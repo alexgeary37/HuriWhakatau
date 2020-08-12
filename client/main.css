@@ -40,9 +40,9 @@ body {
   text-decoration: line-through;
 }
 
-.task-form {
+.simple-todos-react .task-form {
   margin-top: 1rem;
-  display: flex;;
+  display: flex;
 }
 
 .simple-todos-react .task-form input {
