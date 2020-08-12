@@ -56,7 +56,7 @@ body {
 .simple-todos-react .login-form label,
 .simple-todos-react .login-form input {
   display: block;
-  width: 100%;
+  width: 90%;
   box-sizing: border-box;
 }
  
