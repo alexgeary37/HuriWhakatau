@@ -33,7 +33,7 @@ export const App = () => {
 
       <div className="comments-and-form">
         <ul className="comments">
-          {comments.map((comment) => (
+          {comments.reverse().map((comment) => (
             <Comment
               key={comment._id}
               comment={comment}
