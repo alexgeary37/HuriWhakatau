@@ -4,13 +4,16 @@ body {
   font-size: 14px;
 }
 
+/******************************************************** 
+App.jsx
+*********************************************************/
 .juryroom {
   margin: 0 auto;
   max-width: 512px;
 }
 
-.juryroom .filters {
-  margin-bottom: 1rem;
+.juryroom .login-form {
+  margin-top: 2rem;
 }
 
 .juryroom .comments-and-form {
@@ -20,59 +23,56 @@ body {
   bottom: 0;
 }
 
-.juryroom .comments {
+.juryroom .comments-and-form .comments {
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-.juryroom .comments .comment {
+.juryroom .comments-and-form .comments .comment {
   display: flex;
   align-items: center;
   height: 32px;
 }
 
-.juryroom .comments .comment span {
+.juryroom .comments-and-form .comment-form {
+  margin-top: 1rem;
+  display: flex;
+}
+
+/******************************************************** 
+Comment.jsx
+*********************************************************/
+.juryroom .comments-and-form .comments .comment span {
   flex-grow: 1;
 }
 
-.juryroom .comments .comment button {
+.juryroom .comments-and-form .comments .comment button {
   cursor: pointer;
   background: transparent;
   outline: none;
   border: none;
 }
 
-.juryroom .comments .comment.checked span {
-  text-decoration: line-through;
-}
-
-.juryroom .comment-form {
-  margin-top: 1rem;
-  display: flex;
-}
-
-.juryroom .comment-form input {
+/******************************************************** 
+CommentForm.jsx
+*********************************************************/
+.juryroom .comments-and-form .comment-form input {
   flex-grow: 1;
 }
 
-.juryroom .login-form {
-  margin-top: 2rem;
-}
-
-.juryroom .login-form label,
+/******************************************************** 
+LoginForm.jsx
+*********************************************************/
 .juryroom .login-form input {
   display: block;
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: 0.8rem;
 }
 
 .juryroom .login-form label {
   margin-bottom: 0.4rem;
-}
-
-.juryroom .login-form input {
-  margin-bottom: 0.8rem;
 }
 
 .juryroom .login-form button[type="submit"] {
