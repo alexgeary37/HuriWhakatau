@@ -1,74 +1,62 @@
-import React, { useState} from 'react';
-import { useTracker } from 'meteor/react-meteor-data';
-import _ from 'lodash';
-import { Task } from './Task';
-import { Tasks } from '/imports/api/tasks';
-import { TaskForm } from './TaskForm';
-import { LoginForm } from './LoginForm';
- 
-const toggleChecked = ({ _id, isChecked}) => {
-  Meteor.call('tasks.setChecked', _id, !isChecked);
-};
+import React from "react";
+import { useTracker } from "meteor/react-meteor-data";
+import { Comment } from "./Comment";
+import { Comments } from "/imports/api/comments";
+import { CommentForm } from "./CommentForm";
+import { LoginForm } from "./LoginForm";
+import { Sidebar, Segment } from "semantic-ui-react";
 
-const togglePrivate = ({ _id, isPrivate }) => {
-  Meteor.call('tasks.setPrivate', _id, !isPrivate);
-};
+const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
 
-const deleteTask = ({ _id }) => {
-  Meteor.call('tasks.remove', _id);
-};
-
-export const App = () => { 
+export const App = () => {
   const filter = {};
-  const [hideCompleted, setHideCompleted] = useState(false);
-  
-  if (hideCompleted){
-    _.set(filter, 'checked', false);
-  };
 
-  const {tasks, incompleteTasksCount, user } = useTracker(() => {
-    Meteor.subscribe('tasks');
-    return ({
-    tasks: Tasks.find(filter, {sort: { createdAt: -1}}).fetch(),
-    incompleteTasksCount: Tasks.find({ checked: { $ne: true}}).count(),
-    user: Meteor.user(),
-    });
+  const { comments, user } = useTracker(() => {
+    Meteor.subscribe("comments");
+
+    return {
+      comments: Comments.find(filter, { sort: { createdAt: -1 } }).fetch(),
+      user: Meteor.user(),
+    };
   });
 
-  if (!user){
-    return ( 
-    <div className="simple-todos-react">
-      <LoginForm/>
-    </div>
-    );
-  };
- 
-  return (
-    <div className="simple-todos-react">
-      <h1>Todos List ({incompleteTasksCount})</h1>
-
-      <div className="filters">
-        <label>
-          <input
-          type="checkbox"
-          readOnly
-          checked={Boolean(hideCompleted)}
-          onClick={() => setHideCompleted(!hideCompleted)}
-          />
-          Hide Completed
-        </label>
+  if (!user) {
+    return (
+      <div className="juryroom">
+        <LoginForm />
       </div>
- 
-      <ul className="tasks">
-        { tasks.map(task => <Task 
-        key={ task._id } 
-        task={ task } 
-        onCheckboxClick={toggleChecked}
-        onDeleteClick={deleteTask}
-        onToggleprivateClick={togglePrivate}
-        />) }
-      </ul>
-      <TaskForm user={user}/>
+    );
+  }
+
+  return (
+    <div>
+      {/* 
+      
+      This is attempting to use the semantic-ui-react library to emulate original JuryRoom.
+
+      <Sidebar animation="overlay" direction="right">
+        <h1>Verdicts</h1>
+        <button>Propose Verdict</button>
+      </Sidebar>
+      <Sidebar animation="overlay" direction="left">
+        <h1>Title Section</h1>
+        <button>Button to look at</button>
+      </Sidebar> */}
+      <div className="juryroom">
+        <h1>JuryRoom</h1>
+        <div className="comments-and-form">
+          <ul className="comments">
+            {comments.reverse().map((comment) => (
+              <Comment
+                key={comment._id}
+                comment={comment}
+                onDeleteClick={deleteComment}
+              />
+            ))}
+          </ul>
+          <CommentForm />
+        </div>
+      </div>
     </div>
   );
 };
