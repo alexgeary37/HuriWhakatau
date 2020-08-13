@@ -4,10 +4,13 @@ import { check } from "meteor/check";
 export const Comments = new Mongo.Collection("comments");
 
 Meteor.methods({
+  // Insert a comment into the comments collection in the db.
+  // text: the text of the comment
+  // Called from CommentForm.jsx
   "comments.insert"(text) {
     check(text, String);
 
-    // I believe this means it's checking that the user is the client currently calling this method
+    // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
@@ -20,11 +23,15 @@ Meteor.methods({
     });
   },
 
+  // Remove a comment from the comments collection in the db.
+  // commentId: the
+  // Called from App.jsx
   "comments.remove"(commentId) {
     check(commentId, String);
 
     const comment = Comments.findOne(commentId);
 
+    // If user is not the owner of the comment, throw error
     if (!this.userId || comment.owner !== this.userId) {
       throw new Meteor.Error("Not authorized.");
     }

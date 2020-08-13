@@ -4,10 +4,8 @@ export const CommentForm = () => {
   const [text, setText] = useState("");
 
   const handleSubmit = () => {
-    if (!text) return;
-
+    if (!text) return; // If text is empty, don't submit anything
     Meteor.call("comments.insert", text.trim());
-
     setText("");
   };
 
@@ -15,7 +13,7 @@ export const CommentForm = () => {
     <form className="comment-form" onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Type to add new comments"
+        placeholder="Type your comment here..."
         value={text}
         onChange={(e) => setText(e.target.value)}
       />

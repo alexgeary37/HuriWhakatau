@@ -29,19 +29,20 @@ export const App = () => {
 
   return (
     <div className="juryroom">
-      <h1>Todo List</h1>
+      <h1>JuryRoom</h1>
 
-      <ul className="comments">
-        {comments.map((comment) => (
-          <Comment
-            key={comment._id}
-            comment={comment}
-            onDeleteClick={deleteComment}
-          />
-        ))}
-      </ul>
-
-      <CommentForm />
+      <div className="comments-and-form">
+        <ul className="comments">
+          {comments.map((comment) => (
+            <Comment
+              key={comment._id}
+              comment={comment}
+              onDeleteClick={deleteComment}
+            />
+          ))}
+        </ul>
+        <CommentForm />
+      </div>
     </div>
   );
 };
