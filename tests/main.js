@@ -1,9 +1,11 @@
 import assert from "assert";
 
-describe("simple-todos-react", function () {
+import "../imports/api/comments.tests.js";
+
+describe("juryroom", function () {
   it("package.json has correct name", async function () {
     const { name } = await import("../package.json");
-    assert.strictEqual(name, "simple-todos-react");
+    assert.strictEqual(name, "juryroom");
   });
 
   if (Meteor.isClient) {

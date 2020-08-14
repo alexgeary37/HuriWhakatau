@@ -1,73 +1,80 @@
 body {
-  padding: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 14px;
 }
 
-.simple-todos-react{
+/******************************************************** 
+App.jsx
+*********************************************************/
+.juryroom {
   margin: 0 auto;
-  max-width:  512px;
+  max-width: 512px;
 }
 
-.simple-todos-react .filters {
-  margin-bottom: 1rem;
+.juryroom .login-form {
+  margin-top: 2rem;
 }
 
-.simple-todos-react .tasks {
+.juryroom .comments-and-form {
   padding: 0;
   margin: 0;
-  list-style:  none;
+  position: fixed;
+  bottom: 0;
 }
 
-.simple-todos-react .tasks .task {
+.juryroom .comments-and-form .comments {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.juryroom .comments-and-form .comments .comment {
   display: flex;
   align-items: center;
   height: 32px;
 }
 
-.simple-todos-react .tasks .task span {
-  flex-grow:  1;
+.juryroom .comments-and-form .comment-form {
+  margin-top: 1rem;
+  display: flex;
 }
 
-.simple-todos-react .tasks .task button {
+/******************************************************** 
+Comment.jsx
+*********************************************************/
+.juryroom .comments-and-form .comments .comment span {
+  flex-grow: 1;
+}
+
+.juryroom .comments-and-form .comments .comment button {
   cursor: pointer;
   background: transparent;
   outline: none;
   border: none;
 }
 
-.simple-todos-react .tasks .task.checked span {
-  text-decoration: line-through;
-}
-
-.simple-todos-react .task-form {
-  margin-top: 1rem;
-  display: flex;
-}
-
-.simple-todos-react .task-form input {
+/******************************************************** 
+CommentForm.jsx
+*********************************************************/
+.juryroom .comments-and-form .comment-form input {
   flex-grow: 1;
 }
- 
-.simple-todos-react .login-form {
-  margin-top: 2rem;
-}
- 
-.simple-todos-react .login-form label,
-.simple-todos-react .login-form input {
+
+/******************************************************** 
+LoginForm.jsx
+*********************************************************/
+.juryroom .login-form input {
   display: block;
-  width: 90%;
+  width: 100%;
   box-sizing: border-box;
+  margin-bottom: 0.8rem;
 }
- 
-.simple-todos-react .login-form label {
-  margin-bottom: .4rem;
+
+.juryroom .login-form label {
+  margin-bottom: 0.4rem;
 }
- 
-.simple-todos-react .login-form input {
-  margin-bottom: .8rem;
-}
- 
-.simple-todos-react .login-form button[type=submit] {
+
+.juryroom .login-form button[type="submit"] {
   float: right;
 }
