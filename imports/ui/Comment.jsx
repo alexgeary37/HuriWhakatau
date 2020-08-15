@@ -7,9 +7,7 @@ export const Comment = ({ comment, onDeleteClick }) => {
   return (
     <li className={classes}>
       <button onClick={() => onDeleteClick(comment)}>&times;</button>
-      <span>
-        {comment.text} {comment.username && <i>({comment.username})</i>}
-      </span>
+      <span>{comment.text}</span>
     </li>
   );
 };
