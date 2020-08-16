@@ -46,9 +46,7 @@ if (Meteor.isServer) {
   // Comments.remove({});
 
   Meteor.publish("comments", function (discussionId) {
-    return Comments.find({
-      discussionId: { $eq: discussionId },
-    });
+    return Comments.find({ discussionId: discussionId });
   });
 
   // List all the comments and users in the db
