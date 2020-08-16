@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Comments } from "/imports/api/comments";
 import { Comment } from "./Comment";
@@ -16,16 +16,24 @@ export const Discussion = () => {
     Meteor.subscribe("comments", discussionId);
 
     return {
-      comments: Comments.find(filter, { sort: { postedTime: -1 } }).fetch(),
+      comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
     };
   });
+
+  const commentsEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    commentsEndRef.current.scrollIntoView({ behavior: "auto" })
+  }
+
+  useEffect(scrollToBottom, [comments]);
 
   return (
     <div className="juryroom">
       <h1>Discussion</h1>
       <div className="comments-and-form">
         <ul className="comments">
-          {comments.reverse().map((comment) => (
+          {comments.map((comment) => (
             <div className="commentContainer" key={comment._id}>
               <Comment
                 key={comment._id}
@@ -34,6 +42,7 @@ export const Discussion = () => {
               />
             </div>
           ))}
+          <div ref={commentsEndRef} />
         </ul>
         <CommentForm discussionId={discussionId} />
       </div>
