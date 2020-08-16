@@ -7,8 +7,10 @@ Meteor.methods({
   // Insert a comment into the comments collection in the db.
   // text: the text of the comment
   // Called from CommentForm.jsx
-  "comments.insert"(text) {
+  "comments.insert"(text, discussionId) {
     check(text, String);
+    check(discussionId, String);
+    console.log("com.insert:", discussionId);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
@@ -16,6 +18,7 @@ Meteor.methods({
     }
 
     Comments.insert({
+      discussionId: discussionId,
       postedTime: new Date(),
       authorId: this.userId, // _id of user
       text: text,
@@ -42,13 +45,13 @@ Meteor.methods({
 if (Meteor.isServer) {
   // Comments.remove({});
 
-  Meteor.publish("comments", function () {
-    return Comments.find({ authorId: this.userId });
+  Meteor.publish("comments", function (discussionId) {
+    return Comments.find({
+      discussionId: { $eq: discussionId },
+    });
   });
 
-  // List all the comments in the data base.
+  // List all the comments and users in the db
   console.log("List all comments\n", Comments.find({}).fetch());
-
-  // List all the users in the database.
   console.log("List all users\n", Meteor.users.find({}).fetch());
 }

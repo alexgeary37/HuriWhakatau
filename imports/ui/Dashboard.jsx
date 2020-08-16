@@ -33,8 +33,19 @@ export const Dashboard = () => {
   return (
     <div className="dashboard">
       <h1>Dashboard</h1>
+      <h2>My discussions</h2>
+      <ul className="discussions">
+        {discussions.map((discussion) => (
+          <div className="discussionContainer" key={discussion._id}>
+            <Button
+              content={"Enter " + discussion.title}
+              as={Link}
+              to={`/discussion/${discussion._id}`}
+            />
+          </div>
+        ))}
+      </ul>
       <Button content="Create Discussion" onClick={createDiscussion} />
-      <Button content="Enter Discussion" as={Link} to="/discussion/" />
     </div>
   );
 };
