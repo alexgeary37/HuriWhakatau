@@ -14,10 +14,9 @@ if (Meteor.isServer) {
         Comments.remove({});
 
         commentId = Comments.insert({
+          postedTime: new Date(),
+          authorId: userId,
           text: "Test Comment",
-          createdAt: new Date(),
-          owner: userId,
-          username: "meteorite",
         });
       });
 

@@ -2,14 +2,17 @@ import React from "react";
 import classnames from "classnames";
 
 export const Comment = ({ comment, onDeleteClick }) => {
-  const classes = classnames("comment");
+    let classes = classnames("comment");
+
+    if (Meteor.userId() === comment.authorId){
+        classes = classnames("comment usersComment");
+    }
+
 
   return (
     <li className={classes}>
       <button onClick={() => onDeleteClick(comment)}>&times;</button>
-      <span>
-        {comment.text} {comment.username && <i>({comment.username})</i>}
-      </span>
+      <span>{comment.text}</span>
     </li>
   );
 };
