@@ -9,7 +9,6 @@ const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
 
 export const Discussion = ({ discussion }) => {
   const filter = {};
-
   const { comments } = useTracker(() => {
     Meteor.subscribe("comments");
 
@@ -24,11 +23,13 @@ export const Discussion = ({ discussion }) => {
       <div className="comments-and-form">
         <ul className="comments">
           {comments.reverse().map((comment) => (
+              <div className="commentContainer" key={comment._id}>
             <Comment
               key={comment._id}
               comment={comment}
               onDeleteClick={deleteComment}
             />
+              </div>
           ))}
         </ul>
         <CommentForm />
