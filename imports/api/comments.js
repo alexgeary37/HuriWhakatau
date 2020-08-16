@@ -16,23 +16,22 @@ Meteor.methods({
     }
 
     Comments.insert({
-      text,
-      createdAt: new Date(),
-      owner: this.userId,
-      username: Meteor.users.findOne(this.userId).username,
+      postedTime: new Date(),
+      authorId: this.userId, // _id of user
+      text: text,
     });
   },
 
   // Remove a comment from the comments collection in the db.
-  // commentId: the
-  // Called from App.jsx
+  // commentId: _id of the comment to be removed
+  // Called from Discussion.jsx
   "comments.remove"(commentId) {
     check(commentId, String);
 
     const comment = Comments.findOne(commentId);
 
-    // If user is not the owner of the comment, throw error
-    if (!this.userId || comment.owner !== this.userId) {
+    // If user is not the author of the comment, throw error
+    if (!this.userId || comment.authorId !== this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
@@ -41,9 +40,15 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // Comments.remove({});
+
   Meteor.publish("comments", function () {
-    return Comments.find({
-      $or: [{ private: { $ne: true } }, { owner: this.userId }],
-    });
+    return Comments.find({ authorId: this.userId });
   });
+
+  // List all the comments in the data base.
+  console.log("List all comments\n", Comments.find({}).fetch());
+
+  // List all the users in the database.
+  console.log("List all users\n", Meteor.users.find({}).fetch());
 }

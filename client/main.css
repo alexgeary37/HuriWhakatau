@@ -4,7 +4,7 @@ body {
   font-size: 14px;
 }
 
-/******************************************************** 
+/********************************************************
 App.jsx
 *********************************************************/
 .juryroom {
@@ -21,26 +21,60 @@ App.jsx
   margin: 0;
   position: fixed;
   bottom: 0;
+  width:600px;
 }
 
 .juryroom .comments-and-form .comments {
   padding: 0;
   margin: 0;
+  width: 600px;
   list-style: none;
+}
+
+.juryroom .comments-and-form .comments .commentContainer{
+  padding: 0;
+  margin: 0;
+  width: inherit;
+  height: max-content;
+  overflow:hidden;
+  align-self:flex-end;
 }
 
 .juryroom .comments-and-form .comments .comment {
   display: flex;
-  align-items: center;
-  height: 32px;
+  margin:3px;
+  align-items: start;
+  align-self:flex-end;
+  width:52%;
+  height:fit-content;
+  background:aliceblue;
+  padding: 10px;
+  border-radius:10px 25px 25px 10px;
+  border-style:solid;
+  border-width: thin;
+  border-color:cadetblue;
+  overflow-wrap: break-spaces;
 }
 
+.juryroom .comments-and-form .comments .comment.usersComment {
+  width:52%;
+  background:aqua;
+  align-self:end;
+  float:right;
+  border-radius:25px 10px 10px 25px;
+  /* margin-left:200px; /* should handle this better. change code to have a wrapper div for the comments.
+                        that is full width then the text part is aligned right or left*/
+}
+
+
 .juryroom .comments-and-form .comment-form {
-  margin-top: 1rem;
+  margin-top: 2rem;
+  width:inherit;
+  align-self:end;
   display: flex;
 }
 
-/******************************************************** 
+/********************************************************
 Comment.jsx
 *********************************************************/
 .juryroom .comments-and-form .comments .comment span {
@@ -54,14 +88,15 @@ Comment.jsx
   border: none;
 }
 
-/******************************************************** 
+/********************************************************
 CommentForm.jsx
 *********************************************************/
 .juryroom .comments-and-form .comment-form input {
   flex-grow: 1;
+  width: inherit;
 }
 
-/******************************************************** 
+/********************************************************
 LoginForm.jsx
 *********************************************************/
 .juryroom .login-form input {

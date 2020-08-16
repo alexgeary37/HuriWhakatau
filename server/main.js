@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import "/imports/api/comments";
+import "/imports/api/discussions";
 
 Meteor.startup(() => {
   // Create accounts
