@@ -2,12 +2,11 @@ import React from "react";
 import classnames from "classnames";
 
 export const Comment = ({ comment, onDeleteClick }) => {
-    let classes = classnames("comment");
+  let classes = classnames("comment");
 
-    if (Meteor.userId() === comment.authorId){
-        classes = classnames("comment usersComment");
-    }
-
+  if (Meteor.userId() === comment.authorId) {
+    classes = classnames("comment usersComment");
+  }
 
   return (
     <li className={classes}>
