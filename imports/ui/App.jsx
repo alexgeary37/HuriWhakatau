@@ -4,25 +4,10 @@ import { Router, Route, Switch } from "react-router";
 import history from "history";
 import { Dashboard } from "./Dashboard";
 import { Discussion } from "./Discussion";
-import { LoginForm } from "./LoginForm";
 
 const browserHistory = history.createBrowserHistory();
 
 export const App = () => {
-    const { user } = useTracker(() => {
-        return {
-            user: Meteor.user(),
-        };
-    });
-
-    console.log(user);
-    if (!user) {
-        return (
-            <div className="juryroom">
-                <LoginForm />
-            </div>
-        );
-    }
 
     return (
     <Router history={browserHistory}>
