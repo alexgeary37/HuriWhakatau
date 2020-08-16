@@ -54,7 +54,6 @@ App.jsx
 }
 
 .juryroom .comments-and-form .comments .comment {
-  display: flex;
   margin:3px;
   align-items: start;
   align-self:flex-end;
@@ -66,7 +65,9 @@ App.jsx
   border-style:solid;
   border-width: thin;
   border-color:cadetblue;
-  overflow-wrap: break-spaces;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .juryroom .comments-and-form .comments .comment.usersComment {
