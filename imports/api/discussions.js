@@ -6,7 +6,7 @@ export const Discussions = new Mongo.Collection("discussions");
 //
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
-  // Called from .........jsx
+  // Called from Dashboardjsx
   "discussions.insert"(title, description) {
     check(title, String);
     check(description, String);
@@ -27,7 +27,7 @@ Meteor.methods({
 
   // Remove a Discussion from the discussions collection in the db.
   // discussionId: _id of the discussion to be removed
-  // Called from Discussion.jsx
+  // Called from ...
   "discussions.remove"(discussionId) {
     check(discussionId, String);
 
@@ -43,10 +43,10 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  //   Discussions.remove({});
+  // Discussions.remove({});
 
   Meteor.publish("discussions", function () {
-    return Discussions.find({ createdBy: this.userId });
+    return Discussions.find({});
   });
 
   // List all the discussions in the data base.
