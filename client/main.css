@@ -10,7 +10,7 @@ App.jsx
 *********************************************************/
 .juryroom {
   margin: 0 auto;
-  width: 650px;
+  width: 100vh;
   height: 100%;
   overflow: hidden;
 }
@@ -24,7 +24,7 @@ App.jsx
   margin: 0;
   position: fixed;
   bottom: 0;
-  width:650px;
+  width:60vh;
   height: 90%;
   overflow: hidden;
 }
@@ -32,14 +32,14 @@ App.jsx
 .juryroom .comments-and-form .comments {
   padding: 0;
   margin: 0;
-  width: 100%;
+  width: 60vh;
   list-style: none;
   overflow-y: scroll;
   height: 90%;
 }
 
 ::-webkit-scrollbar {
-  width: 0px; /* Remove scrollbar space */
+  width: 0; /* Remove scrollbar space */
 }
 
 .juryroom .comments-and-form .comments .commentContainer{
@@ -54,6 +54,7 @@ App.jsx
 }
 
 .juryroom .comments-and-form .comments .comment {
+  /*display: flex;*/
   margin:3px;
   align-items: start;
   align-self:flex-end;
