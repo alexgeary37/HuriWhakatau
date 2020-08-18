@@ -10,7 +10,7 @@ App.jsx
 *********************************************************/
 .juryroom {
   margin: 0 auto;
-  width: 650px;
+  width: 100vh;
   height: 100%;
   overflow: hidden;
 }
@@ -19,27 +19,62 @@ App.jsx
   margin-top: 2rem;
 }
 
+.juryroom h2{
+  height: 7vh;
+}
+
+.juryroom h5{
+  height: 5vh;
+}
+
 .juryroom .comments-and-form {
   padding: 0;
   margin: 0;
   position: fixed;
   bottom: 0;
-  width:650px;
-  height: 90%;
+  width:60vh;
+  height: 50%;
   overflow: hidden;
+}
+
+.juryroom .discussion-right-panel {
+  padding: 0;
+  margin: 0;
+  width: 50vh;
+  list-style: none;
+  overflow-y: scroll;
+  height: 50%;
 }
 
 .juryroom .comments-and-form .comments {
   padding: 0;
   margin: 0;
-  width: 100%;
+  width: 50vh;
   list-style: none;
   overflow-y: scroll;
-  height: 90%;
+  height: 75vh;
 }
 
 ::-webkit-scrollbar {
-  width: 0px; /* Remove scrollbar space */
+  width: 0; /* Remove scrollbar space */
+}
+
+.juryroom .discussion-right-panel .verdict {
+  list-style: none;
+  margin:3px;
+  align-items: start;
+  align-self:flex-end;
+  width:100%;
+  height:fit-content;
+  background:whitesmoke;
+  padding: 10px;
+  border-radius:1px 1px 1px 1px;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .juryroom .comments-and-form .comments .commentContainer{
@@ -54,7 +89,7 @@ App.jsx
 }
 
 .juryroom .comments-and-form .comments .comment {
-  display: flex;
+  /*display: flex;*/
   margin:3px;
   align-items: start;
   align-self:flex-end;
@@ -66,7 +101,9 @@ App.jsx
   border-style:solid;
   border-width: thin;
   border-color:cadetblue;
-  overflow-wrap: break-spaces;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .juryroom .comments-and-form .comments .comment.usersComment {

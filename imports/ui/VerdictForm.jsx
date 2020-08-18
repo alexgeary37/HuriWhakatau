@@ -23,7 +23,6 @@ export const VerdictForm = (discussionId) => {
         placeholder="Type your verdict here..."
         value={text}
         onChange={(e) => setText(e.target.value)}
-        autoFocus
       />
 
       <button type="submit">Submit Verdict</button>
