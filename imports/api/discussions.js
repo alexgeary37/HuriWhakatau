@@ -21,24 +21,45 @@ Meteor.methods({
       description: description,
       createdAt: new Date(),
       createdBy: this.userId,
+      activeVerdictProposers: [], // Contains the users currently proposing a verdict.
+      verdicts: [], // Verdicts in this discussion.
     });
-    console.log("End discussions.insert " + title);
   },
 
-  // Remove a Discussion from the discussions collection in the db.
-  // discussionId: _id of the discussion to be removed
-  // Called from ...
-  "discussions.remove"(discussionId) {
+  // Add a user to the list of activeVerdictProposers in the specified Discussion.
+  // Called from Discussion.jsx
+  "discussions.addProposer"(discussionId) {
     check(discussionId, String);
 
-    const discussion = Discussions.findOne(discussionId);
-
-    // If user is not the creator of the discussion, throw error
-    if (!this.userId || discussion.createdBy !== this.userId) {
+    if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    Discussions.remove(discussionId);
+    Discussions.update(discussionId, {
+      $addToSet: { activeVerdictProposers: this.userId },
+    });
+  },
+
+  // Remove a user from the list of activeVerdictProposers in the specified Discussion.
+  // Called from VerdictForm.jsx
+  "discussions.removeProposer"(discussionId) {
+    check(discussionId, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error("Not authorized.");
+    }
+
+    Discussions.update(discussionId, {
+      $pull: { activeVerdictProposers: this.userId },
+    });
+  },
+
+  // Add the specified Verdict to the internal list of verdicts in the specified Discussion.
+  // Called from VerdictForm.jsx
+  "discussions.addVerdict"(discussionId, verdict) {
+    Discussions.update(discussionId, {
+      $addToSet: { verdicts: verdict },
+    });
   },
 });
 
@@ -46,9 +67,9 @@ if (Meteor.isServer) {
   // Discussions.remove({});
 
   Meteor.publish("discussions", function () {
-    return Discussions.find({});
+    return Discussions.find();
   });
 
-  // List all the discussions in the data base.
+  // List all the Discussions in the data base.
   console.log("List all discussions\n", Discussions.find({}).fetch());
 }
