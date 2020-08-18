@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Discussions } from "../api/discussions";
 import { Verdicts } from "../api/verdicts";
 
 export const VerdictForm = (discussionId) => {
@@ -10,22 +9,26 @@ export const VerdictForm = (discussionId) => {
   const handleSubmit = () => {
     if (!text) return; // If text is empty, don't submit anything.
     Meteor.call("verdicts.insert", text.trim(), discussionId.discussionId);
-    Meteor.call("discussions.removeProposer", discussionId.discussionId);
-    let verdict = Verdicts.findOne({ authorId: Meteor.userId() });
-    Meteor.call("discussions.addVerdict", discussionId.discussionId, verdict);
     setText("");
   };
 
-  return (
-    <form className="verdict-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Type your verdict here..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
+  const handleCancel = () =>
+    Meteor.call("discussions.removeProposer", discussionId.discussionId);
 
-      <button type="submit">Submit Verdict</button>
-    </form>
+  return (
+    <div>
+      <form className="verdict-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Type your verdict here..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <div>
+          <button type="submit">Submit Verdict</button>
+        </div>
+      </form>
+      <button onClick={handleCancel}>Cancel</button>
+    </div>
   );
 };
