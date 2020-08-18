@@ -46,19 +46,6 @@ App.jsx
   height: 50%;
 }
 
-.juryroom .comments-and-form .comments {
-  padding: 0;
-  margin: 0;
-  width: 50vh;
-  list-style: none;
-  overflow-y: scroll;
-  height: 75vh;
-}
-
-::-webkit-scrollbar {
-  width: 0; /* Remove scrollbar space */
-}
-
 .juryroom .discussion-right-panel .verdict {
   list-style: none;
   margin:3px;
@@ -75,6 +62,20 @@ App.jsx
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
+}
+
+.juryroom .comments-and-form .comments {
+  padding: 0;
+  position: relative;
+  margin: auto 0 0;
+  width: 67vh;
+  list-style: none;
+  overflow-y: scroll;
+  height: 75vh;
+}
+
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
 }
 
 .juryroom .comments-and-form .comments .commentContainer{
@@ -106,6 +107,19 @@ App.jsx
   hyphens: auto;
 }
 
+.juryroom .comments-and-form .comment button {
+  visibility: hidden;
+}
+
+.authorName {
+  font-weight: bold;
+}
+
+.commentTime {
+  font-weight: lighter;
+  font-size: smaller;
+}
+
 .juryroom .comments-and-form .comments .comment.usersComment {
   width:52%;
   background:aqua;
@@ -114,6 +128,9 @@ App.jsx
   border-radius:25px 10px 10px 25px;
 }
 
+.juryroom .comments-and-form .comment.usersComment button {
+  visibility: visible;
+}
 
 .juryroom .comments-and-form .comment-form {
   margin-top: 2rem;
