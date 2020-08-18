@@ -41,6 +41,7 @@ export const Discussion = () => {
       verdictProposers = discussion.activeVerdictProposers;
     }
 
+    console.log("verdProposers", verdictProposers);
     return {
       // Assign and return the constants initialized with data.
       discussionTitle: thisDiscussionTitle,
