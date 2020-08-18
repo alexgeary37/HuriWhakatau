@@ -23,6 +23,7 @@ Meteor.methods({
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // Verdicts in this discussion.
+      verdictSubmitters: [], // List of userIds of users that have submitted a verdict.
     });
   },
 
@@ -51,14 +52,6 @@ Meteor.methods({
 
     Discussions.update(discussionId, {
       $pull: { activeVerdictProposers: this.userId },
-    });
-  },
-
-  // Add the specified Verdict to the internal list of verdicts in the specified Discussion.
-  // Called from VerdictForm.jsx
-  "discussions.addVerdict"(discussionId, verdict) {
-    Discussions.update(discussionId, {
-      $addToSet: { verdicts: verdict },
     });
   },
 });
