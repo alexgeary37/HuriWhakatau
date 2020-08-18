@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import {Sidebar, Container, Segment, Header, Button, Visibility, Grid, GridColumn} from "semantic-ui-react";
+import 'semantic-ui-css/semantic.min.css';
 import { useTracker } from "meteor/react-meteor-data";
 import { useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
@@ -73,21 +75,21 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <div className="discussion-right-panel">
+      <Header as='h2' attached='top'>
+        {discussionTitle}
+        {discussionDescription}
+      </Header>
+      <Segment.Group horizontal attached={"true"}>
+      <Segment className="discussion-right-panel">
         {verdicts.map((verdict) => (
           <div className="verdictContainer" key={verdict._id}>
             <Verdict key={verdict._id} verdict={verdict} />
           </div>
         ))}
         {renderVerdictForm}
-      </div>
+      </Segment>
 
-      <div className="discussion-left-panel">
-        <h1>{discussionTitle}</h1>
-        {discussionDescription}
-      </div>
-
-      <div className="comments-and-form">
+      <Segment className="comments-and-form">
         <ul className="comments">
           {comments.map((comment) => (
             <div className="commentContainer" key={comment._id}>
@@ -101,7 +103,9 @@ export const Discussion = () => {
           <div ref={commentsEndRef} />
         </ul>
         <CommentForm discussionId={discussionId} />
-      </div>
+      </Segment>
+        <Segment>RIGHT Content</Segment>
+      </Segment.Group>
     </div>
   );
 };
