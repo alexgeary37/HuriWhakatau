@@ -77,9 +77,11 @@ export const Discussion = () => {
     <div className="juryroom">
       <Header as='h2' attached='top'>
         {discussionTitle}
+      </Header>
+      <Header as='h5' attached='true'>
         {discussionDescription}
       </Header>
-      <Segment.Group horizontal attached={"true"}>
+      <Segment.Group horizontal>
       <Segment className="discussion-right-panel">
         {verdicts.map((verdict) => (
           <div className="verdictContainer" key={verdict._id}>
@@ -90,7 +92,7 @@ export const Discussion = () => {
       </Segment>
 
       <Segment className="comments-and-form">
-        <ul className="comments">
+        <ul className="comments" style={{overflow: 'auto', maxHeight: '50em' }}>
           {comments.map((comment) => (
             <div className="commentContainer" key={comment._id}>
               <Comment
