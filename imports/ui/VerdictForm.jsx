@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Verdicts } from "../api/verdicts";
 
 export const VerdictForm = (discussionId) => {
   // 'setText' is a function we're declaring in the state of this
