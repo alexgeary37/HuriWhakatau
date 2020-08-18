@@ -78,7 +78,7 @@ export const Discussion = () => {
       <Header as='h2' attached='top'>
         {discussionTitle}
       </Header>
-      <Header as='h5' attached='true'>
+      <Header as='h5' attached>
         {discussionDescription}
       </Header>
       <Segment.Group horizontal>
@@ -93,6 +93,7 @@ export const Discussion = () => {
 
       <Segment className="comments-and-form">
         <ul className="comments" style={{overflow: 'auto', maxHeight: '50em' }}>
+          <div className="commentsStartRef"></div>
           {comments.map((comment) => (
             <div className="commentContainer" key={comment._id}>
               <Comment
