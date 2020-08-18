@@ -5,6 +5,7 @@ import {Comments} from "/imports/api/comments";
 import {Comment} from "./Comment";
 import {CommentForm} from "./CommentForm";
 import {useParams} from "react-router-dom";
+import 'semantic-ui-css/semantic.min.css';
 
 // '_id' here is equal to 'comment' in Comment.jsx onDeleteClick(comment) I think ???
 const deleteComment = ({_id}) => Meteor.call("comments.remove", _id);
@@ -34,7 +35,7 @@ export const Discussion = () => {
                     <Header as='h2' attached='top'>
                         Discussion
                     </Header>
-                    <Segment.Group horizontal attached>
+                    <Segment.Group horizontal attached={"true"}>
                     <Segment>LEFT Content</Segment>
                     <Segment className="comments-and-form">
                         <ul className="comments" style={{overflow: 'auto', maxHeight: '50em' }}>
