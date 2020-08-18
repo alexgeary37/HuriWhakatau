@@ -6,11 +6,11 @@ export const Comments = new Mongo.Collection("comments");
 Meteor.methods({
   // Insert a comment into the comments collection in the db.
   // text: the text of the comment
+  // discussionId: _id of the discussion this comment belongs to
   // Called from CommentForm.jsx
   "comments.insert"(text, discussionId) {
     check(text, String);
     check(discussionId, String);
-    console.log("com.insert:", discussionId);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
@@ -46,9 +46,7 @@ if (Meteor.isServer) {
   // Comments.remove({});
 
   Meteor.publish("comments", function (discussionId) {
-    return Comments.find({
-      discussionId: { $eq: discussionId },
-    });
+    return Comments.find({ discussionId: discussionId });
   });
 
   // List all the comments and users in the db

@@ -38,7 +38,7 @@ export const Dashboard = () => {
         {discussions.map((discussion) => (
           <div className="discussionContainer" key={discussion._id}>
             <Button
-              content={"Enter " + discussion.title}
+              content={discussion.title}
               as={Link}
               to={`/discussion/${discussion._id}`}
             />
