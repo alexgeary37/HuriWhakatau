@@ -3,7 +3,6 @@ import { check } from "meteor/check";
 
 export const Discussions = new Mongo.Collection("discussions");
 
-//
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from Dashboardjsx
@@ -22,8 +21,7 @@ Meteor.methods({
       createdAt: new Date(),
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
-      verdicts: [], // Verdicts in this discussion.
-      verdictSubmitters: [], // List of userIds of users that have submitted a verdict.
+      verdicts: [], // List of verdict._ids in this discussion.
     });
   },
 

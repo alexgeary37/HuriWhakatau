@@ -28,7 +28,7 @@ Meteor.methods({
         votes: [], // _ids of votes that all OTHER users make on this Verdict.
       },
       (_error, insertedDocs) => {
-        return insertedDocs[0].authorId;
+        return insertedDocs[0]._id;
       }
     );
 
@@ -36,7 +36,6 @@ Meteor.methods({
     Discussions.update(discussionId, {
       $addToSet: {
         verdicts: verdictId,
-        verdictSubmitters: this.userId,
       },
     });
 
