@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Verdicts } from "../api/verdicts";
 
 export const VerdictForm = (discussionId) => {
   // 'setText' is a function we're declaring in the state of this
@@ -16,18 +15,14 @@ export const VerdictForm = (discussionId) => {
     Meteor.call("discussions.removeProposer", discussionId.discussionId);
 
   return (
-    <div>
-      <form className="verdict-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Type your verdict here..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <div>
-          <button type="submit">Submit Verdict</button>
-        </div>
-      </form>
+    <div className="verdict-form">
+      <input
+        type="text"
+        placeholder="Type your verdict here..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button onClick={handleSubmit}>Submit Verdict</button>
       <button onClick={handleCancel}>Cancel</button>
     </div>
   );
