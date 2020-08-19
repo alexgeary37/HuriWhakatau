@@ -19,18 +19,10 @@ export const Dashboard = () => {
     Meteor.subscribe("discussions");
 
     return {
-      user: Meteor.user(),
+      user: Meteor.userId(),
       discussions: Discussions.find({}).fetch(),
     };
   });
-
-  if (!user) {
-    return (
-      <div className="dashboard-login">
-        <LoginForm />
-      </div>
-    );
-  }
 
   return (
     <div className="dashboard">
