@@ -6,11 +6,21 @@ import { Menu, Container, Dropdown, Icon } from "semantic-ui-react";
 import { Dashboard } from "./Dashboard";
 //import { BrowseGroups } from "./BrowseGroups";
 import { Discussion } from "./Discussion";
+import {LoginForm} from "./LoginForm";
 
 // Should this be a constant?????????????????????????????????????????????????????/
 const browserHistory = history.createBrowserHistory();
+let userDude = Meteor.userId();
 
 export const App = () => {
+  console.log(userDude);
+  if (!Meteor.userId()) {
+    return (
+        <div className="dashboard-login">
+          <LoginForm />
+        </div>
+    );
+  }
   return (
     <Router history={browserHistory}>
         {/*<Menu fixed="top" inverted>
