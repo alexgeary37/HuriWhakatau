@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import history from "history";
 import { Menu, Container, Dropdown, Icon } from "semantic-ui-react";
 import { Dashboard } from "./Dashboard";
+import { BrowseGroups } from "./BrowseGroups";
 import { Discussion } from "./Discussion";
 
 // Should this be a constant?????????????????????????????????????????????????????/
@@ -20,17 +21,14 @@ export const App = () => {
           </Menu.Item>
           <Dropdown item text="Browse">
             <Dropdown.Menu>
-              <Dropdown.Item
-                content="Discussions"
-                as={Link}
-                to="/discussions"
-              />
+              <Dropdown.Item content="Groups" as={Link} to="/groups" />
             </Dropdown.Menu>
           </Dropdown>
         </Container>
       </Menu>
       <Switch>
         <Route exact path="/" component={Dashboard} />
+        <Route exact path="/groups" component={BrowseGroups} />
         <Route exact path="/:discussionId" component={Discussion} />
       </Switch>
     </Router>
