@@ -9,10 +9,11 @@ export const CommentForm = (discussionId) => {
     if (!text) return; // If text is empty, don't submit anything.
     Meteor.call("comments.insert", text.trim(), discussionId.discussionId);
     setText("");
+    // return false;
   };
 
   return (
-    <form className="comment-form" onSubmit={handleSubmit}>
+    <div className="comment-form">
       <input
         type="text"
         placeholder="Type your comment here..."
@@ -20,8 +21,7 @@ export const CommentForm = (discussionId) => {
         onChange={(e) => setText(e.target.value)}
         autoFocus
       />
-
-      <button type="submit">Add Comment</button>
-    </form>
+      <button onClick={handleSubmit}>Add Comment</button>
+    </div>
   );
 };

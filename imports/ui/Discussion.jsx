@@ -21,18 +21,15 @@ import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
 
 export const Discussion = () => {
+  console.log("Discussion entry");
   const filter = {};
   const { discussionId } = useParams();
-
-  // '_id' here is equal to 'comment' in Comment.jsx onDeleteClick(comment) I think ???
-  const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
 
   const {
     // Constants to return and use for component rendering
     discussionTitle,
     discussionDescription,
     discussionVerdictProposers,
-    discussionVerdictSubmitters,
     comments,
     verdicts,
   } = useTracker(() => {
@@ -40,19 +37,17 @@ export const Discussion = () => {
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
     let discSub = Meteor.subscribe("discussions");
-    let discSubReady = discSub.ready();
+    discSub = discSub.ready();
 
     let thisDiscussionTitle = "";
     let thisDiscussionDescription = "";
     let verdictProposers = [];
-    let verdictSubmitters = [];
-    if (discSubReady) {
+    if (discSub) {
       // Get the data for the constants.
       let discussion = Discussions.findOne({ _id: discussionId });
       thisDiscussionTitle = discussion.title;
       thisDiscussionDescription = discussion.description;
       verdictProposers = discussion.activeVerdictProposers;
-      verdictSubmitters = discussion.verdictSubmitters;
     }
 
     return {
@@ -60,11 +55,13 @@ export const Discussion = () => {
       discussionTitle: thisDiscussionTitle,
       discussionDescription: thisDiscussionDescription,
       discussionVerdictProposers: verdictProposers,
-      discussionVerdictSubmitters: verdictSubmitters,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
     };
   });
+
+  // '_id' here is equal to 'comment' in Comment.jsx onDeleteClick(comment) I think ???
+  const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
 
   const commentsEndRef = useRef(null);
 
@@ -74,17 +71,13 @@ export const Discussion = () => {
 
   useEffect(scrollToBottom, [comments]);
 
-  const renderVerdictForm = discussionVerdictProposers.includes(
-    Meteor.userId()
-  ) ? (
-    <VerdictForm discussionId={discussionId} />
-  ) : (
-    <button
-      onClick={() => Meteor.call("discussions.addProposer", discussionId)}
-    >
-      Propose Verdict
-    </button>
-  );
+  // Return true if this user has submitted a verdict, false otherwise.
+  const userHasSubmittedVerdict = () => {
+    return verdicts.findIndex((x) => x.authorId === Meteor.userId()) !== -1;
+  };
+
+  const proposeVerdict = () =>
+    Meteor.call("discussions.addProposer", discussionId);
 
   return (
     <div className="juryroom">
@@ -101,8 +94,12 @@ export const Discussion = () => {
               <Verdict key={verdict._id} verdict={verdict} />
             </div>
           ))}
-          {!discussionVerdictSubmitters.includes(Meteor.userId()) &&
-            renderVerdictForm}
+          {!userHasSubmittedVerdict() &&
+            (discussionVerdictProposers.includes(Meteor.userId()) ? (
+              <VerdictForm discussionId={discussionId} />
+            ) : (
+              <button onClick={proposeVerdict}>Propose Verdict</button>
+            ))}
         </Segment>
 
         <Segment className="comments-and-form">

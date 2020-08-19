@@ -45,12 +45,11 @@ Meteor.methods({
 if (Meteor.isServer) {
   // Comments.remove({});
 
-  //
   Meteor.publish("comments", function (discussionId) {
     return Comments.find({ discussionId: discussionId });
   });
 
-  // List all the comments and users in the db
+  // List all the Comments and users in the db
   console.log("List all comments\n", Comments.find({}).fetch());
   console.log("List all users\n", Meteor.users.find({}).fetch());
 }

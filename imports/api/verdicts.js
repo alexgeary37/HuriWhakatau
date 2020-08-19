@@ -25,9 +25,10 @@ Meteor.methods({
         postedTime: new Date(),
         authorId: this.userId, // _id of user.
         text: text,
+        votes: [], // _ids of votes that all OTHER users make on this Verdict.
       },
       (_error, insertedDocs) => {
-        return insertedDocs[0].authorId;
+        return insertedDocs[0]._id;
       }
     );
 
@@ -35,14 +36,11 @@ Meteor.methods({
     Discussions.update(discussionId, {
       $addToSet: {
         verdicts: verdictId,
-        verdictSubmitters: this.userId,
       },
     });
 
-    // Remove this user from the activeVerdictProposers.
-    Discussions.update(discussionId, {
-      $pull: { activeVerdictProposers: this.userId },
-    });
+    // Remove this user from the list of activeVerdictProposers in the Discussion.
+    Meteor.call("discussions.removeProposer", discussionId);
   },
 });
 
@@ -53,6 +51,6 @@ if (Meteor.isServer) {
     return Verdicts.find({ discussionId: discussionId });
   });
 
-  // List all the verdicts and users in the db
+  // List all the Verdicts in the db
   console.log("List all verdicts\n", Verdicts.find({}).fetch());
 }

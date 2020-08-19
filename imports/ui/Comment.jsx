@@ -14,10 +14,12 @@ export const Comment = ({ comment, onDeleteClick }) => {
   return (
     <li className={classes}>
       <button onClick={() => onDeleteClick(comment)}>&times;</button>
-        <span className="authorName">{comment.authorId} - </span>
-        <span className="commentTime">{comment.postedTime.toDateString()}</span>
-        <br/>
-        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{comment.text}</span>
+      <span className="authorName">{comment.authorId} - </span>
+      <span className="commentTime">{comment.postedTime.toDateString()}</span>
+      <br />
+      <span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{comment.text}
+      </span>
     </li>
   );
 };
