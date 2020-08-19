@@ -1,6 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import {Sidebar, Container, Segment, Header, Button, Visibility, Grid, GridColumn} from "semantic-ui-react";
-import 'semantic-ui-css/semantic.min.css';
+import React, { useEffect, useRef } from "react";
+import {
+  Sidebar,
+  Container,
+  Segment,
+  Header,
+  Button,
+  Visibility,
+  Grid,
+  GridColumn,
+} from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
 import { useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
@@ -23,6 +32,7 @@ export const Discussion = () => {
     discussionTitle,
     discussionDescription,
     discussionVerdictProposers,
+    discussionVerdictSubmitters,
     comments,
     verdicts,
   } = useTracker(() => {
@@ -30,17 +40,19 @@ export const Discussion = () => {
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
     let discSub = Meteor.subscribe("discussions");
-    let _discSubReady = discSub.ready();
+    let discSubReady = discSub.ready();
 
     let thisDiscussionTitle = "";
     let thisDiscussionDescription = "";
     let verdictProposers = [];
-    if (_discSubReady) {
+    let verdictSubmitters = [];
+    if (discSubReady) {
       // Get the data for the constants.
       let discussion = Discussions.findOne({ _id: discussionId });
       thisDiscussionTitle = discussion.title;
       thisDiscussionDescription = discussion.description;
       verdictProposers = discussion.activeVerdictProposers;
+      verdictSubmitters = discussion.verdictSubmitters;
     }
 
     return {
@@ -48,6 +60,7 @@ export const Discussion = () => {
       discussionTitle: thisDiscussionTitle,
       discussionDescription: thisDiscussionDescription,
       discussionVerdictProposers: verdictProposers,
+      discussionVerdictSubmitters: verdictSubmitters,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
     };
@@ -75,38 +88,41 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <Header as='h2' attached='top'>
+      <Header as="h2" attached="top">
         {discussionTitle}
       </Header>
-      <Header as='h5' attached>
+      <Header as="h5" attached>
         {discussionDescription}
       </Header>
       <Segment.Group horizontal>
-      <Segment className="discussion-right-panel">
-        {verdicts.map((verdict) => (
-          <div className="verdictContainer" key={verdict._id}>
-            <Verdict key={verdict._id} verdict={verdict} />
-          </div>
-        ))}
-        {renderVerdictForm}
-      </Segment>
-
-      <Segment className="comments-and-form">
-        <ul className="comments" style={{overflow: 'auto', maxHeight: '50em' }}>
-          <div className="commentsStartRef"></div>
-          {comments.map((comment) => (
-            <div className="commentContainer" key={comment._id}>
-              <Comment
-                key={comment._id}
-                comment={comment}
-                onDeleteClick={deleteComment}
-              />
+        <Segment className="discussion-right-panel">
+          {verdicts.map((verdict) => (
+            <div className="verdictContainer" key={verdict._id}>
+              <Verdict key={verdict._id} verdict={verdict} />
             </div>
           ))}
-          <div ref={commentsEndRef} />
-        </ul>
-        <CommentForm discussionId={discussionId} />
-      </Segment>
+          {!discussionVerdictSubmitters.includes(Meteor.userId()) &&
+            renderVerdictForm}
+        </Segment>
+
+        <Segment className="comments-and-form">
+          <ul
+            className="comments"
+            style={{ overflow: "auto", maxHeight: "50em" }}
+          >
+            {comments.map((comment) => (
+              <div className="commentContainer" key={comment._id}>
+                <Comment
+                  key={comment._id}
+                  comment={comment}
+                  onDeleteClick={deleteComment}
+                />
+              </div>
+            ))}
+            <div ref={commentsEndRef} />
+          </ul>
+          <CommentForm discussionId={discussionId} />
+        </Segment>
         <Segment>RIGHT Content</Segment>
       </Segment.Group>
     </div>

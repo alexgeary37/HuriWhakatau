@@ -1,12 +1,13 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import { Discussions } from "./discussions";
 
 export const Verdicts = new Mongo.Collection("verdicts");
 
 Meteor.methods({
-  // Insert a verdict into the verdicts collection in the db.
-  // text: the text of the verdict
-  // discussionId: _id of the discussion this verdict belongs to
+  // Insert a Verdict into the verdicts collection in the db.
+  // text: the text of the Verdict
+  // discussionId: _id of the Viscussion this Verdict belongs to
   // Called from VerdictForm.jsx
   "verdicts.insert"(text, discussionId) {
     check(text, String);
@@ -17,11 +18,30 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    Verdicts.insert({
-      discussionId: discussionId,
-      postedTime: new Date(),
-      authorId: this.userId, // _id of user
-      text: text,
+    // Insert new Verdict and get its _id.
+    const verdictId = Verdicts.insert(
+      {
+        discussionId: discussionId,
+        postedTime: new Date(),
+        authorId: this.userId, // _id of user.
+        text: text,
+      },
+      (_error, insertedDocs) => {
+        return insertedDocs[0].authorId;
+      }
+    );
+
+    // Add _id of inserted Verdict and the author of it.
+    Discussions.update(discussionId, {
+      $addToSet: {
+        verdicts: verdictId,
+        verdictSubmitters: this.userId,
+      },
+    });
+
+    // Remove this user from the activeVerdictProposers.
+    Discussions.update(discussionId, {
+      $pull: { activeVerdictProposers: this.userId },
     });
   },
 });

@@ -11,6 +11,12 @@ export const Verdict = ({ verdict }) => {
   return (
     <li className={classes}>
       <span>{verdict.text}</span>
+      {Meteor.userId() !== verdict.authorId && (
+        <div>
+          <button>Affirm</button>
+          <button>Reject</button>
+        </div>
+      )}
     </li>
   );
 };
