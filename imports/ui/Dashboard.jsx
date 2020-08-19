@@ -6,6 +6,7 @@ import { Discussions } from "/imports/api/discussions";
 import { LoginForm } from "./LoginForm";
 
 export const createDiscussion = () =>
+  // Go to CreateDiscussion.jsx at link /discussions/create
   Meteor.call(
     "discussions.insert",
     "Title" + Discussions.find().count(),
@@ -13,6 +14,7 @@ export const createDiscussion = () =>
   );
 
 export const Dashboard = () => {
+  console.log("Dashboard entry");
   const { user, discussions } = useTracker(() => {
     Meteor.subscribe("discussions");
 
@@ -40,7 +42,7 @@ export const Dashboard = () => {
             <Button
               content={discussion.title}
               as={Link}
-              to={`/discussion/${discussion._id}`}
+              to={`/${discussion._id}`}
             />
           </div>
         ))}
