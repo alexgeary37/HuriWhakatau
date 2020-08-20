@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Dashboard } from "./Dashboard";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -10,28 +11,34 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={submit} className="login-form">
-      <label htmlFor="username">Username</label>
+    <div>
+      <div>
+        <h1>HEAding</h1>
+        <h1>Heading 2</h1>
+      </div>
+      <form onSubmit={submit} className="login-form">
+        <label htmlFor="username">Username</label>
 
-      <input
-        type="text"
-        placeholder="Username"
-        name="username"
-        required
-        onChange={(e) => setUsername(e.currentTarget.value)}
-      />
+        <input
+          type="text"
+          placeholder="Username"
+          name="username"
+          required
+          onChange={(e) => setUsername(e.currentTarget.value)}
+        />
 
-      <label htmlFor="password">Password</label>
+        <label htmlFor="password">Password</label>
 
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        required
-        onChange={(e) => setPassword(e.currentTarget.value)}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          required
+          onChange={(e) => setPassword(e.currentTarget.value)}
+        />
 
-      <button type="submit">Log In</button>
-    </form>
+        <button type="submit">Log In</button>
+      </form>
+    </div>
   );
 };

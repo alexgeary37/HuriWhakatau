@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import { Container, Segment, Form, Modal } from "semantic-ui-react";
+import Select from "react-select";
+
+const a1 = [
+  { value: "Alex", label: "10" },
+  { value: "Bob", label: "12" },
+];
 
 export const CreateGroup = () => {
-  const [members, addToMembers] = useState([]);
-
   const { users } = useTracker(() => {
     Meteor.subscribe("users");
 
@@ -13,41 +16,23 @@ export const CreateGroup = () => {
     };
   });
 
+  const getUsers = () => {
+    console.log(users[0]);
+    userarray = [];
+    for (user in users) {
+      entry = { value: "", label: "" };
+      entry.value = user._id;
+      entry.label = user.username;
+      console.log(entry.value);
+      userarray += entry;
+    }
+    console.log("userarray", userarray[0]);
+    return userarray;
+  };
+
   return (
-    <Form as={Segment} attached="bottom">
-      <Form.Field control={Form.Group} label="Users">
-        <Form.Dropdown
-          width={14}
-          loading={users.length === 0}
-          selection
-          multiple
-          search
-          options={users.map((user) => ({
-            key: user._id,
-            text: user._id,
-            value: user._id,
-          }))}
-          name="members"
-          value={members}
-          onChange={(e) => {
-            console.log("e:", e.target.value);
-            addToMembers(members.concat(e.target.value));
-            members.map((m) => console.log(m));
-          }}
-        />
-      </Form.Field>
-      <Form.Button
-        content="Submit"
-        onClick={() =>
-          members.length > 1 &&
-          Meteor.call(
-            "groups.create",
-            "Group name",
-            members,
-            (event, groupId) => history.push(`/groups/${groupId}`)
-          )
-        }
-      />
-    </Form>
+    <div>
+      <Select options={getUsers()} isMulti />
+    </div>
   );
 };
