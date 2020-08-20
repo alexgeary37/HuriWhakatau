@@ -40,6 +40,34 @@ Meteor.methods({
 
     Comments.remove(commentId);
   },
+
+  //edit an existing comment in the discussion,
+  //probably update comment in db to set an edited true or something
+  "comments.edit"(commentId){
+    check(commentId, String);
+  },
+  // Update an existing comment in the comments collection in the db.
+  // text: the text of the comment
+  // commentId: _id of the comment to be updated
+  // Called from Discussion.jsx
+  "comments.update"(text, commentId) {
+    console.log(text);
+
+    check(commentId, String);
+    const comment = Comments.findOne(commentId);
+
+    // If user is not the author of the comment, throw error
+    if (!this.userId || comment.authorId !== this.userId) {
+      throw new Meteor.Error("Not authorized.");
+    }
+
+    Comments.update(commentId,{
+      $set: {
+        text: text,
+      }
+    });
+  },
+
 });
 
 if (Meteor.isServer) {
@@ -50,6 +78,6 @@ if (Meteor.isServer) {
   });
 
   // List all the Comments and users in the db
-  console.log("List all comments\n", Comments.find({}).fetch());
-  console.log("List all users\n", Meteor.users.find({}).fetch());
+  // console.log("List all comments\n", Comments.find({}).fetch());
+  // console.log("List all users\n", Meteor.users.find({}).fetch());
 }
