@@ -52,5 +52,5 @@ if (Meteor.isServer) {
   });
 
   // List all the Verdicts in the db
-  console.log("List all verdicts\n", Verdicts.find({}).fetch());
+  // console.log("List all verdicts\n", Verdicts.find({}).fetch());
 }
