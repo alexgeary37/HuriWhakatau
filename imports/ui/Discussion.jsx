@@ -62,6 +62,24 @@ export const Discussion = () => {
 
   // '_id' here is equal to 'comment' in Comment.jsx onDeleteClick(comment) I think ???
   const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
+  // adding edit comment call
+  const editComment = ({ _id }) => {
+    let commentSpan = document.getElementById(_id + ":text");
+    commentSpan.contentEditable = "true";
+    let range = document.createRange();
+    range.selectNodeContents(commentSpan);
+    range.collapse("false");
+    commentSpan.focus();
+    Meteor.call("comments.edit", _id);
+  };
+  //update comment call
+  const updateComment = ({ _id }) => {
+    let commentSpan = document.getElementById(_id + ":text");
+    let text = commentSpan.innerText;
+    console.log(text);
+    commentSpan.contentEditable = "false";
+    Meteor.call("comments.update", text, _id);
+  }
 
   const commentsEndRef = useRef(null);
 
@@ -113,6 +131,8 @@ export const Discussion = () => {
                   key={comment._id}
                   comment={comment}
                   onDeleteClick={deleteComment}
+                  onEditClick={editComment}
+                  onSubmitEditClick={updateComment}
                 />
               </div>
             ))}
