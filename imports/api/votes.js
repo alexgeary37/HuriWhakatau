@@ -47,5 +47,5 @@ if (Meteor.isServer) {
   });
 
   // List all the Votes in the db.
-  console.log("List all votes\n", Votes.find({}).fetch());
+  // console.log("List all votes\n", Votes.find({}).fetch());
 }

@@ -62,5 +62,5 @@ if (Meteor.isServer) {
   });
 
   // List all the Discussions in the data base.
-  console.log("List all discussions\n", Discussions.find({}).fetch());
+  // console.log("List all discussions\n", Discussions.find({}).fetch());
 }
