@@ -30,6 +30,7 @@ export const Discussion = () => {
     discussionTitle,
     discussionDescription,
     discussionVerdictProposers,
+    // scenarioTitle,
     comments,
     verdicts,
   } = useTracker(() => {
@@ -38,15 +39,22 @@ export const Discussion = () => {
     Meteor.subscribe("verdicts", discussionId);
     let discSub = Meteor.subscribe("discussions");
 
+    let scenSub = Meteor.subscribe("scenarios");
+
     let thisDiscussionTitle = "";
     let thisDiscussionDescription = "";
     let verdictProposers = [];
-    if (discSub.ready()) {
+
+    // let thisScenarioTitle = "";
+    if (discSub.ready() && scenSub.ready()) {
       // Get the data for the constants.
       let discussion = Discussions.findOne({ _id: discussionId });
       thisDiscussionTitle = discussion.title;
       thisDiscussionDescription = discussion.description;
       verdictProposers = discussion.activeVerdictProposers;
+
+      // let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
+      // thisScenarioTitle = scenario.title;
     }
 
     return {
@@ -54,6 +62,7 @@ export const Discussion = () => {
       discussionTitle: thisDiscussionTitle,
       discussionDescription: thisDiscussionDescription,
       discussionVerdictProposers: verdictProposers,
+      // scenarioTitle: thisScenarioTitle,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
     };
@@ -61,6 +70,7 @@ export const Discussion = () => {
 
   // '_id' here is equal to 'comment' in Comment.jsx onDeleteClick(comment) I think ???
   const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
+
   // adding edit comment call
   const editComment = ({ _id }) => {
     let commentSpan = document.getElementById(_id + ":text");
@@ -71,6 +81,7 @@ export const Discussion = () => {
     commentSpan.focus();
     Meteor.call("comments.edit", _id);
   };
+
   //update comment call
   const updateComment = ({ _id }) => {
     let commentSpan = document.getElementById(_id + ":text");
