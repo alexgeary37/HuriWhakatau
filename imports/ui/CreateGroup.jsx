@@ -1,46 +1,46 @@
 import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Container, Segment, Form } from "semantic-ui-react";
-import { Discussions } from "/imports/api/discussions";
+import { ScenarioSets } from "/imports/api/scenarioSets";
 
 export const CreateGroup = () => {
-  const [discussionSet, setDiscussionSet] = useState([]);
+  const [scenarioSet, setScenarioSet] = useState([]);
   const [members, setMembers] = useState([]);
   const [groupName, setGroupName] = useState("");
 
-  const { users, discussions } = useTracker(() => {
+  const { users, scenarioSets } = useTracker(() => {
     Meteor.subscribe("users");
-    Meteor.subscribe("discussions");
+    Meteor.subscribe("scenarioSets");
 
     return {
       users: Meteor.users.find().fetch(),
-      discussions: Discussions.find().fetch(),
+      scenarioSets: ScenarioSets.find().fetch(),
     };
   });
 
   return (
     <Container>
       <Form as={Segment} attached="bottom">
-        <Form.Dropdown
-          label="Discussion"
-          loading={discussions.length === 0}
-          selection
-          multiple
-          options={discussions.map((discussion) => ({
-            key: discussion._id,
-            text: discussion.title,
-            description: discussion.description,
-            value: discussion._id,
-          }))}
-          name="discussions"
-          value={discussionSet}
-          onChange={(e, { value }) => setDiscussionSet(value.concat())}
-        />
         <Form.Input
           label="Name"
           type="text"
           value={groupName}
           onInput={({ target }) => setGroupName(target.value)}
+        />
+        <Form.Dropdown
+          label="Scenario Set"
+          loading={scenarioSets.length === 0}
+          selection
+          multiple
+          options={scenarioSets.map((scenarioSet) => ({
+            key: scenarioSet._id,
+            text: scenarioSet.title,
+            description: scenarioSet.description,
+            value: scenarioSet._id,
+          }))}
+          name="scenarioSets"
+          value={scenarioSet}
+          onChange={(e, { value }) => setScenarioSet(value.concat())}
         />
         <Form.Field control={Form.Group} label="Members">
           <Form.Dropdown
@@ -64,7 +64,8 @@ export const CreateGroup = () => {
           onClick={() =>
             groupName != "" &&
             members.length > 1 &&
-            Meteor.call("groups.create", groupName, members, discussionSet)
+            scenarioSet.length == 1 &&
+            Meteor.call("groups.create", groupName, members, scenarioSet)
           }
         />
       </Form>
