@@ -7,7 +7,7 @@ Meteor.methods({
   // Insert a Group into the groups collection in the db.
   // members: _ids of the users in this group
   // discussions: _ids of the discussions this Group will discuss
-  // Called from ...
+  // Called from CreateGroup.jsx
   "groups.create"(name, members, discussions) {
     check(name, String);
     check(members, Array);
