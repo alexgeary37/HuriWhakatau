@@ -1,6 +1,6 @@
 import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import { Link } from "react-router-dom";
+import { Link, withRouter} from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
 import { LoginForm } from "./LoginForm";
