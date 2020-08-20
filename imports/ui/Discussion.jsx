@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
-import { useParams } from "react-router-dom";
+import { useParams, withRouter } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
@@ -81,7 +81,7 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <Header as="h2" attached="top">
+      <Header as="h2">
         {discussionTitle}
       </Header>
       <Header as="h5" attached>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, BrowserRouter } from "react-router-dom";
 import history from "history";
 import { Menu, Container, Dropdown, Icon } from "semantic-ui-react";
 import { Dashboard } from "./Dashboard";
@@ -9,10 +9,8 @@ import {LoginForm} from "./LoginForm";
 
 // Should this be a constant?????????????????????????????????????????????????????/
 const browserHistory = history.createBrowserHistory();
-let userDude = Meteor.userId();
 
 export const App = () => {
-  console.log(userDude);
   if (!Meteor.userId()) {
     return (
         <div className="dashboard-login">
@@ -22,6 +20,7 @@ export const App = () => {
   }
   return (
     <Router history={browserHistory}>
+        <BrowserRouter>
       <Menu fixed="top" inverted>
         <Container className="content-width">
           <Menu.Item as={Link} to="/" header>
@@ -33,7 +32,7 @@ export const App = () => {
               <Dropdown.Item
                 content="Discussions"
                 as={Link}
-                to="/discussions"
+                to="/"
               />
             </Dropdown.Menu>
           </Dropdown>
@@ -41,8 +40,9 @@ export const App = () => {
       </Menu>
       <Switch>
         <Route exact path="/" component={Dashboard} />
-        <Route exact path="/:discussionId" component={Discussion} />
+        <Route path="/:discussionId" component={Discussion} />
       </Switch>
+        </BrowserRouter>
     </Router>
   );
 };
