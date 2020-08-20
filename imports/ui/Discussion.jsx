@@ -19,6 +19,7 @@ import { Comment } from "./Comment";
 import { CommentForm } from "./CommentForm";
 import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
+import { Scenarios } from "/imports/api/scenarios";
 
 export const Discussion = () => {
   const filter = {};
@@ -77,7 +78,7 @@ export const Discussion = () => {
     console.log(text);
     commentSpan.contentEditable = "false";
     Meteor.call("comments.update", text, _id);
-  }
+  };
 
   const commentsEndRef = useRef(null);
 

@@ -10,7 +10,6 @@ Meteor.methods({
     check(title, String);
     check(description, String);
 
-    // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
@@ -18,6 +17,7 @@ Meteor.methods({
     Discussions.insert({
       title: title,
       description: description,
+      // scenarioId: scenarioId,
       createdAt: new Date(),
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
