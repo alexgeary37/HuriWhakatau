@@ -6,7 +6,6 @@ import { Discussions } from "/imports/api/discussions";
 import { LoginForm } from "./LoginForm";
 
 export const createDiscussion = () =>
-  // Go to CreateDiscussion.jsx at link /discussions/create
   Meteor.call(
     "discussions.insert",
     "Title" + Discussions.find().count(),

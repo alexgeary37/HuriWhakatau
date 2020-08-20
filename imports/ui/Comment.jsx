@@ -1,12 +1,14 @@
 import React from "react";
 import classnames from "classnames";
-import {Discussions} from "../api/discussions";
+import { Discussions } from "../api/discussions";
 
 export const Comment = ({ comment, onDeleteClick }) => {
   let classes = classnames("comment");
-  let user = Meteor.users.find(comment.authorId,{
-      fields :{username : 1}});
+  let user = Meteor.users.find(comment.authorId, {
+    fields: { username: 1 },
+  });
   console.log(user);
+
   if (Meteor.userId() === comment.authorId) {
     classes = classnames("comment usersComment");
   }

@@ -4,30 +4,26 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { Groups } from "/imports/api/groups";
 
-export const createGroup = () =>
-  Meteor.call("groups.insert", "Title" + Groups.find().count(), "desc");
-
-export const Dashboard = () => {
+export const BrowseGroups = () => {
   const { groups } = useTracker(() => {
-    Meteor.subscribe("groups");
+    Meteor.subscribe("groups", Meteor.userId());
 
     return {
-      groups: Groups.find({}).fetch(),
+      groups: Groups.find().fetch(),
     };
   });
 
   return (
-    <div className="dashboard">
+    <div className="browseGroups">
       <h1>Groups</h1>
       <ul className="groups">
-        {/* Change this for groups */}
         {groups.map((group) => (
           <div className="groupContainer" key={group._id}>
-            <Button content={group.title} as={Link} to={`/${group._id}`} />
+            <Button content={group.name} as={Link} to={`/${group._id}`} />
           </div>
         ))}
       </ul>
-      <Button content="Create Group" onClick={createGroup} />
+      <Button content="Create Group" as={Link} to={"/groups/create"} />
     </div>
   );
 };

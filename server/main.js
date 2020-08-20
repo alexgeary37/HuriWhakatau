@@ -1,4 +1,5 @@
 import { Meteor } from "meteor/meteor";
+import "/imports/api/groups";
 import "/imports/api/discussions";
 import "/imports/api/comments";
 import "/imports/api/verdicts";
@@ -22,6 +23,12 @@ Meteor.startup(() => {
     Accounts.createUser({
       username: "alexgeary",
       password: "password3",
+    });
+  }
+
+  if (Meteor.isServer) {
+    Meteor.publish("users", function () {
+      return Meteor.users.find();
     });
   }
 });
