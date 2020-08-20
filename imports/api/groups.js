@@ -7,11 +7,11 @@ Meteor.methods({
   // Insert a Group into the groups collection in the db.
   // members: _ids of the users in this group
   // discussions: _ids of the discussions this Group will discuss
-  // Called from ...
-  "groups.create"(name, members, discussions) {
+  // Called from CreateGroup.jsx
+  "groups.create"(name, members, scenarioSet) {
     check(name, String);
     check(members, Array);
-    check(discussions, Array);
+    check(scenarioSet, Array);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
@@ -22,7 +22,7 @@ Meteor.methods({
     Groups.insert({
       name: name,
       members: members,
-      discussions: discussions,
+      scenarioSet: scenarioSet,
       createdAt: new Date(),
       createdBy: this.userId,
     });
@@ -37,5 +37,5 @@ if (Meteor.isServer) {
   });
 
   // List all the Groups in the db
-  console.log("List all groups\n", Groups.find().fetch());
+  // console.log("List all groups\n", Groups.find().fetch());
 }
