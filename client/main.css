@@ -16,14 +16,15 @@ App.jsx
 }
 
 .juryroom .login-form {
-  margin-top: 2rem;
+  margin-top: 100rem;
+  padding-top: 100rem;
 }
 
-.juryroom h2{
+.juryroom h2 {
   height: 7vh;
 }
 
-.juryroom h5{
+.juryroom h5 {
   height: 5vh;
 }
 
@@ -32,7 +33,7 @@ App.jsx
   margin: 0;
   position: fixed;
   bottom: 0;
-  width:100%;
+  width: 100%;
   height: 50%;
   overflow: hidden;
 }
@@ -48,14 +49,14 @@ App.jsx
 
 .juryroom .discussion-right-panel .verdict {
   list-style: none;
-  margin:3px;
+  margin: 3px;
   align-items: start;
-  align-self:flex-end;
-  width:100%;
-  height:fit-content;
-  background:whitesmoke;
+  align-self: flex-end;
+  width: 100%;
+  height: fit-content;
+  background: whitesmoke;
   padding: 10px;
-  border-radius:1px 1px 1px 1px;
+  border-radius: 1px 1px 1px 1px;
   border-style: solid;
   border-color: black;
   border-width: 2px;
@@ -78,30 +79,30 @@ App.jsx
   width: 0; /* Remove scrollbar space */
 }
 
-.juryroom .comments-and-form .comments .commentContainer{
+.juryroom .comments-and-form .comments .commentContainer {
   padding: 0;
   margin: 0;
   width: inherit;
   height: max-content;
-  overflow:hidden;
-  align-self:flex-end;
+  overflow: hidden;
+  align-self: flex-end;
   flex: 100%;
   min-height: max-content;
 }
 
 .juryroom .comments-and-form .comments .comment {
   /*display: flex;*/
-  margin:3px;
+  margin: 3px;
   align-items: start;
-  align-self:flex-end;
-  width:52%;
-  height:fit-content;
-  background:aliceblue;
+  align-self: flex-end;
+  width: 52%;
+  height: fit-content;
+  background: aliceblue;
   padding: 10px;
-  border-radius:10px 25px 25px 10px;
-  border-style:solid;
+  border-radius: 10px 25px 25px 10px;
+  border-style: solid;
   border-width: thin;
-  border-color:cadetblue;
+  border-color: cadetblue;
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
@@ -121,11 +122,11 @@ App.jsx
 }
 
 .juryroom .comments-and-form .comments .comment.usersComment {
-  width:52%;
-  background:aqua;
-  align-self:end;
-  float:right;
-  border-radius:25px 10px 10px 25px;
+  width: 52%;
+  background: aqua;
+  align-self: end;
+  float: right;
+  border-radius: 25px 10px 10px 25px;
 }
 
 .juryroom .comments-and-form .comment.usersComment button {
@@ -134,8 +135,8 @@ App.jsx
 
 .juryroom .comments-and-form .comment-form {
   margin-top: 2rem;
-  width:inherit;
-  align-self:end;
+  width: inherit;
+  align-self: end;
   display: flex;
 }
 

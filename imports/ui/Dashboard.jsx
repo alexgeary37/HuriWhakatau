@@ -1,12 +1,11 @@
 import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import { Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
 import { LoginForm } from "./LoginForm";
 
 export const createDiscussion = () =>
-  // Go to CreateDiscussion.jsx at link /discussions/create
   Meteor.call(
     "discussions.insert",
     "Title" + Discussions.find().count(),
@@ -14,7 +13,6 @@ export const createDiscussion = () =>
   );
 
 export const Dashboard = () => {
-  console.log("Dashboard entry");
   const { user, discussions } = useTracker(() => {
     Meteor.subscribe("discussions");
 
@@ -23,6 +21,14 @@ export const Dashboard = () => {
       discussions: Discussions.find({}).fetch(),
     };
   });
+
+  if (!user) {
+    return (
+      <div className="dashboard-login">
+        <LoginForm />
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">

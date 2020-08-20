@@ -21,7 +21,6 @@ import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
 
 export const Discussion = () => {
-  console.log("Discussion entry");
   const filter = {};
   const { discussionId } = useParams();
 
@@ -37,12 +36,11 @@ export const Discussion = () => {
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
     let discSub = Meteor.subscribe("discussions");
-    discSub = discSub.ready();
 
     let thisDiscussionTitle = "";
     let thisDiscussionDescription = "";
     let verdictProposers = [];
-    if (discSub) {
+    if (discSub.ready()) {
       // Get the data for the constants.
       let discussion = Discussions.findOne({ _id: discussionId });
       thisDiscussionTitle = discussion.title;
@@ -99,9 +97,7 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <Header as="h2">
-        {discussionTitle}
-      </Header>
+      <Header as="h2">{discussionTitle}</Header>
       <Header as="h5" attached>
         {discussionDescription}
       </Header>
