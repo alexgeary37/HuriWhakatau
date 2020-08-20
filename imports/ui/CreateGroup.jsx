@@ -12,15 +12,15 @@ export const CreateGroup = () => {
     Meteor.subscribe("users");
 
     return {
-      users: Meteor.users.find().fetch(),
+      users: Meteor.users.find({}).fetch(),
     };
   });
 
   const getUsers = () => {
     console.log(users[0]);
-    userarray = [];
-    for (user in users) {
-      entry = { value: "", label: "" };
+    let userarray = [];
+    for (var user in users) {
+      let entry = { value: "", label: "" };
       entry.value = user._id;
       entry.label = user.username;
       console.log(entry.value);
