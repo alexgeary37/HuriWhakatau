@@ -34,10 +34,11 @@ Meteor.methods({
     );
 
     const set = ScenarioSets.findOne({ _id: scenarioSet });
-    const scenarios = set.scenarios;
-    const scenarioId = Scenarios.findOne({ _id: scenarios[0] });
-    console.log(scenarioId);
-    Meteor.call("discussions.insert", scenarioId, groupId);
+    const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
+
+    for (i = 0; i < scenarios.length; i++) {
+      Meteor.call("discussions.insert", scenarios[i]._id, groupId);
+    }
   },
 });
 

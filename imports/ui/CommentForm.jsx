@@ -9,7 +9,6 @@ export const CommentForm = ({ discussionId }) => {
     if (!text) return; // If text is empty, don't submit anything.
     Meteor.call("comments.insert", text.trim(), discussionId);
     setText("");
-    // return false;
   };
 
   return (

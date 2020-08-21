@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Container, Segment, Form } from "semantic-ui-react";
 import { ScenarioSets } from "/imports/api/scenarioSets";
+import { Scenarios } from "/imports/api/scenarios";
 
 export const CreateGroup = () => {
   const [scenarioSet, setScenarioSet] = useState("");
@@ -9,12 +10,12 @@ export const CreateGroup = () => {
   const [groupName, setGroupName] = useState("");
 
   const { users, scenarioSets } = useTracker(() => {
-    Meteor.subscribe("users");
     Meteor.subscribe("scenarioSets");
-
+    Meteor.subscribe("scenarios");
     return {
       users: Meteor.users.find().fetch(),
       scenarioSets: ScenarioSets.find().fetch(),
+      scenarios: Scenarios.find().fetch(),
     };
   });
 

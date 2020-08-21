@@ -5,32 +5,19 @@ import { List, Segment } from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
 export const DiscussionSummary = ({ discussion }) => {
-  const { title, description } = useTracker(() => {
-    let sub = Meteor.subscribe("scenarios");
-
-    let scenarioTitle = "";
-    let scenarioDescription = "";
-
-    // console.log(discussion.scenarioId);
-
-    if (sub.ready()) {
-      let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
-      scenarioTitle = scenario.title;
-      scenarioDescription = scenario.description;
-    }
+  const { scenario } = useTracker(() => {
+    // Meteor.subscribe("scenarios");
 
     return {
-      title: scenarioTitle,
-      description: scenarioDescription,
+      scenario: Scenarios.findOne({ _id: discussion.scenarioId }),
     };
   });
 
   return (
-    // to={`/${discussion._id}`}
     <List.Item as={Link} to={`/discussion/${discussion._id}`}>
       <List.Content as={Segment}>
-        <List.Header content={title} />
-        <List.Description content={description} />
+        <List.Header content={scenario && scenario.title} />
+        <List.Description content={scenario && scenario.description} />
       </List.Content>
     </List.Item>
   );

@@ -9,8 +9,6 @@ export const CreateScenarioSet = () => {
   const [scenarioSet, setScenarios] = useState([]);
 
   const { scenarios } = useTracker(() => {
-    Meteor.subscribe("scenarios");
-
     return {
       scenarios: Scenarios.find().fetch(),
     };

@@ -34,17 +34,15 @@ export const Discussion = () => {
     verdicts,
   } = useTracker(() => {
     // useTracker makes sure the component will re-render when the data changes.
+    let discussionSub = Meteor.subscribe("discussions");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
-    let discussionSub = Meteor.subscribe("discussions");
-    let scenarioSub = Meteor.subscribe("scenarios");
 
     let discussionTitle = "";
     let discussionDescription = "";
     let verdictProposers = [];
 
-    // let thisScenarioTitle = "";
-    if (discussionSub.ready() && scenarioSub.ready()) {
+    if (discussionSub.ready()) {
       // Get the data for the constants.
       let discussion = Discussions.findOne({ _id: discussionId });
       let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
@@ -111,11 +109,12 @@ export const Discussion = () => {
       </Header>
       <Segment.Group horizontal>
         <Segment className="discussion-right-panel">
-          {verdicts.map((verdict) => (
-            <div className="verdictContainer" key={verdict._id}>
-              <Verdict key={verdict._id} verdict={verdict} />
-            </div>
-          ))}
+          {verdicts &&
+            verdicts.map((verdict) => (
+              <div className="verdictContainer" key={verdict._id}>
+                <Verdict key={verdict._id} verdict={verdict} />
+              </div>
+            ))}
           {!userHasSubmittedVerdict() &&
             (discussionVerdictProposers.includes(Meteor.userId()) ? (
               <VerdictForm discussionId={discussionId} />
@@ -129,17 +128,18 @@ export const Discussion = () => {
             className="comments"
             style={{ overflow: "auto", maxHeight: "50em" }}
           >
-            {comments.map((comment) => (
-              <div className="commentContainer" key={comment._id}>
-                <Comment
-                  key={comment._id}
-                  comment={comment}
-                  onDeleteClick={deleteComment}
-                  onEditClick={editComment}
-                  onSubmitEditClick={updateComment}
-                />
-              </div>
-            ))}
+            {comments &&
+              comments.map((comment) => (
+                <div className="commentContainer" key={comment._id}>
+                  <Comment
+                    key={comment._id}
+                    comment={comment}
+                    onDeleteClick={deleteComment}
+                    onEditClick={editComment}
+                    onSubmitEditClick={updateComment}
+                  />
+                </div>
+              ))}
             <div ref={commentsEndRef} />
           </ul>
           <CommentForm discussionId={discussionId} />
