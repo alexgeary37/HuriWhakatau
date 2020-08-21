@@ -1,5 +1,7 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import { ScenarioSets } from "/imports/api/scenarioSets";
+import { Scenarios } from "/imports/api/scenarios";
 
 export const Groups = new Mongo.Collection("groups");
 
@@ -11,21 +13,31 @@ Meteor.methods({
   "groups.create"(name, members, scenarioSet) {
     check(name, String);
     check(members, Array);
-    check(scenarioSet, Array);
+    check(scenarioSet, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
-    }
+    } //
 
-    // Insert new Group and get its _id.
-    Groups.insert({
-      name: name,
-      members: members,
-      scenarioSet: scenarioSet,
-      createdAt: new Date(),
-      createdBy: this.userId,
-    });
+    const groupId = Groups.insert(
+      {
+        name: name,
+        members: members,
+        scenarioSet: scenarioSet,
+        createdAt: new Date(),
+        createdBy: this.userId,
+      },
+      (_error, insertedDocs) => {
+        return insertedDocs[0]._id;
+      }
+    );
+
+    const set = ScenarioSets.findOne({ _id: scenarioSet });
+    const scenarios = set.scenarios;
+    const scenarioId = Scenarios.findOne({ _id: scenarios[0] });
+    console.log(scenarioId);
+    Meteor.call("discussions.insert", scenarioId, groupId);
   },
 });
 
@@ -35,7 +47,4 @@ if (Meteor.isServer) {
   Meteor.publish("groups", function (userId) {
     return Groups.find();
   });
-
-  // List all the Groups in the db
-  // console.log("List all groups\n", Groups.find().fetch());
 }

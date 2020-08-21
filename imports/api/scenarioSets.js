@@ -33,7 +33,4 @@ if (Meteor.isServer) {
   Meteor.publish("scenarioSets", function () {
     return ScenarioSets.find();
   });
-
-  // List all the ScenarioSets in the db.
-  // console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
 }

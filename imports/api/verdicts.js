@@ -50,7 +50,4 @@ if (Meteor.isServer) {
   Meteor.publish("verdicts", function (discussionId) {
     return Verdicts.find({ discussionId: discussionId });
   });
-
-  // List all the Verdicts in the db
-  // console.log("List all verdicts\n", Verdicts.find({}).fetch());
 }

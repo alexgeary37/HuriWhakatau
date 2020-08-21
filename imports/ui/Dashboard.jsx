@@ -1,27 +1,19 @@
 import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
-import { Scenarios } from "/imports/api/scenarios";
+import { DiscussionSummary } from "./DiscussionSummary";
+import { Groups } from "/imports/api/groups";
 import { LoginForm } from "./LoginForm";
 
-export const createDiscussion = () =>
-  Meteor.call(
-    "discussions.insert",
-    "Title" + Discussions.find().count(),
-    "desc"
-  );
-
 export const Dashboard = () => {
-  const { user, discussions, scenarios } = useTracker(() => {
+  const { user, discussions } = useTracker(() => {
+    Meteor.subscribe("groups");
     Meteor.subscribe("discussions");
-    Meteor.subscribe("scenarios");
 
     return {
       user: Meteor.userId(),
       discussions: Discussions.find({}).fetch(),
-      scenarios: Scenarios.find({}).fetch(),
     };
   });
 
@@ -39,16 +31,11 @@ export const Dashboard = () => {
       <h2>My discussions</h2>
       <ul className="discussions">
         {discussions.map((discussion) => (
-          <div className="discussionContainer" key={discussion._id}>
-            <Button
-              content={discussion.title}
-              as={Link}
-              to={`/${discussion._id}`}
-            />
-          </div>
+          // <div className="discussionContainer" key={discussion._id}>
+          <DiscussionSummary key={discussion._id} discussion={discussion} />
+          // </div>
         ))}
       </ul>
-      <Button content="Create Discussion" onClick={createDiscussion} />
     </div>
   );
 };

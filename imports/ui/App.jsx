@@ -49,7 +49,7 @@ export const App = () => {
             path="/scenarioSets/create"
             component={CreateScenarioSet}
           />
-          <Route path="/:discussionId" component={Discussion} />
+          <Route path="/discussion/:discussionId" component={Discussion} />
         </Switch>
       </BrowserRouter>
     </Router>

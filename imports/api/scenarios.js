@@ -29,9 +29,6 @@ if (Meteor.isServer) {
   // Scenarios.remove({});
 
   Meteor.publish("scenarios", function () {
-    return Scenarios.find();
+    return Scenarios.find({});
   });
-
-  // List all the Scenarios in the db
-  // console.log("List all scenarios\n", Scenarios.find().fetch());
 }

@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
-import { useParams, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
@@ -27,42 +27,38 @@ export const Discussion = () => {
 
   const {
     // Constants to return and use for component rendering
-    discussionTitle,
-    discussionDescription,
+    title,
+    description,
     discussionVerdictProposers,
-    // scenarioTitle,
     comments,
     verdicts,
   } = useTracker(() => {
     // useTracker makes sure the component will re-render when the data changes.
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
-    let discSub = Meteor.subscribe("discussions");
+    let discussionSub = Meteor.subscribe("discussions");
+    let scenarioSub = Meteor.subscribe("scenarios");
 
-    let scenSub = Meteor.subscribe("scenarios");
-
-    let thisDiscussionTitle = "";
-    let thisDiscussionDescription = "";
+    let discussionTitle = "";
+    let discussionDescription = "";
     let verdictProposers = [];
 
     // let thisScenarioTitle = "";
-    if (discSub.ready() && scenSub.ready()) {
+    if (discussionSub.ready() && scenarioSub.ready()) {
       // Get the data for the constants.
       let discussion = Discussions.findOne({ _id: discussionId });
-      thisDiscussionTitle = discussion.title;
-      thisDiscussionDescription = discussion.description;
-      verdictProposers = discussion.activeVerdictProposers;
+      let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
 
-      // let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
-      // thisScenarioTitle = scenario.title;
+      verdictProposers = discussion.activeVerdictProposers;
+      discussionTitle = scenario.title;
+      discussionDescription = scenario.description;
     }
 
     return {
       // Assign and return the constants initialized with data.
-      discussionTitle: thisDiscussionTitle,
-      discussionDescription: thisDiscussionDescription,
+      title: discussionTitle,
+      description: discussionDescription,
       discussionVerdictProposers: verdictProposers,
-      // scenarioTitle: thisScenarioTitle,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
     };
@@ -109,9 +105,9 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <Header as="h2">{discussionTitle}</Header>
+      <Header as="h2">{title}</Header>
       <Header as="h5" attached>
-        {discussionDescription}
+        {description}
       </Header>
       <Segment.Group horizontal>
         <Segment className="discussion-right-panel">

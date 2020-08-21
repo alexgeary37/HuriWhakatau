@@ -41,14 +41,6 @@ Meteor.startup(() => {
       return Meteor.users.find();
     });
 
-    Groups.remove();
-    Scenarios.remove();
-    ScenarioSets.remove();
-    Discussions.remove();
-    Comments.remove();
-    Verdicts.remove();
-    Votes.remove();
-
     console.log("List all groups\n", Groups.find().fetch());
     console.log("List all scenarios\n", Scenarios.find().fetch());
     console.log("List all scenarioSets\n", ScenarioSets.find().fetch());

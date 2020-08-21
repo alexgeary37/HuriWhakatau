@@ -45,7 +45,4 @@ if (Meteor.isServer) {
   Meteor.publish("votes", function (verdictId) {
     return Votes.find({ verdictId: verdictId });
   });
-
-  // List all the Votes in the db.
-  // console.log("List all votes\n", Votes.find({}).fetch());
 }

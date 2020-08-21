@@ -6,18 +6,17 @@ export const Discussions = new Mongo.Collection("discussions");
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from Dashboardjsx
-  "discussions.insert"(title, description) {
-    check(title, String);
-    check(description, String);
+  "discussions.insert"(scenarioId, groupId) {
+    check(scenarioId, String);
+    check(groupId, String);
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
     Discussions.insert({
-      title: title,
-      description: description,
-      // scenarioId: scenarioId,
+      scenarioId: scenarioId,
+      groupId: groupId,
       createdAt: new Date(),
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
@@ -60,7 +59,4 @@ if (Meteor.isServer) {
   Meteor.publish("discussions", function () {
     return Discussions.find();
   });
-
-  // List all the Discussions in the data base.
-  // console.log("List all discussions\n", Discussions.find({}).fetch());
 }
