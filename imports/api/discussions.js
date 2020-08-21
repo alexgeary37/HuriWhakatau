@@ -56,7 +56,11 @@ Meteor.methods({
 if (Meteor.isServer) {
   // Discussions.remove({});
 
-  Meteor.publish("discussions", function () {
-    return Discussions.find();
+  Meteor.publish("allDiscussions", function () {
+    return Discussions.find({});
+  });
+
+  Meteor.publish("discussions", function (discussionId) {
+    return Discussions.find({ _id: discussionId });
   });
 }

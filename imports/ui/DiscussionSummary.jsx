@@ -6,7 +6,7 @@ import { Scenarios } from "/imports/api/scenarios";
 
 export const DiscussionSummary = ({ discussion }) => {
   const { scenario } = useTracker(() => {
-    // Meteor.subscribe("scenarios");
+    Meteor.subscribe("scenarios");
 
     return {
       scenario: Scenarios.findOne({ _id: discussion.scenarioId }),

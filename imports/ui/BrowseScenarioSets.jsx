@@ -6,6 +6,8 @@ import { ScenarioSets } from "/imports/api/scenarioSets";
 
 export const BrowseScenarioSets = () => {
   const { scenarioSets } = useTracker(() => {
+    Meteor.subscribe("scenarioSets");
+
     return {
       scenarioSets: ScenarioSets.find().fetch(),
     };

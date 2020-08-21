@@ -31,6 +31,6 @@ if (Meteor.isServer) {
   // ScenarioSets.remove({});
 
   Meteor.publish("scenarioSets", function () {
-    return ScenarioSets.find();
+    return ScenarioSets.find({});
   });
 }

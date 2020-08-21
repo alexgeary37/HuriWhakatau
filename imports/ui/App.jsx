@@ -18,9 +18,6 @@ const browserHistory = history.createBrowserHistory();
 export const App = () => {
   const { user } = useTracker(() => {
     Meteor.subscribe("users");
-    Meteor.subscribe("discussions");
-    Meteor.subscribe("scenarios");
-    Meteor.subscribe("scenarioSets");
 
     return {
       user: Meteor.userId(),

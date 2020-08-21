@@ -16,6 +16,8 @@ export const Comment = ({
 
   // useTracker makes sure the component will re-render when the data changes.
   const { user } = useTracker(() => {
+    Meteor.subscribe("users");
+
     return {
       user: Meteor.users.findOne({ _id: comment.authorId }),
     };

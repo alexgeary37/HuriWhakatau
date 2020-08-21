@@ -9,6 +9,8 @@ export const CreateScenarioSet = () => {
   const [scenarioSet, setScenarios] = useState([]);
 
   const { scenarios } = useTracker(() => {
+    Meteor.subscribe("scenarios");
+
     return {
       scenarios: Scenarios.find().fetch(),
     };
@@ -31,16 +33,19 @@ export const CreateScenarioSet = () => {
         />
         <Form.Dropdown
           label="Scenarios"
-          loading={scenarios.length === 0}
+          loading={scenarios && scenarios.length === 0}
           selection
           multiple
           placeholder="Select scenarios for this set..."
-          options={scenarios.map((scenario) => ({
-            key: scenario._id,
-            text: scenario.title,
-            description: scenario.description,
-            value: scenario._id,
-          }))}
+          options={
+            scenarios &&
+            scenarios.map((scenario) => ({
+              key: scenario._id,
+              text: scenario.title,
+              description: scenario.description,
+              value: scenario._id,
+            }))
+          }
           name="scenarios"
           value={scenarioSet}
           onChange={(e, { value }) => setScenarios(value.concat())}
@@ -50,7 +55,7 @@ export const CreateScenarioSet = () => {
           onClick={() =>
             title != "" &&
             description != "" &&
-            scenarios.length > 0 &&
+            scenarioSet.length > 0 &&
             Meteor.call("scenarioSets.create", title, description, scenarioSet)
           }
         />

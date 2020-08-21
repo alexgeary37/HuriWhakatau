@@ -16,6 +16,8 @@ import { LoginForm } from "./LoginForm";
 
 export const Dashboard = () => {
   const { user, discussions } = useTracker(() => {
+    Meteor.subscribe("allDiscussions");
+
     return {
       user: Meteor.userId(),
       discussions: Discussions.find({}).fetch(),
@@ -93,28 +95,14 @@ export const Dashboard = () => {
           <List relaxed size="huge">
             {discussions &&
               discussions.map((discussion) => (
-                // <div className="discussionContainer" key={discussion._id}>
                 <DiscussionSummary
                   key={discussion._id}
                   discussion={discussion}
                 />
               ))}
           </List>
-          )}
         </Segment>
       </Segment>
     </Container>
-    // <div className="dashboard">
-    //   <h1>Dashboard</h1>
-    //   <h2>My discussions</h2>
-    //   <ul className="discussions">
-    //     {discussions &&
-    //       discussions.map((discussion) => (
-    //         // <div className="discussionContainer" key={discussion._id}>
-    //         <DiscussionSummary key={discussion._id} discussion={discussion} />
-    //         // </div>
-    //       ))}
-    //   </ul>
-    // </div>
   );
 };

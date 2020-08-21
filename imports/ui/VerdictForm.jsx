@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 export const VerdictForm = ({ discussionId }) => {
-  // 'setText' is a function we're declaring in the state of this
-  // component in order to change the value of 'text'.
   const [text, setText] = useState(""); // "" is the default value for 'text'.
 
   const handleSubmit = () => {

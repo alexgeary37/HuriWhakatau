@@ -19,18 +19,13 @@ Meteor.methods({
     }
 
     // Insert new Verdict and get its _id.
-    const verdictId = Verdicts.insert(
-      {
-        discussionId: discussionId,
-        postedTime: new Date(),
-        authorId: this.userId, // _id of user.
-        text: text,
-        votes: [], // _ids of votes that all OTHER users make on this Verdict.
-      },
-      (_error, insertedDocs) => {
-        return insertedDocs[0]._id;
-      }
-    );
+    const verdictId = Verdicts.insert({
+      discussionId: discussionId,
+      postedTime: new Date(),
+      authorId: this.userId, // _id of user.
+      text: text,
+      votes: [], // _ids of votes that all OTHER users make on this Verdict.
+    });
 
     // Add _id of inserted Verdict and the author of it.
     Discussions.update(discussionId, {

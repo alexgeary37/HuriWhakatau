@@ -18,20 +18,15 @@ Meteor.methods({
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
-    } //
+    }
 
-    const groupId = Groups.insert(
-      {
-        name: name,
-        members: members,
-        scenarioSet: scenarioSet,
-        createdAt: new Date(),
-        createdBy: this.userId,
-      },
-      (_error, insertedDocs) => {
-        return insertedDocs[0]._id;
-      }
-    );
+    const groupId = Groups.insert({
+      name: name,
+      members: members,
+      scenarioSet: scenarioSet,
+      createdAt: new Date(),
+      createdBy: this.userId,
+    });
 
     const set = ScenarioSets.findOne({ _id: scenarioSet });
     const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
@@ -46,6 +41,6 @@ if (Meteor.isServer) {
   // Groups.remove({});
 
   Meteor.publish("groups", function (userId) {
-    return Groups.find();
+    return Groups.find({});
   });
 }

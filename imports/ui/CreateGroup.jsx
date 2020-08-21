@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Container, Segment, Form } from "semantic-ui-react";
 import { ScenarioSets } from "/imports/api/scenarioSets";
-import { Scenarios } from "/imports/api/scenarios";
 
 export const CreateGroup = () => {
   const [scenarioSet, setScenarioSet] = useState("");
@@ -11,11 +10,10 @@ export const CreateGroup = () => {
 
   const { users, scenarioSets } = useTracker(() => {
     Meteor.subscribe("scenarioSets");
-    Meteor.subscribe("scenarios");
+
     return {
       users: Meteor.users.find().fetch(),
       scenarioSets: ScenarioSets.find().fetch(),
-      scenarios: Scenarios.find().fetch(),
     };
   });
 
@@ -32,12 +30,15 @@ export const CreateGroup = () => {
           label="Scenario Set"
           loading={scenarioSets.length === 0}
           selection
-          options={scenarioSets.map((scenarioSet) => ({
-            key: scenarioSet._id,
-            text: scenarioSet.title,
-            description: scenarioSet.description,
-            value: scenarioSet._id,
-          }))}
+          options={
+            scenarioSets &&
+            scenarioSets.map((scenarioSet) => ({
+              key: scenarioSet._id,
+              text: scenarioSet.title,
+              description: scenarioSet.description,
+              value: scenarioSet._id,
+            }))
+          }
           name="scenarioSets"
           value={scenarioSet}
           onChange={(e, { value }) => setScenarioSet(value)}
@@ -49,11 +50,14 @@ export const CreateGroup = () => {
             selection
             multiple
             search
-            options={users.map((user) => ({
-              key: user._id,
-              text: user.username,
-              value: user._id,
-            }))}
+            options={
+              users &&
+              users.map((user) => ({
+                key: user._id,
+                text: user.username,
+                value: user._id,
+              }))
+            }
             name="members"
             value={members}
             onChange={(e, { value }) => setMembers(value.concat())}

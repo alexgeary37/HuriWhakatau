@@ -26,36 +26,27 @@ export const Discussion = () => {
   const { discussionId } = useParams();
 
   const {
-    // Constants to return and use for component rendering
-    title,
-    description,
+    scenario,
     discussionVerdictProposers,
     comments,
     verdicts,
   } = useTracker(() => {
-    // useTracker makes sure the component will re-render when the data changes.
-    let discussionSub = Meteor.subscribe("discussions");
+    const discussionSub = Meteor.subscribe("discussions", discussionId);
+    Meteor.subscribe("scenarios");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
 
-    let discussionTitle = "";
-    let discussionDescription = "";
-    let verdictProposers = [];
+    let verdictProposers;
+    let discussionScenario;
 
     if (discussionSub.ready()) {
-      // Get the data for the constants.
-      let discussion = Discussions.findOne({ _id: discussionId });
-      let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
-
+      let discussion = Discussions.find({}).fetch();
+      discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       verdictProposers = discussion.activeVerdictProposers;
-      discussionTitle = scenario.title;
-      discussionDescription = scenario.description;
     }
 
     return {
-      // Assign and return the constants initialized with data.
-      title: discussionTitle,
-      description: discussionDescription,
+      scenario: discussionScenario,
       discussionVerdictProposers: verdictProposers,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
@@ -103,9 +94,9 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <Header as="h2">{title}</Header>
+      <Header as="h2">{scenario && scenario.title}</Header>
       <Header as="h5" attached>
-        {description}
+        {scenario && scenario.description}
       </Header>
       <Segment.Group horizontal>
         <Segment className="discussion-right-panel">
@@ -116,6 +107,7 @@ export const Discussion = () => {
               </div>
             ))}
           {!userHasSubmittedVerdict() &&
+            discussionVerdictProposers &&
             (discussionVerdictProposers.includes(Meteor.userId()) ? (
               <VerdictForm discussionId={discussionId} />
             ) : (
