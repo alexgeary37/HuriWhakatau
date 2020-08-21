@@ -57,10 +57,34 @@ if (Meteor.isServer) {
   // Discussions.remove({});
 
   Meteor.publish("allDiscussions", function () {
-    return Discussions.find({});
+    return Discussions.find(
+      {},
+      {
+        fields: {
+          scenarioId: 1,
+          groupId: 1,
+          createdAt: 1,
+          createdBy: 1,
+          activeVerdictProposers: 1,
+          verdicts: 1,
+        },
+      }
+    );
   });
 
   Meteor.publish("discussions", function (discussionId) {
-    return Discussions.find({ _id: discussionId });
+    return Discussions.find(
+      { _id: discussionId },
+      {
+        fields: {
+          scenarioId: 1,
+          groupId: 1,
+          createdAt: 1,
+          createdBy: 1,
+          activeVerdictProposers: 1,
+          verdicts: 1,
+        },
+      }
+    );
   });
 }

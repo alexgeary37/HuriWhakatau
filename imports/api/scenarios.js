@@ -29,6 +29,16 @@ if (Meteor.isServer) {
   // Scenarios.remove({});
 
   Meteor.publish("scenarios", function () {
-    return Scenarios.find({});
+    return Scenarios.find(
+      {},
+      {
+        fields: {
+          title: 1,
+          description: 1,
+          createdAt: 1,
+          createdBy: 1,
+        },
+      }
+    );
   });
 }

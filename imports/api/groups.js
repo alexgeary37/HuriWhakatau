@@ -41,6 +41,17 @@ if (Meteor.isServer) {
   // Groups.remove({});
 
   Meteor.publish("groups", function (userId) {
-    return Groups.find({});
+    return Groups.find(
+      {},
+      {
+        fields: {
+          name: 1,
+          members: 1,
+          scenarioSet: 1,
+          createdAt: 1,
+          createdBy: 1,
+        },
+      }
+    );
   });
 }

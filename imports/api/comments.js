@@ -76,7 +76,11 @@ if (Meteor.isServer) {
     return Comments.find(
       { discussionId: discussionId },
       {
-        fields: { postedTime: 1, authorId: 1, text: 1 },
+        fields: {
+          postedTime: 1,
+          authorId: 1,
+          text: 1,
+        },
       }
     );
   });

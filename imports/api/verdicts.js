@@ -43,6 +43,17 @@ if (Meteor.isServer) {
   // Verdicts.remove({});
 
   Meteor.publish("verdicts", function (discussionId) {
-    return Verdicts.find({ discussionId: discussionId });
+    return Verdicts.find(
+      { discussionId: discussionId },
+      {
+        fields: {
+          discussionId: 1,
+          postedTime: 1,
+          authorId: 1,
+          text: 1,
+          votes: 1,
+        },
+      }
+    );
   });
 }
