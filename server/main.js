@@ -41,20 +41,20 @@ Meteor.startup(() => {
       return Meteor.users.find();
     });
 
-    // Groups.remove({});
-    // Scenarios.remove();
-    // ScenarioSets.remove();
-    // Discussions.remove();
-    // Comments.remove();
-    // Verdicts.remove();
-    // Votes.remove();
+    Groups.remove();
+    Scenarios.remove();
+    ScenarioSets.remove();
+    Discussions.remove();
+    Comments.remove();
+    Verdicts.remove();
+    Votes.remove();
 
-    // console.log("List all groups\n", Groups.find().fetch());
-    // console.log("List all scenarios\n", Scenarios.find().fetch());
-    // console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
-    // console.log("List all discussions\n", Discussions.find().fetch());
-    // console.log("List all comments\n", Comments.find().fetch());
-    // console.log("List all verdicts\n", Verdicts.find().fetch());
-    // console.log("List all votes\n", Votes.find().fetch());
+    console.log("List all groups\n", Groups.find().fetch());
+    console.log("List all scenarios\n", Scenarios.find().fetch());
+    console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
+    console.log("List all discussions\n", Discussions.find().fetch());
+    console.log("List all comments\n", Comments.find().fetch());
+    console.log("List all verdicts\n", Verdicts.find().fetch());
+    console.log("List all votes\n", Votes.find().fetch());
   }
 });

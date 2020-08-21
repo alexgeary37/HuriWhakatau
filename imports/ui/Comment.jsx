@@ -15,26 +15,26 @@ export const Comment = ({
   }
 
   // useTracker makes sure the component will re-render when the data changes.
-  const { users } = useTracker(() => {
-    Meteor.subscribe("users");
+  const { author } = useTracker(() => {
+    sub = Meteor.subscribe("users");
 
+    let username = "";
+
+    if (sub.ready()) {
+      let thisUser = Meteor.users.findOne({ _id: comment.authorId });
+      username = thisUser.username;
+    }
     return {
-      users: Meteor.users.find().fetch(),
+      author: username,
     };
   });
-
-  const getUser = (authorId) => {
-    const index = users.findIndex((x) => x._id === authorId);
-    // console.log(typeof users);
-    // return users[index];
-  };
 
   return (
     <li className={classes} id={comment._id}>
       <button onClick={() => onDeleteClick(comment)}>&times;</button>
       <button onClick={() => onEditClick(comment)}>EDIT</button>
       <button onClick={() => onSubmitEditClick(comment)}>SAVE</button>
-      <span className="authorName">{getUser(comment.authorId)} - </span>
+      <span className="authorName">{author} - </span>
       <span className="commentTime">{comment.postedTime.toDateString()}</span>
       <br />
       <span id={comment._id + ":text"}>
