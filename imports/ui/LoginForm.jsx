@@ -5,6 +5,7 @@ import {VerdictForm} from "./VerdictForm";
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(true);
   const [err, setErr] = useState("");
 
   const submit = (e) => {
@@ -21,7 +22,7 @@ export const LoginForm = () => {
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
           open={open}
-          trigger={<Button>Show Modal</Button>}
+          // trigger={<Button>Show Modal</Button>}
       >
         <Modal.Header>Please Login to continue</Modal.Header>
         <Modal.Content>
