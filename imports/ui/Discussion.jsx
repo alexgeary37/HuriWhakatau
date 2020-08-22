@@ -5,6 +5,7 @@ import {
   Segment,
   Header,
   Button,
+  Divider,
   Visibility,
   Grid,
   GridColumn,
