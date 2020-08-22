@@ -43,7 +43,7 @@ Meteor.methods({
 
   //edit an existing comment in the discussion,
   //probably update comment in db to set an edited true or something
-  "comments.edit"(commentId){
+  "comments.edit"(commentId) {
     check(commentId, String);
   },
   // Update an existing comment in the comments collection in the db.
@@ -61,23 +61,27 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    Comments.update(commentId,{
+    Comments.update(commentId, {
       $set: {
         text: text,
-      }
+      },
     });
   },
-
 });
 
 if (Meteor.isServer) {
   // Comments.remove({});
 
   Meteor.publish("comments", function (discussionId) {
-    return Comments.find({ discussionId: discussionId });
+    return Comments.find(
+      { discussionId: discussionId },
+      {
+        fields: {
+          postedTime: 1,
+          authorId: 1,
+          text: 1,
+        },
+      }
+    );
   });
-
-  // List all the Comments and users in the db
-  // console.log("List all comments\n", Comments.find({}).fetch());
-  // console.log("List all users\n", Meteor.users.find({}).fetch());
 }

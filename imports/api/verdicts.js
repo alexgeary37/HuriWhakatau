@@ -19,18 +19,13 @@ Meteor.methods({
     }
 
     // Insert new Verdict and get its _id.
-    const verdictId = Verdicts.insert(
-      {
-        discussionId: discussionId,
-        postedTime: new Date(),
-        authorId: this.userId, // _id of user.
-        text: text,
-        votes: [], // _ids of votes that all OTHER users make on this Verdict.
-      },
-      (_error, insertedDocs) => {
-        return insertedDocs[0]._id;
-      }
-    );
+    const verdictId = Verdicts.insert({
+      discussionId: discussionId,
+      postedTime: new Date(),
+      authorId: this.userId, // _id of user.
+      text: text,
+      votes: [], // _ids of votes that all OTHER users make on this Verdict.
+    });
 
     // Add _id of inserted Verdict and the author of it.
     Discussions.update(discussionId, {
@@ -48,9 +43,17 @@ if (Meteor.isServer) {
   // Verdicts.remove({});
 
   Meteor.publish("verdicts", function (discussionId) {
-    return Verdicts.find({ discussionId: discussionId });
+    return Verdicts.find(
+      { discussionId: discussionId },
+      {
+        fields: {
+          discussionId: 1,
+          postedTime: 1,
+          authorId: 1,
+          text: 1,
+          votes: 1,
+        },
+      }
+    );
   });
-
-  // List all the Verdicts in the db
-  // console.log("List all verdicts\n", Verdicts.find({}).fetch());
 }

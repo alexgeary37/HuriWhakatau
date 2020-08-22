@@ -43,9 +43,15 @@ if (Meteor.isServer) {
   // Votes.remove({});
 
   Meteor.publish("votes", function (verdictId) {
-    return Votes.find({ verdictId: verdictId });
+    return Votes.find(
+      { verdictId: verdictId },
+      {
+        fields: {
+          userId: 1,
+          verdictId: 1,
+          vote: 1,
+        },
+      }
+    );
   });
-
-  // List all the Votes in the db.
-  // console.log("List all votes\n", Votes.find({}).fetch());
 }

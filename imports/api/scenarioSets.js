@@ -31,9 +31,17 @@ if (Meteor.isServer) {
   // ScenarioSets.remove({});
 
   Meteor.publish("scenarioSets", function () {
-    return ScenarioSets.find();
+    return ScenarioSets.find(
+      {},
+      {
+        fields: {
+          title: 1,
+          description: 1,
+          scenarios: 1,
+          createdAt: 1,
+          createdBy: 1,
+        },
+      }
+    );
   });
-
-  // List all the ScenarioSets in the db.
-  // console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
 }
