@@ -33,7 +33,7 @@ App.jsx
   margin: 0;
   position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 50vh;
   height: 50%;
   overflow: hidden;
 }
@@ -41,7 +41,7 @@ App.jsx
 .juryroom .discussion-right-panel {
   padding: 0;
   margin: 0;
-  width: 50vh;
+  width: 25vh;
   list-style: none;
   overflow-y: scroll;
   height: 50%;
