@@ -8,6 +8,7 @@ import {
   Visibility,
   Grid,
   GridColumn,
+  List,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
@@ -32,15 +33,15 @@ export const Discussion = () => {
     verdicts,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
-    Meteor.subscribe("scenarios");
+    const scenarioSub = Meteor.subscribe("scenarios");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
 
     let verdictProposers;
     let discussionScenario;
 
-    if (discussionSub.ready()) {
-      let discussion = Discussions.find({}).fetch();
+    if (discussionSub.ready() && scenarioSub.ready()) {
+      let discussion = Discussions.findOne({});
       discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       verdictProposers = discussion.activeVerdictProposers;
     }
@@ -93,36 +94,21 @@ export const Discussion = () => {
     Meteor.call("discussions.addProposer", discussionId);
 
   return (
-    <div className="juryroom">
-      <Header as="h2">{scenario && scenario.title}</Header>
-      <Header as="h5" attached>
-        {scenario && scenario.description}
-      </Header>
+    <Container className="juryroom">
       <Segment.Group horizontal>
-        <Segment className="discussion-right-panel">
-          {verdicts &&
-            verdicts.map((verdict) => (
-              <div className="verdictContainer" key={verdict._id}>
-                <Verdict key={verdict._id} verdict={verdict} />
-              </div>
-            ))}
-          {!userHasSubmittedVerdict() &&
-            discussionVerdictProposers &&
-            (discussionVerdictProposers.includes(Meteor.userId()) ? (
-              <VerdictForm discussionId={discussionId} />
-            ) : (
-              <button onClick={proposeVerdict}>Propose Verdict</button>
-            ))}
+        <Segment>
+          <Header as="h2">{scenario && scenario.title}</Header>
+          <Header as="h5">Description:</Header>
+          {scenario && scenario.description}
         </Segment>
-
         <Segment className="comments-and-form">
-          <ul
+          <List
             className="comments"
             style={{ overflow: "auto", maxHeight: "50em" }}
           >
             {comments &&
               comments.map((comment) => (
-                <div className="commentContainer" key={comment._id}>
+                <List.Item className="commentContainer" key={comment._id}>
                   <Comment
                     key={comment._id}
                     comment={comment}
@@ -130,14 +116,37 @@ export const Discussion = () => {
                     onEditClick={editComment}
                     onSubmitEditClick={updateComment}
                   />
-                </div>
+                </List.Item>
               ))}
             <div ref={commentsEndRef} />
-          </ul>
+          </List>
           <CommentForm discussionId={discussionId} />
         </Segment>
-        <Segment>RIGHT Content</Segment>
+        <Segment className="discussion-right-panel">
+          <List
+            className="verdicts"
+            style={{ overflow: "auto", maxHeight: "50em" }}
+          >
+            {verdicts &&
+              verdicts.map((verdict) => (
+                <List.Item className="verdictContainer" key={verdict._id}>
+                  <Verdict key={verdict._id} verdict={verdict} />
+                </List.Item>
+              ))}
+            {!userHasSubmittedVerdict() &&
+              discussionVerdictProposers &&
+              (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                <VerdictForm discussionId={discussionId} />
+              ) : (
+                <Button
+                  content="Propose Verdict"
+                  onClick={proposeVerdict}
+                  primary
+                />
+              ))}
+          </List>
+        </Segment>
       </Segment.Group>
-    </div>
+    </Container>
   );
 };
