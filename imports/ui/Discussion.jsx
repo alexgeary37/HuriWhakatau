@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
-import { useParams, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
@@ -26,43 +26,28 @@ export const Discussion = () => {
   const { discussionId } = useParams();
 
   const {
-    // Constants to return and use for component rendering
-    discussionTitle,
-    discussionDescription,
+    scenario,
     discussionVerdictProposers,
-    // scenarioTitle,
     comments,
     verdicts,
   } = useTracker(() => {
-    // useTracker makes sure the component will re-render when the data changes.
+    const discussionSub = Meteor.subscribe("discussions", discussionId);
+    Meteor.subscribe("scenarios");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
-    let discSub = Meteor.subscribe("discussions");
 
-    let scenSub = Meteor.subscribe("scenarios");
+    let verdictProposers;
+    let discussionScenario;
 
-    let thisDiscussionTitle = "";
-    let thisDiscussionDescription = "";
-    let verdictProposers = [];
-
-    // let thisScenarioTitle = "";
-    if (discSub.ready() && scenSub.ready()) {
-      // Get the data for the constants.
-      let discussion = Discussions.findOne({ _id: discussionId });
-      thisDiscussionTitle = discussion.title;
-      thisDiscussionDescription = discussion.description;
+    if (discussionSub.ready()) {
+      let discussion = Discussions.find({}).fetch();
+      discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       verdictProposers = discussion.activeVerdictProposers;
-
-      // let scenario = Scenarios.findOne({ _id: discussion.scenarioId });
-      // thisScenarioTitle = scenario.title;
     }
 
     return {
-      // Assign and return the constants initialized with data.
-      discussionTitle: thisDiscussionTitle,
-      discussionDescription: thisDiscussionDescription,
+      scenario: discussionScenario,
       discussionVerdictProposers: verdictProposers,
-      // scenarioTitle: thisScenarioTitle,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
     };
@@ -109,18 +94,20 @@ export const Discussion = () => {
 
   return (
     <div className="juryroom">
-      <Header as="h2">{discussionTitle}</Header>
+      <Header as="h2">{scenario && scenario.title}</Header>
       <Header as="h5" attached>
-        {discussionDescription}
+        {scenario && scenario.description}
       </Header>
       <Segment.Group horizontal>
         <Segment className="discussion-right-panel">
-          {verdicts.map((verdict) => (
-            <div className="verdictContainer" key={verdict._id}>
-              <Verdict key={verdict._id} verdict={verdict} />
-            </div>
-          ))}
+          {verdicts &&
+            verdicts.map((verdict) => (
+              <div className="verdictContainer" key={verdict._id}>
+                <Verdict key={verdict._id} verdict={verdict} />
+              </div>
+            ))}
           {!userHasSubmittedVerdict() &&
+            discussionVerdictProposers &&
             (discussionVerdictProposers.includes(Meteor.userId()) ? (
               <VerdictForm discussionId={discussionId} />
             ) : (
@@ -133,17 +120,18 @@ export const Discussion = () => {
             className="comments"
             style={{ overflow: "auto", maxHeight: "50em" }}
           >
-            {comments.map((comment) => (
-              <div className="commentContainer" key={comment._id}>
-                <Comment
-                  key={comment._id}
-                  comment={comment}
-                  onDeleteClick={deleteComment}
-                  onEditClick={editComment}
-                  onSubmitEditClick={updateComment}
-                />
-              </div>
-            ))}
+            {comments &&
+              comments.map((comment) => (
+                <div className="commentContainer" key={comment._id}>
+                  <Comment
+                    key={comment._id}
+                    comment={comment}
+                    onDeleteClick={deleteComment}
+                    onEditClick={editComment}
+                    onSubmitEditClick={updateComment}
+                  />
+                </div>
+              ))}
             <div ref={commentsEndRef} />
           </ul>
           <CommentForm discussionId={discussionId} />

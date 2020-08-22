@@ -1,4 +1,5 @@
 import React from "react";
+import { useTracker } from "meteor/react-meteor-data";
 import { Router, Route, Switch } from "react-router";
 import { Link, BrowserRouter } from "react-router-dom";
 import history from "history";
@@ -15,6 +16,14 @@ import { Discussion } from "./Discussion";
 const browserHistory = history.createBrowserHistory();
 
 export const App = () => {
+  const { user } = useTracker(() => {
+    Meteor.subscribe("users");
+
+    return {
+      user: Meteor.userId(),
+    };
+  });
+
   return (
     <Router history={browserHistory}>
       <BrowserRouter>
@@ -49,7 +58,7 @@ export const App = () => {
             path="/scenarioSets/create"
             component={CreateScenarioSet}
           />
-          <Route path="/:discussionId" component={Discussion} />
+          <Route path="/discussion/:discussionId" component={Discussion} />
         </Switch>
       </BrowserRouter>
     </Router>

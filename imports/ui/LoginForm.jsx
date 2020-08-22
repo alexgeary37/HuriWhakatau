@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Dashboard } from "./Dashboard";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
