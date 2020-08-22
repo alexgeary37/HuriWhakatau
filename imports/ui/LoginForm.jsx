@@ -21,7 +21,7 @@ export const LoginForm = () => {
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
           open={open}
-          // trigger={<Button>Show Modal</Button>}
+          trigger={<Button>Show Modal</Button>}
       >
         <Modal.Header>Please Login to continue</Modal.Header>
         <Modal.Content>
@@ -46,7 +46,7 @@ export const LoginForm = () => {
               <input/>
             </Input>
             {err &&
-                {err}
+            <div>{err}</div>
             }
           </Modal.Description>
         </Modal.Content>
