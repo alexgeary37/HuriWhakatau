@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import {Modal, Image, Button, Header, Input, Label} from "semantic-ui-react";
+import {VerdictForm} from "./VerdictForm";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
 
   const submit = (e) => {
     e.preventDefault();
-    Meteor.loginWithPassword(username, password);
+    Meteor.loginWithPassword(username, password, function (error) {
+      if(error){
+        setErr(error.message);
+      }
+    });
   };
-
+ console.log(err);
   return (
       <Modal
           onClose={() => setOpen(false)}
           onOpen={() => setOpen(true)}
           open={open}
-          trigger={<Button>Show Modal</Button>}
+          // trigger={<Button>Show Modal</Button>}
       >
         <Modal.Header>Please Login to continue</Modal.Header>
         <Modal.Content>
@@ -39,6 +45,9 @@ export const LoginForm = () => {
               <Label>Password</Label>
               <input/>
             </Input>
+            {err &&
+                {err}
+            }
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
