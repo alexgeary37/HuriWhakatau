@@ -5,8 +5,11 @@ import {
   Segment,
   Header,
   Button,
-  Divider,
   Visibility,
+  Comment,
+  Modal,
+  Input,
+  Label,
   Grid,
   GridColumn,
   List,
@@ -18,7 +21,7 @@ import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
 import { NavBar } from "./NavBar";
-import { Comment } from "./Comment";
+import { UserComment } from "./UserComment";
 import { CommentForm } from "./CommentForm";
 import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
@@ -56,10 +59,7 @@ export const Discussion = () => {
     };
   });
 
-  // '_id' here is equal to 'comment' in Comment.jsx onDeleteClick(comment) I think ???
-  const deleteComment = ({ _id }) => Meteor.call("comments.remove", _id);
-
-  // adding edit comment call
+  // // adding edit comment call
   const editComment = ({ _id }) => {
     let commentSpan = document.getElementById(_id + ":text");
     commentSpan.contentEditable = "true";
@@ -98,62 +98,154 @@ export const Discussion = () => {
   return (
     <div>
       <NavBar />
-      <Container className="juryroom" attached="bottom">
-        <Segment.Group horizontal>
-          <Segment>
-            <Header as="h2">{scenario && scenario.title}</Header>
-            {scenario && scenario.description}
-          </Segment>
-          <Segment className="comments-and-form">
-            <List
-              className="comments"
-              style={{ overflow: "auto", maxHeight: "50em" }}
+      <Container
+
+      // className="juryroom"
+      >
+        <Grid columns={3} celled divided>
+          <Grid.Row>
+            <GridColumn width={4}>
+              <Header content={scenario && scenario.title} size="large" />
+              {scenario && scenario.description}
+            </GridColumn>
+            <GridColumn
+              // className="comments-and-form"
+              width={8}
             >
-              {comments &&
-                comments.map((comment) => (
-                  <List.Item className="commentContainer" key={comment._id}>
-                    <Comment
+              {/* <List
+              // className="comments"
+              style={{ overflow: "auto", maxHeight: "50em" }}
+            > */}
+              <Comment.Group>
+                {comments &&
+                  comments.map((comment) => (
+                    <List.Item
+                      // className="commentContainer"
                       key={comment._id}
-                      comment={comment}
-                      onDeleteClick={deleteComment}
-                      onEditClick={editComment}
-                      onSubmitEditClick={updateComment}
-                    />
-                  </List.Item>
-                ))}
-              <div ref={commentsEndRef} />
-            </List>
-            <CommentForm discussionId={discussionId} />
-          </Segment>
-          <Segment className="discussion-right-panel">
-            <Header content="Verdicts" size="large" />
-            <Segment attached="bottom">
+                    >
+                      <UserComment
+                        key={comment._id}
+                        comment={comment}
+                        onEditClick={editComment}
+                        onSubmitEditClick={updateComment}
+                      />
+                    </List.Item>
+                  ))}
+                <div ref={commentsEndRef} />
+              </Comment.Group>
+              {/* </List> */}
+              <CommentForm discussionId={discussionId} />
+            </GridColumn>
+            <GridColumn
+              textAlign="center"
+              // className="discussion-right-panel"
+              width={4}
+            >
+              <Header content="Verdicts" size="large" />
               <List
-                className="verdicts"
+                // className="verdicts"
                 style={{ overflow: "auto", maxHeight: "50em" }}
               >
                 {verdicts &&
                   verdicts.map((verdict) => (
-                    <List.Item className="verdictContainer" key={verdict._id}>
+                    <List.Item
+                      // className="verdictContainer"
+                      key={verdict._id}
+                    >
                       <Verdict key={verdict._id} verdict={verdict} />
                     </List.Item>
                   ))}
                 {!userHasSubmittedVerdict() &&
                   discussionVerdictProposers &&
                   (discussionVerdictProposers.includes(Meteor.userId()) ? (
-                    <VerdictForm discussionId={discussionId} />
+                    <VerdictForm
+                      discussionId={discussionId}
+                      isProposing={discussionVerdictProposers.includes(
+                        Meteor.userId()
+                      )}
+                    />
                   ) : (
                     <Button
+                      style={{ margin: 10 }}
                       content="Propose Verdict"
                       onClick={proposeVerdict}
                       primary
                     />
                   ))}
               </List>
-            </Segment>
-          </Segment>
-        </Segment.Group>
+            </GridColumn>
+          </Grid.Row>
+        </Grid>
       </Container>
     </div>
+
+    // <div>
+    //   <NavBar />
+    //   <Sidebar
+    //     // animation="overlay"
+    //     direction="left"
+    //     visible={true}
+    //     // as={Swipe}
+    //     tolerance={100}
+    //     // onSwipeRight={() => this.setState({ showOverviewPanel: false })}
+    //   >
+    //     <h1>JJJJJJJJJJJJ</h1>
+    //     {/* <Header as="h2">{scenario && scenario.title}</Header> */}
+    //     {/* {scenario && scenario.description} */}
+    //   </Sidebar>
+    //   <Sidebar
+    //     // animation="overlay"
+    //     direction="right"
+    //     visible={true}
+    //     // as={Swipe}
+    //     tolerance={100}
+    //     // onSwipeRight={() => this.setState({ showOverviewPanel: false })}
+    //   >
+    //     <Header content="Verdicts" size="large" />
+    //     <List style={{ overflow: "auto", maxHeight: "50em" }}>
+    //       {verdicts &&
+    //         verdicts.map((verdict) => (
+    //           <List.Item key={verdict._id}>
+    //             <Verdict key={verdict._id} verdict={verdict} />
+    //           </List.Item>
+    //         ))}
+    //       {!userHasSubmittedVerdict() &&
+    //         discussionVerdictProposers &&
+    //         (discussionVerdictProposers.includes(Meteor.userId()) ? (
+    //           <VerdictForm
+    //             discussionId={discussionId}
+    //             isProposing={discussionVerdictProposers.includes(
+    //               Meteor.userId()
+    //             )}
+    //           />
+    //         ) : (
+    //           <Button
+    //             style={{ margin: 10 }}
+    //             content="Propose Verdict"
+    //             onClick={proposeVerdict}
+    //             primary
+    //           />
+    //         ))}
+    //     </List>
+    //   </Sidebar>
+    //   <Sidebar.Pusher>
+    //     <Comment.Group>
+    //       {comments &&
+    //         comments.map((comment) => (
+    //           <List.Item key={comment._id}>
+    //             <UserComment
+    //               key={comment._id}
+    //               comment={comment}
+    //               onEditClick={editComment}
+    //               onSubmitEditClick={updateComment}
+    //             />
+    //           </List.Item>
+    //         ))}
+    //       <div ref={commentsEndRef} />
+    //     </Comment.Group>
+
+    //     {/* <CommentForm discussionId={discussionId} /> */}
+    //   </Sidebar.Pusher>
+    // </div>
   );
 };

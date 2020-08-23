@@ -32,7 +32,7 @@ export const Verdict = ({ verdict }) => {
 
   return (
     <List.Item>
-      <Segment color="yellow" secondary>
+      <Segment color="yellow">
         <Header content={user && user.username} />
         {verdict.text}
         <Divider horizontal />

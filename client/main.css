@@ -32,12 +32,12 @@ App.jsx
   margin: 4rem;
 }
 
-.juryroom .comments-and-form {
+.comments-and-form {
   padding: 0;
   margin: 0;
   position: fixed;
   bottom: 0;
-  width: 50vh;
+  /*width: 50vh;*/
   height: 50%;
   overflow: hidden;
 }
@@ -45,10 +45,11 @@ App.jsx
 .juryroom .discussion-right-panel {
   padding: 0;
   margin: 0;
-  width: 25vh;
+  /*width: 100%;*/
   list-style: none;
   overflow-y: scroll;
-  height: 50%;
+  /*height: 100%;*/
+  /*background: lightgray;*/
 }
 
 .juryroom .discussion-right-panel .verdict {
@@ -73,10 +74,10 @@ App.jsx
   padding: 0;
   position: relative;
   margin: auto 0 0;
-  width: 100%;
+  /*width: 100%;*/
   list-style: none;
   overflow-y: scroll;
-  height: 75vh;
+  height: 90vh;
 }
 
 ::-webkit-scrollbar {
@@ -112,8 +113,12 @@ App.jsx
   hyphens: auto;
 }
 
+.juryroom .comments-and-form .comment span {
+  margin-left: 2px;
+}
+
 .juryroom .comments-and-form .comment button {
-  visibility: hidden;
+  display: none;
 }
 
 .authorName {
@@ -134,7 +139,7 @@ App.jsx
 }
 
 .juryroom .comments-and-form .comment.usersComment button {
-  visibility: visible;
+  display: initial;
 }
 
 .juryroom .comments-and-form .comment-form {
@@ -145,7 +150,7 @@ App.jsx
 }
 
 /********************************************************
-Comment.jsx
+UserComment.jsx
 *********************************************************/
 .juryroom .comments-and-form .comments .comment span {
   flex-grow: 1;
@@ -163,7 +168,7 @@ CommentForm.jsx
 *********************************************************/
 .juryroom .comments-and-form .comment-form input {
   flex-grow: 1;
-  width: inherit;
+  /*width: 100vh;*/
 }
 
 /********************************************************

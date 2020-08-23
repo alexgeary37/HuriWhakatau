@@ -1,68 +1,42 @@
 import React, { useState } from "react";
-import { Modal, Button, Input, Label } from "semantic-ui-react";
+import { Modal, Button, Input, Label, Form, TextArea } from "semantic-ui-react";
 
-export const VerdictForm = ({ discussionId }) => {
-  const [text, setText] = useState(""); // "" is the default value for 'text'.
-  const [open, setOpen] = useState(false);
-
-  const handleSubmit = () => {
-    if (!text) return; // If text is empty, don't submit anything.
-    Meteor.call("verdicts.insert", text.trim(), discussionId);
-    setText("");
-  };
-
-  const handleCancel = () =>
-    Meteor.call("discussions.removeProposer", discussionId);
+export const VerdictForm = ({ discussionId, isProposing }) => {
+  const [verdict, setText] = useState("");
 
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
-      // trigger={<Button>Show Modal</Button>}
-    >
+    <Modal open={isProposing}>
       <Modal.Header>Propose a Verdict</Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          <Input
-            type="text"
-            placeholder="Type your verdict here..."
-            name="verdict"
-            required
-            onChange={(e) => setUsername(e.currentTarget.value)}
-          >
-            <Label>Verdict</Label>
-            <input />
-          </Input>
+          <Form>
+            <textarea
+              placeholder="Type your verdict here..."
+              rows="3"
+              name="verdict"
+              onChange={(e) => setText(e.currentTarget.value)}
+            />
+          </Form>
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
         <Button
           content="Cancel"
           color="black"
-          onClick={() => {
-            setOpen(false);
-            handleCancel;
-          }}
+          onClick={() =>
+            Meteor.call("discussions.removeProposer", discussionId)
+          }
         />
         <Button
           content="Submit Verdict"
           labelPosition="right"
           icon="checkmark"
-          onClick={handleSubmit}
+          onClick={() =>
+            Meteor.call("verdicts.insert", verdict.trim(), discussionId)
+          }
           positive
         />
       </Modal.Actions>
     </Modal>
-    // <div className="verdict-form">
-    //   <input
-    //     type="text"
-    //     placeholder="Type your verdict here..."
-    //     value={text}
-    //     onChange={(e) => setText(e.target.value)}
-    //   />
-    //   <button onClick={handleSubmit}>Submit Verdict</button>
-    //   <button onClick={handleCancel}>Cancel</button>
-    // </div>
   );
 };
