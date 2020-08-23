@@ -28,6 +28,10 @@ App.jsx
   height: 5vh;
 }
 
+.navbar {
+  margin: 4rem;
+}
+
 .juryroom .comments-and-form {
   padding: 0;
   margin: 0;

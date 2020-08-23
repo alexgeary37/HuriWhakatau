@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
+import { NavBar } from "./NavBar";
 import { Comment } from "./Comment";
 import { CommentForm } from "./CommentForm";
 import { Verdict } from "./Verdict";
@@ -95,59 +96,64 @@ export const Discussion = () => {
     Meteor.call("discussions.addProposer", discussionId);
 
   return (
-    <Container className="juryroom">
-      <Segment.Group horizontal>
-        <Segment>
-          <Header as="h2">{scenario && scenario.title}</Header>
-          <Header as="h5">Description:</Header>
-          {scenario && scenario.description}
-        </Segment>
-        <Segment className="comments-and-form">
-          <List
-            className="comments"
-            style={{ overflow: "auto", maxHeight: "50em" }}
-          >
-            {comments &&
-              comments.map((comment) => (
-                <List.Item className="commentContainer" key={comment._id}>
-                  <Comment
-                    key={comment._id}
-                    comment={comment}
-                    onDeleteClick={deleteComment}
-                    onEditClick={editComment}
-                    onSubmitEditClick={updateComment}
-                  />
-                </List.Item>
-              ))}
-            <div ref={commentsEndRef} />
-          </List>
-          <CommentForm discussionId={discussionId} />
-        </Segment>
-        <Segment className="discussion-right-panel">
-          <List
-            className="verdicts"
-            style={{ overflow: "auto", maxHeight: "50em" }}
-          >
-            {verdicts &&
-              verdicts.map((verdict) => (
-                <List.Item className="verdictContainer" key={verdict._id}>
-                  <Verdict key={verdict._id} verdict={verdict} />
-                </List.Item>
-              ))}
-            {!userHasSubmittedVerdict() &&
-              discussionVerdictProposers &&
-              (discussionVerdictProposers.includes(Meteor.userId()) ? (
-                <VerdictForm discussionId={discussionId} />
-              ) : (
-                <Button
-                  content="Propose Verdict"
-                  onClick={proposeVerdict}
-                  primary
-                />
-              ))}
-          </List>
-        </Segment>
-      </Segment.Group>
-    </Container>
+    <div>
+      <NavBar />
+      <Container className="juryroom" attached="bottom">
+        <Segment.Group horizontal>
+          <Segment>
+            <Header as="h2">{scenario && scenario.title}</Header>
+            {scenario && scenario.description}
+          </Segment>
+          <Segment className="comments-and-form">
+            <List
+              className="comments"
+              style={{ overflow: "auto", maxHeight: "50em" }}
+            >
+              {comments &&
+                comments.map((comment) => (
+                  <List.Item className="commentContainer" key={comment._id}>
+                    <Comment
+                      key={comment._id}
+                      comment={comment}
+                      onDeleteClick={deleteComment}
+                      onEditClick={editComment}
+                      onSubmitEditClick={updateComment}
+                    />
+                  </List.Item>
+                ))}
+              <div ref={commentsEndRef} />
+            </List>
+            <CommentForm discussionId={discussionId} />
+          </Segment>
+          <Segment className="discussion-right-panel">
+            <Header content="Verdicts" size="large" />
+            <Segment attached="bottom">
+              <List
+                className="verdicts"
+                style={{ overflow: "auto", maxHeight: "50em" }}
+              >
+                {verdicts &&
+                  verdicts.map((verdict) => (
+                    <List.Item className="verdictContainer" key={verdict._id}>
+                      <Verdict key={verdict._id} verdict={verdict} />
+                    </List.Item>
+                  ))}
+                {!userHasSubmittedVerdict() &&
+                  discussionVerdictProposers &&
+                  (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                    <VerdictForm discussionId={discussionId} />
+                  ) : (
+                    <Button
+                      content="Propose Verdict"
+                      onClick={proposeVerdict}
+                      primary
+                    />
+                  ))}
+              </List>
+            </Segment>
+          </Segment>
+        </Segment.Group>
+      </Container>
+    </div>
   );
 };

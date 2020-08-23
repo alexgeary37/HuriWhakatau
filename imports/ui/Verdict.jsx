@@ -2,7 +2,7 @@ import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
 import { Votes } from "../api/votes";
-import { List, Segment, Button, Divider } from "semantic-ui-react";
+import { List, Segment, Button, Divider, Header } from "semantic-ui-react";
 
 export const Verdict = ({ verdict }) => {
   let classes = classnames("verdict");
@@ -12,11 +12,13 @@ export const Verdict = ({ verdict }) => {
   }
 
   // useTracker makes sure the component will re-render when the data changes.
-  const { verdictVotes } = useTracker(() => {
+  const { user, verdictVotes } = useTracker(() => {
     Meteor.subscribe("votes", verdict._id);
+    Meteor.subscribe("users");
 
     return {
       verdictVotes: Votes.find().fetch(),
+      user: Meteor.users.findOne({ _id: verdict.authorId }),
     };
   });
 
@@ -31,6 +33,7 @@ export const Verdict = ({ verdict }) => {
   return (
     <List.Item>
       <Segment color="yellow" secondary>
+        <Header content={user && user.username} />
         {verdict.text}
         <Divider horizontal />
         {Meteor.userId() !== verdict.authorId && !userHasVoted() ? (
