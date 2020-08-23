@@ -96,12 +96,12 @@ export const Discussion = () => {
     return (
         <Container className="juryroom">
             <Grid columns={3} celled divided>
-                <GridColumn>
+                <GridColumn width={4}>
                     <Header as="h2">{scenario && scenario.title}</Header>
                     <Header as="h5">Description:</Header>
                     {scenario && scenario.description}
                 </GridColumn>
-                <GridColumn className="comments-and-form">
+                <GridColumn className="comments-and-form" width={7}>
                     <List
                         className="comments"
                         style={{overflow: "auto", maxHeight: "50em"}}
@@ -122,7 +122,7 @@ export const Discussion = () => {
                     </List>
                     <CommentForm discussionId={discussionId}/>
                 </GridColumn>
-                <GridColumn className="discussion-right-panel">
+                <GridColumn className="discussion-right-panel" width={5}>
                     <List
                         className="verdicts"
                         style={{overflow: "auto", maxHeight: "50em"}}
