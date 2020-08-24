@@ -6,12 +6,13 @@ import { Button, Comment } from "semantic-ui-react";
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
   const [isEditing, setIsEditing] = useState(false);
   let classes = classnames("comment");
-  let colour = "aliceBlue";
+  let colour = "#F2F2F2";
+  let borderCol = "#E5E5E5";
 
   if (Meteor.userId() === comment.authorId) {
     classes = classnames("comment usersComment");
-    // colour = "lightCyan";
-    colour = "honeydew";
+    colour = "#EDE8FF";
+    borderCol = "#DFDBF0";
   }
 
   // useTracker makes sure the component will re-render when the data changes.
@@ -31,7 +32,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
         borderRadius: 5,
         border: "solid",
         borderWidth: 0.5,
-        borderColor: "lightBlue",
+        borderColor: borderCol,
         padding: 5,
       }}
     >

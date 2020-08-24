@@ -1,7 +1,14 @@
 import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link } from "react-router-dom";
-import { Button, Container, Segment, List, Header } from "semantic-ui-react";
+import {
+  Button,
+  Container,
+  Grid,
+  Segment,
+  List,
+  Header,
+} from "semantic-ui-react";
 import { Groups } from "/imports/api/groups";
 import { NavBar } from "./NavBar";
 
@@ -18,7 +25,7 @@ export const BrowseGroups = () => {
     <div>
       <NavBar />
       <Container>
-        <Segment attached="top">
+        <Segment attached="top" clearing>
           <Button
             content="Create New"
             as={Link}
@@ -26,24 +33,19 @@ export const BrowseGroups = () => {
             color="green"
           />
         </Segment>
-        <Segment attached="bottom">
-          <Header content="Discussions" />
-
-          <List relaxed size="huge">
-            {groups &&
-              groups.map((group) => (
-                <List.Item
-                  key={group._id}
-                  as={Link}
-                  to={`/groups/${group._id}`}
-                >
-                  <List.Content as={Segment}>
-                    <List.Header content={group.name} />
-                  </List.Content>
-                </List.Item>
-              ))}
-          </List>
-        </Segment>
+        <List as={Segment} attached="bottom" divided relaxed="very">
+          {groups &&
+            groups.map((group) => (
+              <List.Item
+                style={{ padding: 15 }}
+                key={group._id}
+                as={Link}
+                to={`/groups/${group._id}`}
+              >
+                <List.Content header={group.name} />
+              </List.Item>
+            ))}
+        </List>
       </Container>
     </div>
   );

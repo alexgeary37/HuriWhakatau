@@ -26,28 +26,26 @@ export const BrowseScenarios = () => {
       <NavBar />
       <Container>
         <Segment attached="top" clearing>
-          <Grid>
-            <Grid.Column floated="left" width={4} verticalAlign="bottom">
-              <Button
-                content="Create New"
-                as={Link}
-                to="/scenarios/create"
-                color="green"
-                floated="left"
-              />
-            </Grid.Column>
-          </Grid>
+          <Button
+            content="Create New"
+            as={Link}
+            to="/scenarios/create"
+            color="green"
+          />
         </Segment>
         <List as={Segment} attached="bottom" divided relaxed="very">
           {scenarios &&
             scenarios.map((scenario) => (
               <List.Item
+                style={{ padding: 15 }}
                 key={scenario._id}
                 as={Link}
                 to={`/scenarios/${scenario._id}`}
               >
-                <List.Content as={Header} content={scenario.title} />
-                <List.Description content={scenario.description} />
+                <List.Content
+                  header={scenario.title}
+                  content={scenario.description}
+                />
               </List.Item>
             ))}
         </List>

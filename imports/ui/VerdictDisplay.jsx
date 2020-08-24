@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Modal, Button, Input, Label, Form, TextArea } from "semantic-ui-react";
 
-export const VerdictForm = ({ discussionId, isProposing }) => {
+export const VerdictDisplay = () => {
   const [verdict, setText] = useState("");
 
+  console.log("HHHHHHHH");
+
   return (
-    <Modal open={isProposing} size="tiny">
-      <Modal.Header>Propose a Verdict</Modal.Header>
+    <Modal open={true} size="tiny">
+      <Modal.Header>Verdict</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Form>

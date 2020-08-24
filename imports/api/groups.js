@@ -38,7 +38,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Groups.remove({}); //
+  // Groups.remove({});
 
   Meteor.publish("groups", function (userId) {
     return Groups.find(

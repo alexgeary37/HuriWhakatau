@@ -30,6 +30,7 @@ export const BrowseScenarioSets = () => {
           {scenarioSets &&
             scenarioSets.map((set) => (
               <List.Item
+                style={{ padding: 15 }}
                 key={set._id}
                 as={Link}
                 to={`/scenarioSets/${set._id}`}

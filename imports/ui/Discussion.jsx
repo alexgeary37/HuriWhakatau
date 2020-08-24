@@ -99,18 +99,17 @@ export const Discussion = () => {
     <div>
       <NavBar />
       <Container
-
       // className="juryroom"
       >
         <Grid columns={3} celled divided>
           <Grid.Row>
-            <GridColumn width={4}>
+            <GridColumn width={3}>
               <Header content={scenario && scenario.title} size="large" />
               {scenario && scenario.description}
             </GridColumn>
             <GridColumn
               // className="comments-and-form"
-              width={8}
+              width={10}
             >
               {/* <List
               // className="comments"
@@ -119,17 +118,17 @@ export const Discussion = () => {
               <Comment.Group>
                 {comments &&
                   comments.map((comment) => (
-                    <List.Item
-                      // className="commentContainer"
+                    // <List.Item
+                    //   // className="commentContainer"
+                    //   key={comment._id}
+                    // >
+                    <UserComment
                       key={comment._id}
-                    >
-                      <UserComment
-                        key={comment._id}
-                        comment={comment}
-                        onEditClick={editComment}
-                        onSubmitEditClick={updateComment}
-                      />
-                    </List.Item>
+                      comment={comment}
+                      onEditClick={editComment}
+                      onSubmitEditClick={updateComment}
+                    />
+                    // </List.Item>
                   ))}
                 <div ref={commentsEndRef} />
               </Comment.Group>
@@ -137,9 +136,8 @@ export const Discussion = () => {
               <CommentForm discussionId={discussionId} />
             </GridColumn>
             <GridColumn
-              textAlign="center"
               // className="discussion-right-panel"
-              width={4}
+              width={3}
             >
               <Header content="Verdicts" size="large" />
               <List
@@ -165,87 +163,21 @@ export const Discussion = () => {
                       )}
                     />
                   ) : (
-                    <Button
-                      style={{ margin: 10 }}
-                      content="Propose Verdict"
-                      onClick={proposeVerdict}
-                      primary
-                    />
+                    <div style={{ textAlign: "center" }}>
+                      <Button
+                        style={{ margin: 10 }}
+                        content="Propose Verdict"
+                        onClick={proposeVerdict}
+                        primary
+                      />
+                    </div>
                   ))}
+                {discussion}
               </List>
             </GridColumn>
           </Grid.Row>
         </Grid>
       </Container>
     </div>
-
-    // <div>
-    //   <NavBar />
-    //   <Sidebar
-    //     // animation="overlay"
-    //     direction="left"
-    //     visible={true}
-    //     // as={Swipe}
-    //     tolerance={100}
-    //     // onSwipeRight={() => this.setState({ showOverviewPanel: false })}
-    //   >
-    //     <h1>JJJJJJJJJJJJ</h1>
-    //     {/* <Header as="h2">{scenario && scenario.title}</Header> */}
-    //     {/* {scenario && scenario.description} */}
-    //   </Sidebar>
-    //   <Sidebar
-    //     // animation="overlay"
-    //     direction="right"
-    //     visible={true}
-    //     // as={Swipe}
-    //     tolerance={100}
-    //     // onSwipeRight={() => this.setState({ showOverviewPanel: false })}
-    //   >
-    //     <Header content="Verdicts" size="large" />
-    //     <List style={{ overflow: "auto", maxHeight: "50em" }}>
-    //       {verdicts &&
-    //         verdicts.map((verdict) => (
-    //           <List.Item key={verdict._id}>
-    //             <Verdict key={verdict._id} verdict={verdict} />
-    //           </List.Item>
-    //         ))}
-    //       {!userHasSubmittedVerdict() &&
-    //         discussionVerdictProposers &&
-    //         (discussionVerdictProposers.includes(Meteor.userId()) ? (
-    //           <VerdictForm
-    //             discussionId={discussionId}
-    //             isProposing={discussionVerdictProposers.includes(
-    //               Meteor.userId()
-    //             )}
-    //           />
-    //         ) : (
-    //           <Button
-    //             style={{ margin: 10 }}
-    //             content="Propose Verdict"
-    //             onClick={proposeVerdict}
-    //             primary
-    //           />
-    //         ))}
-    //     </List>
-    //   </Sidebar>
-    //   <Sidebar.Pusher>
-    //     <Comment.Group>
-    //       {comments &&
-    //         comments.map((comment) => (
-    //           <List.Item key={comment._id}>
-    //             <UserComment
-    //               key={comment._id}
-    //               comment={comment}
-    //               onEditClick={editComment}
-    //               onSubmitEditClick={updateComment}
-    //             />
-    //           </List.Item>
-    //         ))}
-    //       <div ref={commentsEndRef} />
-    //     </Comment.Group>
-
-    //     {/* <CommentForm discussionId={discussionId} /> */}
-    //   </Sidebar.Pusher>
-    // </div>
   );
 };

@@ -2,7 +2,16 @@ import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
 import { Votes } from "../api/votes";
-import { List, Segment, Button, Divider, Header } from "semantic-ui-react";
+import {
+  List,
+  Segment,
+  Button,
+  Divider,
+  Card,
+  Header,
+  Comment,
+  Modal,
+} from "semantic-ui-react";
 
 export const Verdict = ({ verdict }) => {
   let classes = classnames("verdict");
@@ -32,27 +41,36 @@ export const Verdict = ({ verdict }) => {
 
   return (
     <List.Item>
-      <Segment color="yellow">
-        <Header content={user && user.username} />
-        {verdict.text}
-        <Divider horizontal />
+      <Card color="yellow" fluid>
+        <Card.Content>
+          <Header size="small" content={user && user.username} />
+          <Header
+            sub
+            size="tiny"
+            color="grey"
+            content={verdict.postedTime.toDateString()}
+          />
+          <Card.Description content={verdict.text} />
+        </Card.Content>
         {Meteor.userId() !== verdict.authorId && !userHasVoted() ? (
-          <div>
+          <div style={{ paddingBottom: 5, textAlign: "center" }}>
             <Button
               content="Affirm"
               onClick={() => handleVoteClick(true)}
               positive
+              size="mini"
             />
             <Button
               content="Reject"
               onClick={() => handleVoteClick(false)}
               negative
+              size="mini"
             />
           </div>
         ) : (
-          <div>Voted</div>
+          <div style={{ paddingBottom: 5, textAlign: "right" }}>Voted</div>
         )}
-      </Segment>
+      </Card>
     </List.Item>
   );
 };

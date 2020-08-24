@@ -17,21 +17,21 @@ import { Votes } from "/imports/api/votes";
 
 Meteor.startup(() => {
   // Create accounts
-  if (!Accounts.findUserByUsername("alex")) {
+  if (!Accounts.findUserByUsername("OpenlyOctopus")) {
     Accounts.createUser({
-      username: "alex",
+      username: "OpenlyOctopus",
       password: "password1",
     });
   }
-  if (!Accounts.findUserByUsername("geary")) {
+  if (!Accounts.findUserByUsername("HairyHog")) {
     Accounts.createUser({
-      username: "geary",
+      username: "HairyHog",
       password: "password2",
     });
   }
-  if (!Accounts.findUserByUsername("alexgeary")) {
+  if (!Accounts.findUserByUsername("DizzyDandylion")) {
     Accounts.createUser({
-      username: "alexgeary",
+      username: "DizzyDandylion",
       password: "password3",
     });
   }
@@ -41,6 +41,8 @@ Meteor.startup(() => {
       return Meteor.users.find();
     });
 
+    // Meteor.users.remove();
+    console.log("List all users\n", Meteor.users.find().fetch()); //
     console.log("List all groups\n", Groups.find().fetch());
     console.log("List all scenarios\n", Scenarios.find().fetch());
     console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
