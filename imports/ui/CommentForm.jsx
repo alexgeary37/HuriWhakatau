@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form, Button, Input } from "semantic-ui-react";
 
 export const CommentForm = ({ discussionId }) => {
   // 'setText' is a function we're declaring in the state of this
@@ -9,18 +10,22 @@ export const CommentForm = ({ discussionId }) => {
     if (!text) return; // If text is empty, don't submit anything.
     Meteor.call("comments.insert", text.trim(), discussionId);
     setText("");
+    console.log("text::", text);
   };
 
   return (
-    <div className="comment-form">
-      <input
+    <Form>
+      <Input
         type="text"
         placeholder="Type your comment here..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        autoFocus
-      />
-      <button onClick={handleSubmit}>Add Comment</button>
-    </div>
+        name="text"
+        fluid
+        onChange={(e) => setText(e.currentTarget.value)}
+        focus
+      >
+        <input />
+        <Button content="Post" onClick={handleSubmit} positive />
+      </Input>
+    </Form>
   );
 };

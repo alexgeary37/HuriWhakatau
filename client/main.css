@@ -28,7 +28,11 @@ App.jsx
   height: 5vh;
 }
 
-.juryroom .comments-and-form {
+.navbar {
+  margin: 4rem;
+}
+
+.comments-and-form {
   padding: 0;
   margin: 0;
   position: fixed;
@@ -146,7 +150,7 @@ App.jsx
 }
 
 /********************************************************
-Comment.jsx
+UserComment.jsx
 *********************************************************/
 .juryroom .comments-and-form .comments .comment span {
   flex-grow: 1;
