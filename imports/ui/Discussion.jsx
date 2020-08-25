@@ -85,13 +85,11 @@ export const Discussion = () => {
     Meteor.call("comments.update", text, _id);
   };
 
-  // const commentsEndRef = useRef(null);
-
-  // const scrollToBottom = () => {
-  // commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  // };
-
-  // useEffect(scrollToBottom, [comments]);
+  const commentsEndRef = useRef(null);
+  const scrollToBottom = () => {
+  commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+  };
+  useEffect(scrollToBottom, [comments]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -117,7 +115,9 @@ export const Discussion = () => {
   return (
     <div>
       <NavBar />
-      <Container
+      {/*hacky way to move content out from under menu*/}
+      <br/><br/>
+      <Container attached='bottom'
       // className="juryroom"
       >
         <Grid columns={3} celled divided>
@@ -128,13 +128,12 @@ export const Discussion = () => {
             </GridColumn>
             <GridColumn
               // className="comments-and-form"
-              width={10}
+                width={10}
             >
               {/* <List
               // className="comments"
-              style={{ overflow: "auto", maxHeight: "50em" }}
             > */}
-              <Comment.Group>
+              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
                 {comments &&
                   comments.map((comment) => (
                     // <List.Item
@@ -149,7 +148,7 @@ export const Discussion = () => {
                     />
                     // </List.Item>
                   ))}
-                {/* <div ref={commentsEndRef} /> */}
+                 <div ref={commentsEndRef} />
               </Comment.Group>
               {/* </List> */}
               <CommentForm discussionId={discussionId} />
