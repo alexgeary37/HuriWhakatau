@@ -24,7 +24,7 @@ Meteor.methods({
       postedTime: new Date(),
       authorId: this.userId, // _id of user.
       text: text,
-      votes: [], // _ids of votes that all OTHER users make on this Verdict.
+      votes: [], // _ids of votes that all OTHER users have given.
     });
 
     // Add _id of inserted Verdict and the author of it.
@@ -36,6 +36,22 @@ Meteor.methods({
 
     // Remove this user from the list of activeVerdictProposers in the Discussion.
     Meteor.call("discussions.removeProposer", discussionId);
+  },
+
+  "verdicts.addVote"(verdictId, vote) {
+    check(verdictId, String);
+    check(vote, Boolean);
+
+    if (!this.userId) {
+      throw new Meteor.Error("Not authorized.");
+    }
+
+    // Add a vote with the voter's ID and the time of the vote to the given verdict.
+    Verdicts.update(verdictId, {
+      $addToSet: {
+        votes: { userId: this.userId, vote: vote, voteTime: new Date() },
+      },
+    });
   },
 });
 

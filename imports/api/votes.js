@@ -40,7 +40,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  Votes.remove({});
+  // Votes.remove({});
 
   Meteor.publish("votes", function (verdictId) {
     return Votes.find(
