@@ -24,16 +24,21 @@ export const MyDashboard = () => {
 
   const { user, discussions, groups } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
-    Meteor.subscribe("groups", {members: 'vqFdTchkSz52CZWgh'});  //, 'vqFdTchkSz52CZWgh' random user id for testing
+    Meteor.subscribe("groups");
+    let fetchedGroups = Groups.find({members: { $elemMatch: { $eq : 'vqFdTchkSz52CZWgh'}}}).fetch(); //, 'vqFdTchkSz52CZWgh' random user id for testing replace with Meteor.userId()
+    let groupIds = [];
+
+    for (let i=0;i<fetchedGroups.length; i++){
+      groupIds.push(fetchedGroups[i]._id);
+    }
+    let fetchedDiscussions = Discussions.find({ groupId: {$in :groupIds}}).fetch();
 
     return {
       user: Meteor.userId(),
-      discussions: Discussions.find({}).fetch(),
-      groups: Groups.find({}).fetch(),
+      discussions: fetchedDiscussions,
+      groups: fetchedGroups,
     };
   });
-
-  console.log(groups.length);
 
   if (!user) {
     return (
@@ -84,7 +89,7 @@ export const MyDashboard = () => {
           </GridColumn>
           <GridColumn width={8}>
             <Segment attached="bottom">
-              <Header content="All Discussions" />
+              <Header content="My Discussions" />
               <Segment attached="top" clearing>
                 <List relaxed size="huge">
                   {discussions &&
