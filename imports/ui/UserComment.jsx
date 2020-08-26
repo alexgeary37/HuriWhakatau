@@ -5,10 +5,11 @@ import { Button, Comment } from "semantic-ui-react";
 
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [isAuthor, setIsAuthor] = useState(false);
+    const [isAuthor, setIsAuthor] = useState(true);
   let classes = classnames("comment");
   let colour = "#F2F2F2";
   let borderCol = "#E5E5E5";
+
   //if user is author then the page renders once for each comment in the discussion.
   console.log(Meteor.userId());
   if (Meteor.userId() === comment.authorId) {
@@ -26,7 +27,6 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
       user: Meteor.users.findOne({ _id: comment.authorId }),
     };
   });
-
   return (
     <Comment
       style={{
@@ -45,8 +45,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
           <div>{comment.postedTime.toDateString()}</div>
         </Comment.Metadata>
         <Comment.Text id={comment._id + ":text"}>{comment.text}</Comment.Text>
-      </Comment.Content>
-        {isAuthor &&
+      </Comment.Content>{isAuthor &&
         <Comment.Actions>
             <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
                     onClick={() => {

@@ -20,6 +20,7 @@ export const NavBar = () => {
                 as={Link}
                 to="/scenarioSets"
               />
+              <Dropdown.Item content="My Dash" as={Link} to="/mydashboard" />
             </Dropdown.Menu>
           </Dropdown>
         </Container>
