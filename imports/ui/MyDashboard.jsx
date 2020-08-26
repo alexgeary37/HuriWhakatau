@@ -89,7 +89,7 @@ export const MyDashboard = () => {
           </GridColumn>
           <GridColumn width={8}>
             <Segment attached="bottom">
-              <Header content="All Discussions" />
+              <Header content="My Discussions" />
               <Segment attached="top" clearing>
                 <List relaxed size="huge">
                   {discussions &&
