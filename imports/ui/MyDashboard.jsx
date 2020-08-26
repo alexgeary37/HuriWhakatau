@@ -68,7 +68,7 @@ export const MyDashboard = () => {
         <Grid columns={2}><GridRow>
           <GridColumn width={8}>
           <Segment attached="bottom">
-          <Header content="Groups" />
+          <Header content="My Groups" />
           <Segment attached="top" clearing>
             <List relaxed size="huge">
               {groups &&
@@ -84,7 +84,7 @@ export const MyDashboard = () => {
           </GridColumn>
           <GridColumn width={8}>
             <Segment attached="bottom">
-              <Header content="Discussions" />
+              <Header content="All Discussions" />
               <Segment attached="top" clearing>
                 <List relaxed size="huge">
                   {discussions &&
