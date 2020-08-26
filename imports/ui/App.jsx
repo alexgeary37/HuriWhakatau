@@ -11,6 +11,8 @@ import { CreateScenario } from "./CreateScenario";
 import { BrowseScenarioSets } from "./BrowseScenarioSets";
 import { CreateScenarioSet } from "./CreateScenarioSet";
 import { Discussion } from "./Discussion";
+import { MyDashboard } from "./MyDashboard";
+
 
 const browserHistory = history.createBrowserHistory();
 
@@ -28,6 +30,7 @@ export const App = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Dashboard} />
+          <Route exact path="/mydashboard" component={MyDashboard} />
           <Route exact path="/groups" component={BrowseGroups} />
           <Route exact path="/groups/create" component={CreateGroup} />
           <Route exact path="/scenarios" component={BrowseScenarios} />
