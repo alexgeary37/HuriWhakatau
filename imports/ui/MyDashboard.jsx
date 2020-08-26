@@ -26,7 +26,8 @@ export const MyDashboard = () => {
   const { user, discussions, groups } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
     Meteor.subscribe("groups");
-    let fetchedGroups = Groups.find({members: { $elemMatch: { $eq : 'vqFdTchkSz52CZWgh'}}}).fetch(); //, 'vqFdTchkSz52CZWgh' random user id for testing replace with Meteor.userId()
+    let fetchedGroups = Groups.find({members: { $elemMatch: { $eq : 'vqFdTchkSz52CZWgh'}}}).fetch(); //, 'vqFdTchkSz52CZWgh'
+    // random user id for testing replace with Meteor.userId(). Also need to handle case where user has no groups or discussions yet.
     let groupIds = [];
 
     for (let i=0;i<fetchedGroups.length; i++){
@@ -73,42 +74,33 @@ export const MyDashboard = () => {
 
         <Grid columns={2}><GridRow>
           <GridColumn width={4}>
-          {/*<Segment attached="bottom">*/}
-          {/*<Header content="My Groups" />*/}
-          {/*<Segment attached="top" clearing>*/}
             <Card>
               <Card.Content header='My Groups' />
-              <Card.Content description={groups &&
+              <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+                            description={groups &&
               groups.map((group) => (
                   <GroupSummary
                       key={group._id}
                       group={group}
                   />
               ))} />
+              <Card.Content extra>
+            </Card.Content>
             </Card>
-            {/*<List relaxed size="huge">*/}
-            {/*</List>*/}
-          {/*</Segment>*/}
-        {/*</Segment>*/}
           </GridColumn>
           <GridColumn width={4}>
             <Card>
               <Card.Content header='My Discussions' />
-              <Card.Content description={discussions &&
+              <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+                            description={discussions &&
               discussions.map((discussion) => (
                   <DiscussionSummary
                       key={discussion._id}
                       discussion={discussion}
                   />
               ))} />
-            {/*<Segment attached="bottom">*/}
-            {/*  <Header content="" />*/}
-            {/*  <Segment attached="top" clearing>*/}
-            {/*    <List relaxed size="huge">*/}
-            {/*      */}
-            {/*    </List>*/}
-            {/*  </Segment>*/}
-            {/*</Segment>*/}
+              <Card.Content extra>
+              </Card.Content>
             </Card>
           </GridColumn>
         </GridRow>
