@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import {
   Button,
+    Card,
   Container,
   Segment,
   Header,
@@ -71,37 +72,44 @@ export const MyDashboard = () => {
         </Segment>
 
         <Grid columns={2}><GridRow>
-          <GridColumn width={8}>
-          <Segment attached="bottom">
-          <Header content="My Groups" />
-          <Segment attached="top" clearing>
-            <List relaxed size="huge">
-              {groups &&
+          <GridColumn width={4}>
+          {/*<Segment attached="bottom">*/}
+          {/*<Header content="My Groups" />*/}
+          {/*<Segment attached="top" clearing>*/}
+            <Card>
+              <Card.Content header='My Groups' />
+              <Card.Content description={groups &&
               groups.map((group) => (
                   <GroupSummary
                       key={group._id}
                       group={group}
                   />
-              ))}
-            </List>
-          </Segment>
-        </Segment>
+              ))} />
+            </Card>
+            {/*<List relaxed size="huge">*/}
+            {/*</List>*/}
+          {/*</Segment>*/}
+        {/*</Segment>*/}
           </GridColumn>
-          <GridColumn width={8}>
-            <Segment attached="bottom">
-              <Header content="My Discussions" />
-              <Segment attached="top" clearing>
-                <List relaxed size="huge">
-                  {discussions &&
-                  discussions.map((discussion) => (
-                      <DiscussionSummary
-                          key={discussion._id}
-                          discussion={discussion}
-                      />
-                  ))}
-                </List>
-              </Segment>
-            </Segment>
+          <GridColumn width={4}>
+            <Card>
+              <Card.Content header='My Discussions' />
+              <Card.Content description={discussions &&
+              discussions.map((discussion) => (
+                  <DiscussionSummary
+                      key={discussion._id}
+                      discussion={discussion}
+                  />
+              ))} />
+            {/*<Segment attached="bottom">*/}
+            {/*  <Header content="" />*/}
+            {/*  <Segment attached="top" clearing>*/}
+            {/*    <List relaxed size="huge">*/}
+            {/*      */}
+            {/*    </List>*/}
+            {/*  </Segment>*/}
+            {/*</Segment>*/}
+            </Card>
           </GridColumn>
         </GridRow>
         </Grid>
