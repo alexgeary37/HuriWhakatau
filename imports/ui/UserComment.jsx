@@ -5,18 +5,16 @@ import { Button, Comment } from "semantic-ui-react";
 
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [isAuthor, setIsAuthor] = useState(true);
   let classes = classnames("comment");
   let colour = "#F2F2F2";
   let borderCol = "#E5E5E5";
 
   //if user is author then the page renders once for each comment in the discussion.
-  console.log(Meteor.userId());
+  // console.log(Meteor.userId());
   if (Meteor.userId() === comment.authorId) {
     classes = classnames("comment usersComment");
     colour = "#EDE8FF";
     borderCol = "#DFDBF0";
-    // setIsAuthor(true);
   }
 
   // useTracker makes sure the component will re-render when the data changes.
@@ -45,18 +43,20 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
           <div>{comment.postedTime.toDateString()}</div>
         </Comment.Metadata>
         <Comment.Text id={comment._id + ":text"}>{comment.text}</Comment.Text>
-      </Comment.Content>{isAuthor &&
+      </Comment.Content>
+        {Meteor.userId() === comment.authorId ?
         <Comment.Actions>
-            <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
-                    onClick={() => {
-                        onEditClick(comment);
-                        setIsEditing(true);}} />
-            <Button content='Save' size='mini' active={isEditing} disabled={!isEditing}
-                    onClick={() => {
-                        onSubmitEditClick(comment);
-                        setIsEditing(false);
-                    }} />
-        </Comment.Actions>}
+        <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
+        onClick={() => {
+            onEditClick(comment);
+            setIsEditing(true);}} />
+        <Button content='Save' size='mini' active={isEditing} disabled={!isEditing}
+        onClick={() => {
+            onSubmitEditClick(comment);
+            setIsEditing(false);
+        }} />
+        </Comment.Actions> : <div></div>
+        }
     </Comment>
 
     // <li className={classes} id={comment._id}>
