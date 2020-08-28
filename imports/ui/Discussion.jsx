@@ -71,7 +71,7 @@ export const Discussion = () => {
     commentSpan.contentEditable = "true";
     let range = document.createRange();
     range.selectNodeContents(commentSpan);
-    range.collapse("false");
+    range.collapse(false);// supposed to set cursor to end of text but doesn't. todo
     commentSpan.focus();
     Meteor.call("comments.edit", _id);
   };
