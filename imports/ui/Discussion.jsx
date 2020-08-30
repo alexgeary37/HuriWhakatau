@@ -25,6 +25,7 @@ import { UserComment } from "./UserComment";
 import { CommentForm } from "./CommentForm";
 import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
+import { VerdictDisplay } from "./VerdictDisplay";
 import { Scenarios } from "/imports/api/scenarios";
 import { Groups } from "../api/groups";
 
@@ -111,74 +112,54 @@ export const Discussion = () => {
     return false;
   };
 
+  // const displayVerdict = () => <VerdictDisplay />;
+
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
   return (
     <div>
       <NavBar />
-      <Container
-      // className="juryroom"
-      >
+      <Container>
         <Grid columns={3} celled divided>
           <Grid.Row>
             <GridColumn width={3}>
               <Header content={scenario && scenario.title} size="medium" />
               {scenario && scenario.description}
             </GridColumn>
-            <GridColumn
-              // className="comments-and-form"
-              width={10}
-            >
-              {/* <List
-              // className="comments"
-              style={{ overflow: "auto", maxHeight: "50em" }}
-            > */}
+            <GridColumn width={10}>
               <Comment.Group>
                 {comments &&
                   comments.map((comment) => (
-                    // <List.Item
-                    //   // className="commentContainer"
-                    //   key={comment._id}
-                    // >
                     <UserComment
                       key={comment._id}
                       comment={comment}
                       onEditClick={editComment}
                       onSubmitEditClick={updateComment}
                     />
-                    // </List.Item>
                   ))}
-                {/* <div ref={commentsEndRef} /> */}
               </Comment.Group>
-              {/* </List> */}
               <CommentForm discussionId={discussionId} />
             </GridColumn>
-            <GridColumn
-              // className="discussion-right-panel"
-              width={3}
-            >
+            <GridColumn width={3}>
               <Header content="Verdicts" size="medium" />
-              <List
-                // className="verdicts"
-                style={{ overflow: "auto", maxHeight: "50em" }}
-              >
+              <List style={{ overflow: "auto", maxHeight: "50em" }}>
                 {verdicts &&
                   verdicts.map((verdict) => (
-                    <List.Item
-                      // className="verdictContainer"
-                      key={verdict._id}
-                    >
+                    <List.Item key={verdict._id}>
                       <Verdict
                         key={verdict._id}
                         verdict={verdict}
                         onVote={hasReachedConsensus}
+                        // onClick={displayVerdict}
                       />
                     </List.Item>
                   ))}
                 {group && hasReachedConsensus() && (
-                  <Modal open={true}>
-                    <Modal.Content>Consensus</Modal.Content>
+                  <Modal open={true} size="tiny">
+                    <Modal.Content>
+                      This discussion has reached a consensus
+                    </Modal.Content>
                   </Modal>
                 )}
                 {!userHasSubmittedVerdict() &&
