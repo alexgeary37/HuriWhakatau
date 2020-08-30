@@ -12,11 +12,11 @@ import {
   Label,
   Grid,
   GridColumn,
-  List,
+  List, Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
@@ -178,6 +178,9 @@ export const Discussion = () => {
                 {group && hasReachedConsensus() && (
                   <Modal open={true}>
                     <Modal.Content>Consensus</Modal.Content>
+                    <Modal.Actions>
+                      <Button as={Link} to="/" content='Return to Dashboard'></Button>
+                    </Modal.Actions>
                   </Modal>
                 )}
                 {!userHasSubmittedVerdict() &&
