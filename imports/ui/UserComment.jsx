@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
 import { Button, Comment } from "semantic-ui-react";
+import ReactMarkdown from 'react-markdown';
 
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -43,7 +44,9 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
         <Comment.Metadata>
           <div>{comment.postedTime.toDateString()}</div>
         </Comment.Metadata>
-        <Comment.Text id={comment._id + ":text"} >{comment.text}</Comment.Text>
+        <Comment.Text id={comment._id + ":text"} >
+            <ReactMarkdown source={comment.text} />
+        </Comment.Text>
       </Comment.Content>
         {isAuthor ?
         <Comment.Actions>
