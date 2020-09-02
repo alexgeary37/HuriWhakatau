@@ -79,7 +79,7 @@ export const Discussion = () => {
   //update comment call
   const updateComment = ({ _id }) => {
     let commentSpan = document.getElementById(_id + ":text");
-    let text = commentSpan.innerText;
+    let text = commentSpan.innerHTML;
     console.log(text);
     commentSpan.contentEditable = "false";
     Meteor.call("comments.update", text, _id);

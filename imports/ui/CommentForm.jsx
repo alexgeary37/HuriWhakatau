@@ -44,13 +44,14 @@ export const CommentForm = ({ discussionId }) => {
             value={editorValue}
             onChange={handleChange}
             toolbarConfig={toolbarConfig}
-            // required
             // id="body-text"
             // name="bodyText"
-            // type="string"
-            // multiline
+            type="string"
             // variant="filled"
-            // style={{ minHeight: 50 }}
+            style={{ minHeight: 50 }}
+            autoFocus
+            multiline
+            required
         >
         </RichTextEditor>
             <button onClick={handleSubmit}>Add Comment</button>

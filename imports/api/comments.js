@@ -51,8 +51,6 @@ Meteor.methods({
   // commentId: _id of the comment to be updated
   // Called from Discussion.jsx
   "comments.update"(text, commentId) {
-    console.log(text);
-
     check(commentId, String);
     const comment = Comments.findOne(commentId);
 
