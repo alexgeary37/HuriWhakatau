@@ -15,6 +15,7 @@ import {
   List, Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
+import "../api/security";
 import { useTracker } from "meteor/react-meteor-data";
 import {Link, useParams} from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
@@ -27,6 +28,7 @@ import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
 import { Scenarios } from "/imports/api/scenarios";
 import { Groups } from "../api/groups";
+import RichTextEditor from "react-rte";
 
 export const Discussion = () => {
   const filter = {};
@@ -73,16 +75,17 @@ export const Discussion = () => {
     range.selectNodeContents(commentSpan);
     range.collapse(false);// supposed to set cursor to end of text but doesn't. todo
     commentSpan.focus();
-    Meteor.call("comments.edit", _id);
   };
 
   //update comment call
   const updateComment = ({ _id }) => {
     let commentSpan = document.getElementById(_id + ":text");
-    let text = commentSpan.innerText;
+    let text = RichTextEditor.createValueFromString(commentSpan.innerHTML, 'html').toString('markdown');
     console.log(text);
     commentSpan.contentEditable = "false";
     Meteor.call("comments.update", text, _id);
+    // Roles.setUserRoles(Meteor.userId(), "ADMIN");
+    Meteor.call("security.checkRole", Meteor.userId(), "ADMIN");
   };
 
   const commentsEndRef = useRef(null);

@@ -9,12 +9,12 @@ export const CommentForm = ({ discussionId }) => {
 
     const handleChange = (value) => {
         setEditorValue(value);
-        // setValue(value.toString("markdown"));
     };
 
     const handleSubmit = () => {
           if (!editorValue) return; // If text is empty, don't submit anything.
           Meteor.call("comments.insert", editorValue.toString('markdown'), discussionId);
+          console.log(editorValue.toString('markdown'));
           setEditorValue(RichTextEditor.createEmptyValue());
         };
 
@@ -44,42 +44,14 @@ export const CommentForm = ({ discussionId }) => {
             value={editorValue}
             onChange={handleChange}
             toolbarConfig={toolbarConfig}
-            // required
-            // id="body-text"
-            // name="bodyText"
-            // type="string"
-            // multiline
-            // variant="filled"
-            // style={{ minHeight: 50 }}
+            type="string"
+            style={{ minHeight: 100 }}
+            autoFocus
+            multiline
+            required
         >
         </RichTextEditor>
             <button onClick={handleSubmit}>Add Comment</button>
         </Form>
     );
-
-
-
-
-  // 'setText' is a function we're declaring in the state of this
-  // component in order to change the value of 'text'.
-  // const [text, setText] = useState(""); // "" is the default value for 'text'.
-  //
-  // const handleSubmit = () => {
-  //   if (!text) return; // If text is empty, don't submit anything.
-  //   Meteor.call("comments.insert", text.trim(), discussionId);
-  //   setText("");
-  // };
-  //
-  // return (
-  //   <div className="comment-form">
-  //     <input
-  //       type="text"
-  //       placeholder="Type your comment here..."
-  //       value={text}
-  //       onChange={(e) => setText(e.target.value)}
-  //       autoFocus
-  //     />
-  //     <button onClick={handleSubmit}>Add Comment</button>
-  //   </div>
-  // );
 };

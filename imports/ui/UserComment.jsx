@@ -63,33 +63,5 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
         }
     </Comment>
 
-    // <li className={classes} id={comment._id}>
-    //   <span className="authorName">{user && user.username} - </span>
-    //   <span className="commentTime">{comment.postedTime.toDateString()}</span>
-    //   <br />
-    //   <span id={comment._id + ":text"}>{comment.text}</span>
-    //   <br />
-    //   <span>
-    //     {isEditing ? (
-    //       <Button
-    //         onClick={() => {
-    //           onSubmitEditClick(comment);
-    //           setIsEditing(false);
-    //         }}
-    //       >
-    //         SAVE
-    //       </Button>
-    //     ) : (
-    //       <Button
-    //         onClick={() => {
-    //           onEditClick(comment);
-    //           setIsEditing(true);
-    //         }}
-    //       >
-    //         EDIT
-    //       </Button>
-    //     )}
-    //   </span>
-    // </li>
   );
 };
