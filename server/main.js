@@ -16,6 +16,7 @@ import { Verdicts } from "/imports/api/verdicts";
 import { Votes } from "/imports/api/votes";
 
 Meteor.startup(() => {
+
   // Create accounts
   if (!Accounts.findUserByUsername("OpenlyOctopus")) {
     Accounts.createUser({
@@ -39,18 +40,19 @@ Meteor.startup(() => {
   //add a group
 
   if (Meteor.isServer) {
+    Meteor.publish(null, () => Meteor.roles.find({}));
     Meteor.publish("users", function () {
       return Meteor.users.find();
     });
 
     // Meteor.users.remove();
-    console.log("List all users\n", Meteor.users.find().fetch()); //
-    console.log("List all groups\n", Groups.find().fetch());
-    console.log("List all scenarios\n", Scenarios.find().fetch());
-    console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
-    console.log("List all discussions\n", Discussions.find().fetch());
-    console.log("List all comments\n", Comments.find().fetch());
-    console.log("List all verdicts\n", Verdicts.find().fetch());
+    // console.log("List all users\n", Meteor.users.find().fetch()); //
+    // console.log("List all groups\n", Groups.find().fetch());
+    // console.log("List all scenarios\n", Scenarios.find().fetch());
+    // console.log("List all scenarioSets\n", ScenarioSets.find().fetch());
+    // console.log("List all discussions\n", Discussions.find().fetch());
+    // console.log("List all comments\n", Comments.find().fetch());
+    // console.log("List all verdicts\n", Verdicts.find().fetch());
     console.log("List all votes\n", Votes.find().fetch());
   }
 });
