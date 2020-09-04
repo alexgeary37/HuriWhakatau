@@ -40,6 +40,10 @@ Meteor.startup(() => {
   //add a group
 
   if (Meteor.isServer) {
+    if(!Meteor.roles.findOne({name: "ADMIN"})){
+      // Roles.createRole('ADMIN');
+    }
+
     Meteor.publish(null, () => Meteor.roles.find({}));
     Meteor.publish("users", function () {
       return Meteor.users.find();

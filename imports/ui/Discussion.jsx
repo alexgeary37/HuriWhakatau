@@ -40,6 +40,7 @@ export const Discussion = () => {
     discussionVerdictProposers,
     comments,
     verdicts,
+    discussionStatus,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
     const scenarioSub = Meteor.subscribe("scenarios");
@@ -50,12 +51,14 @@ export const Discussion = () => {
     let verdictProposers;
     let discussionScenario;
     let discussionGroup;
+    let discussionState;
 
     if (discussionSub.ready() && scenarioSub.ready() && groupSub.ready()) {
       let discussion = Discussions.findOne({});
       discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       discussionGroup = Groups.findOne({ _id: discussion.groupId });
       verdictProposers = discussion.activeVerdictProposers;
+      discussionState = discussion.status;
     }
 
     return {
@@ -64,6 +67,7 @@ export const Discussion = () => {
       group: discussionGroup,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
+      discussionStatus: discussionState,
     };
   });
 
@@ -84,8 +88,6 @@ export const Discussion = () => {
     console.log(text);
     commentSpan.contentEditable = "false";
     Meteor.call("comments.update", text, _id);
-    // Roles.setUserRoles(Meteor.userId(), "ADMIN");
-    Meteor.call("security.checkRole", Meteor.userId(), "ADMIN");
   };
 
   const commentsEndRef = useRef(null);
@@ -103,7 +105,7 @@ export const Discussion = () => {
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
-        votes.length === group.members.length - 1 &&
+        votes.length === group.members.length -1 &&
         votes.findIndex((x) => x.vote === false) === -1
       ) {
         return true;
@@ -112,6 +114,7 @@ export const Discussion = () => {
     return false;
   };
 
+  console.log(discussionStatus);
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
@@ -153,8 +156,7 @@ export const Discussion = () => {
                   ))}
                  <div ref={commentsEndRef} />
               </Comment.Group>
-              {/* </List> */}
-              <CommentForm discussionId={discussionId} />
+              {discussionStatus === "active" && <CommentForm discussionId={discussionId} />}
             </GridColumn>
             <GridColumn
               // className="discussion-right-panel"
