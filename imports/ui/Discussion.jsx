@@ -88,6 +88,8 @@ export const Discussion = () => {
     console.log(text);
     commentSpan.contentEditable = "false";
     Meteor.call("comments.update", text, _id);
+    // Roles.setUserRoles("LM8yRACHLduWWbjtj", "ADMIN");
+    console.log(Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
   };
 
   const commentsEndRef = useRef(null);

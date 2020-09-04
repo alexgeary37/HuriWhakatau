@@ -6,6 +6,8 @@ import "/imports/api/discussions";
 import "/imports/api/comments";
 import "/imports/api/verdicts";
 import "/imports/api/votes";
+import { Roles } from 'meteor/alanning:roles';
+
 
 import { Groups } from "/imports/api/groups";
 import { Scenarios } from "/imports/api/scenarios";
@@ -40,9 +42,26 @@ Meteor.startup(() => {
   //add a group
 
   if (Meteor.isServer) {
-    if(!Meteor.roles.findOne({name: "ADMIN"})){
-      // Roles.createRole('ADMIN');
-    }
+    let createdRoles = Roles.getAllRoles();
+    let roleList = [];
+    createdRoles.forEach((role) => {
+      roleList.push(role._id);
+    });
+    console.log(roleList);
+    //set up roles
+    const userRoles = ["CREATE_GROUPS", "CREATE_SCENARIOS", "CREATE_SCENARIOSETS", 'ADMIN', 'RESEARCHER',
+      'PARTICIPANT_W', "PARTICIPANT_I",  "GROUP_LEADER"];
+
+    userRoles.forEach((role) => {
+      if(!roleList.includes(role)){
+        Roles.createRole(role);
+      }
+      if(['ADMIN', 'RESEARCHER'].includes(role)){
+        !Roles.isParentOf(role,'CREATE_SCENARIOS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
+        !Roles.isParentOf(role,'CREATE_GROUPS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
+        !Roles.isParentOf(role,'CREATE_SCENARIOSETS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
+      }
+    })
 
     Meteor.publish(null, () => Meteor.roles.find({}));
     Meteor.publish("users", function () {
@@ -57,6 +76,6 @@ Meteor.startup(() => {
     // console.log("List all discussions\n", Discussions.find().fetch());
     // console.log("List all comments\n", Comments.find().fetch());
     // console.log("List all verdicts\n", Verdicts.find().fetch());
-    console.log("List all votes\n", Votes.find().fetch());
+    // console.log("List all votes\n", Votes.find().fetch());
   }
 });
