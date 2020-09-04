@@ -62,8 +62,10 @@ Meteor.startup(() => {
         !Roles.isParentOf(role,'CREATE_SCENARIOSETS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
       }
     })
-
-    Meteor.publish(null, () => Meteor.roles.find({}));
+    console.log("HAS ROLE: ", Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
+    Meteor.publish('roles', function () {
+      return Meteor.roleAssignment.find({});
+    });
     Meteor.publish("users", function () {
       return Meteor.users.find();
     });
