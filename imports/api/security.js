@@ -9,9 +9,7 @@ if (Meteor.isServer) {
 
 Meteor.methods({
     "security.checkRole"(userId, role) {
-        Roles.setUserRoles("Jbs8mB5JaKyNSkuaE", "ADMIN");
-
-        console.log("about tto check roll for :" & Meteor.userId());
+        console.log("about to check role for :" & Meteor.userId());
     if (!Roles.userIsInRole(userId, role)) {
         console.log("nope don't have that role");
         // throw new Meteor.Error('not-authorized');  put back in use once roles sorted.

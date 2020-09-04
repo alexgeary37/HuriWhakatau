@@ -19,6 +19,8 @@ import { DiscussionSummary } from "./DiscussionSummary";
 import { GroupSummary } from "./GroupSummary";
 import { LoginForm } from "./LoginForm";
 import {Groups} from "../api/groups";
+// import "../api/security";
+import { Roles } from 'meteor/alanning:roles';
 
 export const MyDashboard = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -35,6 +37,10 @@ export const MyDashboard = () => {
     }
     let fetchedAllFinishedDiscussions = Discussions.find({ status: {$ne :"active"} }, { sort: { status: 1 }}).fetch();
     let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: { status: 1 }}).fetch();
+
+    //check user has role
+    Roles.getAllRoles().forEach((role) => console.log(role._id));
+    console.log(Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
 
     return {
       user: Meteor.userId(),
