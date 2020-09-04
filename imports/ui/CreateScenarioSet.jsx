@@ -55,7 +55,7 @@ export const CreateScenarioSet = () => {
           />
           <Form.Button
             content="Submit"
-            onClick={() =>
+            onClick={() => {
               title != "" &&
               description != "" &&
               scenarioSet.length > 0 &&
@@ -64,7 +64,8 @@ export const CreateScenarioSet = () => {
                 title,
                 description,
                 scenarioSet
-              )
+              );
+                history.back();}
             }
           />
         </Form>

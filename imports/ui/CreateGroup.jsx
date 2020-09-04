@@ -68,11 +68,12 @@ export const CreateGroup = () => {
           </Form.Field>
           <Form.Button
             content="Submit"
-            onClick={() =>
+            onClick={() => {
               groupName != "" &&
               members.length > 1 &&
               scenarioSet != "" &&
-              Meteor.call("groups.create", groupName, members, scenarioSet)
+              Meteor.call("groups.create", groupName, members, scenarioSet);
+            history.back();}
             }
           />
         </Form>

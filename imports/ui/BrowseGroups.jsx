@@ -42,7 +42,7 @@ export const BrowseGroups = () => {
                 as={Link}
                 to={`/groups/${group._id}`}
               >
-                <List.Content header={group.name} />
+                <List.Content header={group.name ? group.name : group._id} />
               </List.Item>
             ))}
         </List>

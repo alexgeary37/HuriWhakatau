@@ -25,10 +25,11 @@ export const CreateScenario = () => {
           />
           <Form.Button
             content="Submit"
-            onClick={() =>
+            onClick={() => {
               title != "" &&
               description != "" &&
-              Meteor.call("scenarios.create", title, description)
+              Meteor.call("scenarios.create", title, description);
+              history.back();}
             }
           />
         </Form>
