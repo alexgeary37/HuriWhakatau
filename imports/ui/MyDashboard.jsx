@@ -39,8 +39,8 @@ export const MyDashboard = () => {
     let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: { status: 1 }}).fetch();
 
     //check user has role
-    Roles.getAllRoles().forEach((role) => console.log(role._id));
-    console.log(Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
+    // Roles.getAllRoles().forEach((role) => console.log(role._id));
+    // console.log(Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
 
     return {
       user: Meteor.userId(),

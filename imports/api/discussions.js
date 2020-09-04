@@ -21,6 +21,7 @@ Meteor.methods({
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
+      status: 'active',
     });
   },
 
