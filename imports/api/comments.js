@@ -63,7 +63,7 @@ Meteor.methods({
 
   "comments.updateEmojis"(emojis, commentId){
     check(commentId, String);
-    // const comment = Comments.findOne(commentId);
+    check(emojis, Array);
 
     Comments.update(commentId, {
       $set: {
