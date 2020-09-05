@@ -19,7 +19,7 @@ import { DiscussionSummary } from "./DiscussionSummary";
 import { GroupSummary } from "./GroupSummary";
 import { LoginForm } from "./LoginForm";
 import {Groups} from "../api/groups";
-// import "../api/security";
+import '../api/security'
 import { Roles } from 'meteor/alanning:roles';
 
 export const MyDashboard = () => {
@@ -45,7 +45,7 @@ export const MyDashboard = () => {
     let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: { status: 1 }}).fetch();
 
     //check user has role
-    Roles.getAllRoles().forEach((role) => console.log(role._id));
+    // Roles.getAllRoles().forEach((role) => console.log(role._id));
     console.log("meteor call: ", Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
 
     return {

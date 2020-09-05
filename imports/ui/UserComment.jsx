@@ -23,25 +23,23 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
     // hide picker.
     const handleEmojiSelect = (selection) => {
         let emoOb = {emoji:selection, count:1};
-        if (selectedEmojis.length < 1){
+        let justEmojis = selectedEmojis.map(function(item) {
+            return item.emoji.id;
+        });
+        if (!justEmojis.includes(emoOb.emoji.id)){
             setSelectedEmojis([...selectedEmojis, emoOb]);
-        } else {
-            let justEmojis = selectedEmojis.map(function(item) {
-                return item.emoji.id;
-            });
-            if (!justEmojis.includes(emoOb.emoji.id)){
-                setSelectedEmojis([...selectedEmojis, emoOb]);
-                return;
-            }
-            selectedEmojis.forEach((emoObject) => {
-            if (emoObject.emoji.id === emoOb.emoji.id){
-                emoObject.count += 1;
-            }})
-            setSelectedEmojis([...selectedEmojis]);
+            setReactionShown(false);
+            return;
         }
+        selectedEmojis.forEach((emoObject) => {
+        if (emoObject.emoji.id === emoOb.emoji.id){
+            emoObject.count += 1;
+        }})
+        setSelectedEmojis([...selectedEmojis]);
         setReactionShown(false);
         Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
     }
+
     const customReactionEmojis = [
         {
             id: '+1',
