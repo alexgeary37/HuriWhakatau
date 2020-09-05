@@ -19,7 +19,7 @@ export const GroupSummary = ({ group }) => {
             users: Meteor.users.find({ _id: {$in :group.members}}).fetch(),
         };
     });
-console.log(users[0]);
+// console.log(users[0]);
 let userList = [];
 for (let i=0;i<users.length; i++){
     userList.push(users[i].username);

@@ -62,7 +62,8 @@ Meteor.startup(() => {
         !Roles.isParentOf(role,'CREATE_SCENARIOSETS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
       }
     })
-    console.log("HAS ROLE: ", Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
+    //serverside check of OpenlyOctopus admin role. Should return true.
+    console.log("Server Octopus Has Admin Role: ", Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
     Meteor.publish('roles', function () {
       return Meteor.roleAssignment.find({});
     });
