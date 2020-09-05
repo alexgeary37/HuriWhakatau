@@ -3,20 +3,71 @@ import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
 import { Button, Comment } from "semantic-ui-react";
 import ReactMarkdown from 'react-markdown';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker, Emoji } from 'emoji-mart';
 
-export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
+export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussionStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
-  // let classes = classnames("comment");
-  // let colour = "#F2F2F2";
-  // let borderCol = "#E5E5E5";
-  let isAuthor = Meteor.userId() === comment.authorId;
-  //if user is author then the page renders once for each comment in the discussion.
-  // console.log(Meteor.userId());
-  // if (isAuthor) {
-    // classes = classnames("comment usersComment");
-    // colour = "#EDE8FF";
-    // borderCol = "#DFDBF0";
-  // }
+    const [reactionShown, setReactionShown ] = useState(false);
+    const [selectedEmojis, setSelectedEmojis] = useState(comment.emojis ? [...comment.emojis] : []);
+
+    let isAuthor = Meteor.userId() === comment.authorId;
+
+    const handleShowEmojis = () => {
+        setReactionShown(!reactionShown);
+    }
+
+    const handleEmojiSelect = (selection) => {
+        let emoOb = {emoji:selection, count:1};
+        if (selectedEmojis.length < 1){
+            console.log('adding first emoji');
+            setSelectedEmojis([...selectedEmojis, emoOb]);
+        } else {
+            let justEmojis = selectedEmojis.map(function(item) {
+                return item.emoji.id;
+            });
+            console.log(justEmojis);
+            if (!justEmojis.includes(emoOb.emoji.id)){
+                setSelectedEmojis([...selectedEmojis, emoOb]);
+                return;
+            }
+            selectedEmojis.forEach((emoObject) => {
+            console.log('checking counts');
+            if (emoObject.emoji.id === emoOb.emoji.id){
+                console.log('adding count');
+                emoObject.count += 1;
+            }})
+            setSelectedEmojis([...selectedEmojis]);
+            setReactionShown(false);
+        }
+        console.log(comment);
+        Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
+    }
+    const customReactionEmojis = [
+        {
+            id: '+1',
+            name: '+1',
+            short_names: ['+1'],
+            text: '',
+            emoticons: [],
+            keywords: ['thumbsup'],
+        },
+        {
+            id: 'clap',
+            name: 'clap',
+            short_names: ['clap'],
+            text: '',
+            emoticons: [],
+            keywords: ['clap'],
+        },
+        {
+            id: '-1',
+            name: '-1',
+            short_names: ['-1'],
+            text: '',
+            emoticons: [],
+            keywords: ['thumbsdown'],
+        }];
 
   // useTracker makes sure the component will re-render when the data changes.
     const { user } = useTracker(() => {
@@ -48,7 +99,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
             <ReactMarkdown source={comment.text} />
         </Comment.Text>
       </Comment.Content>
-        {isAuthor ?
+        {isAuthor &&
         <Comment.Actions>
         <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
         onClick={() => {
@@ -59,7 +110,30 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
             onSubmitEditClick(comment);
             setIsEditing(false);
         }} />
-        </Comment.Actions> : <div></div>
+        </Comment.Actions>
+        }
+        {discussionStatus === 'active' && <Button content='Add Reaction' size='mini' onClick={handleShowEmojis} />}
+        {selectedEmojis &&
+        selectedEmojis.map((emoji) => (
+            <span>
+            <Emoji
+                emoji={emoji.emoji} size={25}
+            />
+            <span>{emoji.count}</span>
+            </span>
+        ))}
+        {reactionShown &&
+        <div className="reactions">
+            <div className="reactions">
+                <Picker
+                    showPreview={false}
+                    showSkinTones={false}
+                    include={['custom']}
+                    custom={customReactionEmojis}
+                    onSelect={handleEmojiSelect}
+                />
+            </div>
+        </div>
         }
     </Comment>
 
