@@ -18,30 +18,28 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         setReactionShown(!reactionShown);
     }
 
+    //handle emoji selection; take event, get previous emoji ids and
+    // add to count for current selected id. Add emoji if not exists.
+    // hide picker.
     const handleEmojiSelect = (selection) => {
         let emoOb = {emoji:selection, count:1};
         if (selectedEmojis.length < 1){
-            console.log('adding first emoji');
             setSelectedEmojis([...selectedEmojis, emoOb]);
         } else {
             let justEmojis = selectedEmojis.map(function(item) {
                 return item.emoji.id;
             });
-            console.log(justEmojis);
             if (!justEmojis.includes(emoOb.emoji.id)){
                 setSelectedEmojis([...selectedEmojis, emoOb]);
                 return;
             }
             selectedEmojis.forEach((emoObject) => {
-            console.log('checking counts');
             if (emoObject.emoji.id === emoOb.emoji.id){
-                console.log('adding count');
                 emoObject.count += 1;
             }})
             setSelectedEmojis([...selectedEmojis]);
-            setReactionShown(false);
         }
-        console.log(comment);
+        setReactionShown(false);
         Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
     }
     const customReactionEmojis = [
@@ -116,13 +114,13 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         {discussionStatus === 'active' && <Button content='Add Reaction' size='mini' onClick={handleShowEmojis} />}
         {selectedEmojis &&
         selectedEmojis.map((emoji) => (
-            <span style={{marginRight:15}}>
+            <span style={{marginRight:17, margintop:107}}>
             <Emoji
-                emoji={emoji.emoji} size={31}>
+                emoji={emoji.emoji} size={18}>
                 <NotificationBadge
                 count={emoji.count}
                 effect={[null, null, {top:'-5px'}, {top:'0px'}]}
-                style={{color: 'black', backgroundColor:'yellow', top: '', left: '', bottom: '', right: '-14px', fontSize:'10px'}}/>
+                style={{color: 'black', backgroundColor:'yellow', top: '', left: '', bottom: '', right: '-16px', fontSize:'6px'}}/>
             </Emoji>
             </span>
         ))}

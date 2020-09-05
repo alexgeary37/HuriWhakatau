@@ -85,14 +85,11 @@ export const Discussion = () => {
   const updateComment = ({ _id }) => {
     let commentSpan = document.getElementById(_id + ":text");
     let text = RichTextEditor.createValueFromString(commentSpan.innerHTML, 'html').toString('markdown');
-    console.log(text);
     commentSpan.contentEditable = "false";
     Meteor.call("comments.update", text, _id);
-    // Roles.setUserRoles("LM8yRACHLduWWbjtj", "ADMIN");
-    console.log(Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
   };
 
-
+  //set reference for end of discussion and scroll to that point on page load
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
   commentsEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -117,7 +114,6 @@ export const Discussion = () => {
     return false;
   };
 
-  console.log(discussionStatus);
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
