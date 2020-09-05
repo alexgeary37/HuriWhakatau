@@ -24,14 +24,20 @@ import { Roles } from 'meteor/alanning:roles';
 
 export const MyDashboard = () => {
   const [showInfo, setShowInfo] = useState(true);
+  //clientside check of OpenlyOctopus admin role. Should return true.
+  console.log("client Octopus has Admin role: ",Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
+  const isAdmin = Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN");
 
   const { user, myDiscussions, allFinishedDiscussions, groups } = useTracker(() => {
+    //subscribe to roles for user permissions check
+    Meteor.subscribe("roles");
     Meteor.subscribe("allDiscussions");
     Meteor.subscribe("groups");
-    let fetchedGroups = Groups.find({members: { $elemMatch: { $eq : Meteor.userId()}}}).fetch(); //, 'vqFdTchkSz52CZWgh'
-    // random user id for testing replace with Meteor.userId(). Also need to handle case where user has no groups or discussions yet.
-    let groupIds = [];
+    let fetchedGroups = Groups.find({members: { $elemMatch: { $eq : Meteor.userId()}}}).fetch(); //,
+    // 'vqFdTchkSz52CZWgh' random user id for testing replace with Meteor.userId(). Also need to handle case
+    // where user has no groups or discussions yet.
 
+    let groupIds = [];
     for (let i=0;i<fetchedGroups.length; i++){
       groupIds.push(fetchedGroups[i]._id);
     }
@@ -39,8 +45,8 @@ export const MyDashboard = () => {
     let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: { status: 1 }}).fetch();
 
     //check user has role
-    // Roles.getAllRoles().forEach((role) => console.log(role._id));
-    // console.log(Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
+    Roles.getAllRoles().forEach((role) => console.log(role._id));
+    console.log("meteor call: ", Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
 
     return {
       user: Meteor.userId(),
@@ -126,6 +132,22 @@ export const MyDashboard = () => {
               </Card.Content>
             </Card>
           </GridColumn>
+          {isAdmin && <GridColumn width={4}>
+            <Card>
+              <Card.Content header='Some admin stuff eventually' />
+              <Card.Content style={{ overflow: "auto", maxHeight: "40vh" }}
+                            description={allFinishedDiscussions &&
+                            allFinishedDiscussions.map((discussion) => (
+                                <DiscussionSummary
+                                    key={discussion._id}
+                                    discussion={discussion}
+                                />
+                            ))} />
+              <Card.Content extra>
+              </Card.Content>
+            </Card>
+          </GridColumn>
+          }
         </GridRow>
         </Grid>
       </Container>

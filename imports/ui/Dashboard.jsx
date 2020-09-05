@@ -23,7 +23,7 @@ export const Dashboard = () => {
 
     return {
       user: Meteor.userId(),
-      discussions: Discussions.find({}).fetch(),
+      discussions: Discussions.find({ sort: { status: 1 }}).fetch(),
     };
   });
 
