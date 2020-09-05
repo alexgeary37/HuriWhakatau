@@ -116,13 +116,13 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         {discussionStatus === 'active' && <Button content='Add Reaction' size='mini' onClick={handleShowEmojis} />}
         {selectedEmojis &&
         selectedEmojis.map((emoji) => (
-            <span>
+            <span style={{marginRight:15}}>
             <Emoji
                 emoji={emoji.emoji} size={31}>
                 <NotificationBadge
                 count={emoji.count}
                 effect={[null, null, {top:'-5px'}, {top:'0px'}]}
-                style={{color: 'black', backgroundColor:'yellow', top: '', left: '', bottom: '', right: '-7px'}}/>
+                style={{color: 'black', backgroundColor:'yellow', top: '', left: '', bottom: '', right: '-14px', fontSize:'10px'}}/>
             </Emoji>
             </span>
         ))}
