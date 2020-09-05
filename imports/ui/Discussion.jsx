@@ -92,6 +92,7 @@ export const Discussion = () => {
     console.log(Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
   };
 
+
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
   commentsEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -153,6 +154,7 @@ export const Discussion = () => {
                       comment={comment}
                       onEditClick={editComment}
                       onSubmitEditClick={updateComment}
+                      discussionStatus={discussionStatus}
                     />
                     // </List.Item>
                   ))}
