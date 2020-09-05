@@ -5,6 +5,7 @@ import { Button, Comment } from "semantic-ui-react";
 import ReactMarkdown from 'react-markdown';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker, Emoji } from 'emoji-mart';
+import NotificationBadge, {Effect}  from 'react-notification-badge';
 
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussionStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -117,9 +118,12 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         selectedEmojis.map((emoji) => (
             <span>
             <Emoji
-                emoji={emoji.emoji} size={25}
-            />
-            <span>{emoji.count}</span>
+                emoji={emoji.emoji} size={31}>
+                <NotificationBadge
+                count={emoji.count}
+                effect={[null, null, {top:'-5px'}, {top:'0px'}]}
+                style={{color: 'black', backgroundColor:'yellow', top: '', left: '', bottom: '', right: '-7px'}}/>
+            </Emoji>
             </span>
         ))}
         {reactionShown &&
