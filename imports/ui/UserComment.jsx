@@ -22,22 +22,29 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
     // add to count for current selected id. Add emoji if not exists.
     // hide picker.
     const handleEmojiSelect = (selection) => {
+        console.log("handling emoji")
         let emoOb = {emoji:selection, count:1};
         let justEmojis = selectedEmojis.map(function(item) {
             return item.emoji.id;
         });
         if (!justEmojis.includes(emoOb.emoji.id)){
             setSelectedEmojis([...selectedEmojis, emoOb]);
+            console.log(emoOb);
+            Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
             setReactionShown(false);
-            return;
+            return; // todo. if this return isn't here then the emoji does not get added to the comment
+            // in the browser. but also emojis only get added to db if there is more than one of the same type. weird.
         }
+
         selectedEmojis.forEach((emoObject) => {
         if (emoObject.emoji.id === emoOb.emoji.id){
             emoObject.count += 1;
         }})
         setSelectedEmojis([...selectedEmojis]);
         setReactionShown(false);
+        console.log("updating comment in database with emojis")
         Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
+        console.log("update complete")
     }
 
     const customReactionEmojis = [
