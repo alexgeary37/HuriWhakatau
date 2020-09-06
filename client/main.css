@@ -202,6 +202,7 @@ Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reacti
 .reactions .emoji-mart {
   z-index: 999;
 }
+
 .reactions .emoji-mart-anchors {
   display: none;
 }
@@ -217,4 +218,8 @@ Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reacti
 }
 .reactions .emoji-mart-category-label {
   display: none;
+}
+
+.badge {
+  top: 15px;
 }

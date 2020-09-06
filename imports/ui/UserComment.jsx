@@ -64,6 +64,14 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
             text: '',
             emoticons: [],
             keywords: ['thumbsdown'],
+        },
+        {
+            id: 'heart',
+            name: 'heart',
+            short_names: ['heart'],
+            text: '',
+            emoticons: [],
+            keywords: ['heart'],
         }];
 
   // useTracker makes sure the component will re-render when the data changes.
@@ -114,18 +122,18 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         selectedEmojis.map((emoji) => (
             <span style={{marginRight:17, margintop:107}}>
             <Emoji
-                emoji={emoji.emoji} size={18}>
+                emoji={emoji.emoji} size={22}>
                 <NotificationBadge
                 count={emoji.count}
-                effect={[null, null, {top:'-5px'}, {top:'0px'}]}
-                style={{color: 'black', backgroundColor:'yellow', top: '', left: '', bottom: '', right: '-16px', fontSize:'6px'}}/>
+                effect={[null, null, {top:'-3px'}, {top:'0px'}]}
+                style={{color: 'black', backgroundColor:'yellow', top:'', left: '', bottom: '', right: '-16px', fontSize:'7px'}}/>
             </Emoji>
             </span>
         ))}
         {reactionShown &&
-        <div className="reactions">
             <div className="reactions">
                 <Picker
+                    style={{width: 'auto'}}
                     showPreview={false}
                     showSkinTones={false}
                     include={['custom']}
@@ -133,7 +141,6 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
                     onSelect={handleEmojiSelect}
                 />
             </div>
-        </div>
         }
     </Comment>
 
