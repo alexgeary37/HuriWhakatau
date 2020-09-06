@@ -31,6 +31,7 @@ import { Groups } from "../api/groups";
 import RichTextEditor from "react-rte";
 
 export const Discussion = () => {
+  console.log("Entered discussion");
   const filter = {};
   const { discussionId } = useParams();
 

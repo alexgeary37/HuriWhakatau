@@ -1,8 +1,12 @@
 import React from "react";
-import { Menu, Container, Icon, Dropdown } from "semantic-ui-react";
+import {Menu, Container, Icon, Dropdown, MenuItem, MenuMenu} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 export const NavBar = () => {
+  const logUserOut = () => {
+    Accounts.logout();
+}
+
   return (
     <div className="navbar">
       <Menu fixed="top" inverted>
@@ -23,6 +27,14 @@ export const NavBar = () => {
               <Dropdown.Item content="My Dash" as={Link} to="/mydashboard" />
             </Dropdown.Menu>
           </Dropdown>
+          <MenuMenu position='right'>
+            <MenuItem
+                as={Link} to="/"
+                name='logout'
+                onClick={logUserOut} >
+              Logout
+            </MenuItem>
+          </MenuMenu>
         </Container>
       </Menu>
     </div>
