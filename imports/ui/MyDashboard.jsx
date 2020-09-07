@@ -31,7 +31,6 @@ export const MyDashboard = () => {
       console.log(error.reason);
       return;
     }
-    console.log("succy: ", result);
     setIsAdmin(result);
   });
 

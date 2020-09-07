@@ -48,9 +48,7 @@ export const Discussion = () => {
     const groupSub = Meteor.subscribe("groups");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
-    //debugging inability to get user role - need to subscribe so that the info is available to the client.
-    let roleSub = Meteor.subscribe("roles");
-    if(roleSub.ready()){console.log("roles ready")};
+    Meteor.subscribe("roles");
 
     let verdictProposers;
     let discussionScenario;
@@ -126,9 +124,7 @@ export const Discussion = () => {
       <NavBar />
       {/*hacky way to move content out from under menu*/}
       <br/><br/>
-      <Container attached='bottom'
-      // className="juryroom"
-      >
+      <Container attached='bottom'>
         <Grid columns={3} celled divided>
           <Grid.Row>
             <GridColumn width={3}>
@@ -136,19 +132,11 @@ export const Discussion = () => {
               {scenario && scenario.description}
             </GridColumn>
             <GridColumn
-              // className="comments-and-form"
                 width={10}
             >
-              {/* <List
-              // className="comments"
-            > */}
               <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
                 {comments &&
                   comments.map((comment) => (
-                    // <List.Item
-                    //   // className="commentContainer"
-                    //   key={comment._id}
-                    // >
                     <UserComment
                       key={comment._id}
                       comment={comment}
@@ -156,25 +144,21 @@ export const Discussion = () => {
                       onSubmitEditClick={updateComment}
                       discussionStatus={discussionStatus}
                     />
-                    // </List.Item>
                   ))}
                  <div ref={commentsEndRef} />
               </Comment.Group>
               {discussionStatus === "active" && <CommentForm discussionId={discussionId} />}
             </GridColumn>
             <GridColumn
-              // className="discussion-right-panel"
               width={3}
             >
               <Header content="Verdicts" size="medium" />
               <List
-                // className="verdicts"
                 style={{ overflow: "auto", maxHeight: "50em" }}
               >
                 {verdicts &&
                   verdicts.map((verdict) => (
                     <List.Item
-                      // className="verdictContainer"
                       key={verdict._id}
                     >
                       <Verdict
