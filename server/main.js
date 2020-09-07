@@ -6,6 +6,7 @@ import "/imports/api/discussions";
 import "/imports/api/comments";
 import "/imports/api/verdicts";
 import "/imports/api/votes";
+import "/imports/api/security";
 import { Roles } from 'meteor/alanning:roles';
 
 
@@ -39,9 +40,9 @@ Meteor.startup(() => {
     });
   }
 
-  //add a group
 
   if (Meteor.isServer) {
+    //set up roles if they don't exist
     let createdRoles = Roles.getAllRoles();
     let roleList = [];
     createdRoles.forEach((role) => {
@@ -57,13 +58,13 @@ Meteor.startup(() => {
         Roles.createRole(role);
       }
       if(['ADMIN', 'RESEARCHER'].includes(role)){
-        !Roles.isParentOf(role,'CREATE_SCENARIOS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
-        !Roles.isParentOf(role,'CREATE_GROUPS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
-        !Roles.isParentOf(role,'CREATE_SCENARIOSETS') ? Roles.addRolesToParent('CREATE_SCENARIOS', role) : "";
+        !Roles.isParentOf(role,'CREATE_SCENARIOS') && Roles.addRolesToParent('CREATE_SCENARIOS', role);
+        !Roles.isParentOf(role,'CREATE_GROUPS') && Roles.addRolesToParent('CREATE_GROUPS', role);
+        !Roles.isParentOf(role,'CREATE_SCENARIOSETS') && Roles.addRolesToParent('CREATE_SCENARIOSETS', role);
       }
     })
-    //serverside check of OpenlyOctopus admin role. Should return true.
-    console.log("Server Octopus Has Admin Role: ", Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
+
+    //publish required information to client
     Meteor.publish('roles', function () {
       return Meteor.roleAssignment.find({});
     });

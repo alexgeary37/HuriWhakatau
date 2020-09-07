@@ -48,6 +48,9 @@ export const Discussion = () => {
     const groupSub = Meteor.subscribe("groups");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
+    //debugging inability to get user role - need to subscribe so that the info is available to the client.
+    let roleSub = Meteor.subscribe("roles");
+    if(roleSub.ready()){console.log("roles ready")};
 
     let verdictProposers;
     let discussionScenario;

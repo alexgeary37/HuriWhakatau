@@ -24,18 +24,24 @@ import { Roles } from 'meteor/alanning:roles';
 
 export const MyDashboard = () => {
   const [showInfo, setShowInfo] = useState(true);
-  //clientside check of OpenlyOctopus admin role. Should return true.
-  console.log("client Octopus has Admin role: ",Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN"));
-  const isAdmin = Roles.userIsInRole("LM8yRACHLduWWbjtj", "ADMIN");
+  const [isAdmin, setIsAdmin] = useState(false);
+  //get user admin role status and update isAdmin variable with call back. possibly this should be a Promise?
+  Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
+    if(error){
+      console.log(error.reason);
+      return;
+    }
+    console.log("succy: ", result);
+    setIsAdmin(result);
+  });
 
   const { user, myDiscussions, allFinishedDiscussions, groups } = useTracker(() => {
-    //subscribe to roles for user permissions check
+    //subscribe to roles for user permissions check, should this be ^^ up there?
     Meteor.subscribe("roles");
     Meteor.subscribe("allDiscussions");
     Meteor.subscribe("groups");
     let fetchedGroups = Groups.find({members: { $elemMatch: { $eq : Meteor.userId()}}}).fetch(); //,
-    // 'vqFdTchkSz52CZWgh' random user id for testing replace with Meteor.userId(). Also need to handle case
-    // where user has no groups or discussions yet.
+    // need to handle case where user has no groups or discussions yet.
 
     let groupIds = [];
     for (let i=0;i<fetchedGroups.length; i++){
@@ -43,10 +49,6 @@ export const MyDashboard = () => {
     }
     let fetchedAllFinishedDiscussions = Discussions.find({ status: {$ne :"active"} }, { sort: { status: 1 }}).fetch();
     let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: { status: 1 }}).fetch();
-
-    //check user has role
-    // Roles.getAllRoles().forEach((role) => console.log(role._id));
-    console.log("meteor call: ", Meteor.call("security.hasRole", "LM8yRACHLduWWbjtj", "ADMIN"))
 
     return {
       user: Meteor.userId(),
@@ -68,8 +70,6 @@ export const MyDashboard = () => {
     <div>
       <NavBar />
       <Container>
-        {/* ########################################################################
-        Display 'Dashboard' and '?' */}
         <Segment attached="top" clearing>
           <Header size="huge">
             <Header.Content as={Container} fluid>
@@ -81,7 +81,7 @@ export const MyDashboard = () => {
                 icon="help circle"
                 onClick={() => setShowInfo(!showInfo)}
               />
-              My Dashboard
+              My Dashboard {isAdmin && <span>- Admin</span>}
             </Header.Content>
           </Header>
         </Segment>
