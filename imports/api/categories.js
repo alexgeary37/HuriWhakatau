@@ -9,7 +9,6 @@ Meteor.methods({
     // Called from *****
     "categories.insert"(name) {
         check(name, String);
-
         //addcheck for user admin/researcher role
 
         Categories.insert({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
 import { Button, Comment } from "semantic-ui-react";
@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker, Emoji } from 'emoji-mart';
 import NotificationBadge, {Effect}  from 'react-notification-badge';
+import RichTextEditor from "react-rte";
 
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussionStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -14,25 +15,49 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
 
     let isAuthor = Meteor.userId() === comment.authorId;
 
+    // // adding edit comment call - move to the UserComment.jsx
+    const editComment = ({ _id }) => {
+        let commentSpan = document.getElementById(_id + ":text");
+        commentSpan.contentEditable = "true";
+        let range = document.createRange();
+        range.selectNodeContents(commentSpan);
+        range.collapse(false);// supposed to set cursor to end of text but doesn't. todo
+        commentSpan.focus();
+    };
+
+    //update comment call
+    const updateComment = ({ _id }) => {
+        let commentSpan = document.getElementById(_id + ":text");
+        let text = RichTextEditor.createValueFromString(commentSpan.innerHTML, 'html').toString('markdown');
+        commentSpan.contentEditable = "false";
+        Meteor.call("comments.update", text, _id);
+    };
+
+
     const handleShowEmojis = () => {
         setReactionShown(!reactionShown);
     }
-
-    //handle emoji selection; take event, get previous emoji ids and
-    // add to count for current selected id. Add emoji if not exists.
+    //handle emoji selection; take event, get previous emoji
+    // ids and add emoji if not exists.
+    // add to count for current selected id.
     // hide picker.
     const handleEmojiSelect = (selection) => {
         console.log("handling emoji")
         let emoOb = {emoji:selection, count:1};
-        let justEmojis = selectedEmojis.map(function(item) {
+        let existingEmojiIds = selectedEmojis.map(function(item) {
             return item.emoji.id;
         });
-        if (!justEmojis.includes(emoOb.emoji.id)){
+        if (!existingEmojiIds.includes(emoOb.emoji.id)){
             setSelectedEmojis([...selectedEmojis, emoOb]);
-            console.log(emoOb);
+            // console.log(selectedEmojis);
+            // const addNewEmoji = () => {
+            //     Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
+            // }
+            // useEffect(addNewEmoji, selectedEmojis);
             Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
             setReactionShown(false);
-            return; // todo. if this return isn't here then the emoji does not get added to the comment
+            return;
+             // todo. if this return isn't here then the emoji does not get added to the comment
             // in the browser. but also emojis only get added to db if there is more than one of the same type. weird.
         }
 
@@ -60,7 +85,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
             id: 'clap',
             name: 'clap',
             short_names: ['clap'],
-            text: '',
+            // text: '',
             emoticons: [],
             keywords: ['clap'],
         },
@@ -68,7 +93,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
             id: '-1',
             name: '-1',
             short_names: ['-1'],
-            text: '',
+            // text: '',
             emoticons: [],
             keywords: ['thumbsdown'],
         },
@@ -76,7 +101,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
             id: 'heart',
             name: 'heart',
             short_names: ['heart'],
-            text: '',
+            // text: '',
             emoticons: [],
             keywords: ['heart'],
         }];
@@ -115,11 +140,11 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         <Comment.Actions>
         <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
         onClick={() => {
-            onEditClick(comment);
+            editComment(comment);
             setIsEditing(true);}} />
         <Button content='Save' size='mini' active={isEditing} disabled={!isEditing}
         onClick={() => {
-            onSubmitEditClick(comment);
+            updateComment(comment);
             setIsEditing(false);
         }} />
         </Comment.Actions>
@@ -129,8 +154,10 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         selectedEmojis.map((emoji) => (
             <span style={{marginRight:17, margintop:107}}>
             <Emoji
+                key={emoji.emoji.id}
                 emoji={emoji.emoji} size={22}>
                 <NotificationBadge
+                key={emoji.emoji.id + ":count"}
                 count={emoji.count}
                 effect={[null, null, {top:'-3px'}, {top:'0px'}]}
                 style={{color: 'black', backgroundColor:'yellow', top:'', left: '', bottom: '', right: '-16px', fontSize:'7px'}}/>

@@ -72,6 +72,7 @@ Meteor.methods({
         emojis: emojis,
       },
     });
+    return true;
   },
 });
 

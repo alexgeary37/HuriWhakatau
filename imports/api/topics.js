@@ -33,9 +33,9 @@ Meteor.methods({
     // Remove a topic from the topics collection in the db.
     // topicId: _id of the tpoic to be removed
     // Called from Discussion.jsx
-    "categories.remove"(topicId) {
+    "topics.remove"(topicId) {
         check(topicId, String);
-        //add role check
+        //todo add role check
         const topic = Topics.findOne(topicId);
 
         Topics.remove(topicId);
