@@ -13,6 +13,7 @@ Meteor.methods({
 
         Categories.insert({
             name: name,
+            createdBy: this.userId, // _id of user
         });
     },
 
@@ -22,7 +23,6 @@ Meteor.methods({
     "categories.remove"(categoryId) {
         check(categoryId, String);
         //add role check
-        const category = Categories.findOne(categoryId);
 
         Categories.remove(categoryId);
     },
@@ -36,6 +36,7 @@ if (Meteor.isServer) {
             {
                 fields: {
                     name: 1,
+                    createdBy: 1,
                 },
             }
         );

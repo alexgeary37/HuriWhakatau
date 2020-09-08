@@ -26,12 +26,12 @@ Meteor.startup(() => {
 
   //create categories if the basic set doesn't exist
   if (Categories.find().count() === 0) {
-    Categories.insert({ title: "Politics" });
-    Categories.insert({ title: "Religion" });
-    Categories.insert({ title: "Philosophy" });
-    Categories.insert({ title: "Sport" });
-    Categories.insert({ title: "Science" });
-    Categories.insert({ title: "Other" });
+    Categories.insert({ name: "Politics" });
+    Categories.insert({ name: "Religion" });
+    Categories.insert({ name: "Philosophy" });
+    Categories.insert({ name: "Sport" });
+    Categories.insert({ name: "Science" });
+    Categories.insert({ name: "Other" });
   }
 
 
