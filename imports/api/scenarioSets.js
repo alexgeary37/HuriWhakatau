@@ -6,7 +6,7 @@ export const ScenarioSets = new Mongo.Collection("scenarioSets");
 Meteor.methods({
   // Insert a Group into the scenariosets collection in the db.
   // Called from ...
-  "scenarioSets.create"(title, description, scenarios) {
+  "scenarioSets.create"(title, description, scenarios, randomise) {
     check(title, String);
     check(description, String);
     check(scenarios, Array);
@@ -21,6 +21,7 @@ Meteor.methods({
       title: title,
       description: description,
       scenarios: scenarios,
+      randomise: randomise,
       createdAt: new Date(),
       createdBy: this.userId,
     });
@@ -38,6 +39,7 @@ if (Meteor.isServer) {
           title: 1,
           description: 1,
           scenarios: 1,
+          randomise: 1,
           createdAt: 1,
           createdBy: 1,
         },
