@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
 import { Button, Comment } from "semantic-ui-react";
@@ -8,12 +8,22 @@ import { Picker, Emoji } from 'emoji-mart';
 import NotificationBadge, {Effect}  from 'react-notification-badge';
 import RichTextEditor from "react-rte";
 
+
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussionStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [reactionShown, setReactionShown ] = useState(false);
     const [selectedEmojis, setSelectedEmojis] = useState(comment.emojis ? [...comment.emojis] : []);
-
     let isAuthor = Meteor.userId() === comment.authorId;
+
+    //reference boolean to for the useEffect callback sending the changed emoji list to the db
+    const settingEmojisRef = useRef(false);
+    //ensure the selectedEmojis state variable is finished updating before sending to db.
+    useEffect(() => {
+        if(settingEmojisRef.current){
+            settingEmojisRef.current = false;
+            Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
+        }
+    },[selectedEmojis]);
 
     // // adding edit comment call - move to the UserComment.jsx
     const editComment = ({ _id }) => {
@@ -33,7 +43,6 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
         Meteor.call("comments.update", text, _id);
     };
 
-
     const handleShowEmojis = () => {
         setReactionShown(!reactionShown);
     }
@@ -48,30 +57,23 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
             return item.emoji.id;
         });
         if (!existingEmojiIds.includes(emoOb.emoji.id)){
+            //trigger the useEffect callback to udate db when selectedEmojis state variable has changed.
+            settingEmojisRef.current = true;
             setSelectedEmojis([...selectedEmojis, emoOb]);
-            // console.log(selectedEmojis);
-            // const addNewEmoji = () => {
-            //     Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
-            // }
-            // useEffect(addNewEmoji, selectedEmojis);
-            Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
             setReactionShown(false);
             return;
-             // todo. if this return isn't here then the emoji does not get added to the comment
-            // in the browser. but also emojis only get added to db if there is more than one of the same type. weird.
         }
 
         selectedEmojis.forEach((emoObject) => {
         if (emoObject.emoji.id === emoOb.emoji.id){
             emoObject.count += 1;
         }})
+        settingEmojisRef.current = true;
         setSelectedEmojis([...selectedEmojis]);
         setReactionShown(false);
-        console.log("updating comment in database with emojis")
-        Meteor.call("comments.updateEmojis", selectedEmojis, comment._id);
-        console.log("update complete")
     }
 
+    //emojis to show in selector
     const customReactionEmojis = [
         {
             id: '+1',
