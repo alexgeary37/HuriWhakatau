@@ -7,6 +7,9 @@ import "/imports/api/comments";
 import "/imports/api/verdicts";
 import "/imports/api/votes";
 import "/imports/api/security";
+import "/imports/api/topics";
+import "/imports/api/categories";
+
 import { Roles } from 'meteor/alanning:roles';
 
 
@@ -17,8 +20,20 @@ import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
 import { Votes } from "/imports/api/votes";
+import {Categories} from "../imports/api/categories";
 
 Meteor.startup(() => {
+
+  //create categories if the basic set doesn't exist
+  if (Categories.find().count() === 0) {
+    Categories.insert({ title: "Politics" });
+    Categories.insert({ title: "Religion" });
+    Categories.insert({ title: "Philosophy" });
+    Categories.insert({ title: "Sport" });
+    Categories.insert({ title: "Science" });
+    Categories.insert({ title: "Other" });
+  }
+
 
   // Create accounts
   if (!Accounts.findUserByUsername("OpenlyOctopus")) {

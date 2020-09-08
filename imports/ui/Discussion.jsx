@@ -73,24 +73,6 @@ export const Discussion = () => {
     };
   });
 
-  // // adding edit comment call
-  const editComment = ({ _id }) => {
-    let commentSpan = document.getElementById(_id + ":text");
-    commentSpan.contentEditable = "true";
-    let range = document.createRange();
-    range.selectNodeContents(commentSpan);
-    range.collapse(false);// supposed to set cursor to end of text but doesn't. todo
-    commentSpan.focus();
-  };
-
-  //update comment call
-  const updateComment = ({ _id }) => {
-    let commentSpan = document.getElementById(_id + ":text");
-    let text = RichTextEditor.createValueFromString(commentSpan.innerHTML, 'html').toString('markdown');
-    commentSpan.contentEditable = "false";
-    Meteor.call("comments.update", text, _id);
-  };
-
   //set reference for end of discussion and scroll to that point on page load
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
@@ -123,25 +105,25 @@ export const Discussion = () => {
     <div>
       <NavBar />
       {/*hacky way to move content out from under menu*/}
-      <br/><br/>
+      {/*<br/><br/>*/}
       <Container attached='bottom'>
         <Grid columns={3} celled divided>
           <Grid.Row>
-            <GridColumn width={3}>
+            <GridColumn width={3} >
               <Header content={scenario && scenario.title} size="medium" />
               {scenario && scenario.description}
             </GridColumn>
             <GridColumn
                 width={10}
             >
-              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
+              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh"}}>
                 {comments &&
                   comments.map((comment) => (
                     <UserComment
                       key={comment._id}
                       comment={comment}
-                      onEditClick={editComment}
-                      onSubmitEditClick={updateComment}
+                      // onEditClick={editComment}
+                      // onSubmitEditClick={updateComment}
                       discussionStatus={discussionStatus}
                     />
                   ))}
