@@ -11,12 +11,10 @@ Meteor.methods({
     // createdAt: date created
     // createdBy: user _id of creator.
     // Called from ****
-    "topics.insert"(title, description, categoryId, createdAt, createdBy) {
+    "topics.insert"(title, description, categoryId) {
         check(title, String);
         check(description, String);
         check(categoryId, String);
-        check(createdAt, Date);
-        check(createdBy, String);
 
 
         //addcheck for user admin/researcher role
@@ -25,8 +23,8 @@ Meteor.methods({
             title: title,
             description: description,
             categoryId: categoryId,
-            createdAt: createdAt,
-            createdBy: createdBy,
+            createdAt: new Date(),
+            createdBy: this.userId, // _id of user
         });
     },
 
@@ -36,7 +34,6 @@ Meteor.methods({
     "topics.remove"(topicId) {
         check(topicId, String);
         //todo add role check
-        const topic = Topics.findOne(topicId);
 
         Topics.remove(topicId);
     },

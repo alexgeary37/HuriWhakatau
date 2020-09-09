@@ -48,8 +48,8 @@ export const Dashboard = () => {
                 floated="right"
                 circular
                 color="blue"
-                size="massive"
-                icon="help circle"
+                size="large"
+                icon="help"
                 onClick={() => setShowInfo(!showInfo)}
               />
               Dashboard

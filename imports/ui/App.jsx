@@ -10,6 +10,7 @@ import { BrowseScenarios } from "./BrowseScenarios";
 import { CreateScenario } from "./CreateScenario";
 import { BrowseScenarioSets } from "./BrowseScenarioSets";
 import { CreateScenarioSet } from "./CreateScenarioSet";
+import { CreateDiscussionTemplate } from "./CreateDiscussionTemplate";
 import { Discussion } from "./Discussion";
 import { MyDashboard } from "./MyDashboard";
 
@@ -40,6 +41,11 @@ export const App = () => {
             exact
             path="/scenarioSets/create"
             component={CreateScenarioSet}
+          />
+          <Route
+              exact
+              path="/discussiontemplates/create"
+              component={CreateDiscussionTemplate}
           />
           <Route path="/discussion/:discussionId" component={Discussion} />
         </Switch>
