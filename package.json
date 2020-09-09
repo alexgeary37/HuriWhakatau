@@ -17,12 +17,8 @@
     "moment": "^2.27.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-<<<<<<< HEAD
-    "react-moment": "^0.9.7",
-=======
     "react-markdown": "^4.3.1",
     "react-notification-badge": "^1.5.1",
->>>>>>> 1c85c0be80d19dec05d54a6b5890d36ac722b5cf
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-rte": "^0.16.3",
