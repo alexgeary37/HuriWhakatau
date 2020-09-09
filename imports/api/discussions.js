@@ -14,6 +14,9 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
+    let deadline = new Date();
+    deadline.setMinutes(30);
+
     Discussions.insert({
       scenarioId: scenarioId,
       groupId: groupId,
@@ -21,6 +24,7 @@ Meteor.methods({
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
+      deadline: deadline,
     });
   },
 
@@ -67,6 +71,7 @@ if (Meteor.isServer) {
           createdBy: 1,
           activeVerdictProposers: 1,
           verdicts: 1,
+          deadline: 1,
         },
       }
     );
@@ -83,6 +88,7 @@ if (Meteor.isServer) {
           createdBy: 1,
           activeVerdictProposers: 1,
           verdicts: 1,
+          deadline: 1,
         },
       }
     );

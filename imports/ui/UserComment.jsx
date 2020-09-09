@@ -4,20 +4,22 @@ import classnames from "classnames";
 import { Button, Comment } from "semantic-ui-react";
 
 export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  let classes = classnames("comment");
-  let colour = "#F2F2F2";
-  let borderCol = "#E5E5E5";
-
-  if (Meteor.userId() === comment.authorId) {
-    classes = classnames("comment usersComment");
-    colour = "#EDE8FF";
-    borderCol = "#DFDBF0";
-  }
+    const [isEditing, setIsEditing] = useState(false);
+  // let classes = classnames("comment");
+  // let colour = "#F2F2F2";
+  // let borderCol = "#E5E5E5";
+  let isAuthor = Meteor.userId() === comment.authorId;
+  //if user is author then the page renders once for each comment in the discussion.
+  // console.log(Meteor.userId());
+  // if (isAuthor) {
+    // classes = classnames("comment usersComment");
+    // colour = "#EDE8FF";
+    // borderCol = "#DFDBF0";
+  // }
 
   // useTracker makes sure the component will re-render when the data changes.
-  const { user } = useTracker(() => {
-    Meteor.subscribe("users");
+    const { user } = useTracker(() => {
+      Meteor.subscribe("users");
 
     return {
       user: Meteor.users.findOne({ _id: comment.authorId }),
@@ -28,11 +30,11 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
     <Comment
       style={{
         margin: 20,
-        backgroundColor: colour,
+        backgroundColor: isAuthor ? "#EDE8FF" : "#F2F2F2",
         borderRadius: 5,
         border: "solid",
         borderWidth: 0.5,
-        borderColor: borderCol,
+        borderColor: isAuthor ? "#DFDBF0" : "#DFDBF0",
         padding: 5,
       }}
     >
@@ -41,8 +43,21 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick }) => {
         <Comment.Metadata>
           <div>{comment.postedTime.toDateString()}</div>
         </Comment.Metadata>
-        <Comment.Text>{comment.text}</Comment.Text>
+        <Comment.Text id={comment._id + ":text"} >{comment.text}</Comment.Text>
       </Comment.Content>
+        {isAuthor ?
+        <Comment.Actions>
+        <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
+        onClick={() => {
+            onEditClick(comment);
+            setIsEditing(true);}} />
+        <Button content='Save' size='mini' active={isEditing} disabled={!isEditing}
+        onClick={() => {
+            onSubmitEditClick(comment);
+            setIsEditing(false);
+        }} />
+        </Comment.Actions> : <div></div>
+        }
     </Comment>
 
     // <li className={classes} id={comment._id}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Sidebar,
   Container,
@@ -13,10 +13,12 @@ import {
   Grid,
   GridColumn,
   List,
+  Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { useTracker } from "meteor/react-meteor-data";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { Moment } from "react-moment";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
@@ -32,6 +34,7 @@ import { Groups } from "../api/groups";
 export const Discussion = () => {
   const filter = {};
   const { discussionId } = useParams();
+  const [deadline, setDeadline] = useState(new Date());
 
   const {
     scenario,
@@ -72,7 +75,7 @@ export const Discussion = () => {
     commentSpan.contentEditable = "true";
     let range = document.createRange();
     range.selectNodeContents(commentSpan);
-    range.collapse("false");
+    range.collapse(false); // supposed to set cursor to end of text but doesn't. todo
     commentSpan.focus();
     Meteor.call("comments.edit", _id);
   };
@@ -86,13 +89,11 @@ export const Discussion = () => {
     Meteor.call("comments.update", text, _id);
   };
 
-  // const commentsEndRef = useRef(null);
-
-  // const scrollToBottom = () => {
-  // commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  // };
-
-  // useEffect(scrollToBottom, [comments]);
+  const commentsEndRef = useRef(null);
+  const scrollToBottom = () => {
+    commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+  };
+  useEffect(scrollToBottom, [comments]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -120,15 +121,40 @@ export const Discussion = () => {
   return (
     <div>
       <NavBar />
-      <Container>
+      {/*hacky way to move content out from under menu*/}
+      <br />
+      <br />
+      <Container
+        attached="bottom"
+        // className="juryroom"
+      >
         <Grid columns={3} celled divided>
           <Grid.Row>
             <GridColumn width={3}>
               <Header content={scenario && scenario.title} size="medium" />
               {scenario && scenario.description}
+              <Button
+                content="Start countdown"
+                onClick={() => {
+                  console.log(deadline);
+                  setDeadline(deadline.setMinutes(30));
+                  console.log(deadline);
+                }}
+              />
+              {/* {deadline && (
+                <Header floated="right" size="small">
+                  Discussion ends <Moment fromNow>{deadline}</Moment>
+                </Header>
+              )} */}
             </GridColumn>
-            <GridColumn width={10}>
-              <Comment.Group>
+            <GridColumn
+              // className="comments-and-form"
+              width={10}
+            >
+              {/* <List
+              // className="comments"
+            > */}
+              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
                 {comments &&
                   comments.map((comment) => (
                     <UserComment
@@ -138,6 +164,7 @@ export const Discussion = () => {
                       onSubmitEditClick={updateComment}
                     />
                   ))}
+                <div ref={commentsEndRef} />
               </Comment.Group>
               <CommentForm discussionId={discussionId} />
             </GridColumn>
@@ -156,10 +183,15 @@ export const Discussion = () => {
                     </List.Item>
                   ))}
                 {group && hasReachedConsensus() && (
-                  <Modal open={true} size="tiny">
-                    <Modal.Content>
-                      This discussion has reached a consensus
-                    </Modal.Content>
+                  <Modal open={true}>
+                    <Modal.Content>Consensus</Modal.Content>
+                    <Modal.Actions>
+                      <Button
+                        as={Link}
+                        to="/"
+                        content="Return to Dashboard"
+                      ></Button>
+                    </Modal.Actions>
                   </Modal>
                 )}
                 {!userHasSubmittedVerdict() &&

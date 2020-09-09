@@ -138,7 +138,7 @@ App.jsx
   border-radius: 25px 10px 10px 25px;
 }
 
-.juryroom .comments-and-form .comment.usersComment button {
+.juryroom .comments-and-form .comments .comment.usersComment button {
   display: initial;
 }
 
