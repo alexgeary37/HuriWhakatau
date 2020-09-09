@@ -1,32 +1,53 @@
-import React, {useState} from "react";
-import {Form, Button, Input} from "semantic-ui-react";
+import React, { useState } from "react";
+import RichTextEditor from "react-rte";
+import {Form} from "semantic-ui-react";
 
-export const CommentForm = ({discussionId}) => {
-    // 'setText' is a function we're declaring in the state of this
-    // component in order to change the value of 'text'.
-    const [text, setText] = useState(""); // "" is the default value for 'text'.
+export const CommentForm = ({ discussionId }) => {
+
+    const [editorValue, setEditorValue] =
+        useState(RichTextEditor.createEmptyValue());
+
+    const handleChange = (value) => {
+        setEditorValue(value);
+    };
 
     const handleSubmit = () => {
-        if (!text) return; // If text is empty, don't submit anything.
-        Meteor.call("comments.insert", text.trim(), discussionId);
-        setText("");
-        console.log("text::", text);
+          if (!editorValue) return; // If text is empty, don't submit anything.
+          Meteor.call("comments.insert", editorValue.toString('markdown'), discussionId);
+          console.log(editorValue.toString('markdown'));
+          setEditorValue(RichTextEditor.createEmptyValue());
+        };
+
+    const toolbarConfig = {
+        // Optionally specify the groups to display (displayed in the order listed).
+        INLINE_STYLE_BUTTONS: [
+            {label: 'Bold', style: 'BOLD', className: 'custom-css-class'},
+            {label: 'Italic', style: 'ITALIC'},
+            {label: 'Underline', style: 'UNDERLINE'},
+            {label: 'Strikethrough', style: 'STRIKETHROUGH'},
+            {label: 'Blockquote', style: 'blockquote'},
+        ],
+        BLOCK_TYPE_BUTTONS: [
+            {label: 'UL', style: 'unordered-list-item'},
+            {label: 'OL', style: 'ordered-list-item'}
+        ],
+        display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS'],
     };
 
     return (
         <Form>
-            <Input
-                value={text}
-                type="text"
-                placeholder="Type your comment here..."
-                name="text"
-                fluid
-                onChange={(e) => setText(e.currentTarget.value)}
-                focus
-            >
-                <input/>
-                <Button content="Post" onClick={handleSubmit} positive/>
-            </Input>
+        <RichTextEditor
+            value={editorValue}
+            onChange={handleChange}
+            toolbarConfig={toolbarConfig}
+            type="string"
+            style={{ minHeight: 100 }}
+            autoFocus
+            multiline
+            required
+        >
+        </RichTextEditor>
+            <button color='green' onClick={handleSubmit}>Add Comment</button>
         </Form>
     );
 };

@@ -22,6 +22,7 @@ Meteor.methods({
       postedTime: new Date(),
       authorId: this.userId, // _id of user
       text: text,
+      emojis: [],
     });
   },
 
@@ -37,22 +38,15 @@ Meteor.methods({
     if (!this.userId || comment.authorId !== this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
-
     Comments.remove(commentId);
   },
 
-  //edit an existing comment in the discussion,
-  //probably update comment in db to set an edited true or something
-  "comments.edit"(commentId) {
-    check(commentId, String);
-  },
   // Update an existing comment in the comments collection in the db.
   // text: the text of the comment
   // commentId: _id of the comment to be updated
   // Called from Discussion.jsx
   "comments.update"(text, commentId) {
-    console.log(text);
-
+    console.log("updating comment text");
     check(commentId, String);
     const comment = Comments.findOne(commentId);
 
@@ -67,6 +61,19 @@ Meteor.methods({
       },
     });
   },
+
+  "comments.updateEmojis"(emojis, commentId){
+    console.log("updating comment emojis");
+    check(commentId, String);
+    check(emojis, Array);
+
+    Comments.update(commentId, {
+      $set: {
+        emojis: emojis,
+      },
+    });
+    return true;
+  },
 });
 
 if (Meteor.isServer) {
@@ -80,6 +87,7 @@ if (Meteor.isServer) {
           postedTime: 1,
           authorId: 1,
           text: 1,
+          emojis: 1,
         },
       }
     );

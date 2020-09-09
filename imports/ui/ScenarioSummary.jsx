@@ -4,16 +4,9 @@ import { Link } from "react-router-dom";
 import { List, Segment } from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
-export const GroupSummary = ({ group }) => {
-  // const { scenario } = useTracker(() => {
-  //   Meteor.subscribe("scenarios");
-  //
-  //   return {
-  //     scenario: Scenarios.findOne({ _id: discussion.scenarioId }),
-  //   };
-  // });
+export const ScenarioSummary = ({ group }) => {
     const { users } = useTracker(() => {
-        Meteor.subscribe("users");
+        Meteor.subscribe("scenarios");
 
         return {
             users: Meteor.users.find({ _id: {$in :group.members}}).fetch(),

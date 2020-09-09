@@ -23,7 +23,7 @@ export const Dashboard = () => {
 
     return {
       user: Meteor.userId(),
-      discussions: Discussions.find({}).fetch(),
+      discussions: Discussions.find({ status: {$ne :"active"} }, { sort: { status: 1 }}).fetch(),
     };
   });
 
@@ -48,8 +48,8 @@ export const Dashboard = () => {
                 floated="right"
                 circular
                 color="blue"
-                size="massive"
-                icon="help circle"
+                size="large"
+                icon="help"
                 onClick={() => setShowInfo(!showInfo)}
               />
               Dashboard

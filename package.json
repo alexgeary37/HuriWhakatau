@@ -11,18 +11,24 @@
     "@babel/runtime": "^7.11.2",
     "bcrypt": "^5.0.0",
     "classnames": "^2.2.6",
+    "emoji-mart": "^3.0.0",
     "history": "^5.0.0",
     "meteor-node-stubs": "^1.0.0",
     "moment": "^2.27.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+<<<<<<< HEAD
     "react-moment": "^0.9.7",
+=======
+    "react-markdown": "^4.3.1",
+    "react-notification-badge": "^1.5.1",
+>>>>>>> 1c85c0be80d19dec05d54a6b5890d36ac722b5cf
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-rte": "^0.16.3",
     "react-select": "^3.1.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^1.2.0"
+    "semantic-ui-react": "^1.2.1"
   },
   "meteor": {
     "mainModule": {

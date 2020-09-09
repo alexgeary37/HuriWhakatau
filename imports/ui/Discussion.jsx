@@ -16,6 +16,7 @@ import {
   Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
+import "../api/security";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link, useParams } from "react-router-dom";
 import { Moment } from "react-moment";
@@ -30,8 +31,10 @@ import { VerdictForm } from "./VerdictForm";
 import { VerdictDisplay } from "./VerdictDisplay";
 import { Scenarios } from "/imports/api/scenarios";
 import { Groups } from "../api/groups";
+import RichTextEditor from "react-rte";
 
 export const Discussion = () => {
+  console.log("Entered discussion");
   const filter = {};
   const { discussionId } = useParams();
   const [deadline, setDeadline] = useState(new Date());
@@ -42,22 +45,26 @@ export const Discussion = () => {
     discussionVerdictProposers,
     comments,
     verdicts,
+    discussionStatus,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
     const scenarioSub = Meteor.subscribe("scenarios");
     const groupSub = Meteor.subscribe("groups");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
+    Meteor.subscribe("roles");
 
     let verdictProposers;
     let discussionScenario;
     let discussionGroup;
+    let discussionState;
 
     if (discussionSub.ready() && scenarioSub.ready() && groupSub.ready()) {
       let discussion = Discussions.findOne({});
       discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       discussionGroup = Groups.findOne({ _id: discussion.groupId });
       verdictProposers = discussion.activeVerdictProposers;
+      discussionState = discussion.status;
     }
 
     return {
@@ -66,29 +73,11 @@ export const Discussion = () => {
       group: discussionGroup,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
+      discussionStatus: discussionState,
     };
   });
 
-  // // adding edit comment call
-  const editComment = ({ _id }) => {
-    let commentSpan = document.getElementById(_id + ":text");
-    commentSpan.contentEditable = "true";
-    let range = document.createRange();
-    range.selectNodeContents(commentSpan);
-    range.collapse(false); // supposed to set cursor to end of text but doesn't. todo
-    commentSpan.focus();
-    Meteor.call("comments.edit", _id);
-  };
-
-  //update comment call
-  const updateComment = ({ _id }) => {
-    let commentSpan = document.getElementById(_id + ":text");
-    let text = commentSpan.innerText;
-    console.log(text);
-    commentSpan.contentEditable = "false";
-    Meteor.call("comments.update", text, _id);
-  };
-
+  //set reference for end of discussion and scroll to that point on page load
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -104,7 +93,7 @@ export const Discussion = () => {
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
-        votes.length === group.members.length - 1 &&
+        votes.length === group.members.length -1 &&
         votes.findIndex((x) => x.vote === false) === -1
       ) {
         return true;
@@ -122,15 +111,11 @@ export const Discussion = () => {
     <div>
       <NavBar />
       {/*hacky way to move content out from under menu*/}
-      <br />
-      <br />
-      <Container
-        attached="bottom"
-        // className="juryroom"
-      >
+      {/*<br/><br/>*/}
+      <Container attached='bottom'>
         <Grid columns={3} celled divided>
           <Grid.Row>
-            <GridColumn width={3}>
+            <GridColumn width={3} >
               <Header content={scenario && scenario.title} size="medium" />
               {scenario && scenario.description}
               <Button
@@ -148,32 +133,35 @@ export const Discussion = () => {
               )} */}
             </GridColumn>
             <GridColumn
-              // className="comments-and-form"
-              width={10}
+                width={10}
             >
-              {/* <List
-              // className="comments"
-            > */}
-              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
+              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh"}}>
                 {comments &&
                   comments.map((comment) => (
                     <UserComment
                       key={comment._id}
                       comment={comment}
-                      onEditClick={editComment}
-                      onSubmitEditClick={updateComment}
+                      // onEditClick={editComment}
+                      // onSubmitEditClick={updateComment}
+                      discussionStatus={discussionStatus}
                     />
                   ))}
                 <div ref={commentsEndRef} />
               </Comment.Group>
-              <CommentForm discussionId={discussionId} />
+              {discussionStatus === "active" && <CommentForm discussionId={discussionId} />}
             </GridColumn>
-            <GridColumn width={3}>
+            <GridColumn
+              width={3}
+            >
               <Header content="Verdicts" size="medium" />
-              <List style={{ overflow: "auto", maxHeight: "50em" }}>
+              <List
+                style={{ overflow: "auto", maxHeight: "50em" }}
+              >
                 {verdicts &&
                   verdicts.map((verdict) => (
-                    <List.Item key={verdict._id}>
+                    <List.Item
+                      key={verdict._id}
+                    >
                       <Verdict
                         key={verdict._id}
                         verdict={verdict}

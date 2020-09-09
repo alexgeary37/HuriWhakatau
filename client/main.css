@@ -188,3 +188,38 @@ LoginForm.jsx
 .juryroom .login-form button[type="submit"] {
   float: right;
 }
+
+/*********************************************************
+Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reaction-in-react-bd68e03ad7b8
+********************************************************/
+.reactions {
+  margin-top: 20px;
+}
+.reactions .reactions-counter {
+  display: flex;
+  flex-wrap: wrap;
+}
+.reactions .emoji-mart {
+  z-index: 999;
+}
+
+.reactions .emoji-mart-anchors {
+  display: none;
+}
+.reactions .emoji-mart-search {
+  display: none;
+}
+.reactions .emoji-mart-bar {
+  display: none;
+}
+.reactions .emoji-mart-scroll {
+  overflow: auto;
+  height: auto;
+}
+.reactions .emoji-mart-category-label {
+  display: none;
+}
+
+.badge {
+  top: 15px;
+}

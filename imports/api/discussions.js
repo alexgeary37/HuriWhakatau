@@ -2,7 +2,7 @@ import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
 
 export const Discussions = new Mongo.Collection("discussions");
-
+//todo add status field to discussions and setter method. 'active', 'finished', 'hung'
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from Dashboardjsx
@@ -24,7 +24,11 @@ Meteor.methods({
       createdBy: this.userId,
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
+<<<<<<< HEAD
       deadline: deadline,
+=======
+      status: 'active',
+>>>>>>> 1c85c0be80d19dec05d54a6b5890d36ac722b5cf
     });
   },
 
@@ -71,7 +75,7 @@ if (Meteor.isServer) {
           createdBy: 1,
           activeVerdictProposers: 1,
           verdicts: 1,
-          deadline: 1,
+          status: 1,
         },
       }
     );
@@ -88,7 +92,11 @@ if (Meteor.isServer) {
           createdBy: 1,
           activeVerdictProposers: 1,
           verdicts: 1,
+<<<<<<< HEAD
           deadline: 1,
+=======
+          status: 1,
+>>>>>>> 1c85c0be80d19dec05d54a6b5890d36ac722b5cf
         },
       }
     );
