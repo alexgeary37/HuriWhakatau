@@ -13,24 +13,17 @@ export const CreateDiscussionTemplate = () => {
   const [timeLimit, setTimeLimit] = useState(0);
   const [charLimit, setCharLimit] = useState(0);
 
-    // const { users, scenarioSets } = useTracker(() => {
-  //   Meteor.subscribe("scenarioSets");
-  //
-  //   return {
-  //     users: Meteor.users.find().fetch(),
-  //     scenarioSets: ScenarioSets.find().fetch(),
-  //   };
-  // });
-
   // enable form items as this functionality becomes available
   return (
     <div>
       <NavBar />
       <Container>
         <Form as={Segment} attached="bottom">
+          <p>Coming functionality..</p>
           <Input
-            label="Name"
+            label="Template Name"
             type="text"
+            placeholder="Template Name"
             value={templateName}
             onInput={({ target }) => setTemplateName(target.value)}
             autoFocus
@@ -62,26 +55,6 @@ export const CreateDiscussionTemplate = () => {
             <input/>
             <Label>characters</Label>
           </Input>
-          {/*<Form.Field control={Form.Group} label="Members">*/}
-          {/*  <Form.Dropdown*/}
-          {/*    width={14}*/}
-          {/*    loading={users.length === 0}*/}
-          {/*    selection*/}
-          {/*    multiple*/}
-          {/*    search*/}
-          {/*    options={*/}
-          {/*      users &&*/}
-          {/*      users.map((user) => ({*/}
-          {/*        key: user._id,*/}
-          {/*        text: user.username,*/}
-          {/*        value: user._id,*/}
-          {/*      }))*/}
-          {/*    }*/}
-          {/*    name="members"*/}
-          {/*    value={members}*/}
-          {/*    onChange={(e, { value }) => setMembers(value.concat())}*/}
-          {/*  />*/}
-          {/*</Form.Field>*/}
           <br/>
           <br/>
           <Form.Button

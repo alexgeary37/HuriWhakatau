@@ -4,6 +4,7 @@ import { NavBar } from "./NavBar";
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "../api/scenarioSets";
 import {DiscussionTemplates} from "../api/discussionTemplate";
+import { Topics } from "../api/topics";
 
 export const CreateScenario = () => {
   const [title, setTitle] = useState("");
@@ -39,7 +40,7 @@ export const CreateScenario = () => {
             value={description}
             onInput={({ target }) => setDescription(target.value)}
           />
-          // show topics and discussion templates, get ids for db
+          {/*show topics and discussion templates, get ids for db*/}
             <Form.Dropdown
                 label="Topic"
                 loading={topics.length === 0}
@@ -47,8 +48,8 @@ export const CreateScenario = () => {
                 options={
                     topics &&
                     topics.map((topic) => ({
-                        key: topics._id,
-                        text: topics.title,
+                        key: topic._id,
+                        text: topic.title,
                         decription: topic.description,
                         value: topic._id,
                     }))
@@ -57,12 +58,12 @@ export const CreateScenario = () => {
                 value={topicId}
                 onChange={(e, { value }) => setTopicId(value)}
             />
-            <Form.Input
-                label="Topic"
-                type="text"
-                value={topicId}
-                onInput={({ target }) => setTopicId(target.value)}
-            />
+            {/*<Form.Input*/}
+            {/*    label="Topic"*/}
+            {/*    type="text"*/}
+            {/*    value={topicId}*/}
+            {/*    onInput={({ target }) => setTopicId(target.value)}*/}
+            {/*/>*/}
             <Form.Dropdown
                 label="Discussion Template"
                 loading={discussionTemplates.length === 0}
@@ -71,20 +72,13 @@ export const CreateScenario = () => {
                     discussionTemplates &&
                     discussionTemplates.map((discussionTemplate) => ({
                         key: discussionTemplate._id,
-                        text: discussionTemplate.title,
-                        decription: topic.description,
-                        value: topic._id,
+                        text: discussionTemplate.name,
+                        value: discussionTemplate._id,
                     }))
                 }
-                name="topics"
-                value={topicId}
-                onChange={(e, { value }) => setTopicId(value)}
-            />
-            <Form.Input
-                label="Topic"
-                type="text"
-                value={topicId}
-                onInput={({ target }) => setTopicId(target.value)}
+                name="discussion templates"
+                value={discussionTemplateId}
+                onChange={(e, { value }) => setDiscussionTemplateId(value)}
             />
           <Form.Button
             content="Submit"
@@ -93,7 +87,7 @@ export const CreateScenario = () => {
               description != "" &&
               topicId != "" &&
               discussionTemplateId != "" &&
-              Meteor.call("scenarios.create", title, description);
+              Meteor.call("scenarios.create", title, description, topicId, discussionTemplateId);
               history.back();}
             }
           />

@@ -29,6 +29,7 @@ Meteor.methods({
       createdBy: this.userId,
     });
   },
+
 });
 
 if (Meteor.isServer) {
