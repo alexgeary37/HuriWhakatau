@@ -102,11 +102,11 @@ export const MyDashboard = () => {
                 floated="right"
                 circular
                 color="blue"
-                size="massive"
-                icon="help circle"
+                size="large"
+                icon="help"
                 onClick={() => setShowInfo(!showInfo)}
               />
-              My Dashboard {isAdmin && <span>- Admin</span>}
+              {username && <div>username</div>} My Dashboard {isAdmin && <span>- Admin</span>}
             </Header.Content>
           </Header>
         </Segment>

@@ -31,27 +31,25 @@ export const LoginForm = () => {
         <Modal.Description>
           <Input
             label='Username'
+            labelPosition="left"
             type="text"
             placeholder="Username"
             name="username"
             required
             onChange={(e) => setUsername(e.currentTarget.value)}
-          >
-            {/*<Label>Username</Label>*/}
-            <input />
-          </Input>
+          />
+          <br/>
+          <br/>
           <Input
             label='Password'
+            labelPosition="left"
             type="password"
             placeholder="Password"
             name="password"
             required
             onChange={(e) => setPassword(e.currentTarget.value)}
-          >
-            {/*<Label>Password</Label>*/}
-            <input />
-          </Input>
-          {err && <div>{err}</div>}
+          />
+          {err ? <div style={{height:'10px', color:'red'}}>{err}</div> : <div style={{height: '10px'}}/>}
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
@@ -59,7 +57,7 @@ export const LoginForm = () => {
         <Button
           content="Login"
           labelPosition="right"
-          icon="checkmark"
+          icon="check"
           onClick={submit}
           positive
         />
