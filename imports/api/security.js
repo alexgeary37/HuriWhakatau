@@ -1,11 +1,5 @@
 import { Roles } from 'meteor/alanning:roles';
 
-//Attempting to add roles, but cant seem to create roles and so cannot assign..??
-// Called when the server starts up.
-if (Meteor.isServer) {
-    Meteor.publish("roles", () => Meteor.roleAssignment.find({}));
-}
-
 Meteor.methods({
     //Note these methods take time to return a value from the database,
     // a callback method must be used as part of Meteor.call()

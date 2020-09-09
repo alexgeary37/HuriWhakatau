@@ -7,9 +7,8 @@ Meteor.methods({
     // Insert a category into the category collection in the db.
     // name: the category name
     // Called from *****
-    "discussionTemplates.insert"(name, usersAreAnonymous, showTypingNotification, usersCanEditComments,
-                                 discussionCommentsThreaded, showProfileInfo, timeLimit, commentCharacterLimit,
-                                 createdBy) {
+    "discussionTemplates.create"(name, usersAreAnonymous, showTypingNotification, usersCanEditComments,
+                                 discussionCommentsThreaded, showProfileInfo, timeLimit, commentCharacterLimit) {
         check(name, String);
         //addcheck for user admin/researcher role
 
@@ -23,7 +22,7 @@ Meteor.methods({
             timeLimit: timeLimit,
             commentCharacterLimit: commentCharacterLimit,
             createdAt: new Date(),
-            createdBy: createdBy,
+            createdBy: Meteor.userId(),
         });
     },
 

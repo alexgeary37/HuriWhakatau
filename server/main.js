@@ -9,6 +9,7 @@ import "/imports/api/votes";
 import "/imports/api/security";
 import "/imports/api/topics";
 import "/imports/api/categories";
+import "/imports/api/discussionTemplate";
 
 import { Roles } from 'meteor/alanning:roles';
 

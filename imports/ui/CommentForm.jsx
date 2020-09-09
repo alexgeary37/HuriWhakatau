@@ -27,13 +27,6 @@ export const CommentForm = ({ discussionId }) => {
             {label: 'Strikethrough', style: 'STRIKETHROUGH'},
             {label: 'Blockquote', style: 'blockquote'},
         ],
-        // removing the dropdown header box
-        // BLOCK_TYPE_DROPDOWN: [
-        //     {label: 'Normal', style: 'unstyled'},
-        //     {label: 'Heading Large', style: 'header-one'},
-        //     {label: 'Heading Medium', style: 'header-two'},
-        //     {label: 'Heading Small', style: 'header-three'}
-        // ],
         BLOCK_TYPE_BUTTONS: [
             {label: 'UL', style: 'unordered-list-item'},
             {label: 'OL', style: 'ordered-list-item'}
@@ -54,7 +47,7 @@ export const CommentForm = ({ discussionId }) => {
             required
         >
         </RichTextEditor>
-            <button onClick={handleSubmit}>Add Comment</button>
+            <button color='green' onClick={handleSubmit}>Add Comment</button>
         </Form>
     );
 };

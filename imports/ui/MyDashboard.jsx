@@ -106,7 +106,7 @@ export const MyDashboard = () => {
                 icon="help"
                 onClick={() => setShowInfo(!showInfo)}
               />
-              {username && <div>username</div>} My Dashboard {isAdmin && <span>- Admin</span>}
+              My Dashboard {isAdmin && <span>- Admin</span>}
             </Header.Content>
           </Header>
         </Segment>
