@@ -126,9 +126,9 @@ export const MyDashboard = () => {
         <Grid columns={4}>
           <GridRow>
           <GridColumn width={4}>
-            <Card>
+            <Card style={{ height: "35vh" }}>
               <Card.Content header='My Groups' />
-              <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+              <Card.Content style={{ overflow: "auto", height: "25vh" }}
                             description={groups &&
               groups.map((group) => (
                   <GroupSummary
@@ -148,9 +148,9 @@ export const MyDashboard = () => {
             </Card>
           </GridColumn>
           <GridColumn width={4}>
-            <Card>
+            <Card style={{ height: "35vh" }}>
               <Card.Content header='My Discussions' />
-              <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+              <Card.Content style={{ overflow: "auto", height: "25vh" }}
                             description={myDiscussions &&
                             myDiscussions.map((discussion) => (
                   <DiscussionSummary
@@ -163,9 +163,9 @@ export const MyDashboard = () => {
             </Card>
           </GridColumn>
           <GridColumn width={4}>
-            <Card>
+            <Card style={{ height: "35vh" }}>
               <Card.Content header='All Finished Discussions' />
-              <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+              <Card.Content style={{ overflow: "auto", height: "25vh" }}
                             description={allFinishedDiscussions &&
                             allFinishedDiscussions.map((discussion) => (
                                 <DiscussionSummary
@@ -179,9 +179,9 @@ export const MyDashboard = () => {
           </GridColumn>
           {isAdmin &&
           <GridColumn width={4}>
-            <Card>
+            <Card style={{ height: "35vh" }}>
               <Card.Content header='My Discussion Templates' />
-              <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+              <Card.Content style={{ overflow: "auto", height: "25vh" }}
                             description={discussionTemplates &&
                             discussionTemplates.map((discussionTemplate) => (
                                 <DiscussionTemplateSummary
@@ -205,9 +205,9 @@ export const MyDashboard = () => {
           {isAdmin &&
           <GridRow>
             <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header='My scenarios' />
-                <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+                <Card.Content style={{ overflow: "auto", height: "25vh" }}
                               description={scenarios &&
                               scenarios.map((scenario) => (
                                   <ScenarioSummary
@@ -226,9 +226,9 @@ export const MyDashboard = () => {
               </Card>
             </GridColumn>
             <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header='My Experiments' />
-                <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+                <Card.Content style={{ overflow: "auto", height: "25vh" }}
                               description={experiments &&
                               experiments.map((experiment) => (
                                   <ExperimentSummary
@@ -237,13 +237,19 @@ export const MyDashboard = () => {
                                   />
                               ))} />
                 <Card.Content extra>
+                  <Button
+                      content="Create New Experiment"
+                      as={Link}
+                      to="/experiments/create"
+                      color="green"
+                  />
                 </Card.Content>
               </Card>
             </GridColumn>
             <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header='All Finished Discussions' />
-                <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+                <Card.Content style={{ overflow: "auto", height: "25vh" }}
                               description={allFinishedDiscussions &&
                               allFinishedDiscussions.map((discussion) => (
                                   <DiscussionSummary
@@ -256,9 +262,9 @@ export const MyDashboard = () => {
               </Card>
             </GridColumn>
             {isAdmin && <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header='Some admin stuff eventually' />
-                <Card.Content style={{ overflow: "auto", maxHeight: "30vh" }}
+                <Card.Content style={{ overflow: "auto", height: "25vh" }}
                               description={allFinishedDiscussions &&
                               allFinishedDiscussions.map((discussion) => (
                                   <DiscussionSummary
