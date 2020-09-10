@@ -11,6 +11,7 @@ import { CreateScenario } from "./CreateScenario";
 import { BrowseScenarioSets } from "./BrowseScenarioSets";
 import { CreateScenarioSet } from "./CreateScenarioSet";
 import { CreateDiscussionTemplate } from "./CreateDiscussionTemplate";
+import { CreateExperiment } from "./CreateExperiment";
 import { Discussion } from "./Discussion";
 import { MyDashboard } from "./MyDashboard";
 
@@ -46,6 +47,11 @@ export const App = () => {
               exact
               path="/discussiontemplates/create"
               component={CreateDiscussionTemplate}
+          />
+          <Route
+              exact
+              path="/experiments/create"
+              component={CreateExperiment}
           />
           <Route path="/discussion/:discussionId" component={Discussion} />
         </Switch>
