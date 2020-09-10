@@ -22,6 +22,7 @@ Meteor.methods({
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
       status: 'active',
+      deadline: 0, //to be set when discussion started and based on start datetime + timelimit from discussion template
     });
   },
 
@@ -69,6 +70,8 @@ if (Meteor.isServer) {
           activeVerdictProposers: 1,
           verdicts: 1,
           status: 1,
+          maxCommentLength: 1,
+          deadline: 1,
         },
       }
     );
@@ -86,6 +89,8 @@ if (Meteor.isServer) {
           activeVerdictProposers: 1,
           verdicts: 1,
           status: 1,
+          maxCommentLength: 1,
+          deadline: 1,
         },
       }
     );

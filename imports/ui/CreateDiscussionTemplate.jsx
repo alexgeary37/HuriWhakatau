@@ -10,6 +10,7 @@ export const CreateDiscussionTemplate = () => {
   const [canEdit, setCanEdit] = useState(true);
   const [isThreaded, setIsThreaded] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [canAddEmojis, setCanAddEmojis] = useState(false);
   const [timeLimit, setTimeLimit] = useState(0);
   const [charLimit, setCharLimit] = useState(0);
 
@@ -41,6 +42,9 @@ export const CreateDiscussionTemplate = () => {
           <Checkbox disabled label='Show profile info (eg pic)' onClick={(e, data)=> setShowProfile(data.checked)}/>
           <br/>
           <br/>
+          <Checkbox disabled label='Users can add comment reactions' onClick={(e, data)=> setCanAddEmojis(data.checked)}/>
+          <br/>
+          <br/>
           <Input style={{width:'60px', rightMargin:'60px'}} type='number' labelPosition='right' value={timeLimit}
                  onInput={({ target }) => setTimeLimit(target.value)}>
             <Label>Discussions have time limit</Label>
@@ -62,9 +66,11 @@ export const CreateDiscussionTemplate = () => {
             onClick={() => {
             templateName &&
             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
-                isThreaded, showProfile, timeLimit, charLimit);
-              }
-            }
+                isThreaded, showProfile, setCanAddEmojis, timeLimit, charLimit);
+
+              history.back();}
+
+          }
           />
         </Form>
       </Container>

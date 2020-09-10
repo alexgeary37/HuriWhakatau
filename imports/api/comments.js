@@ -23,6 +23,7 @@ Meteor.methods({
       authorId: this.userId, // _id of user
       text: text,
       emojis: [],
+      editedDate: new Date(),
     });
   },
 

@@ -26,6 +26,7 @@ export const CreateGroup = () => {
           <Form.Input
             label="Name"
             type="text"
+            autoFocus
             value={groupName}
             onInput={({ target }) => setGroupName(target.value)}
           />
@@ -69,9 +70,9 @@ export const CreateGroup = () => {
           <Form.Button
             content="Submit"
             onClick={() => {
-              groupName != "" &&
+              groupName !== "" &&
               members.length > 1 &&
-              scenarioSet != "" &&
+              scenarioSet !== "" &&
               Meteor.call("groups.create", groupName, members, scenarioSet);
             history.back();}
             }

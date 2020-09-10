@@ -8,7 +8,7 @@ Meteor.methods({
     // name: the category name
     // Called from *****
     "discussionTemplates.create"(name, usersAreAnonymous, showTypingNotification, usersCanEditComments,
-                                 discussionCommentsThreaded, showProfileInfo, timeLimit, commentCharacterLimit) {
+                                 discussionCommentsThreaded, showProfileInfo, setCanAddEmojis, timeLimit, commentCharacterLimit) {
         check(name, String);
         //addcheck for user admin/researcher role
 
@@ -19,6 +19,7 @@ Meteor.methods({
             usersCanEditComments: usersCanEditComments,
             discussionCommentsThreaded: discussionCommentsThreaded,
             showProfileInfo: showProfileInfo,
+            setCanAddEmojis: setCanAddEmojis,
             timeLimit: timeLimit,
             commentCharacterLimit: commentCharacterLimit,
             createdAt: new Date(),
@@ -50,6 +51,7 @@ if (Meteor.isServer) {
                     usersCanEditComments: 1,
                     discussionCommentsThreaded: 1,
                     showProfileInfo: 1,
+                    setCanAddEmojis: 1,
                     timeLimit: 1,
                     commentCharacterLimit: 1,
                     createdAt: 1,
