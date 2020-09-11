@@ -6,9 +6,10 @@ export const Discussions = new Mongo.Collection("discussions");
 Meteor.methods({
     // Insert a discussion into the discussions collection in the db.
     // Called from Dashboardjsx
-    "discussions.insert"(scenarioId, groupId) {
+    "discussions.insert"(scenarioId, groupId, timeLimit) {
         check(scenarioId, String);
         check(groupId, String);
+        check(timeLimit, Number);
 
         if (!this.userId) {
             throw new Meteor.Error("Not authorized.");
@@ -22,6 +23,7 @@ Meteor.methods({
             activeVerdictProposers: [], // Contains the users currently proposing a verdict.
             verdicts: [], // List of verdict._ids in this discussion.
             status: 'active',
+            timeLimit: timeLimit,
             deadline: 0, //to be set when discussion started and based on start datetime + timelimit from discussion template
         });
     },

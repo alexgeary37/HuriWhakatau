@@ -89,6 +89,10 @@ export const Discussion = () => {
         };
     });
 
+    //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
+    // else set deaadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
+
+
     //set reference for end of discussion and scroll to that point on page load
     const commentsEndRef = useRef(null);
     const scrollToBottom = () => {

@@ -3,6 +3,7 @@ import {check} from "meteor/check";
 import {Groups} from "./groups";
 import {ScenarioSets} from "./scenarioSets";
 import {Scenarios} from "./scenarios";
+import { DiscussionTemplates } from "./discussionTemplate";
 
 export const Experiments = new Mongo.Collection("experiments");
 
@@ -25,10 +26,12 @@ Meteor.methods({
         console.log(experimentId);
         const set = ScenarioSets.findOne({_id: scenarioSetId});
         const scenarios = Scenarios.find({_id: {$in: set.scenarios}}).fetch();
+        //for each scenario get discussion time limit and add to discussion
 
         for (i = 0; i < scenarios.length; i++) {
             console.log("creating discussion");
-            Meteor.call("discussions.insert", scenarios[i]._id, groupId);
+            let discussionTemplate = DiscussionTemplates.findOne({_id: scenarios[i].discussionTemplateId});
+            Meteor.call("discussions.insert", scenarios[i]._id, groupId, discussionTemplate.timeLimit);
         }
     },
 
