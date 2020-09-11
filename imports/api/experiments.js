@@ -1,5 +1,5 @@
-import { Mongo } from "meteor/mongo";
-import { check } from "meteor/check";
+import {Mongo} from "meteor/mongo";
+import {check} from "meteor/check";
 import {Groups} from "./groups";
 import {ScenarioSets} from "./scenarioSets";
 import {Scenarios} from "./scenarios";
@@ -23,8 +23,8 @@ Meteor.methods({
             createdBy: Meteor.userId(),
         });
         console.log(experimentId);
-        const set = ScenarioSets.findOne({ _id: scenarioSetId });
-        const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
+        const set = ScenarioSets.findOne({_id: scenarioSetId});
+        const scenarios = Scenarios.find({_id: {$in: set.scenarios}}).fetch();
 
         for (i = 0; i < scenarios.length; i++) {
             console.log("creating discussion");
