@@ -20,6 +20,7 @@ import { GroupSummary } from "./GroupSummary";
 import { ScenarioSummary } from "./ScenarioSummary";
 import { ExperimentSummary } from "./ExperimentSummary";
 import { DiscussionTemplateSummary } from "./DiscussionTemplateSummary";
+import { ScenarioSetSummary } from "./ScenarioSetSummary";
 import { LoginForm } from "./LoginForm";
 import {Groups} from "../api/groups";
 import '../api/security'
@@ -80,8 +81,8 @@ export const MyDashboard = () => {
     for (let i=0;i<fetchedGroups.length; i++){
       groupIds.push(fetchedGroups[i]._id);
     }
-    let fetchedAllFinishedDiscussions = Discussions.find({ status: {$ne :"active"} }, { sort: { status: 1 }}).fetch();
-    let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: { status: 1 }}).fetch();
+    let fetchedAllFinishedDiscussions = Discussions.find({ status: {$ne :"active"} }, { sort: { createdAt: -1 }}).fetch();
+    let fetchedMyDiscussions = Discussions.find({ groupId: {$in :groupIds}}, { sort: {createdAt: -1, status: 1 }}).fetch();
 
     return {
       user: userId,
@@ -225,6 +226,28 @@ export const MyDashboard = () => {
                 </Card.Content>
               </Card>
             </GridColumn>
+
+            <GridColumn width={4}>
+              <Card style={{ height: "35vh" }}>
+                <Card.Content header='My Scenario Sets' />
+                <Card.Content style={{ overflow: "auto", height: "25vh" }}
+                              description={scenarioSets &&
+                              scenarioSets.map((scenarioSet) => (
+                                  <ScenarioSetSummary
+                                      key={scenarioSet._id}
+                                      scenarioSet={scenarioSet}
+                                  />
+                              ))} />
+                <Card.Content extra>
+                  <Button
+                      content="Create New Set"
+                      as={Link}
+                      to="/scenarioSets/create"
+                      color="green"
+                  />
+                </Card.Content>
+              </Card>
+            </GridColumn>
             <GridColumn width={4}>
               <Card style={{ height: "35vh" }}>
                 <Card.Content header='My Experiments' />
@@ -248,7 +271,7 @@ export const MyDashboard = () => {
             </GridColumn>
             <GridColumn width={4}>
               <Card style={{ height: "35vh" }}>
-                <Card.Content header='All Finished Discussions' />
+                <Card.Content header='Some admin stuff ' />
                 <Card.Content style={{ overflow: "auto", height: "25vh" }}
                               description={allFinishedDiscussions &&
                               allFinishedDiscussions.map((discussion) => (
@@ -261,22 +284,6 @@ export const MyDashboard = () => {
                 </Card.Content>
               </Card>
             </GridColumn>
-            {isAdmin && <GridColumn width={4}>
-              <Card style={{ height: "35vh" }}>
-                <Card.Content header='Some admin stuff eventually' />
-                <Card.Content style={{ overflow: "auto", height: "25vh" }}
-                              description={allFinishedDiscussions &&
-                              allFinishedDiscussions.map((discussion) => (
-                                  <DiscussionSummary
-                                      key={discussion._id}
-                                      discussion={discussion}
-                                  />
-                              ))} />
-                <Card.Content extra>
-                </Card.Content>
-              </Card>
-            </GridColumn>
-            }
           </GridRow>
               }
         </Grid>

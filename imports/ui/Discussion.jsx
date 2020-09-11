@@ -28,6 +28,8 @@ import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
 import { Scenarios } from "/imports/api/scenarios";
 import { Groups } from "../api/groups";
+import { Topics } from "../api/topics";
+import { DiscussionTemplates } from "../api/discussionTemplate";
 import RichTextEditor from "react-rte";
 
 export const Discussion = () => {
@@ -38,14 +40,18 @@ export const Discussion = () => {
   const {
     scenario,
     group,
+    topic,
     discussionVerdictProposers,
     comments,
     verdicts,
     discussionStatus,
+    discussionTemplate,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
     const scenarioSub = Meteor.subscribe("scenarios");
     const groupSub = Meteor.subscribe("groups");
+    const topicSub = Meteor.subscribe("topics");
+    const discussionTemplateSub = Meteor.subscribe("discussionTemplates");
     Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
     Meteor.subscribe("roles");
@@ -54,22 +60,32 @@ export const Discussion = () => {
     let discussionScenario;
     let discussionGroup;
     let discussionState;
+    let discussionTopic;
+    let discussionTemplate;
 
-    if (discussionSub.ready() && scenarioSub.ready() && groupSub.ready()) {
+    if (discussionSub.ready() &&
+        scenarioSub.ready() &&
+        groupSub.ready() &&
+        topicSub.ready() &&
+        discussionTemplateSub.ready()) {
       let discussion = Discussions.findOne({});
       discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       discussionGroup = Groups.findOne({ _id: discussion.groupId });
       verdictProposers = discussion.activeVerdictProposers;
       discussionState = discussion.status;
+      discussionTopic = Topics.findOne({_id: discussionScenario.topicId })
+      discussionTemplate = DiscussionTemplates.findOne({_id: discussionScenario.discussionTemplateId});
     }
 
     return {
       scenario: discussionScenario,
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
+      topic: discussionTopic,
       comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
       discussionStatus: discussionState,
+      discussionTemplate: discussionTemplate,
     };
   });
 
@@ -110,8 +126,8 @@ export const Discussion = () => {
         <Grid columns={3} celled divided>
           <Grid.Row>
             <GridColumn width={3} >
-              <Header content={scenario && scenario.title} size="medium" />
-              {scenario && scenario.description}
+              <Header content={scenario && scenario.title || topic && topic.title } size="medium" />
+              {scenario && scenario.description  || topic && topic.description }
             </GridColumn>
             <GridColumn
                 width={10}
@@ -125,6 +141,7 @@ export const Discussion = () => {
                       // onEditClick={editComment}
                       // onSubmitEditClick={updateComment}
                       discussionStatus={discussionStatus}
+                      userCanEdit={discussionTemplate ? discussionTemplate.usersCanEditComments : true}
                     />
                   ))}
                  <div ref={commentsEndRef} />

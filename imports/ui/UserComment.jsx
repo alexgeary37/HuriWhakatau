@@ -9,7 +9,7 @@ import NotificationBadge, {Effect}  from 'react-notification-badge';
 import RichTextEditor from "react-rte";
 
 
-export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussionStatus }) => {
+export const UserComment = ({ comment, discussionStatus, userCanEdit }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [reactionShown, setReactionShown ] = useState(false);
     const [selectedEmojis, setSelectedEmojis] = useState(comment.emojis ? [...comment.emojis] : []);
@@ -138,7 +138,7 @@ export const UserComment = ({ comment, onSubmitEditClick, onEditClick, discussio
             <ReactMarkdown source={comment.text} />
         </Comment.Text>
       </Comment.Content>
-        {isAuthor &&
+        {isAuthor & userCanEdit &&
         <Comment.Actions>
         <Button color='blue' content='Edit' size='mini' active={!isEditing} disabled={isEditing}
         onClick={() => {

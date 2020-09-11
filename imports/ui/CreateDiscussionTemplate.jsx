@@ -66,7 +66,7 @@ export const CreateDiscussionTemplate = () => {
             onClick={() => {
             templateName &&
             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
-                isThreaded, showProfile, setCanAddEmojis, timeLimit, charLimit);
+                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
 
               history.back();}
 
