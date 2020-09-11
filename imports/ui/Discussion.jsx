@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
     Sidebar,
     Container,
@@ -23,6 +23,7 @@ import {Comments} from "/imports/api/comments";
 import {Verdicts} from "/imports/api/verdicts";
 import {NavBar} from "./NavBar";
 import {UserComment} from "./UserComment";
+import { Timer } from "./Timer";
 import {CommentForm} from "./CommentForm";
 import {Verdict} from "./Verdict";
 import {VerdictForm} from "./VerdictForm";
@@ -36,6 +37,32 @@ export const Discussion = () => {
     console.log("Entered discussion");
     const filter = {};
     const {discussionId} = useParams();
+    const [timedDiscussion, setTimedDiscussion] = useState(false);
+    const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(null);
+    const updateTimed = () => {
+        setTimedDiscussion(true);
+    }
+    const updateDeadline = (deadline) => {
+        setMutableDiscussionDeadline(deadline);
+        console.log("deadline updated", mutableDiscussionDeadline);
+    }
+
+    //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
+    const calculateTimeLeft = () => {
+        let current = new Date();
+        let minutes = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60));
+        console.log("timeleft: ", minutes);
+        return minutes;
+        // setTimeLeft(minutes);
+    }
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+        // Clear timeout if the component is unmounted
+        return () => clearTimeout(timer);
+    });
 
     const {
         scenario,
@@ -46,6 +73,8 @@ export const Discussion = () => {
         verdicts,
         discussionStatus,
         discussionTemplate,
+        discussionDeadline,
+        discussionTimeLimit,
     } = useTracker(() => {
         const discussionSub = Meteor.subscribe("discussions", discussionId);
         const scenarioSub = Meteor.subscribe("scenarios");
@@ -60,6 +89,8 @@ export const Discussion = () => {
         let discussionScenario;
         let discussionGroup;
         let discussionState;
+        let discussionTimeLimit;
+        let discussionDeadline;
         let discussionTopic;
         let discussionTemplate;
 
@@ -73,8 +104,10 @@ export const Discussion = () => {
             discussionGroup = Groups.findOne({_id: discussion.groupId});
             verdictProposers = discussion.activeVerdictProposers;
             discussionState = discussion.status;
-            discussionTopic = Topics.findOne({_id: discussionScenario.topicId})
             discussionTemplate = DiscussionTemplates.findOne({_id: discussionScenario.discussionTemplateId});
+            discussionTimeLimit = discussionTemplate.timeLimit;
+            discussionDeadline = discussion.deadline;
+            discussionTopic = Topics.findOne({_id: discussionScenario.topicId})
         }
 
         return {
@@ -86,12 +119,38 @@ export const Discussion = () => {
             verdicts: Verdicts.find(filter, {sort: {postedTime: 1}}).fetch(),
             discussionStatus: discussionState,
             discussionTemplate: discussionTemplate,
+            discussionTimeLimit: discussionTimeLimit,
+            discussionDeadline: discussionDeadline,
         };
     });
+    // setMutableDiscussionDeadline(discussionDeadline);
+    console.log("time limit: ",discussionTimeLimit, "\ndiscussion deadline: ", discussionDeadline);
+
+
 
     //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
-    // else set deaadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
+    // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
+    if (discussionDeadline == null && discussionTimeLimit === 0){
+        console.log("it's null");
+         return;
+    } else if (discussionDeadline == null && discussionTimeLimit > 0) {
+        console.log("need to update deadline");
+        let currentDateTime = new Date();
+        updateDeadline(new Date(currentDateTime.getTime() + discussionTimeLimit * 60000));
+        console.log("after setting time limit: ",discussionTimeLimit, "\ndiscussion deadline: ", mutableDiscussionDeadline);
+        Meteor.call("discussions.updateDeadline", discussionId, mutableDiscussionDeadline);
+    }
+    // updateDeadline(new Date(currentDateTime.getTime() + discussionTimeLimit * 60000));
 
+    if ((discussionDeadline != null)){
+        let currentTime = new Date();
+        if (discussionDeadline < currentTime && discussionStatus === "active"){
+            Meteor.call("discussions.updateStatus", discussionId, "timedout")
+        } else if (discussionDeadline > currentTime){
+            console.log("the future has not yet come");
+            calculateTimeLeft();
+        }
+    };
 
     //set reference for end of discussion and scroll to that point on page load
     const commentsEndRef = useRef(null);
@@ -132,6 +191,7 @@ export const Discussion = () => {
                         <GridColumn width={3}>
                             <Header content={scenario && scenario.title || topic && topic.title} size="medium"/>
                             {scenario && scenario.description || topic && topic.description}
+                            <Timer time={timeLeft}/>
                         </GridColumn>
                         <GridColumn
                             width={10}

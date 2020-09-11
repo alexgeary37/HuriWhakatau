@@ -12,8 +12,6 @@ export const DiscussionSummary = ({discussion }) => {
       scenario: Scenarios.findOne({ _id: discussion.scenarioId }),
     };
   });
-console.log(discussion);
-
 
   return (
     <List.Item

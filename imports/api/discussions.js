@@ -24,7 +24,25 @@ Meteor.methods({
             verdicts: [], // List of verdict._ids in this discussion.
             status: 'active',
             timeLimit: timeLimit,
-            deadline: 0, //to be set when discussion started and based on start datetime + timelimit from discussion template
+            deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
+        });
+    },
+
+    "discussions.updateDeadline"(discussionId, deadline) {
+        check(discussionId, String);
+        // check(deadline, Date);
+
+        Discussions.update(discussionId, {
+            $set: {deadline: deadline}
+        });
+    },
+
+    "discussions.updateStatus"(discussionId, status) {
+        check(discussionId, String);
+        // check(deadline, Date);
+
+        Discussions.update(discussionId, {
+            $set: {status: status}
         });
     },
 
