@@ -7,9 +7,9 @@ import { Scenarios } from "/imports/api/scenarios";
 export const DiscussionTemplateSummary = ({ template }) => {
   //${template._id}
   return (
-    <List.Item as={Link} to={`/discussionTemplates/`}>
+    <List.Item as={Link} to={`/discussionTemplates/${template._id}`}>
       <List.Content as={Segment}>
-        <List.Header content={template && template.name} />
+        <List.Header as={'H5'} content={template && template.name} />
         <List.Description content={template && template.name} />
       </List.Content>
     </List.Item>

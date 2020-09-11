@@ -187,7 +187,7 @@ export const MyDashboard = () => {
                             discussionTemplates.map((discussionTemplate) => (
                                 <DiscussionTemplateSummary
                                     key={discussionTemplate._id}
-                                    discussionTemplate={discussionTemplate}
+                                    template={discussionTemplate}
                                 />
                             ))}
               />
