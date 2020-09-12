@@ -60,6 +60,7 @@ Meteor.methods({
       $set: {
         text: text,
       },
+      $push: {previousEdits: comment.text},
     });
   },
 

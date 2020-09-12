@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { List, Segment } from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
-export const DiscussionSummary = ({ discussion }) => {
+export const DiscussionSummary = ({discussion }) => {
   const { scenario } = useTracker(() => {
     Meteor.subscribe("scenarios");
 
@@ -12,8 +12,6 @@ export const DiscussionSummary = ({ discussion }) => {
       scenario: Scenarios.findOne({ _id: discussion.scenarioId }),
     };
   });
-
-
 
   return (
     <List.Item
