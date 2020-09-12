@@ -23,6 +23,7 @@ Meteor.methods({
       authorId: this.userId, // _id of user
       text: text,
       emojis: [],
+      editedDate: new Date(),
     });
   },
 
@@ -59,6 +60,7 @@ Meteor.methods({
       $set: {
         text: text,
       },
+      $push: {previousEdits: comment.text},
     });
   },
 

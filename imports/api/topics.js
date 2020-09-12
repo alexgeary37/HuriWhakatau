@@ -1,5 +1,5 @@
-import { Mongo } from "meteor/mongo";
-import { check } from "meteor/check";
+import {Mongo} from "meteor/mongo";
+import {check} from "meteor/check";
 
 export const Topics = new Mongo.Collection("topics");
 
