@@ -6,7 +6,7 @@ export const NavBar = () => {
     const logUserOut = () => {
         Accounts.logout();
     }
-
+    //todo, remove the links to Grousp, Scenarios and Scenario sets when we're sure they aren't needed.
     return (
         <div className="navbar">
             <Menu fixed="top" inverted>
@@ -17,10 +17,10 @@ export const NavBar = () => {
                     </Menu.Item>
                     <Dropdown item text="Browse">
                         <Dropdown.Menu>
-                            <Dropdown.Item content="Groups" as={Link} to="/groups"/>
-                            <Dropdown.Item content="Scenarios" as={Link} to="/scenarios"/>
+                            <Dropdown.Item content="Groups (redundant)" as={Link} to="/groups"/>
+                            <Dropdown.Item content="Scenarios (redundant)" as={Link} to="/scenarios"/>
                             <Dropdown.Item
-                                content="Scenario Sets"
+                                content="Scenario Sets (redundant)"
                                 as={Link}
                                 to="/scenarioSets"
                             />
