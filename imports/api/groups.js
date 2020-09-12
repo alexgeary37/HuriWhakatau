@@ -13,7 +13,7 @@ Meteor.methods({
     "groups.create"(name, members, scenarioSet) {
         check(name, String);
         check(members, Array);
-        check(scenarioSet, String);
+        // check(scenarioSet, String);
 
         // I believe this means it's checking that the user is the client currently calling this method.
         if (!this.userId) {
@@ -23,17 +23,17 @@ Meteor.methods({
         const groupId = Groups.insert({
             name: name,
             members: members,
-            scenarioSet: scenarioSet,
+            // scenarioSet: scenarioSet,
             createdAt: new Date(),
             createdBy: this.userId,
         });
 
-        const set = ScenarioSets.findOne({_id: scenarioSet});
-        const scenarios = Scenarios.find({_id: {$in: set.scenarios}}).fetch();
-
-        for (i = 0; i < scenarios.length; i++) {
-            Meteor.call("discussions.insert", scenarios[i]._id, groupId);
-        }
+    //     const set = ScenarioSets.findOne({_id: scenarioSet});
+    //     const scenarios = Scenarios.find({_id: {$in: set.scenarios}}).fetch();
+    //
+    //     for (i = 0; i < scenarios.length; i++) {
+    //         Meteor.call("discussions.insert", scenarios[i]._id, groupId);
+    //     }
     },
 });
 
@@ -47,7 +47,7 @@ if (Meteor.isServer) {
                 fields: {
                     name: 1,
                     members: 1,
-                    scenarioSet: 1,
+                    // scenarioSet: 1,
                     createdAt: 1,
                     createdBy: 1,
                 },

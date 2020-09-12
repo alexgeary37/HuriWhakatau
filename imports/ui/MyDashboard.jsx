@@ -22,6 +22,7 @@ import {ExperimentSummary} from "./ExperimentSummary";
 import {DiscussionTemplateSummary} from "./DiscussionTemplateSummary";
 import {ScenarioSetSummary} from "./ScenarioSetSummary";
 import {LoginForm} from "./LoginForm";
+import {CreateDiscussionTemplate} from "./CreateDiscussionTemplate";
 import {Groups} from "../api/groups";
 import '../api/security'
 import {Roles} from 'meteor/alanning:roles';
@@ -35,6 +36,11 @@ export const MyDashboard = () => {
     const [showInfo, setShowInfo] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isresearcher, setIsresearcher] = useState(false);
+    const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
+
+    const handletoggleCreation = () => {
+        setIsOpenTemplateCreation(!isOpenTemplateCreation);
+    }
 
     //get user admin role status and update isAdmin variable with call back.
     // possibly this should be a Promise?
@@ -198,9 +204,10 @@ export const MyDashboard = () => {
                                 />
                                 <Card.Content extra>
                                     <Button
+                                        onClick={handletoggleCreation}
                                         content="Create New Template"
-                                        as={Link}
-                                        to="/discussionTemplates/create"
+                                        // as={Link}
+                                        // to="/discussionTemplates/create"
                                         color="green"
                                     />
                                 </Card.Content>
@@ -277,14 +284,20 @@ export const MyDashboard = () => {
                         <GridColumn width={4}>
                             <Card style={{height: "35vh"}}>
                                 <Card.Content header='Add Users to roles'/>
-                                <Card.Content>
+                                {/*<Card.Content>*/}
 
-                                </Card.Content>
+                                {/*</Card.Content>*/}
                                 <Card.Content extra>
                                     <Button
                                         content="Assign Roles"
                                         as={Link}
                                         to="/assignroles"
+                                        color="green"
+                                    />
+                                    <Button
+                                        content="Add user"
+                                        as={Link}
+                                        to="/AddUser"
                                         color="green"
                                     />
                                 </Card.Content>
@@ -293,6 +306,13 @@ export const MyDashboard = () => {
                     </GridRow>
                     }
                 </Grid>
+            {/*    Modals    */}
+                {isOpenTemplateCreation &&
+                <CreateDiscussionTemplate
+                isCreationOpen={handletoggleCreation}/>
+                }
+
+
             </Container>
         </div>
     );

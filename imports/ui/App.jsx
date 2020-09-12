@@ -15,6 +15,7 @@ import {CreateExperiment} from "./CreateExperiment";
 import {Discussion} from "./Discussion";
 import {MyDashboard} from "./MyDashboard";
 import {AssignRoles} from "./AssignRoles";
+import {AddUser } from "./AddUser";
 
 
 const browserHistory = history.createBrowserHistory();
@@ -40,6 +41,7 @@ export const App = () => {
                     <Route exact path="/scenarios/create" component={CreateScenario}/>
                     <Route exact path="/scenarioSets" component={BrowseScenarioSets}/>
                     <Route exact path="/assignroles" component={AssignRoles}/>
+                    <Route exact path="/AddUser" component={AddUser}/>
                     <Route
                         exact
                         path="/scenarioSets/create"

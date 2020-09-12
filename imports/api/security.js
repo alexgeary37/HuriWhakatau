@@ -31,7 +31,17 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         } else {
             Roles.addUsersToRoles(userIds, roles);
-        }
-        ;
+        };
+    },
+
+    "security.addUser"(userName, password){
+        if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
+            throw new Meteor.Error('not-authorized');
+        } else {
+            Accounts.createUser({
+                username: userName,
+                password: password,
+            });
+        };
     },
 })
