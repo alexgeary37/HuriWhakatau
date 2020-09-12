@@ -55,19 +55,22 @@ export const Discussion = () => {
         let minutes = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor(((discussionDeadline - current) % (1000 * 60)) / 1000);
         console.log("timeleft: ", minutes);
-        return hours.toString().padStart(2 , '0')
-            +":"+
-            minutes.toString().padStart(2 , '0')
-            +":"+
-            seconds.toString().padStart(2 , '0');
+        return hours.toString().padStart(2, '0')
+            + ":" +
+            minutes.toString().padStart(2, '0')
+            + ":" +
+            seconds.toString().padStart(2, '0');
     }
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setTimeLeft(calculateTimeLeft());
-        }, 1000);
-        // Clear timeout if the component is unmounted
-        return () => clearTimeout(timer);
-    });
+    if (timedDiscussion) {
+
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setTimeLeft(calculateTimeLeft());
+            }, 1000);
+            // Clear timeout if the component is unmounted
+            return () => clearTimeout(timer);
+        });
+    }
 
     const {
         scenario,
