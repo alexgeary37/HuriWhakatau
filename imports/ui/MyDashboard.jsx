@@ -38,8 +38,7 @@ export const MyDashboard = () => {
     const [isresearcher, setIsresearcher] = useState(false);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
 
-    const openTemplateCreation = () => {
-        setIsOpenTemplateCreation(!isOpenTemplateCreation);
+    const handletoggleCreation = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
     }
 
@@ -205,7 +204,7 @@ export const MyDashboard = () => {
                                 />
                                 <Card.Content extra>
                                     <Button
-                                        onClick={openTemplateCreation}
+                                        onClick={handletoggleCreation}
                                         content="Create New Template"
                                         // as={Link}
                                         // to="/discussionTemplates/create"
@@ -285,14 +284,20 @@ export const MyDashboard = () => {
                         <GridColumn width={4}>
                             <Card style={{height: "35vh"}}>
                                 <Card.Content header='Add Users to roles'/>
-                                <Card.Content>
+                                {/*<Card.Content>*/}
 
-                                </Card.Content>
+                                {/*</Card.Content>*/}
                                 <Card.Content extra>
                                     <Button
                                         content="Assign Roles"
                                         as={Link}
                                         to="/assignroles"
+                                        color="green"
+                                    />
+                                    <Button
+                                        content="Add user"
+                                        as={Link}
+                                        to="/AddUser"
                                         color="green"
                                     />
                                 </Card.Content>
@@ -303,7 +308,8 @@ export const MyDashboard = () => {
                 </Grid>
             {/*    Modals    */}
                 {isOpenTemplateCreation &&
-                <CreateDiscussionTemplate isCreationOpen={isOpenTemplateCreation}/>
+                <CreateDiscussionTemplate
+                isCreationOpen={handletoggleCreation}/>
                 }
 
 

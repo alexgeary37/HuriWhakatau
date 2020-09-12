@@ -3,8 +3,8 @@ import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {NavBar} from "./NavBar";
 
-export const CreateDiscussionTemplate = (isCreationOpen) => {
-    console.log(isCreationOpen.isCreationOpen);
+export const CreateDiscussionTemplate = (handletoggleCreation) => {
+    // console.log(isCreationOpen.isCreationOpen);
     const [anonymous, setAnonymous] = useState(false);
     const [typing, setTyping] = useState(false);
     const [templateName, setTemplateName] = useState("");
@@ -14,7 +14,7 @@ export const CreateDiscussionTemplate = (isCreationOpen) => {
     const [canAddEmojis, setCanAddEmojis] = useState(false);
     const [timeLimit, setTimeLimit] = useState(0);
     const [charLimit, setCharLimit] = useState(0);
-    const [isOpen, setIsOpen] = useState(isCreationOpen.isCreationOpen);
+    const [isOpen, setIsOpen] = useState(true);
 
     // enable form items as this functionality becomes available
     return (
@@ -82,7 +82,7 @@ export const CreateDiscussionTemplate = (isCreationOpen) => {
                             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
                                 isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
                             setIsOpen(false);
-                            history.back();
+                            // history.back();
                         }
 
                         }
