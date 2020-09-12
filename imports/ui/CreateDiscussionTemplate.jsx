@@ -31,22 +31,22 @@ export const CreateDiscussionTemplate = () => {
                     />
                     <br/>
                     <br/>
-                    <Checkbox disabled label='Users are anonymous' onClick={(e, data) => setAnonymous(data.checked)}/>
+                    <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous' onClick={(e, data) => setAnonymous(data.checked)}/>
                     <br/>
-                    <Checkbox disabled label='Show typing notifications'
+                    <Checkbox disabled readOnly checked={typing} label='Show typing notifications'
                               onClick={(e, data) => setTyping(data.checked)}/>
                     <br/>
-                    <Checkbox disabled checked={canEdit} label='Users can edit their own comments'
+                    <Checkbox checked={canEdit} label='Users can edit their own comments'
                               onClick={(e, data) => setCanEdit(data.checked)}/>
                     <br/>
-                    <Checkbox disabled label='Comments are threaded'
+                    <Checkbox disabled readOnly checked={isThreaded} label='Comments are threaded'
                               onClick={(e, data) => setIsThreaded(data.checked)}/>
                     <br/>
-                    <Checkbox disabled label='Show profile info (eg pic)'
+                    <Checkbox disabled readOnly checked={showProfile} label='Show profile info (eg pic)'
                               onClick={(e, data) => setShowProfile(data.checked)}/>
                     <br/>
                     <br/>
-                    <Checkbox disabled label='Users can add comment reactions'
+                    <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'
                               onClick={(e, data) => setCanAddEmojis(data.checked)}/>
                     <br/>
                     <br/>
@@ -59,7 +59,7 @@ export const CreateDiscussionTemplate = () => {
                     </Input>
                     <br/>
                     <br/>
-                    <Input style={{width: '60px', rightMargin: '70px'}} type='number' labelPosition='right'
+                    <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number' labelPosition='right'
                            value={charLimit}
                            onInput={({target}) => setCharLimit(target.value)}>
                         <Label>Comments have character limit</Label>

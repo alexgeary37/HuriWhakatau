@@ -51,10 +51,15 @@ export const Discussion = () => {
     //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
     const calculateTimeLeft = () => {
         let current = new Date();
+        let hours = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let minutes = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor(((discussionDeadline - current) % (1000 * 60)) / 1000);
         console.log("timeleft: ", minutes);
-        return minutes;
-        // setTimeLeft(minutes);
+        return hours.toString().padStart(2 , '0')
+            +":"+
+            minutes.toString().padStart(2 , '0')
+            +":"+
+            seconds.toString().padStart(2 , '0');
     }
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -105,8 +110,8 @@ export const Discussion = () => {
             verdictProposers = discussion.activeVerdictProposers;
             discussionState = discussion.status;
             discussionTemplate = DiscussionTemplates.findOne({_id: discussionScenario.discussionTemplateId});
-            discussionTimeLimit = discussionTemplate.timeLimit;
-            discussionDeadline = discussion.deadline;
+            discussionTimeLimit = discussionTemplate ? discussionTemplate.timeLimit : 0;
+            discussionDeadline = discussion.deadline ? discussion.deadline : null;
             discussionTopic = Topics.findOne({_id: discussionScenario.topicId})
         }
 
@@ -124,7 +129,7 @@ export const Discussion = () => {
         };
     });
     // setMutableDiscussionDeadline(discussionDeadline);
-    console.log("time limit: ",discussionTimeLimit, "\ndiscussion deadline: ", discussionDeadline);
+    console.log("time limit: ",discussionTimeLimit, "\ndiscussion deadline: ", discussionDeadline, "timed: ", timedDiscussion);
 
 
 
@@ -132,7 +137,6 @@ export const Discussion = () => {
     // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
     if (discussionDeadline == null && discussionTimeLimit === 0){
         console.log("it's null");
-         return;
     } else if (discussionDeadline == null && discussionTimeLimit > 0) {
         console.log("need to update deadline");
         let currentDateTime = new Date();
@@ -146,8 +150,9 @@ export const Discussion = () => {
         let currentTime = new Date();
         if (discussionDeadline < currentTime && discussionStatus === "active"){
             Meteor.call("discussions.updateStatus", discussionId, "timedout")
-        } else if (discussionDeadline > currentTime){
+        } else if (discussionDeadline > currentTime && !timedDiscussion){
             console.log("the future has not yet come");
+            updateTimed();
             calculateTimeLeft();
         }
     };
@@ -191,7 +196,7 @@ export const Discussion = () => {
                         <GridColumn width={3}>
                             <Header content={scenario && scenario.title || topic && topic.title} size="medium"/>
                             {scenario && scenario.description || topic && topic.description}
-                            <Timer time={timeLeft}/>
+                            {timedDiscussion && <Timer time={timeLeft}/>}
                         </GridColumn>
                         <GridColumn
                             width={10}

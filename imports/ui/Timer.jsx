@@ -1,16 +1,15 @@
 import React from "react";
-import {useTracker} from "meteor/react-meteor-data";
-import {Link} from "react-router-dom";
-import {List, Segment} from "semantic-ui-react";
-import {Scenarios} from "/imports/api/scenarios";
+import {List, Segment, Button} from "semantic-ui-react";
 
 export const Timer = ({time}) => {
 
     return (
-        <List.Item>
-            <List.Content as={Segment}>
-                <List.Header content={time}/>
-            </List.Content>
-        </List.Item>
+        //probably a better way to format this but a button looks fine for now.
+        <Button color={'green'} content={time} disabled/>
+        // <List.Item>
+        //     <List.Content as={Segment}>
+        //         <List.Header content={time}/>
+        //     </List.Content>
+        // </List.Item>
     );
 };
