@@ -18,6 +18,10 @@ import { Discussions } from "/imports/api/discussions";
 import { NavBar } from "./NavBar";
 import { DiscussionSummary } from "./DiscussionSummary";
 import { GroupSummary } from "./GroupSummary";
+import { ScenarioSummary } from "./ScenarioSummary";
+import { ExperimentSummary } from "./ExperimentSummary";
+import { DiscussionTemplateSummary } from "./DiscussionTemplateSummary";
+import { ScenarioSetSummary } from "./ScenarioSetSummary";
 import { LoginForm } from "./LoginForm";
 import { Groups } from "../api/groups";
 import "../api/security";
@@ -25,6 +29,8 @@ import { Roles } from "meteor/alanning:roles";
 import { Scenarios } from "../api/scenarios";
 import { ScenarioSets } from "../api/scenarioSets";
 import { DiscussionTemplates } from "../api/discussionTemplate";
+import { Experiments } from "../api/experiments";
+import { Link } from "react-router-dom";
 
 export const MyDashboard = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -63,51 +69,65 @@ export const MyDashboard = () => {
     scenarios,
     scenarioSets,
     discussionTemplates,
+    experiments,
   } = useTracker(() => {
     //subscribe to roles for user permissions check, should this be ^^ up there?
+    let fetchedDiscussionTemplates = null;
     Meteor.subscribe("roles");
     Meteor.subscribe("allDiscussions");
     Meteor.subscribe("groups");
     Meteor.subscribe("scenarios");
     Meteor.subscribe("scenarioSets");
     Meteor.subscribe("discussionTemplates");
+    Meteor.subscribe("experiments");
+
+    let userId = Meteor.userId();
 
     let fetchedGroups = Groups.find({
-      members: { $elemMatch: { $eq: Meteor.userId() } },
+      members: { $elemMatch: { $eq: userId } },
     }).fetch(); //,
     let fetchedScenarios = Scenarios.find({
-      createdBy: { $elemMatch: { $eq: Meteor.userId() } },
+      createdBy: { $eq: userId },
     }).fetch(); //,
     let fetchedScenarioSets = ScenarioSets.find({
-      createdBy: { $elemMatch: { $eq: Meteor.userId() } },
+      createdBy: { $eq: userId },
     }).fetch(); //,
-    let fetchedDiscussionTemplates = DiscussionTemplates.find({
-      createdBy: { $elemMatch: { $eq: Meteor.userId() } },
+    fetchedDiscussionTemplates = DiscussionTemplates.find({
+      createdBy: { $eq: userId },
     }).fetch(); //,
+    let fetchedExperiments = Experiments.find({
+      createdBy: { $eq: userId },
+    }).fetch(); //,
+    // console.log(fetchedDiscussionTemplates[0].name);
 
     // need to handle case where user has no groups or discussions yet.
-
     let groupIds = [];
     for (let i = 0; i < fetchedGroups.length; i++) {
       groupIds.push(fetchedGroups[i]._id);
     }
     let fetchedAllFinishedDiscussions = Discussions.find(
       { status: { $ne: "active" } },
-      { sort: { status: 1 } }
+      { sort: { createdAt: -1 } }
     ).fetch();
     let fetchedMyDiscussions = Discussions.find(
       { groupId: { $in: groupIds } },
-      { sort: { status: 1 } }
+      {
+        sort: {
+          createdAt: -1,
+          status: 1,
+        },
+      }
     ).fetch();
 
     return {
-      user: Meteor.userId(),
+      user: userId,
       myDiscussions: fetchedMyDiscussions,
       allFinishedDiscussions: fetchedAllFinishedDiscussions,
       groups: fetchedGroups,
       scenarios: fetchedScenarios,
       scenarioSets: fetchedScenarioSets,
       discussionTemplates: fetchedDiscussionTemplates,
+      experiments: fetchedExperiments,
     };
   });
 
@@ -122,7 +142,6 @@ export const MyDashboard = () => {
   return (
     <div>
       <NavBar />
-
       <Container>
         <Segment attached="top" clearing>
           <Header size="huge">
@@ -140,13 +159,13 @@ export const MyDashboard = () => {
           </Header>
         </Segment>
 
-        <Grid columns={2}>
+        <Grid columns={4}>
           <GridRow>
             <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header="My Groups" />
                 <Card.Content
-                  style={{ overflow: "auto", maxHeight: "40vh" }}
+                  style={{ overflow: "auto", height: "25vh" }}
                   description={
                     groups &&
                     groups.map((group) => (
@@ -154,14 +173,23 @@ export const MyDashboard = () => {
                     ))
                   }
                 />
-                <Card.Content extra></Card.Content>
+                <Card.Content extra>
+                  {isAdmin && (
+                    <Button
+                      content="Create New Group"
+                      as={Link}
+                      to="/groups/create"
+                      color="green"
+                    />
+                  )}
+                </Card.Content>
               </Card>
             </GridColumn>
             <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header="My Discussions" />
                 <Card.Content
-                  style={{ overflow: "auto", maxHeight: "40vh" }}
+                  style={{ overflow: "auto", height: "25vh" }}
                   description={
                     myDiscussions &&
                     myDiscussions.map((discussion) => (
@@ -176,10 +204,10 @@ export const MyDashboard = () => {
               </Card>
             </GridColumn>
             <GridColumn width={4}>
-              <Card>
+              <Card style={{ height: "35vh" }}>
                 <Card.Content header="All Finished Discussions" />
                 <Card.Content
-                  style={{ overflow: "auto", maxHeight: "40vh" }}
+                  style={{ overflow: "auto", height: "25vh" }}
                   description={
                     allFinishedDiscussions &&
                     allFinishedDiscussions.map((discussion) => (
@@ -195,98 +223,126 @@ export const MyDashboard = () => {
             </GridColumn>
             {isAdmin && (
               <GridColumn width={4}>
-                <Card>
-                  <Card.Content header="Some admin stuff eventually" />
+                <Card style={{ height: "35vh" }}>
+                  <Card.Content header="My Discussion Templates" />
                   <Card.Content
-                    style={{ overflow: "auto", maxHeight: "40vh" }}
+                    style={{ overflow: "auto", height: "25vh" }}
                     description={
-                      allFinishedDiscussions &&
-                      allFinishedDiscussions.map((discussion) => (
-                        <DiscussionSummary
-                          key={discussion._id}
-                          discussion={discussion}
+                      discussionTemplates &&
+                      discussionTemplates.map((discussionTemplate) => (
+                        <DiscussionTemplateSummary
+                          key={discussionTemplate._id}
+                          template={discussionTemplate}
                         />
                       ))
                     }
                   />
-                  <Card.Content extra></Card.Content>
+                  <Card.Content extra>
+                    <Button
+                      content="Create New Template"
+                      as={Link}
+                      to="/discussionTemplates/create"
+                      color="green"
+                    />
+                  </Card.Content>
                 </Card>
               </GridColumn>
             )}
           </GridRow>
-          <GridRow>
-            <GridColumn width={4}>
-              <Card>
-                <Card.Content header="My scenarios" />
-                <Card.Content
-                  style={{ overflow: "auto", maxHeight: "40vh" }}
-                  description={
-                    scenarios &&
-                    scenarios.map((scenario) => (
-                      <ScenariosSummary key={group._id} group={group} />
-                    ))
-                  }
-                />
-                <Card.Content extra></Card.Content>
-              </Card>
-            </GridColumn>
-            <GridColumn width={4}>
-              <Card>
-                <Card.Content header="My Discussions" />
-                <Card.Content
-                  style={{ overflow: "auto", maxHeight: "40vh" }}
-                  description={
-                    myDiscussions &&
-                    myDiscussions.map((discussion) => (
-                      <DiscussionSummary
-                        key={discussion._id}
-                        discussion={discussion}
-                      />
-                    ))
-                  }
-                />
-                <Card.Content extra></Card.Content>
-              </Card>
-            </GridColumn>
-            <GridColumn width={4}>
-              <Card>
-                <Card.Content header="All Finished Discussions" />
-                <Card.Content
-                  style={{ overflow: "auto", maxHeight: "40vh" }}
-                  description={
-                    allFinishedDiscussions &&
-                    allFinishedDiscussions.map((discussion) => (
-                      <DiscussionSummary
-                        key={discussion._id}
-                        discussion={discussion}
-                      />
-                    ))
-                  }
-                />
-                <Card.Content extra></Card.Content>
-              </Card>
-            </GridColumn>
-            {isAdmin && (
+          {isAdmin && (
+            <GridRow>
               <GridColumn width={4}>
-                <Card>
-                  <Card.Content header="Some admin stuff eventually" />
+                <Card style={{ height: "35vh" }}>
+                  <Card.Content header="My scenarios" />
                   <Card.Content
-                    style={{ overflow: "auto", maxHeight: "40vh" }}
+                    style={{ overflow: "auto", height: "25vh" }}
                     description={
-                      allFinishedDiscussions &&
-                      allFinishedDiscussions.map((discussion) => (
-                        <DiscussionSummary
-                          key={discussion._id}
-                          discussion={discussion}
+                      scenarios &&
+                      scenarios.map((scenario) => (
+                        <ScenarioSummary
+                          key={scenario._id}
+                          scenario={scenario}
                         />
                       ))
                     }
                   />
-                  <Card.Content extra></Card.Content>
+                  <Card.Content extra>
+                    <Button
+                      content="Create New"
+                      as={Link}
+                      to="/scenarios/create"
+                      color="green"
+                    />
+                  </Card.Content>
                 </Card>
               </GridColumn>
-            )}
-          </GridRow>
+
+              <GridColumn width={4}>
+                <Card style={{ height: "35vh" }}>
+                  <Card.Content header="My Scenario Sets" />
+                  <Card.Content
+                    style={{ overflow: "auto", height: "25vh" }}
+                    description={
+                      scenarioSets &&
+                      scenarioSets.map((scenarioSet) => (
+                        <ScenarioSetSummary
+                          key={scenarioSet._id}
+                          scenarioSet={scenarioSet}
+                        />
+                      ))
+                    }
+                  />
+                  <Card.Content extra>
+                    <Button
+                      content="Create New Set"
+                      as={Link}
+                      to="/scenarioSets/create"
+                      color="green"
+                    />
+                  </Card.Content>
+                </Card>
+              </GridColumn>
+              <GridColumn width={4}>
+                <Card style={{ height: "35vh" }}>
+                  <Card.Content header="My Experiments" />
+                  <Card.Content
+                    style={{ overflow: "auto", height: "25vh" }}
+                    description={
+                      experiments &&
+                      experiments.map((experiment) => (
+                        <ExperimentSummary
+                          key={experiment._id}
+                          experiment={experiment}
+                        />
+                      ))
+                    }
+                  />
+                  <Card.Content extra>
+                    <Button
+                      content="Create New Experiment"
+                      as={Link}
+                      to="/experiments/create"
+                      color="green"
+                    />
+                  </Card.Content>
+                </Card>
+              </GridColumn>
+              <GridColumn width={4}>
+                <Card style={{ height: "35vh" }}>
+                  <Card.Content header="Add Users to roles" />
+                  <Card.Content></Card.Content>
+                  <Card.Content extra>
+                    <Button
+                      content="Assign Roles"
+                      as={Link}
+                      to="/assignroles"
+                      color="green"
+                    />
+                  </Card.Content>
+                </Card>
+              </GridColumn>
+            </GridRow>
+          )}
         </Grid>
       </Container>
     </div>

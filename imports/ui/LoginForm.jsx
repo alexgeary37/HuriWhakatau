@@ -23,14 +23,14 @@ export const LoginForm = () => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      size='mini'
+      size="mini"
       // trigger={<Button>Show Modal</Button>}
     >
       <Modal.Header>Please Login to continue</Modal.Header>
       <Modal.Content>
         <Modal.Description>
           <Input
-            label='Username'
+            label="Username"
             labelPosition="left"
             type="text"
             placeholder="Username"
@@ -38,10 +38,10 @@ export const LoginForm = () => {
             required
             onChange={(e) => setUsername(e.currentTarget.value)}
           />
-          <br/>
-          <br/>
+          <br />
+          <br />
           <Input
-            label='Password'
+            label="Password"
             labelPosition="left"
             type="password"
             placeholder="Password"
@@ -49,7 +49,11 @@ export const LoginForm = () => {
             required
             onChange={(e) => setPassword(e.currentTarget.value)}
           />
-          {err ? <div style={{height:'10px', color:'red'}}>{err}</div> : <div style={{height: '10px'}}/>}
+          {err ? (
+            <div style={{ height: "10px", color: "red" }}>{err}</div>
+          ) : (
+            <div style={{ height: "10px" }} />
+          )}
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>

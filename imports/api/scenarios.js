@@ -10,12 +10,14 @@ Meteor.methods({
   "scenarios.create"(title, description, topicId, discussionTemplateId) {
     // topicId: String,
     // discussionTemplateId: String,
+    console.log("Enter scenarios.create");
 
     check(title, String);
     check(description, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
+      console.log("Not authorized");
       throw new Meteor.Error("Not authorized.");
     }
 
@@ -29,7 +31,6 @@ Meteor.methods({
       createdBy: this.userId,
     });
   },
-
 });
 
 if (Meteor.isServer) {

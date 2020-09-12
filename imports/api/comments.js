@@ -23,6 +23,7 @@ Meteor.methods({
       authorId: this.userId, // _id of user
       text: text,
       emojis: [],
+      editedDate: new Date(),
     });
   },
 
@@ -59,10 +60,11 @@ Meteor.methods({
       $set: {
         text: text,
       },
+      $push: { previousEdits: comment.text },
     });
   },
 
-  "comments.updateEmojis"(emojis, commentId){
+  "comments.updateEmojis"(emojis, commentId) {
     console.log("updating comment emojis");
     check(commentId, String);
     check(emojis, Array);

@@ -17,7 +17,6 @@ export const BrowseScenarioSets = () => {
   return (
     <div>
       <NavBar />
-
       <Container>
         <Segment attached="top">
           <Button

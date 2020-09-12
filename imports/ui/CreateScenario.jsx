@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, Segment, Form } from "semantic-ui-react";
 import { NavBar } from "./NavBar";
 import { useTracker } from "meteor/react-meteor-data";
-import { ScenarioSets } from "../api/scenarioSets";
 import { DiscussionTemplates } from "../api/discussionTemplate";
 import { Topics } from "../api/topics";
 
@@ -26,12 +25,12 @@ export const CreateScenario = () => {
   return (
     <div>
       <NavBar />
-
       <Container>
         <Form as={Segment} attached="bottom">
           <Form.Input
             label="Title"
             type="text"
+            autoFocus
             value={title}
             onInput={({ target }) => setTitle(target.value)}
           />
@@ -59,12 +58,6 @@ export const CreateScenario = () => {
             value={topicId}
             onChange={(e, { value }) => setTopicId(value)}
           />
-          {/*<Form.Input*/}
-          {/*    label="Topic"*/}
-          {/*    type="text"*/}
-          {/*    value={topicId}*/}
-          {/*    onInput={({ target }) => setTopicId(target.value)}*/}
-          {/*/>*/}
           <Form.Dropdown
             label="Discussion Template"
             loading={discussionTemplates.length === 0}
@@ -84,10 +77,10 @@ export const CreateScenario = () => {
           <Form.Button
             content="Submit"
             onClick={() => {
-              title != "" &&
-                description != "" &&
-                topicId != "" &&
-                discussionTemplateId != "" &&
+              title !== "" &&
+                description !== "" &&
+                topicId !== "" &&
+                discussionTemplateId !== "" &&
                 Meteor.call(
                   "scenarios.create",
                   title,

@@ -27,7 +27,8 @@ export const CommentForm = ({ discussionId }) => {
     INLINE_STYLE_BUTTONS: [
       { label: "Bold", style: "BOLD", className: "custom-css-class" },
       { label: "Italic", style: "ITALIC" },
-      { label: "Underline", style: "UNDERLINE" },
+      // {label: 'Underline', style: 'UNDERLINE'}, underline is not going through markdown/markup properly.
+      // possibly an issue with one of those packages
       { label: "Strikethrough", style: "STRIKETHROUGH" },
       { label: "Blockquote", style: "blockquote" },
     ],

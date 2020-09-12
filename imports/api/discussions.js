@@ -6,16 +6,14 @@ export const Discussions = new Mongo.Collection("discussions");
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from Dashboardjsx
-  "discussions.insert"(scenarioId, groupId) {
+  "discussions.insert"(scenarioId, groupId, timeLimit) {
     check(scenarioId, String);
     check(groupId, String);
+    check(timeLimit, Number);
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
-
-    let deadline = new Date();
-    deadline.setMinutes(30);
 
     Discussions.insert({
       scenarioId: scenarioId,
@@ -25,6 +23,26 @@ Meteor.methods({
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
       status: "active",
+      timeLimit: timeLimit,
+      deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
+    });
+  },
+
+  "discussions.updateDeadline"(discussionId, deadline) {
+    check(discussionId, String);
+    // check(deadline, Date);
+
+    Discussions.update(discussionId, {
+      $set: { deadline: deadline },
+    });
+  },
+
+  "discussions.updateStatus"(discussionId, status) {
+    check(discussionId, String);
+    // check(deadline, Date);
+
+    Discussions.update(discussionId, {
+      $set: { status: status },
     });
   },
 
@@ -58,7 +76,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Discussions.remove({});
+  //   Discussions.remove({});
 
   Meteor.publish("allDiscussions", function () {
     return Discussions.find(
@@ -72,6 +90,8 @@ if (Meteor.isServer) {
           activeVerdictProposers: 1,
           verdicts: 1,
           status: 1,
+          maxCommentLength: 1,
+          deadline: 1,
         },
       }
     );
@@ -89,6 +109,8 @@ if (Meteor.isServer) {
           activeVerdictProposers: 1,
           verdicts: 1,
           status: 1,
+          maxCommentLength: 1,
+          deadline: 1,
         },
       }
     );

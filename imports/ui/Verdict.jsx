@@ -1,7 +1,7 @@
 import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import classnames from "classnames";
-import { Button, Card, Header } from "semantic-ui-react";
+import { List, Button, Card, Header } from "semantic-ui-react";
 
 export const Verdict = ({ verdict, onVote }) => {
   let classes = classnames("verdict");
@@ -20,9 +20,9 @@ export const Verdict = ({ verdict, onVote }) => {
   });
 
   const handleVoteClick = (vote) => {
-    Meteor.call("verdicts.addVote", verdict._id, vote, (err, _result) => {
-      // If there is no error thrown, run the rest of the callback function.
-      if (!err) {
+    console.log("handleVoteClick", vote);
+    Meteor.call("verdicts.addVote", verdict._id, vote, (e, result) => {
+      if (result) {
         onVote();
       }
     });
@@ -34,35 +34,37 @@ export const Verdict = ({ verdict, onVote }) => {
   };
 
   return (
-    <Card color="yellow" fluid>
-      <Card.Content>
-        <Header size="small" content={user && user.username} />
-        <Header
-          sub
-          size="tiny"
-          color="grey"
-          content={verdict.postedTime.toDateString()}
-        />
-        <Card.Description content={verdict.text} />
-      </Card.Content>
-      {Meteor.userId() !== verdict.authorId && !userHasVoted() ? (
-        <div style={{ paddingBottom: 5, textAlign: "center" }}>
-          <Button
-            content="Affirm"
-            onClick={() => handleVoteClick(true)}
-            positive
-            size="mini"
+    <List.Item>
+      <Card color="yellow" fluid>
+        <Card.Content>
+          <Header size="small" content={user && user.username} />
+          <Header
+            sub
+            size="tiny"
+            color="grey"
+            content={verdict.postedTime.toDateString()}
           />
-          <Button
-            content="Reject"
-            onClick={() => handleVoteClick(false)}
-            negative
-            size="mini"
-          />
-        </div>
-      ) : (
-        <div style={{ paddingBottom: 5, textAlign: "right" }}>Voted</div>
-      )}
-    </Card>
+          <Card.Description content={verdict.text} />
+        </Card.Content>
+        {Meteor.userId() !== verdict.authorId && !userHasVoted() ? (
+          <div style={{ paddingBottom: 5, textAlign: "center" }}>
+            <Button
+              content="Affirm"
+              onClick={() => handleVoteClick(true)}
+              positive
+              size="mini"
+            />
+            <Button
+              content="Reject"
+              onClick={() => handleVoteClick(false)}
+              negative
+              size="mini"
+            />
+          </div>
+        ) : (
+          <div style={{ paddingBottom: 5, textAlign: "right" }}>Voted</div>
+        )}
+      </Card>
+    </List.Item>
   );
 };

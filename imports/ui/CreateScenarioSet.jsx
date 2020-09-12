@@ -20,12 +20,12 @@ export const CreateScenarioSet = () => {
   return (
     <div>
       <NavBar />
-
       <Container>
         <Form as={Segment} attached="bottom">
           <Form.Input
             label="Title"
             type="text"
+            autoFocus
             value={title}
             onInput={({ target }) => setTitle(target.value)}
           />
@@ -57,8 +57,8 @@ export const CreateScenarioSet = () => {
           <Form.Button
             content="Submit"
             onClick={() => {
-              title != "" &&
-                description != "" &&
+              title !== "" &&
+                description !== "" &&
                 scenarioSet.length > 0 &&
                 Meteor.call(
                   "scenarioSets.create",

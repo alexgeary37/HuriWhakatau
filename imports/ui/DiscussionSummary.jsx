@@ -13,14 +13,14 @@ export const DiscussionSummary = ({ discussion }) => {
     };
   });
 
-
-
   return (
-    <List.Item
-        as={Link} to={`/discussion/${discussion._id}`}>
-      <List.Content style={{
-          backgroundColor: discussion.status === 'active' ? "#FFF" : "#d3d3d3",
-      }} as={Segment}>
+    <List.Item as={Link} to={`/discussion/${discussion._id}`}>
+      <List.Content
+        style={{
+          backgroundColor: discussion.status === "active" ? "#FFF" : "#d3d3d3",
+        }}
+        as={Segment}
+      >
         <List.Header content={scenario && scenario.title} />
         <List.Description content={scenario && scenario.description} />
       </List.Content>
