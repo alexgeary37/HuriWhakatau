@@ -1,7 +1,7 @@
-import {Mongo} from "meteor/mongo";
-import {check} from "meteor/check";
-import {ScenarioSets} from "/imports/api/scenarioSets";
-import {Scenarios} from "/imports/api/scenarios";
+import { Mongo } from "meteor/mongo";
+import { check } from "meteor/check";
+import { ScenarioSets } from "/imports/api/scenarioSets";
+import { Scenarios } from "/imports/api/scenarios";
 
 export const Groups = new Mongo.Collection("groups");
 
