@@ -17,18 +17,30 @@ Meteor.methods({
     return Roles.userIsInRole(userId, role);
   },
 
-  "security.checkLoggedIn"(userId) {
-    if (!userId) {
-      throw new Meteor.Error("not-authorized", "You are not authorized");
-    } else {
-      console.log("login check successful");
-    }
-  },
-  "security.setRoles"(userIds, roles) {
-    if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
-      throw new Meteor.Error("not-authorized");
-    } else {
-      Roles.addUsersToRoles(userIds, roles);
-    }
-  },
-});
+    "security.checkLoggedIn"(userId) {
+        if (!userId) {
+            throw new Meteor.Error('not-authorized', 'You are not authorized');
+        } else {
+            console.log("login check successful");
+        }
+        ;
+    },
+    "security.setRoles"(userIds, roles) {
+        if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
+            throw new Meteor.Error('not-authorized');
+        } else {
+            Roles.addUsersToRoles(userIds, roles);
+        };
+    },
+
+    "security.addUser"(userName, password){
+        if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
+            throw new Meteor.Error('not-authorized');
+        } else {
+            Accounts.createUser({
+                username: userName,
+                password: password,
+            });
+        };
+    },
+})

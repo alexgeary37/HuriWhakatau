@@ -36,21 +36,43 @@ import { DiscussionTemplates } from "../api/discussionTemplate";
 import RichTextEditor from "react-rte";
 
 export const Discussion = () => {
-  console.log("Entered discussion");
-  const filter = {};
-  const { discussionId } = useParams();
-  const [timedDiscussion, setTimedDiscussion] = useState(false);
-  const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(
-    null
-  );
-  const [timeLeft, setTimeLeft] = useState(null);
-  const updateTimed = () => {
-    setTimedDiscussion(true);
-  };
-  const updateDeadline = (deadline) => {
-    setMutableDiscussionDeadline(deadline);
-    console.log("deadline updated", mutableDiscussionDeadline);
-  };
+    console.log("Entered discussion");
+    const filter = {};
+    const {discussionId} = useParams();
+    const [timedDiscussion, setTimedDiscussion] = useState(false);
+    const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(null);
+    const updateTimed = () => {
+        setTimedDiscussion(true);
+    }
+    const updateDeadline = (deadline) => {
+        setMutableDiscussionDeadline(deadline);
+        console.log("deadline updated", mutableDiscussionDeadline);
+    }
+
+    //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
+    const calculateTimeLeft = () => {
+        let current = new Date();
+        let hours = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor(((discussionDeadline - current) % (1000 * 60)) / 1000);
+        console.log("timeleft: ", minutes);
+        return hours.toString().padStart(2, '0')
+            + ":" +
+            minutes.toString().padStart(2, '0')
+            + ":" +
+            seconds.toString().padStart(2, '0');
+    }
+    if (timedDiscussion) {
+
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setTimeLeft(calculateTimeLeft());
+            }, 1000);
+            // Clear timeout if the component is unmounted
+            return () => clearTimeout(timer);
+        });
+    }
 
   //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
