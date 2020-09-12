@@ -21,6 +21,7 @@ export const CreateGroup = () => {
   return (
     <div>
       <NavBar />
+
       <Container>
         <Form as={Segment} attached="bottom">
           <Form.Input
@@ -70,11 +71,11 @@ export const CreateGroup = () => {
             content="Submit"
             onClick={() => {
               groupName != "" &&
-              members.length > 1 &&
-              scenarioSet != "" &&
-              Meteor.call("groups.create", groupName, members, scenarioSet);
-            history.back();}
-            }
+                members.length > 1 &&
+                scenarioSet != "" &&
+                Meteor.call("groups.create", groupName, members, scenarioSet);
+              history.back();
+            }}
           />
         </Form>
       </Container>

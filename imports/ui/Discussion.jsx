@@ -16,6 +16,7 @@ import {
   Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
+import Swipe from "react-easy-swipe";
 import "../api/security";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link, useParams } from "react-router-dom";
@@ -31,7 +32,6 @@ import { VerdictForm } from "./VerdictForm";
 import { VerdictDisplay } from "./VerdictDisplay";
 import { Scenarios } from "/imports/api/scenarios";
 import { Groups } from "../api/groups";
-import RichTextEditor from "react-rte";
 
 export const Discussion = () => {
   console.log("Entered discussion");
@@ -78,11 +78,11 @@ export const Discussion = () => {
   });
 
   //set reference for end of discussion and scroll to that point on page load
-  const commentsEndRef = useRef(null);
-  const scrollToBottom = () => {
-    commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  };
-  useEffect(scrollToBottom, [comments]);
+  // const commentsEndRef = useRef(null);
+  // const scrollToBottom = () => {
+  //   commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+  // };
+  // useEffect(scrollToBottom, [comments]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -93,7 +93,7 @@ export const Discussion = () => {
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
-        votes.length === group.members.length -1 &&
+        votes.length === group.members.length - 1 &&
         votes.findIndex((x) => x.vote === false) === -1
       ) {
         return true;
@@ -110,97 +110,160 @@ export const Discussion = () => {
   return (
     <div>
       <NavBar />
-      {/*hacky way to move content out from under menu*/}
-      {/*<br/><br/>*/}
-      <Container attached='bottom'>
-        <Grid columns={3} celled divided>
-          <Grid.Row>
-            <GridColumn width={3} >
-              <Header content={scenario && scenario.title} size="medium" />
-              {scenario && scenario.description}
-              <Button
-                content="Start countdown"
-                onClick={() => {
-                  console.log(deadline);
-                  setDeadline(deadline.setMinutes(30));
-                  console.log(deadline);
-                }}
-              />
-              {/* {deadline && (
-                <Header floated="right" size="small">
-                  Discussion ends <Moment fromNow>{deadline}</Moment>
-                </Header>
-              )} */}
-            </GridColumn>
-            <GridColumn
-                width={10}
-            >
-              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh"}}>
-                {comments &&
-                  comments.map((comment) => (
-                    <UserComment
-                      key={comment._id}
-                      comment={comment}
-                      // onEditClick={editComment}
-                      // onSubmitEditClick={updateComment}
-                      discussionStatus={discussionStatus}
-                    />
-                  ))}
-                <div ref={commentsEndRef} />
-              </Comment.Group>
-              {discussionStatus === "active" && <CommentForm discussionId={discussionId} />}
-            </GridColumn>
-            <GridColumn
-              width={3}
-            >
-              <Header content="Verdicts" size="medium" />
-              <List
-                style={{ overflow: "auto", maxHeight: "50em" }}
-              >
-                {verdicts &&
-                  verdicts.map((verdict) => (
-                    <List.Item
+      <div class="discussion-grid-container">
+        <div class="grid-item">
+          <Header content={scenario && scenario.title} size="medium" />
+          {scenario && scenario.description}
+        </div>
+        <div class="grid-item-comments">
+          {/* style={{ overflow: "auto", maxHeight: "80vh" }} */}
+          <Comment.Group>
+            {comments &&
+              comments.map((comment) => (
+                <UserComment
+                  key={comment._id}
+                  comment={comment}
+                  discussionStatus={discussionStatus}
+                />
+              ))}{" "}
+            {/* <div ref={commentsEndRef} /> */}
+          </Comment.Group>
+          {discussionStatus === "active" && (
+            <CommentForm discussionId={discussionId} />
+          )}
+        </div>
+        <div class="grid-item">
+          <Container>
+            <Header attached="top" content="Verdicts" size="medium" />
+            <List style={{ overflow: "auto", maxHeight: "50em" }}>
+              {verdicts &&
+                verdicts.map((verdict) => (
+                  <List.Item key={verdict._id}>
+                    <Verdict
                       key={verdict._id}
-                    >
-                      <Verdict
-                        key={verdict._id}
-                        verdict={verdict}
-                        onVote={hasReachedConsensus}
-                        // onClick={displayVerdict}
-                      />
-                    </List.Item>
-                  ))}
-                {group && hasReachedConsensus() && (
-                  <Modal open={true}>
-                    <Modal.Content>Consensus</Modal.Content>
-                    <Modal.Actions>
-                      <Button
-                        as={Link}
-                        to="/"
-                        content="Return to Dashboard"
-                      ></Button>
-                    </Modal.Actions>
-                  </Modal>
-                )}
-                {!userHasSubmittedVerdict() &&
-                  discussionVerdictProposers &&
-                  (discussionVerdictProposers.includes(Meteor.userId()) ? (
-                    <VerdictForm discussionId={discussionId} />
-                  ) : (
-                    <div style={{ textAlign: "center" }}>
-                      <Button
-                        style={{ margin: 10 }}
-                        content="Propose Verdict"
-                        onClick={proposeVerdict}
-                        primary
-                      />
-                    </div>
-                  ))}
-              </List>
-            </GridColumn>
-          </Grid.Row>
-        </Grid>
-      </Container>
+                      verdict={verdict}
+                      onVote={hasReachedConsensus}
+                      // onClick={displayVerdict}
+                    />
+                  </List.Item>
+                ))}
+              {group && hasReachedConsensus() && (
+                <Modal open={true}>
+                  <Modal.Content>Consensus</Modal.Content>
+                  <Modal.Actions>
+                    <Button
+                      as={Link}
+                      to="/"
+                      content="Return to Dashboard"
+                    ></Button>
+                  </Modal.Actions>
+                </Modal>
+              )}
+              {!userHasSubmittedVerdict() &&
+                discussionVerdictProposers &&
+                (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                  <VerdictForm discussionId={discussionId} />
+                ) : (
+                  <div style={{ textAlign: "center" }}>
+                    <Button
+                      style={{ margin: 10 }}
+                      content="Propose Verdict"
+                      onClick={proposeVerdict}
+                      primary
+                    />
+                  </div>
+                ))}
+            </List>
+          </Container>
+        </div>
+      </div>
     </div>
+    // </Visibility>
+    // <div>
+    //   <NavBar />
+    //   {/*hacky way to move content out from under menu*/}
+    //   {/*<br/><br/>*/}
+    //   <Container attached="bottom">
+    //     <Grid columns={3} celled divided>
+    //       <Grid.Row>
+    //         <GridColumn width={3}>
+    //           <Header content={scenario && scenario.title} size="medium" />
+    //           {scenario && scenario.description}
+    //           <Button
+    //             content="Start countdown"
+    //             onClick={() => {
+    //               console.log(deadline);
+    //               setDeadline(deadline.setMinutes(30));
+    //               console.log(deadline);
+    //             }}
+    //           />
+    //           {/* {deadline && (
+    //             <Header floated="right" size="small">
+    //               Discussion ends <Moment fromNow>{deadline}</Moment>
+    //             </Header>
+    //           )} */}
+    //         </GridColumn>
+    //         <GridColumn width={10}>
+    //           <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
+    //             {comments &&
+    //               comments.map((comment) => (
+    //                 <UserComment
+    //                   key={comment._id}
+    //                   comment={comment}
+    //                   discussionStatus={discussionStatus}
+    //                 />
+    //               ))}
+    //             <div ref={commentsEndRef} />
+    //           </Comment.Group>
+    //           {discussionStatus === "active" && (
+    //             <CommentForm discussionId={discussionId} />
+    //           )}
+    //         </GridColumn>
+    //         <GridColumn width={3}>
+    //           <Header content="Verdicts" size="medium" />
+    //           <List style={{ overflow: "auto", maxHeight: "50em" }}>
+    //             {verdicts &&
+    //               verdicts.map((verdict) => (
+    //                 <List.Item key={verdict._id}>
+    //                   <Verdict
+    //                     key={verdict._id}
+    //                     verdict={verdict}
+    //                     onVote={hasReachedConsensus}
+    //                     // onClick={displayVerdict}
+    //                   />
+    //                 </List.Item>
+    //               ))}
+    //             {group && hasReachedConsensus() && (
+    //               <Modal open={true}>
+    //                 <Modal.Content>Consensus</Modal.Content>
+    //                 <Modal.Actions>
+    //                   <Button
+    //                     as={Link}
+    //                     to="/"
+    //                     content="Return to Dashboard"
+    //                   ></Button>
+    //                 </Modal.Actions>
+    //               </Modal>
+    //             )}
+    //             {!userHasSubmittedVerdict() &&
+    //               discussionVerdictProposers &&
+    //               (discussionVerdictProposers.includes(Meteor.userId()) ? (
+    //                 <VerdictForm discussionId={discussionId} />
+    //               ) : (
+    //                 <div style={{ textAlign: "center" }}>
+    //                   <Button
+    //                     style={{ margin: 10 }}
+    //                     content="Propose Verdict"
+    //                     onClick={proposeVerdict}
+    //                     primary
+    //                   />
+    //                 </div>
+    //               ))}
+    //           </List>
+    //         </GridColumn>
+    //       </Grid.Row>
+    //     </Grid>
+    //   </Container>
+    // </div>
   );
 };

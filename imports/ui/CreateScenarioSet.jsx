@@ -20,6 +20,7 @@ export const CreateScenarioSet = () => {
   return (
     <div>
       <NavBar />
+
       <Container>
         <Form as={Segment} attached="bottom">
           <Form.Input
@@ -57,16 +58,16 @@ export const CreateScenarioSet = () => {
             content="Submit"
             onClick={() => {
               title != "" &&
-              description != "" &&
-              scenarioSet.length > 0 &&
-              Meteor.call(
-                "scenarioSets.create",
-                title,
-                description,
-                scenarioSet
-              );
-                history.back();}
-            }
+                description != "" &&
+                scenarioSet.length > 0 &&
+                Meteor.call(
+                  "scenarioSets.create",
+                  title,
+                  description,
+                  scenarioSet
+                );
+              history.back();
+            }}
           />
         </Form>
       </Container>

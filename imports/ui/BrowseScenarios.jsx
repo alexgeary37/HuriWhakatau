@@ -24,6 +24,7 @@ export const BrowseScenarios = () => {
   return (
     <div>
       <NavBar />
+
       <Container>
         <Segment attached="top" clearing>
           <Button
