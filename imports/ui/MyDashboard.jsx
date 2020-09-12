@@ -1,17 +1,18 @@
-import React, {useState} from "react";
-import {useTracker} from "meteor/react-meteor-data";
+import React, { useState } from "react";
+import { useTracker } from "meteor/react-meteor-data";
 import {
-    Button,
-    Card,
-    Container,
-    Segment,
-    Header,
-    Message,
-    List,
-    Icon,
-    Divider,
-    Grid,
-    GridColumn, GridRow
+  Button,
+  Card,
+  Container,
+  Segment,
+  Header,
+  Message,
+  List,
+  Icon,
+  Divider,
+  Grid,
+  GridColumn,
+  GridRow,
 } from "semantic-ui-react";
 import {Discussions} from "/imports/api/discussions";
 import {NavBar} from "./NavBar";
@@ -42,98 +43,107 @@ export const MyDashboard = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
     }
 
-    //get user admin role status and update isAdmin variable with call back.
-    // possibly this should be a Promise?
-    Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
-        if (error) {
-            console.log(error.reason);
-            return;
-        }
-        setIsAdmin(result);
-    });
-    //get user researcher role status and update isresearcher variable with call back. p
-    // ossibly this should be a Promise?
-    Meteor.call("security.hasRole", Meteor.userId(), "RESEARCHER", (error, result) => {
-        if (error) {
-            console.log(error.reason);
-            return;
-        }
-        setIsresearcher(result);
-    });
-
-    const {user, myDiscussions, allFinishedDiscussions, groups, scenarios, scenarioSets, discussionTemplates, experiments} = useTracker(() => {
-        //subscribe to roles for user permissions check, should this be ^^ up there?
-        let fetchedDiscussionTemplates = null;
-        Meteor.subscribe("roles");
-        Meteor.subscribe("allDiscussions");
-        Meteor.subscribe("groups");
-        Meteor.subscribe("scenarios");
-        Meteor.subscribe("scenarioSets");
-        Meteor.subscribe("discussionTemplates");
-        Meteor.subscribe("experiments");
-
-
-        let userId = Meteor.userId();
-
-        let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
-        let fetchedScenarios = Scenarios.find({createdBy: {$eq: userId}}).fetch(); //,
-        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$eq: userId}}).fetch(); //,
-        fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$eq: userId}}).fetch(); //,
-        let fetchedExperiments = Experiments.find({createdBy: {$eq: userId}}).fetch(); //,
-        // console.log(fetchedDiscussionTemplates[0].name);
-
-        // need to handle case where user has no groups or discussions yet.
-        let groupIds = [];
-        for (let i = 0; i < fetchedGroups.length; i++) {
-            groupIds.push(fetchedGroups[i]._id);
-        }
-        let fetchedAllFinishedDiscussions = Discussions.find({status: {$ne: "active"}}, {sort: {createdAt: -1}}).fetch();
-        let fetchedMyDiscussions = Discussions.find({groupId: {$in: groupIds}}, {
-            sort: {
-                createdAt: -1,
-                status: 1
-            }
-        }).fetch();
-
-        return {
-            user: userId,
-            myDiscussions: fetchedMyDiscussions,
-            allFinishedDiscussions: fetchedAllFinishedDiscussions,
-            groups: fetchedGroups,
-            scenarios: fetchedScenarios,
-            scenarioSets: fetchedScenarioSets,
-            discussionTemplates: fetchedDiscussionTemplates,
-            experiments: fetchedExperiments,
-        };
-    });
-
-    if (!user) {
-        return (
-            <div className="dashboard-login">
-                <LoginForm/>
-            </div>
-        );
+  //get user admin role status and update isAdmin variable with call back.
+  // possibly this should be a Promise?
+  Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
+    if (error) {
+      console.log(error.reason);
+      return;
     }
+    setIsAdmin(result);
+  });
+  //get user researcher role status and update isresearcher variable with call back. p
+  // ossibly this should be a Promise?
+  Meteor.call(
+    "security.hasRole",
+    Meteor.userId(),
+    "RESEARCHER",
+    (error, result) => {
+      if (error) {
+        console.log(error.reason);
+        return;
+      }
+      setIsresearcher(result);
+    }
+  );
 
+  const {
+    user,
+    myDiscussions,
+    allFinishedDiscussions,
+    groups,
+    scenarios,
+    scenarioSets,
+    discussionTemplates,
+    experiments,
+  } = useTracker(() => {
+    //subscribe to roles for user permissions check, should this be ^^ up there?
+    let fetchedDiscussionTemplates = null;
+    Meteor.subscribe("roles");
+    Meteor.subscribe("allDiscussions");
+    Meteor.subscribe("groups");
+    Meteor.subscribe("scenarios");
+    Meteor.subscribe("scenarioSets");
+    Meteor.subscribe("discussionTemplates");
+    Meteor.subscribe("experiments");
+
+    let userId = Meteor.userId();
+
+    let fetchedGroups = Groups.find({
+      members: { $elemMatch: { $eq: userId } },
+    }).fetch(); //,
+    let fetchedScenarios = Scenarios.find({
+      createdBy: { $eq: userId },
+    }).fetch(); //,
+    let fetchedScenarioSets = ScenarioSets.find({
+      createdBy: { $eq: userId },
+    }).fetch(); //,
+    fetchedDiscussionTemplates = DiscussionTemplates.find({
+      createdBy: { $eq: userId },
+    }).fetch(); //,
+    let fetchedExperiments = Experiments.find({
+      createdBy: { $eq: userId },
+    }).fetch(); //,
+    // console.log(fetchedDiscussionTemplates[0].name);
+
+    // need to handle case where user has no groups or discussions yet.
+    let groupIds = [];
+    for (let i = 0; i < fetchedGroups.length; i++) {
+      groupIds.push(fetchedGroups[i]._id);
+    }
+    let fetchedAllFinishedDiscussions = Discussions.find(
+      { status: { $ne: "active" } },
+      { sort: { createdAt: -1 } }
+    ).fetch();
+    let fetchedMyDiscussions = Discussions.find(
+      { groupId: { $in: groupIds } },
+      {
+        sort: {
+          createdAt: -1,
+          status: 1,
+        },
+      }
+    ).fetch();
+
+    return {
+      user: userId,
+      myDiscussions: fetchedMyDiscussions,
+      allFinishedDiscussions: fetchedAllFinishedDiscussions,
+      groups: fetchedGroups,
+      scenarios: fetchedScenarios,
+      scenarioSets: fetchedScenarioSets,
+      discussionTemplates: fetchedDiscussionTemplates,
+      experiments: fetchedExperiments,
+    };
+  });
+
+  if (!user) {
     return (
-        <div>
-            <NavBar/>
-            <Container>
-                <Segment attached="top" clearing>
-                    <Header size="huge">
-                        <Header.Content as={Container} fluid>
-                            <Button
-                                floated="right"
-                                circular
-                                color="blue"
-                                size="large"
-                                icon="help"
-                                onClick={() => setShowInfo(!showInfo)}
-                            />
-                            My Dashboard {isAdmin && <span>- Admin</span>}
-                        </Header.Content>
-                    </Header>
-                </Segment>
+      <div className="dashboard-login">
+        <LoginForm />
+      </div>
+    );
+  }
 
                 <Grid columns={4}>
                     <GridRow>
