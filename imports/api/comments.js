@@ -60,11 +60,11 @@ Meteor.methods({
       $set: {
         text: text,
       },
-      $push: {previousEdits: comment.text},
+      $push: { previousEdits: comment.text },
     });
   },
 
-  "comments.updateEmojis"(emojis, commentId){
+  "comments.updateEmojis"(emojis, commentId) {
     console.log("updating comment emojis");
     check(commentId, String);
     check(emojis, Array);
