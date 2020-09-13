@@ -34,14 +34,20 @@ Meteor.methods({
         };
     },
 
-    "security.addUser"(userName, password){
+    "security.addUser"(userName, password, email){
         if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
             throw new Meteor.Error('not-authorized');
         } else {
-            Accounts.createUser({
+            // start of taking a list of only emails and generating
+            // usernames and accounts, then sending invite emails
+            //let emails = email.split(/\s*(?:;|$)\s*/)
+
+            const userId = Accounts.createUser({
                 username: userName,
-                password: password,
+                // password: password,
+                email:email,
             });
+            Accounts.sendEnrollmentEmail(userId);
         };
     },
 })

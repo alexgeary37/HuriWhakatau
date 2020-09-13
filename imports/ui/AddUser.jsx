@@ -5,6 +5,7 @@ import {useTracker} from "meteor/react-meteor-data";
 
 export const AddUser = () => {
     const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     // const [topicId, setTopicId] = useState("");
     // const [discussionTemplateId, setDiscussionTemplateId] = useState("");
@@ -24,6 +25,8 @@ export const AddUser = () => {
             <NavBar/>
             <Container>
                 <Form as={Segment} attached="bottom">
+                    {/*input a list of emails. Space or comma separated*/}
+
                     <Form.Input
                         label="UserName"
                         type="text"
@@ -31,18 +34,24 @@ export const AddUser = () => {
                         value={userName}
                         onInput={({target}) => setUserName(target.value)}
                     />
+                    {/*<Form.Input*/}
+                    {/*    label="Password"*/}
+                    {/*    type="text"*/}
+                    {/*    value={password}*/}
+                    {/*    onInput={({target}) => setPassword(target.value)}*/}
+                    {/*/>*/}
                     <Form.Input
-                        label="Password"
-                        type="text"
-                        value={password}
-                        onInput={({target}) => setPassword(target.value)}
+                        label="Email"
+                        type="email"
+                        value={email}
+                        onInput={({target}) => setEmail(target.value)}
                     />
                     <Form.Button
                         content="Submit"
                         onClick={() => {
                             userName !== "" &&
                             password !== "" &&
-                            Meteor.call("security.addUser", userName, password);
+                            Meteor.call("security.addUser", /*userName, password,*/ email);
                             history.back();
                         }
                         }
