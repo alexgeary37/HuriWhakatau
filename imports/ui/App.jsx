@@ -1,7 +1,7 @@
 import React from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Router, Route, Switch} from "react-router";
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, useHistory} from "react-router-dom";
 import history from "history";
 import {Dashboard} from "./Dashboard";
 import {BrowseGroups} from "./BrowseGroups";
@@ -16,7 +16,7 @@ import {Discussion} from "./Discussion";
 import {MyDashboard} from "./MyDashboard";
 import {AssignRoles} from "./AssignRoles";
 import {AddUser } from "./AddUser";
-
+import {EnrollForm} from "./EnrollForm";
 
 const browserHistory = history.createBrowserHistory();
 
@@ -58,6 +58,11 @@ export const App = () => {
                         component={CreateExperiment}
                     />
                     <Route path="/discussion/:discussionId" component={Discussion}/>
+                    <Route
+                    exact
+                    path="/enroll-account/:token"
+                    component={EnrollForm}
+                    />
                 </Switch>
             </BrowserRouter>
         </Router>
