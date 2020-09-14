@@ -34,12 +34,12 @@ export const AddUser = () => {
                         value={userName}
                         onInput={({target}) => setUserName(target.value)}
                     />
-                    {/*<Form.Input*/}
-                    {/*    label="Password"*/}
-                    {/*    type="text"*/}
-                    {/*    value={password}*/}
-                    {/*    onInput={({target}) => setPassword(target.value)}*/}
-                    {/*/>*/}
+                    <Form.Input
+                        label="Password"
+                        type="text"
+                        value={password}
+                        onInput={({target}) => setPassword(target.value)}
+                    />
                     <Form.Input
                         label="Email"
                         type="email"
@@ -51,7 +51,7 @@ export const AddUser = () => {
                         onClick={() => {
                             userName !== "" &&
                             password !== "" &&
-                            Meteor.call("security.addUser", /*userName, password,*/ email);
+                            Meteor.call("security.addUser", userName, password, email);
                             history.back();
                         }
                         }
