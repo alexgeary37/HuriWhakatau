@@ -10,7 +10,7 @@ Accounts.emailTemplates.enrollAccount = {
         const id = url.substring(url.lastIndexOf('/') + 1);
         return `Hi, you've been invited to participate in JuryRoom, 
 Click the link below to get started.
-${process.env.BASE_URL}/enroll-account/${id}
+http://54.252.248.27/enroll-account/${id}
 http://localhost:3000/enroll-account/${id}
 
 please use username: ${user.username}
@@ -31,9 +31,3 @@ Thanks,</p>
 `
     }
 };
-
-// Accounts.emailTemplates.enrollAccount.text = function(user, url) {
-//     var id = url.substring(url.lastIndexOf('/') + 1)
-//     return `Click this link to set your password and
-//     start using the service: ${process.env.BASE_URL}/enroll-account/${id}`
-// }

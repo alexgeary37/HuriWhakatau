@@ -48,7 +48,7 @@ Meteor.startup(() => {
     process.env.MAIL_URL =
         "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
-    console.log("email set");
+    // console.log("email set");
 
 
     // Create accounts

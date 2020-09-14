@@ -40,6 +40,8 @@ export const Discussion = () => {
     const [timedDiscussion, setTimedDiscussion] = useState(false);
     const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(null);
     const [timeLeft, setTimeLeft] = useState(null);
+    //todo, if the user uses the browser back button to go back to dash from a timed discussion
+    // and then to a non-timed discussion the timedDiscussion state stays true
     const updateTimed = () => {
         setTimedDiscussion(true);
     }
@@ -61,48 +63,17 @@ export const Discussion = () => {
             + ":" +
             seconds.toString().padStart(2, '0');
     }
-    if (timedDiscussion) {
 
         useEffect(() => {
+          if (timedDiscussion) {
             const timer = setTimeout(() => {
-                setTimeLeft(calculateTimeLeft());
+              setTimeLeft(calculateTimeLeft());
             }, 1000);
             // Clear timeout if the component is unmounted
             return () => clearTimeout(timer);
+          }
         });
-    }
-  //
-  // //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
-  // const calculateTimeLeft = () => {
-  //   let current = new Date();
-  //   let hours = Math.floor(
-  //     ((discussionDeadline - current) % (1000 * 60 * 60 * 24)) /
-  //       (1000 * 60 * 60)
-  //   );
-  //   let minutes = Math.floor(
-  //     ((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60)
-  //   );
-  //   let seconds = Math.floor(
-  //     ((discussionDeadline - current) % (1000 * 60)) / 1000
-  //   );
-  //   console.log("timeleft: ", minutes);
-  //   console.log("discussionId:", discussionId);
-  //   console.log("id:", Meteor.userId());
-  //   return (
-  //     hours.toString().padStart(2, "0") +
-  //     ":" +
-  //     minutes.toString().padStart(2, "0") +
-  //     ":" +
-  //     seconds.toString().padStart(2, "0")
-  //   );
-  // };
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setTimeLeft(calculateTimeLeft());
-  //   }, 1000);
-  //   // Clear timeout if the component is unmounted
-  //   return () => clearTimeout(timer);
-  // });
+    // }
 
   const {
     scenario,
@@ -201,13 +172,12 @@ export const Discussion = () => {
       mutableDiscussionDeadline
     );
   }
-  // updateDeadline(new Date(currentDateTime.getTime() + discussionTimeLimit * 60000));
 
   if (discussionDeadline != null) {
     let currentTime = new Date();
     if (discussionDeadline < currentTime && discussionStatus === "active") {
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
-    } else if (discussionDeadline > currentTime && !timedDiscussion) {
+    } else if (discussionDeadline > currentTime && !timedDiscussion && discussionStatus === "active") {
       console.log("the future has not yet come");
       updateTimed();
       calculateTimeLeft();
