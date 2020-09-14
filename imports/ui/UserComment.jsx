@@ -147,6 +147,8 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
                 <Comment.Author as="a">{user && user.username}</Comment.Author>
                 <Comment.Metadata>
                     <div>{comment.postedTime.toDateString()}</div>
+                    {comment.editedDate && <div>(edited)</div>
+                }
                 </Comment.Metadata>
                 <Comment.Text id={comment._id + ":text"}>
                     <ReactMarkdown source={comment.text}/>
