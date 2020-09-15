@@ -24,6 +24,22 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
     );
     let isAuthor = Meteor.userId() === comment.authorId;
 
+    //if the comment has an edited date format this for showing on the comment
+    let editedDateTime,
+        options,
+        datetime;
+    if (comment.editedDate) {
+        editedDateTime = new Date(comment.editedDate);
+        options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+        };
+        datetime = new Intl.DateTimeFormat('en-AU', options).format(editedDateTime);
+    };
+
     //reference boolean to for the useEffect callback sending the changed emoji list to the db
     const settingEmojisRef = useRef(false);
     //ensure the selectedEmojis state variable is finished updating before sending to db.
@@ -147,8 +163,8 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
                 <Comment.Author as="a">{user && user.username}</Comment.Author>
                 <Comment.Metadata>
                     <div>{comment.postedTime.toDateString()}</div>
-                    {comment.editedDate && <div>(edited)</div>
-                }
+                    {comment.editedDate && <div>(edited - {datetime})</div>
+                    }
                 </Comment.Metadata>
                 <Comment.Text id={comment._id + ":text"}>
                     <ReactMarkdown source={comment.text}/>
@@ -156,28 +172,28 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
             </Comment.Content>
             <Comment.Actions>
                 {(isAuthor & userCanEdit & discussionStatus === "active") &&
-                    <div>
-                        <Button
-                            color="blue"
-                            content="Edit"
-                            size="mini"
-                            active={!isEditing}
-                            disabled={isEditing}
-                            onClick={() => {
-                                editComment(comment);
-                                setIsEditing(true);
-                            }}/>
-                        <Button
-                            content="Save"
-                            size="mini"
-                            active={isEditing}
-                            disabled={!isEditing}
-                            onClick={() => {
-                                updateComment(comment);
-                                setIsEditing(false);
-                            }}
-                        />
-                    </div>
+                <div>
+                    <Button
+                        color="blue"
+                        content="Edit"
+                        size="mini"
+                        active={!isEditing}
+                        disabled={isEditing}
+                        onClick={() => {
+                            editComment(comment);
+                            setIsEditing(true);
+                        }}/>
+                    <Button
+                        content="Save"
+                        size="mini"
+                        active={isEditing}
+                        disabled={!isEditing}
+                        onClick={() => {
+                            updateComment(comment);
+                            setIsEditing(false);
+                        }}
+                    />
+                </div>
                 }
             </Comment.Actions>
             {discussionStatus === "active" && (
