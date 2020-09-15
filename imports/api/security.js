@@ -1,4 +1,6 @@
 import { Roles } from "meteor/alanning:roles";
+import { Usernames } from "/imports/api/usernames";
+import { Random } from 'meteor/random'
 
 Meteor.methods({
   //Note these methods take time to return a value from the database,
@@ -33,16 +35,25 @@ Meteor.methods({
         };
     },
 
-    "security.addUser"(userName, password, email){
+    "security.addUser"(userName, password, email, userAnon){
         if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
             throw new Meteor.Error('not-authorized');
         } else {
             // start of taking a list of only emails and generating
             // usernames and accounts, then sending invite emails
             //let emails = email.split(/\s*(?:;|$)\s*/)
+            let randomUserName = '';
+            if(userAnon) {
+                do {
+                    randomUserName = Random.choice(Usernames);
+                    // Generate new names until one that does not exist is found
+                } while (Meteor.users.findOne({username: randomUserName}));
+                console.log(randomUserName);
+            }
+
 
             const userId = Accounts.createUser({
-                username: userName,
+                username: userAnon ? randomUserName : userName,
                 // password: password,
                 email:email,
             });
