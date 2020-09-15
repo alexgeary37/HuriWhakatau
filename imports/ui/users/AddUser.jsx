@@ -17,22 +17,25 @@ export const AddUser = () => {
                     {/*update to have ability to input a list of emails. Space or comma separated*/}
 
                     <Form.Input
-                        label="UserName"
+                        label="User Name"
                         type="text"
                         autoFocus
                         value={userName}
                         onInput={({target}) => setUserName(target.value)}
+                        disabled={userAnon}
                     />
                     <Checkbox label="Generate random username"
                               checked={userAnon}
+                              disabled={userName !== ""}
+                              readOnly={userName !== ""}
                               onClick={(e, data) => setUserAnon(data.checked)}
                               />
-                    <Form.Input
-                        label="Password"
-                        type="text"
-                        value={password}
-                        onInput={({target}) => setPassword(target.value)}
-                    />
+                    {/*<Form.Input*/}
+                    {/*    label="Password"*/}
+                    {/*    type="text"*/}
+                    {/*    value={password}*/}
+                    {/*    onInput={({target}) => setPassword(target.value)}*/}
+                    {/*/>*/}
                     <Form.Input
                         label="Email"
                         type="email"
@@ -41,6 +44,7 @@ export const AddUser = () => {
                     />
                     <Form.Button
                         content="Submit"
+                        disabled={(!(userName !== "") & !(email !== "") )|| (!userAnon & !(email !== ""))}
                         onClick={() => {
                             userName !== "" || userAnon &&
                             // password !== "" &&
@@ -54,3 +58,4 @@ export const AddUser = () => {
         </div>
     );
 };
+//(!(userName !== "")) ||
