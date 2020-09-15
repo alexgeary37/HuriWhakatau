@@ -60,7 +60,10 @@ export const LoginForm = () => {
           content="Login"
           labelPosition="right"
           icon="check"
-          onClick={submit}
+          onClick={() =>{
+            submit(event)
+            setOpen(false)
+          }}
           positive
         />
       </Modal.Actions>
