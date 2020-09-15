@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Container, Segment, Form } from "semantic-ui-react";
-import { NavBar } from "./NavBar";
+import { NavBar } from "../NavBar";
 import { useTracker } from "meteor/react-meteor-data";
-import { DiscussionTemplates } from "../api/discussionTemplate";
-import { Topics } from "../api/topics";
+import { DiscussionTemplates } from "../../api/discussionTemplate";
+import { Topics } from "../../api/topics";
 
 export const CreateScenario = () => {
   const [title, setTitle] = useState("");

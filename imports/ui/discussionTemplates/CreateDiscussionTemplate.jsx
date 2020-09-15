@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
-import {NavBar} from "./NavBar";
+import {NavBar} from "../NavBar";
 
 export const CreateDiscussionTemplate = (handletoggleCreation) => {
     // console.log(isCreationOpen.isCreationOpen);

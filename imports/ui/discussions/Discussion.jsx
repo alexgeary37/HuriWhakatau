@@ -16,16 +16,16 @@ import {
   Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import "../api/security";
+import "../../api/security";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link, useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
 import { NavBar } from "./NavBar";
-import { UserComment } from "./UserComment";
+import { UserComment } from "./comments/UserComment";
 import { Timer } from "./Timer";
-import { CommentForm } from "./CommentForm";
+import { CommentForm } from "./comments/CommentForm";
 import { Verdict } from "./Verdict";
 import { VerdictForm } from "./VerdictForm";
 import { Scenarios } from "/imports/api/scenarios";

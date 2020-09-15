@@ -35,16 +35,6 @@ Meteor.startup(() => {
     Categories.insert({ name: "Other" });
   }
 
-    //create categories if the basic set doesn't exist
-    if (Categories.find().count() === 0) {
-        Categories.insert({name: "Politics"});
-        Categories.insert({name: "Religion"});
-        Categories.insert({name: "Philosophy"});
-        Categories.insert({name: "Sport"});
-        Categories.insert({name: "Science"});
-        Categories.insert({name: "Other"});
-    }
-
     process.env.MAIL_URL =
         "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";

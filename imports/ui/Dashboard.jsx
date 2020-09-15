@@ -12,7 +12,7 @@ import {
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
 import { NavBar } from "./NavBar";
-import { DiscussionSummary } from "./DiscussionSummary";
+import { DiscussionSummary } from "./discussions/DiscussionSummary";
 import { LoginForm } from "./LoginForm";
 
 export const Dashboard = () => {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Container, Segment, Form } from "semantic-ui-react";
-import { NavBar } from "./NavBar";
+import { NavBar } from "../NavBar";
 import { useTracker } from "meteor/react-meteor-data";
-import { ScenarioSets } from "../api/scenarioSets";
-import { Groups } from "../api/groups";
+import { ScenarioSets } from "../../api/scenarioSets";
+import { Groups } from "../../api/groups";
 
 export const CreateExperiment = () => {
   const [name, setName] = useState("");

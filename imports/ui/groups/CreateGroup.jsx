@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Container, Segment, Form } from "semantic-ui-react";
 import { ScenarioSets } from "/imports/api/scenarioSets";
-import { NavBar } from "./NavBar";
+import { NavBar } from "../NavBar";
 
 export const CreateGroup = () => {
     // const [scenarioSet, setScenarioSet] = useState("");

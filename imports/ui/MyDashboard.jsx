@@ -15,14 +15,14 @@ import {
 } from "semantic-ui-react";
 import {Discussions} from "/imports/api/discussions";
 import {NavBar} from "./NavBar";
-import {DiscussionSummary} from "./DiscussionSummary";
-import {GroupSummary} from "./GroupSummary";
-import {ScenarioSummary} from "./ScenarioSummary";
-import {ExperimentSummary} from "./ExperimentSummary";
-import {DiscussionTemplateSummary} from "./DiscussionTemplateSummary";
-import {ScenarioSetSummary} from "./ScenarioSetSummary";
+import {DiscussionSummary} from "./discussions/DiscussionSummary";
+import {GroupSummary} from "./groups/GroupSummary";
+import {ScenarioSummary} from "./scenarios/ScenarioSummary";
+import {ExperimentSummary} from "./experiments/ExperimentSummary";
+import {DiscussionTemplateSummary} from "./discussionTemplates/DiscussionTemplateSummary";
+import {ScenarioSetSummary} from "./scenarioSets/ScenarioSetSummary";
 import {LoginForm} from "./LoginForm";
-import {CreateDiscussionTemplate} from "./CreateDiscussionTemplate";
+import {CreateDiscussionTemplate} from "./discussionTemplates/CreateDiscussionTemplate";
 import {Groups} from "../api/groups";
 import '../api/security'
 import {Roles} from 'meteor/alanning:roles';
