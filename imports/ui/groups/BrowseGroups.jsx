@@ -10,7 +10,7 @@ import {
     Header,
 } from "semantic-ui-react";
 import {Groups} from "/imports/api/groups";
-import {NavBar} from "./NavBar";
+import {NavBar} from "/imports/ui/navigation/NavBar";
 
 export const BrowseGroups = () => {
     const {groups} = useTracker(() => {

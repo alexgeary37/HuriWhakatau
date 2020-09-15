@@ -1,22 +1,16 @@
 import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Container, Segment, Form } from "semantic-ui-react";
-import { ScenarioSets } from "/imports/api/scenarioSets";
-import { NavBar } from "./NavBar";
+import { NavBar } from "/imports/ui/navigation/NavBar";
 
 export const AssignRoles = () => {
-  // const [scenarioSet, setScenarioSet] = useState("");
   const [userList, setUserList] = useState([]);
-  // const [groupName, setGroupName] = useState("");
-  const [role, setRole] = useState("");
+  const [roleList, setRoleList] = useState([]);
   const roles = ["ADMIN", "RESEARCHER"];
 
   const { users } = useTracker(() => {
-    // Meteor.subscribe("scenarioSets");
-
     return {
       users: Meteor.users.find().fetch(),
-      // scenarioSets: ScenarioSets.find().fetch(),
     };
   });
 
@@ -28,15 +22,16 @@ export const AssignRoles = () => {
           <Form.Dropdown
             label="Which Roles do you want to assign?"
             selection
+            multiple
             options={roles.map((role) => ({
               key: role,
               text: role.toLowerCase(),
-              description: role,
+              // description: role,
               value: role,
             }))}
             name="roles"
-            value={role}
-            onChange={(e, { value }) => setRole(value)}
+            value={roleList}
+            onChange={(e, { value }) => setRoleList(value.concat())}
           />
           <Form.Field control={Form.Group} label="userList">
             <Form.Dropdown
@@ -61,9 +56,9 @@ export const AssignRoles = () => {
           <Form.Button
             content="Submit"
             onClick={() => {
-              role !== "" &&
+              roleList.length > 0 &&
                 userList.length > 0 &&
-                Meteor.call("security.setRoles", userList, role);
+                Meteor.call("security.setRoles", userList, roleList);
               history.back();
             }}
           />

@@ -2,8 +2,7 @@ import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link } from "react-router-dom";
 import { List, Segment } from "semantic-ui-react";
-import { Scenarios } from "/imports/api/scenarios";
-import { DiscussionTemplates } from "../api/discussionTemplate";
+import { DiscussionTemplates } from "/imports/api/discussionTemplate";
 
 export const ScenarioSummary = ({ scenario }) => {
   const { discussionTemplate } = useTracker(() => {
