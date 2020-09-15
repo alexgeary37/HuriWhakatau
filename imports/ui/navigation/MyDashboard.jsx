@@ -15,21 +15,21 @@ import {
 } from "semantic-ui-react";
 import {Discussions} from "/imports/api/discussions";
 import {NavBar} from "./NavBar";
-import {DiscussionSummary} from "./discussions/DiscussionSummary";
-import {GroupSummary} from "./groups/GroupSummary";
-import {ScenarioSummary} from "./scenarios/ScenarioSummary";
-import {ExperimentSummary} from "./experiments/ExperimentSummary";
-import {DiscussionTemplateSummary} from "./discussionTemplates/DiscussionTemplateSummary";
-import {ScenarioSetSummary} from "./scenarioSets/ScenarioSetSummary";
-import {LoginForm} from "./LoginForm";
-import {CreateDiscussionTemplate} from "./discussionTemplates/CreateDiscussionTemplate";
-import {Groups} from "../api/groups";
-import '../api/security'
+import {DiscussionSummary} from "/imports/ui/discussions/DiscussionSummary";
+import {GroupSummary} from "/imports/ui/groups/GroupSummary";
+import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
+import {ExperimentSummary} from "/imports/ui/experiments/ExperimentSummary";
+import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
+import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
+import {LoginForm} from "/imports/ui/users/LoginForm";
+import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
+import {Groups} from "/imports/api/groups";
+import '/imports/api/security'
 import {Roles} from 'meteor/alanning:roles';
-import {Scenarios} from "../api/scenarios";
-import {ScenarioSets} from "../api/scenarioSets";
-import {DiscussionTemplates} from "../api/discussionTemplate";
-import {Experiments} from "../api/experiments";
+import {Scenarios} from "/imports/api/scenarios";
+import {ScenarioSets} from "/imports/api/scenarioSets";
+import {DiscussionTemplates} from "/imports/api/discussionTemplate";
+import {Experiments} from "/imports/api/experiments";
 import {Link} from "react-router-dom";
 
 export const MyDashboard = () => {

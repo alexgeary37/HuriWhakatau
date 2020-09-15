@@ -8,14 +8,6 @@ import {Picker, Emoji} from "emoji-mart";
 import NotificationBadge, {Effect} from "react-notification-badge";
 import RichTextEditor from "react-rte";
 
-// export const UserComment = ({ comment, discussionStatus }) => {
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [reactionShown, setReactionShown] = useState(false);
-//   const [selectedEmojis, setSelectedEmojis] = useState(
-//     comment.emojis ? [...comment.emojis] : []
-//   );
-//   let isAuthor = Meteor.userId() === comment.authorId;
-
 export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [reactionShown, setReactionShown] = useState(false);

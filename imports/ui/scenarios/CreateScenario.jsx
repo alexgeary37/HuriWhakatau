@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Container, Segment, Form } from "semantic-ui-react";
-import { NavBar } from "../NavBar";
+import { NavBar } from "/imports/ui/navigation/NavBar";
 import { useTracker } from "meteor/react-meteor-data";
-import { DiscussionTemplates } from "../../api/discussionTemplate";
-import { Topics } from "../../api/topics";
+import { DiscussionTemplates } from "/imports/api/discussionTemplate";
+import { Topics } from "/imports/api/topics";
 
 export const CreateScenario = () => {
   const [title, setTitle] = useState("");
@@ -50,7 +50,7 @@ export const CreateScenario = () => {
               topics.map((topic) => ({
                 key: topic._id,
                 text: topic.title,
-                decription: topic.description,
+                description: topic.description,
                 value: topic._id,
               }))
             }

@@ -10,7 +10,7 @@ import {
   Button,
 } from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
-import { NavBar } from "../NavBar";
+import { NavBar } from "/imports/ui/navigation/NavBar";
 
 export const BrowseScenarios = () => {
   const { scenarios } = useTracker(() => {

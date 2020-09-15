@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Modal, Image, Button, Header, Input, Label } from "semantic-ui-react";
-import { VerdictForm } from "./verdicts/VerdictForm";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -24,7 +23,6 @@ export const LoginForm = () => {
       onOpen={() => setOpen(true)}
       open={open}
       size="mini"
-      // trigger={<Button>Show Modal</Button>}
     >
       <Modal.Header>Please Login to continue</Modal.Header>
       <Modal.Content>

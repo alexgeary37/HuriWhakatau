@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
-import {NavBar} from "../NavBar";
 
 export const CreateDiscussionTemplate = (handletoggleCreation) => {
     // console.log(isCreationOpen.isCreationOpen);
@@ -22,7 +21,6 @@ export const CreateDiscussionTemplate = (handletoggleCreation) => {
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
-            // trigger={<Button>Show Modal</Button>}
         >
             <Modal.Header>Create A Discussion Template</Modal.Header>
             <Form >
