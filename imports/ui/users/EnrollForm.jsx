@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Container, Segment, Form} from "semantic-ui-react";
-import {NavBar} from "./NavBar";
+import {NavBar} from "/imports/ui/navigation/NavBar";
 import {useHistory} from "react-router-dom";
 import {useParams} from "react-router-dom";
 import {Accounts} from "meteor/accounts-base";

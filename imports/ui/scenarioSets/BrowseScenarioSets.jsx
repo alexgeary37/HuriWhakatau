@@ -3,7 +3,7 @@ import { useTracker } from "meteor/react-meteor-data";
 import { Link } from "react-router-dom";
 import { Button, Container, List, Segment } from "semantic-ui-react";
 import { ScenarioSets } from "/imports/api/scenarioSets";
-import { NavBar } from "./NavBar";
+import { NavBar } from "/imports/ui/navigation/NavBar";
 
 export const BrowseScenarioSets = () => {
   const { scenarioSets } = useTracker(() => {

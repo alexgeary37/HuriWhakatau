@@ -16,22 +16,22 @@ import {
   Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import "../api/security";
+import "/imports/api/security";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link, useParams } from "react-router-dom";
 import { Discussions } from "/imports/api/discussions";
 import { Comments } from "/imports/api/comments";
 import { Verdicts } from "/imports/api/verdicts";
-import { NavBar } from "./NavBar";
-import { UserComment } from "./UserComment";
+import { NavBar } from "/imports/ui/navigation/NavBar";
+import { UserComment } from "/imports/ui/comments/UserComment";
 import { Timer } from "./Timer";
-import { CommentForm } from "./CommentForm";
-import { Verdict } from "./Verdict";
-import { VerdictForm } from "./VerdictForm";
+import { CommentForm } from "/imports/ui/comments/CommentForm";
+import { Verdict } from "/imports/ui/verdicts/Verdict";
+import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 import { Scenarios } from "/imports/api/scenarios";
-import { Groups } from "../api/groups";
-import { Topics } from "../api/topics";
-import { DiscussionTemplates } from "../api/discussionTemplate";
+import { Groups } from "/imports/api/groups";
+import { Topics } from "/imports/api/topics";
+import { DiscussionTemplates } from "/imports/api/discussionTemplate";
 
 export const Discussion = () => {
     console.log("Entered discussion");

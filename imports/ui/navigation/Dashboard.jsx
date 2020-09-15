@@ -11,9 +11,9 @@ import {
   Divider,
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
-import { NavBar } from "./NavBar";
-import { DiscussionSummary } from "./DiscussionSummary";
-import { LoginForm } from "./LoginForm";
+import { NavBar } from "/imports/ui/navigation/NavBar";
+import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
+import { LoginForm } from "/imports/ui/users/LoginForm";
 
 export const Dashboard = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -42,8 +42,6 @@ export const Dashboard = () => {
     <div>
       <NavBar />
       <Container>
-        {/* ########################################################################
-        Display 'Dashboard' and '?' */}
         <Segment attached="top" clearing>
           <Header size="huge">
             <Header.Content as={Container} fluid>

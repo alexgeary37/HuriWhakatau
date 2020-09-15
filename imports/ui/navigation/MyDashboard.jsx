@@ -15,21 +15,21 @@ import {
 } from "semantic-ui-react";
 import {Discussions} from "/imports/api/discussions";
 import {NavBar} from "./NavBar";
-import {DiscussionSummary} from "./DiscussionSummary";
-import {GroupSummary} from "./GroupSummary";
-import {ScenarioSummary} from "./ScenarioSummary";
-import {ExperimentSummary} from "./ExperimentSummary";
-import {DiscussionTemplateSummary} from "./DiscussionTemplateSummary";
-import {ScenarioSetSummary} from "./ScenarioSetSummary";
-import {LoginForm} from "./LoginForm";
-import {CreateDiscussionTemplate} from "./CreateDiscussionTemplate";
-import {Groups} from "../api/groups";
-import '../api/security'
+import {DiscussionSummary} from "/imports/ui/discussions/DiscussionSummary";
+import {GroupSummary} from "/imports/ui/groups/GroupSummary";
+import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
+import {ExperimentSummary} from "/imports/ui/experiments/ExperimentSummary";
+import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
+import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
+import {LoginForm} from "/imports/ui/users/LoginForm";
+import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
+import {Groups} from "/imports/api/groups";
+import '/imports/api/security'
 import {Roles} from 'meteor/alanning:roles';
-import {Scenarios} from "../api/scenarios";
-import {ScenarioSets} from "../api/scenarioSets";
-import {DiscussionTemplates} from "../api/discussionTemplate";
-import {Experiments} from "../api/experiments";
+import {Scenarios} from "/imports/api/scenarios";
+import {ScenarioSets} from "/imports/api/scenarioSets";
+import {DiscussionTemplates} from "/imports/api/discussionTemplate";
+import {Experiments} from "/imports/api/experiments";
 import {Link} from "react-router-dom";
 
 export const MyDashboard = () => {
@@ -76,10 +76,10 @@ export const MyDashboard = () => {
         let userId = Meteor.userId();
 
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
-        let fetchedScenarios = Scenarios.find({createdBy: {$eq: userId}}).fetch(); //,
-        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$eq: userId}}).fetch(); //,
-        fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$eq: userId}}).fetch(); //,
-        let fetchedExperiments = Experiments.find({createdBy: {$eq: userId}}).fetch(); //,
+        let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedExperiments = Experiments.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         // console.log(fetchedDiscussionTemplates[0].name);
 
         // need to handle case where user has no groups or discussions yet.
