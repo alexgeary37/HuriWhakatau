@@ -76,10 +76,10 @@ export const MyDashboard = () => {
         let userId = Meteor.userId();
 
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
-        let fetchedScenarios = Scenarios.find({createdBy: {$eq: userId}}).fetch(); //,
-        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$eq: userId}}).fetch(); //,
-        fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$eq: userId}}).fetch(); //,
-        let fetchedExperiments = Experiments.find({createdBy: {$eq: userId}}).fetch(); //,
+        let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedExperiments = Experiments.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         // console.log(fetchedDiscussionTemplates[0].name);
 
         // need to handle case where user has no groups or discussions yet.
