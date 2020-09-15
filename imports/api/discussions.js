@@ -2,7 +2,6 @@ import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
 
 export const Discussions = new Mongo.Collection("discussions");
-//todo add status field to discussions and setter method. 'active', 'finished', 'hung'
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from Dashboardjsx
