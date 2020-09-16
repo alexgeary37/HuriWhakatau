@@ -1,14 +1,18 @@
 import React from "react";
-import { List, Segment, Button } from "semantic-ui-react";
+import {List, Segment, Button, Icon, Label} from "semantic-ui-react";
 
-export const Timer = ({ time }) => {
-  return (
-    //probably a better way to format this but a button looks fine for now.
-    <Button color={"green"} content={time} disabled />
-    // <List.Item>
-    //     <List.Content as={Segment}>
-    //         <List.Header content={time}/>
-    //     </List.Content>
-    // </List.Item>
-  );
+export const Timer = ({time}) => {
+    return (
+        //probably a better way to format this but a button looks fine for now.
+        <div>
+            <Button as='div' labelPosition='left'>
+                <Label basic color={"green"} disabled>
+                    Time left
+                </Label>
+                <Button color={"green"} disabled>
+                    {time}
+                </Button>
+            </Button>
+        </div>
+    );
 };
