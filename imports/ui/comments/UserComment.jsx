@@ -163,7 +163,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
                 </Comment.Text>
             </Comment.Content>
             <Comment.Actions>
-                {(isAuthor & userCanEdit & discussionStatus === "active") &&
+                {(isAuthor && userCanEdit && discussionStatus === "active") &&
                 <div>
                     <Button
                         color="blue"
