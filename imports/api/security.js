@@ -42,18 +42,20 @@ Meteor.methods({
             // start of taking a list of only emails and generating
             // usernames and accounts, then sending invite emails
             //let emails = email.split(/\s*(?:;|$)\s*/)
-            let randomUserName = '';
-            if(userAnon) {
+            let finalUserName = '';
+            if(userAnon || (!userAnon && userName === "")) {
                 do {
-                    randomUserName = Random.choice(Usernames);
+                    finalUserName = Random.choice(Usernames);
                     // Generate new names until one that does not exist is found
-                } while (Meteor.users.findOne({username: randomUserName}));
-                console.log(randomUserName);
-            }
+                } while (Meteor.users.findOne({username: finalUserName}));
+                console.log(finalUserName);
+            } else {
+                finalUserName = userName
+            };
 
 
             const userId = Accounts.createUser({
-                username: userAnon ? randomUserName : userName,
+                username: finalUserName,
                 // password: password,
                 email:email,
             });

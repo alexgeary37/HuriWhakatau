@@ -7,7 +7,23 @@ export const AddUser = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [userAnon, setUserAnon] = useState(false);
-
+    // const [submitDisabled, setSubmitDisabled] = useState(true);
+    // covering every situation where we want the form submit to be enabled or disabled and setting appropriately.
+    // There has to be a simpler way. and probably needs to use a hook, so get on that will you?
+//     const handleStatechange = () => {
+//         if( (email === "" && userAnon === true && userName === "") ||
+//             (email === "" && userAnon === true && userName !== "") ||
+//             (email === "" && userAnon !== true && userName === "") ||
+//             (email !== "" && userAnon !== true && userName === "") ||
+//             (email === "" && userAnon !== true && userName !== "")) {
+//             setSubmitDisabled(true);
+//         } else
+//         if( (email !== "" && userAnon === true && userName === "") ||
+//             (email !== "" && userAnon !== true && userName === "") ||
+//             (email !== "" && userAnon === true && userName !== "") ){
+//             setSubmitDisabled(false);
+//         }
+// };
 
     return (
         <div>
@@ -44,10 +60,10 @@ export const AddUser = () => {
                     />
                     <Form.Button
                         content="Submit"
-                        disabled={(!(userName !== "") & !(email !== "") )|| (!userAnon & !(email !== ""))}
+                        disabled={email === ""}
                         onClick={() => {
-                            userName !== "" || userAnon &&
-                            // password !== "" &&
+                            // userName !== "" || userAnon &&
+                            // // password !== "" &&
                             Meteor.call("security.addUser", userName, password, email, userAnon);
                             history.back();
                         }
