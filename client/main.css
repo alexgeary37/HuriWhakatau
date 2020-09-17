@@ -28,6 +28,7 @@ App.jsx
 
 .grid-item .grid-item-comments {
   margin-bottom: 13rem;
+  /* width: 60vw; */
 }
 
 .grid-item .commentForm {
@@ -35,11 +36,6 @@ App.jsx
   position: fixed;
   width: 100%;
   bottom: 1rem;
-  padding: 2px;
-}
-
-.grid-item .grid-item-top {
-  position: fixed;
   padding: 2px;
 }
 

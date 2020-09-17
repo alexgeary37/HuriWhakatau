@@ -227,13 +227,11 @@ export const Discussion = () => {
       <NavBar />
       <div class="discussion-grid-container">
         <div class="grid-item">
-          <div class="grid-item-top">
-            <Header
-              content={(scenario && scenario.title) || (topic && topic.title)}
-              size="medium"
-            />
-            {(scenario && scenario.description) || (topic && topic.description)}
-          </div>
+          <Header
+            content={(scenario && scenario.title) || (topic && topic.title)}
+            size="medium"
+          />
+          {(scenario && scenario.description) || (topic && topic.description)}
           <div class="timer">
             <h4>Time remaining:</h4>
             {timedDiscussion && <Timer time={timeLeft} />}
