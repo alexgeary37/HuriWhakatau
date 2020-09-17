@@ -25,7 +25,7 @@ export const Dashboard = () => {
       user: Meteor.userId(),
       discussions: Discussions.find(
         { status: { $ne: "active" } },
-        { sort: { status: 1 } }
+        { sort: { createdAt: -1 } }
       ).fetch(),
     };
   });
@@ -57,7 +57,7 @@ export const Dashboard = () => {
             </Header.Content>
           </Header>
           <Message
-            size="large"
+            size="huge"
             info
             floating
             hidden={!showInfo}
@@ -66,11 +66,11 @@ export const Dashboard = () => {
             {/* ########################################################################
             Display everything in the blueish box */}
             <Message.Header>
-              <Icon name="help circle" size="big" /> About JuryRoom
+              <Icon name="help circle" size="big" /> About Huri Whakatau
             </Message.Header>
             <Divider horizontal hidden />
             <Message.Content>
-              JuryRoom is a digital environment designed to host discussions
+              Huri Whakatau is a digital environment designed to host discussions
               with a focus on reaching a consensus.
             </Message.Content>
             <Message.Content>
@@ -98,7 +98,7 @@ export const Dashboard = () => {
         </Segment>
 
         <Segment attached="bottom">
-          <Header content="Discussions" />
+          <Header content="Kōrerorero" />
           <Segment attached="top" clearing>
             <List relaxed size="huge">
               {discussions &&

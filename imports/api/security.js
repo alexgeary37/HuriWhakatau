@@ -1,5 +1,5 @@
 import { Roles } from "meteor/alanning:roles";
-import { Usernames } from "/imports/api/usernames";
+import { Usernames, Maorinames } from "/imports/api/usernames";
 import { Random } from 'meteor/random'
 
 Meteor.methods({
@@ -44,6 +44,7 @@ Meteor.methods({
             //let emails = email.split(/\s*(?:;|$)\s*/)
             let finalUserName = '';
             if(userAnon || (!userAnon && userName === "")) {
+                // add in a check for using maori names and sub in the Maorinames list
                 do {
                     finalUserName = Random.choice(Usernames);
                     // Generate new names until one that does not exist is found
