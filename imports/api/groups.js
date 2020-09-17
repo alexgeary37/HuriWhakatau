@@ -10,10 +10,10 @@ Meteor.methods({
   // members: _ids of the users in this group
   // discussions: _ids of the discussions this Group will discuss
   // Called from CreateGroup.jsx
-  "groups.create"(name, members, scenarioSet) {
+  "groups.create"(name, members) {
     check(name, String);
     check(members, Array);
-    check(scenarioSet, String);
+    // check(scenarioSet, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
@@ -23,24 +23,24 @@ Meteor.methods({
     const groupId = Groups.insert({
       name: name,
       members: members,
-      scenarioSet: scenarioSet,
+      // scenarioSet: scenarioSet,
       createdAt: new Date(),
       createdBy: this.userId,
     });
 
-    const set = ScenarioSets.findOne({ _id: scenarioSet });
-    const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
+    // const set = ScenarioSets.findOne({ _id: scenarioSet });
+    // const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
 
-    for (i = 0; i < scenarios.length; i++) {
-      Meteor.call("discussions.insert", scenarios[i]._id, groupId);
-    }
+    // for (i = 0; i < scenarios.length; i++) {
+    //   Meteor.call("discussions.insert", scenarios[i]._id, groupId);
+    // }
   },
 });
 
 if (Meteor.isServer) {
-  //   Groups.remove({});
+  // Groups.remove({});
 
-  Meteor.publish("groups", function (userId) {
+  Meteor.publish("groups", function () {
     return Groups.find(
       {},
       {

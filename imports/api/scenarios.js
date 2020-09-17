@@ -25,7 +25,7 @@ Meteor.methods({
     Scenarios.insert({
       title: title,
       description: description,
-      topicId: topicId,
+      // topicId: topicId,
       discussionTemplateId: discussionTemplateId,
       createdAt: new Date(),
       createdBy: this.userId,
@@ -34,7 +34,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Scenarios.remove({});
+  Scenarios.remove({});
 
   Meteor.publish("scenarios", function () {
     return Scenarios.find(

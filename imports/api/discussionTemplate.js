@@ -48,6 +48,8 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // DiscussionTemplates.remove({});
+
   Meteor.publish("discussionTemplates", function () {
     return DiscussionTemplates.find(
       {},

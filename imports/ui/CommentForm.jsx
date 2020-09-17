@@ -40,20 +40,22 @@ export const CommentForm = ({ discussionId }) => {
   };
 
   return (
-    <Form>
-      <RichTextEditor
-        value={editorValue}
-        onChange={handleChange}
-        toolbarConfig={toolbarConfig}
-        type="string"
-        style={{ minHeight: 100 }}
-        autoFocus
-        multiline
-        required
-      ></RichTextEditor>
-      <button color="green" onClick={handleSubmit}>
-        Add Comment
-      </button>
-    </Form>
+    <div class="commentForm">
+      <Form>
+        <RichTextEditor
+          value={editorValue}
+          onChange={handleChange}
+          toolbarConfig={toolbarConfig}
+          type="string"
+          style={{ minHeight: 100 }}
+          autoFocus
+          multiline
+          required
+        />
+        <button color="green" onClick={handleSubmit}>
+          Add Comment
+        </button>
+      </Form>
+    </div>
   );
 };

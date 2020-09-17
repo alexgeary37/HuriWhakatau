@@ -13,6 +13,9 @@ Meteor.methods({
   // Called from *****
   "experiments.create"(name, description, groupId, scenarioSetId) {
     check(name, String);
+    check(description, String);
+    check(groupId, String);
+    check(scenarioSetId, String);
     //addcheck for user admin/researcher role
 
     const experimentId = Experiments.insert({
@@ -23,16 +26,19 @@ Meteor.methods({
       createdAt: new Date(),
       createdBy: Meteor.userId(),
     });
+
     console.log(experimentId);
+
     const set = ScenarioSets.findOne({ _id: scenarioSetId });
     const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
     //for each scenario get discussion time limit and add to discussion
 
     for (i = 0; i < scenarios.length; i++) {
       console.log("creating discussion");
-      let discussionTemplate = DiscussionTemplates.findOne({
+      const discussionTemplate = DiscussionTemplates.findOne({
         _id: scenarios[i].discussionTemplateId,
       });
+
       Meteor.call(
         "discussions.insert",
         scenarios[i]._id,
@@ -54,6 +60,8 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // Experiments.remove({});
+
   Meteor.publish("experiments", function () {
     return Experiments.find(
       {},

@@ -195,11 +195,11 @@ export const Discussion = () => {
   }
 
   //set reference for end of discussion and scroll to that point on page load
-  const commentsEndRef = useRef(null);
-  const scrollToBottom = () => {
-    commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  };
-  useEffect(scrollToBottom, [comments]);
+  // const commentsEndRef = useRef(null);
+  // const scrollToBottom = () => {
+  //   commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+  // };
+  // useEffect(scrollToBottom, [comments]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -225,87 +225,163 @@ export const Discussion = () => {
   return (
     <div>
       <NavBar />
-      {/*hacky way to move content out from under menu*/}
-      {/*<br/><br/>*/}
-      <Container attached="bottom">
-        <Grid columns={3} celled divided>
-          <Grid.Row>
-            <GridColumn width={3}>
-              <Header
-                content={(scenario && scenario.title) || (topic && topic.title)}
-                size="medium"
-              />
-              {(scenario && scenario.description) ||
-                (topic && topic.description)}
-              {timedDiscussion && <Timer time={timeLeft} />}
-            </GridColumn>
-            <GridColumn width={10}>
-              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
-                {comments &&
-                  comments.map((comment) => (
-                    <UserComment
-                      key={comment._id}
-                      comment={comment}
-                      // onEditClick={editComment}
-                      // onSubmitEditClick={updateComment}
-                      discussionStatus={discussionStatus}
-                      userCanEdit={
-                        discussionTemplate
-                          ? discussionTemplate.usersCanEditComments
-                          : true
-                      }
-                    />
-                  ))}
-                <div ref={commentsEndRef} />
-              </Comment.Group>
-              {discussionStatus === "active" && (
-                <CommentForm discussionId={discussionId} />
-              )}
-            </GridColumn>
-            <GridColumn width={3}>
-              <Header content="Verdicts" size="medium" />
-              <List style={{ overflow: "auto", maxHeight: "50em" }}>
-                {verdicts &&
-                  verdicts.map((verdict) => (
-                    <List.Item key={verdict._id}>
-                      <Verdict
-                        key={verdict._id}
-                        verdict={verdict}
-                        onVote={hasReachedConsensus}
-                      />
-                    </List.Item>
-                  ))}
-                {group && hasReachedConsensus() && (
-                  <Modal open={true}>
-                    <Modal.Content>Consensus</Modal.Content>
-                    <Modal.Actions>
-                      <Button
-                        as={Link}
-                        to="/"
-                        content="Return to Dashboard"
-                      ></Button>
-                    </Modal.Actions>
-                  </Modal>
-                )}
-                {!userHasSubmittedVerdict() &&
-                  discussionVerdictProposers &&
-                  (discussionVerdictProposers.includes(Meteor.userId()) ? (
-                    <VerdictForm discussionId={discussionId} />
-                  ) : (
-                    <div style={{ textAlign: "center" }}>
-                      <Button
-                        style={{ margin: 10 }}
-                        content="Propose Verdict"
-                        onClick={proposeVerdict}
-                        primary
-                      />
-                    </div>
-                  ))}
-              </List>
-            </GridColumn>
-          </Grid.Row>
-        </Grid>
-      </Container>
+      <div class="discussion-grid-container">
+        <div class="grid-item">
+          <Header
+            content={(scenario && scenario.title) || (topic && topic.title)}
+            size="medium"
+          />
+          {(scenario && scenario.description) || (topic && topic.description)}
+          <div class="timer">
+            {timedDiscussion && <Timer time={timeLeft} />}
+          </div>
+        </div>
+        <div class="grid-item">
+          {/* style={{ overflow: "auto", maxHeight: "80vh" }} */}
+          <div class="grid-item-comments">
+            <Comment.Group>
+              {comments &&
+                comments.map((comment) => (
+                  <UserComment
+                    key={comment._id}
+                    comment={comment}
+                    discussionStatus={discussionStatus}
+                    userCanEdit={
+                      discussionTemplate
+                        ? discussionTemplate.usersCanEditComments
+                        : true
+                    }
+                  />
+                ))}
+              {/* <div ref={commentsEndRef} /> */}
+            </Comment.Group>
+          </div>
+          {discussionStatus === "active" && (
+            <CommentForm discussionId={discussionId} />
+          )}
+        </div>
+        <div class="grid-item">
+          <Header content="Verdicts" size="medium" />
+          <List style={{ overflow: "auto", maxHeight: "50em" }}>
+            {verdicts &&
+              verdicts.map((verdict) => (
+                <List.Item key={verdict._id}>
+                  <Verdict
+                    key={verdict._id}
+                    verdict={verdict}
+                    onVote={hasReachedConsensus}
+                  />
+                </List.Item>
+              ))}
+            {group && hasReachedConsensus() && (
+              <Modal open={true}>
+                <Modal.Content>Consensus</Modal.Content>
+                <Modal.Actions>
+                  <Button
+                    as={Link}
+                    to="/"
+                    content="Return to Dashboard"
+                  ></Button>
+                </Modal.Actions>
+              </Modal>
+            )}
+            {!userHasSubmittedVerdict() &&
+              discussionVerdictProposers &&
+              (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                <VerdictForm discussionId={discussionId} />
+              ) : (
+                <div style={{ textAlign: "center" }}>
+                  <Button
+                    style={{ margin: 10 }}
+                    content="Propose Verdict"
+                    onClick={proposeVerdict}
+                    primary
+                  />
+                </div>
+              ))}
+          </List>
+        </div>
+      </div>
     </div>
+    // <div>
+    //   <NavBar />
+    //   <Container attached="bottom">
+    //     <Grid columns={3} celled divided>
+    //       <Grid.Row>
+    //         <GridColumn width={3}>
+    //           <Header
+    //             content={(scenario && scenario.title) || (topic && topic.title)}
+    //             size="medium"
+    //           />
+    //           {(scenario && scenario.description) ||
+    //             (topic && topic.description)}
+    //           {timedDiscussion && <Timer time={timeLeft} />}
+    //         </GridColumn>
+    //         <GridColumn width={10}>
+    //           <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
+    //             {comments &&
+    //               comments.map((comment) => (
+    //                 <UserComment
+    //                   key={comment._id}
+    //                   comment={comment}
+    //                   discussionStatus={discussionStatus}
+    //                   userCanEdit={
+    //                     discussionTemplate
+    //                       ? discussionTemplate.usersCanEditComments
+    //                       : true
+    //                   }
+    //                 />
+    //               ))}
+    //             {/* <div ref={commentsEndRef} /> */}
+    //           </Comment.Group>
+    //           {discussionStatus === "active" && (
+    //             <CommentForm discussionId={discussionId} />
+    //           )}
+    //         </GridColumn>
+    //         <GridColumn width={3}>
+    //           <Header content="Verdicts" size="medium" />
+    //           <List style={{ overflow: "auto", maxHeight: "50em" }}>
+    //             {verdicts &&
+    //               verdicts.map((verdict) => (
+    //                 <List.Item key={verdict._id}>
+    //                   <Verdict
+    //                     key={verdict._id}
+    //                     verdict={verdict}
+    //                     onVote={hasReachedConsensus}
+    //                   />
+    //                 </List.Item>
+    //               ))}
+    //             {group && hasReachedConsensus() && (
+    //               <Modal open={true}>
+    //                 <Modal.Content>Consensus</Modal.Content>
+    //                 <Modal.Actions>
+    //                   <Button
+    //                     as={Link}
+    //                     to="/"
+    //                     content="Return to Dashboard"
+    //                   ></Button>
+    //                 </Modal.Actions>
+    //               </Modal>
+    //             )}
+    //             {!userHasSubmittedVerdict() &&
+    //               discussionVerdictProposers &&
+    //               (discussionVerdictProposers.includes(Meteor.userId()) ? (
+    //                 <VerdictForm discussionId={discussionId} />
+    //               ) : (
+    //                 <div style={{ textAlign: "center" }}>
+    //                   <Button
+    //                     style={{ margin: 10 }}
+    //                     content="Propose Verdict"
+    //                     onClick={proposeVerdict}
+    //                     primary
+    //                   />
+    //                 </div>
+    //               ))}
+    //           </List>
+    //         </GridColumn>
+    //       </Grid.Row>
+    //     </Grid>
+    //   </Container>
+    // </div>
   );
 };

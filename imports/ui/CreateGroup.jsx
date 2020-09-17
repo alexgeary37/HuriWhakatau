@@ -30,23 +30,6 @@ export const CreateGroup = () => {
             value={groupName}
             onInput={({ target }) => setGroupName(target.value)}
           />
-          <Form.Dropdown
-            label="Scenario Set"
-            loading={scenarioSets.length === 0}
-            selection
-            options={
-              scenarioSets &&
-              scenarioSets.map((scenarioSet) => ({
-                key: scenarioSet._id,
-                text: scenarioSet.title,
-                description: scenarioSet.description,
-                value: scenarioSet._id,
-              }))
-            }
-            name="scenarioSets"
-            value={scenarioSet}
-            onChange={(e, { value }) => setScenarioSet(value)}
-          />
           <Form.Field control={Form.Group} label="Members">
             <Form.Dropdown
               width={14}
@@ -72,7 +55,7 @@ export const CreateGroup = () => {
             onClick={() => {
               groupName !== "" &&
                 members.length > 1 &&
-                scenarioSet !== "" &&
+                // scenarioSet !== "" &&
                 Meteor.call("groups.create", groupName, members, scenarioSet);
               history.back();
             }}

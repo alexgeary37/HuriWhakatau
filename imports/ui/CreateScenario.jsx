@@ -79,7 +79,7 @@ export const CreateScenario = () => {
             onClick={() => {
               title !== "" &&
                 description !== "" &&
-                topicId !== "" &&
+                // topicId !== "" &&
                 discussionTemplateId !== "" &&
                 Meteor.call(
                   "scenarios.create",

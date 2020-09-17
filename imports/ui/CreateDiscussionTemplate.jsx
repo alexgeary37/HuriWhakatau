@@ -91,7 +91,7 @@ export const CreateDiscussionTemplate = () => {
             type="number"
             labelPosition="right"
             value={timeLimit}
-            onInput={({ target }) => setTimeLimit(target.value)}
+            onInput={({ target }) => setTimeLimit(parseInt(target.value))}
           >
             <Label>Discussions have time limit</Label>
             <input />

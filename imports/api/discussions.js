@@ -76,7 +76,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  //   Discussions.remove({});
+  // Discussions.remove({});
 
   Meteor.publish("allDiscussions", function () {
     return Discussions.find(
