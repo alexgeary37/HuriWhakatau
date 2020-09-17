@@ -42,9 +42,9 @@ export const NavBar = () => {
         <Container className="content-width">
           <Menu.Item as={Link} to="/" header>
             <Icon size="big" name="balance scale" />
-            JuryRoom
+            Huri Whakatau
           </Menu.Item>
-          <Dropdown item text="Browse">
+          <Dropdown item text="Tirotiro/Browse">
             <Dropdown.Menu>
               <Dropdown.Item
                 content="Groups (redundant)"

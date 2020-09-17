@@ -4,14 +4,13 @@ Accounts.emailTemplates.from = "JuryRoom <no-reply@juryroom.com>";
 // variable per inspiring code from here: https://forums.meteor.com/t/custom-enrollaccount/17102/2
 Accounts.emailTemplates.enrollAccount = {
     subject(user) {
-        return "JuryRoom Invite";
+        return "Huri Whakatau Invite";
     },
     text(user, url) {
         const id = url.substring(url.lastIndexOf('/') + 1);
-        return `Hi, you've been invited to participate in JuryRoom, 
+        return `Hi, you've been invited to participate in Huri Whakatau, 
 Click the link below to get started.
-http://54.252.248.27/enroll-account/${id}
-http://localhost:3000/enroll-account/${id}
+${process.env.ROOT_URL}/enroll-account/${id}
 
 please use username: ${user.username}
 If you didn't request this email, please ignore it.
@@ -19,11 +18,10 @@ Thanks,
 `
     },
     html(user, url) {
-        // This is where HTML email content would go.
-        // See the section about html emails below.
-        `</p>Hi, you've been invited to participate in JuryRoom, 
+        // This is where HTML email content would go. may need to create a component to go here
+        `</p>Hi, you've been invited to participate in Huri Whakatau, 
 Click the link below to get started.
-${url}
+${process.env.ROOT_URL}/enroll-account/${id}
 
 please use username: ${user.username}
 If you didn't request this email, please ignore it.
