@@ -152,7 +152,7 @@ export const UserComment = ({ comment, discussionStatus, userCanEdit }) => {
           <ReactMarkdown source={comment.text} />
         </Comment.Text>
       </Comment.Content>
-      {isAuthor & userCanEdit && (
+      {isAuthor && userCanEdit && (
         <Comment.Actions>
           <Button
             color="blue"

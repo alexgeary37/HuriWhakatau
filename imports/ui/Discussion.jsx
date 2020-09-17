@@ -227,12 +227,15 @@ export const Discussion = () => {
       <NavBar />
       <div class="discussion-grid-container">
         <div class="grid-item">
-          <Header
-            content={(scenario && scenario.title) || (topic && topic.title)}
-            size="medium"
-          />
-          {(scenario && scenario.description) || (topic && topic.description)}
+          <div class="grid-item-top">
+            <Header
+              content={(scenario && scenario.title) || (topic && topic.title)}
+              size="medium"
+            />
+            {(scenario && scenario.description) || (topic && topic.description)}
+          </div>
           <div class="timer">
+            <h4>Time remaining:</h4>
             {timedDiscussion && <Timer time={timeLeft} />}
           </div>
         </div>
@@ -262,7 +265,9 @@ export const Discussion = () => {
         </div>
         <div class="grid-item">
           <Header content="Verdicts" size="medium" />
-          <List style={{ overflow: "auto", maxHeight: "50em" }}>
+
+          {/* style={{ overflow: "auto", maxHeight: "50em" }} */}
+          <List>
             {verdicts &&
               verdicts.map((verdict) => (
                 <List.Item key={verdict._id}>
@@ -277,11 +282,7 @@ export const Discussion = () => {
               <Modal open={true}>
                 <Modal.Content>Consensus</Modal.Content>
                 <Modal.Actions>
-                  <Button
-                    as={Link}
-                    to="/"
-                    content="Return to Dashboard"
-                  ></Button>
+                  <Button as={Link} to="/" content="Return to Dashboard" />
                 </Modal.Actions>
               </Modal>
             )}

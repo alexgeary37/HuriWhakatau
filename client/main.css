@@ -26,12 +26,6 @@ App.jsx
   overflow-y: scroll;
 }
 
-.grid-item .timer {
-  position: fixed;
-  padding: 2px;
-  bottom: 1rem;
-}
-
 .grid-item .grid-item-comments {
   margin-bottom: 13rem;
 }
@@ -42,6 +36,18 @@ App.jsx
   width: 100%;
   bottom: 1rem;
   padding: 2px;
+}
+
+.grid-item .grid-item-top {
+  position: fixed;
+  padding: 2px;
+}
+
+.grid-item .timer {
+  position: fixed;
+  float: right;
+  padding: 2px;
+  bottom: 1rem;
 }
 
 /* .juryroom {

@@ -62,7 +62,7 @@ export const Verdict = ({ verdict, onVote }) => {
             />
           </div>
         ) : (
-          <div style={{ paddingBottom: 5, textAlign: "right" }}>Voted</div>
+          <div style={{ padding: 5, textAlign: "right" }}>Voted</div>
         )}
       </Card>
     </List.Item>

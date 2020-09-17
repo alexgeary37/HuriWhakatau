@@ -34,7 +34,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  Scenarios.remove({});
+  // Scenarios.remove({});
 
   Meteor.publish("scenarios", function () {
     return Scenarios.find(
