@@ -60,6 +60,25 @@ Meteor.startup(() => {
         });
     }
 
+    // add some Maori Users
+    // Accounts.createUser({
+    //     username: "hihi",
+    //     password: "passwordhuri",
+    // });
+    // Accounts.createUser({
+    //     username: "hokioi",
+    //     password: "passwordhuri",
+    // });
+    // Accounts.createUser({
+    //     username: "kakariki",
+    //     password: "passwordhuri",
+    // });
+    // Accounts.createUser({
+    //     username: "Kea",
+    //     password: "passwordhuri",
+    // });
+
+
   if (Meteor.isServer) {
     //set up roles if they don't exist
     let createdRoles = Roles.getAllRoles();

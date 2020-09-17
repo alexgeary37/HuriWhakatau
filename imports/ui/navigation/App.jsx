@@ -58,6 +58,7 @@ export const App = () => {
                         component={CreateExperiment}
                     />
                     <Route path="/discussion/:discussionId" component={Discussion}/>
+                    <Route path="/korerorero/:discussionId" component={Discussion}/>
                     <Route
                     exact
                     path="/enroll-account/:token"
