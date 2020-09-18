@@ -152,7 +152,7 @@ export const Discussion = () => {
   );
 
   // check if user is in the discussion group
-  if (group && Meteor.userId() in group.members){
+  if (Meteor.userId() in group.members){
     setUserInGroup(true);
   }
 
