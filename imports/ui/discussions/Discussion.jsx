@@ -40,6 +40,7 @@ export const Discussion = () => {
     const [timedDiscussion, setTimedDiscussion] = useState(false);
     const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(null);
     const [timeLeft, setTimeLeft] = useState(null);
+    const [userInGroup, setUserInGroup] = useState(false);
     //todo, if the user uses the browser back button to go back to dash from a timed discussion
     // and then to a non-timed discussion the timedDiscussion state stays true
     const updateTimed = () => {
@@ -150,21 +151,19 @@ export const Discussion = () => {
     timedDiscussion
   );
 
+  // check if user is in the discussion group
+  if (group && Meteor.userId() in group.members){
+    setUserInGroup(true);
+  }
+
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit === 0) {
-    console.log("it's null");
+    //probably should refactor this
   } else if (discussionDeadline == null && discussionTimeLimit > 0) {
-    console.log("need to update deadline");
     let currentDateTime = new Date();
     updateDeadline(
       new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
-    );
-    console.log(
-      "after setting time limit: ",
-      discussionTimeLimit,
-      "\ndiscussion deadline: ",
-      mutableDiscussionDeadline
     );
     Meteor.call(
       "discussions.updateDeadline",
@@ -178,18 +177,37 @@ export const Discussion = () => {
     if (discussionDeadline < currentTime && discussionStatus === "active") {
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
     } else if (discussionDeadline > currentTime && !timedDiscussion && discussionStatus === "active") {
-      console.log("the future has not yet come");
       updateTimed();
       calculateTimeLeft();
+      //maybe put the useEffect scroll to bottom controlling state change (vv line 189) here
     }
   }
 
-  //set reference for end of discussion and scroll to that point on page load
+  // //set reference for end of discussion and scroll to that point on page load
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   };
+
   useEffect(scrollToBottom, [comments]);
+  // Initializing firstRender as true, attempting to set scroll to bottom of comments
+  // to only run once, and thereafter is in the control of the user.
+  const [firstRender, setFirstRender] = useState(true);
+  const [renderCount, setRenderCount] = useState(0);
+
+//set reference for end of discussion and scroll to that point on page load
+//   const commentsEndRef = useRef(null);
+//   const scrollToBottom = () => {
+//     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+//   };
+//   setRenderCount(renderCount + 1);
+//   useEffect(() => {
+//
+//     if(firstRender && renderCount > 11){
+//       setFirstRender(false);
+//       scrollToBottom();
+//     }
+//   }, [comments]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -270,16 +288,18 @@ export const Discussion = () => {
                     <Modal.Content>Consensus</Modal.Content>
                     <Modal.Actions>
                       <Button
-                        as={Link}
-                        to="/"
-                        content="Return to Dashboard"
-                      ></Button>
+    as={Link}
+    to="/"
+    content="Return to Dashboard"
+    />
                     </Modal.Actions>
                   </Modal>
                 )}
                 {!userHasSubmittedVerdict() &&
                   discussionVerdictProposers &&
-                  (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                discussionStatus === "active" &&
+                userInGroup &&
+                    (discussionVerdictProposers.includes(Meteor.userId()) ? (
                     <VerdictForm discussionId={discussionId} />
                   ) : (
                     <div style={{ textAlign: "center" }}>
