@@ -12,6 +12,8 @@ export const LoginForm = () => {
     Meteor.loginWithPassword(username, password, function (error) {
       if (error) {
         setErr(error.message);
+      } else {
+        setOpen(false);
       }
     });
   };
@@ -60,9 +62,8 @@ export const LoginForm = () => {
           content="Login"
           labelPosition="right"
           icon="check"
-          onClick={() =>{
-            submit(event)
-            setOpen(false)
+          onClick={(e) =>{
+            submit(e)
           }}
           positive
         />
