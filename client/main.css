@@ -243,3 +243,22 @@ Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reacti
 .badge {
   top: 15px;
 }
+
+/*********************************************************
+Pepeha icons
+********************************************************/
+i.icon.mountain:after {
+  content: "\f102";
+}
+
+i.icon.river:after {
+   content: "\f1de";
+ }
+
+i.icon.waka:after {
+    content: "\f13d";
+  }
+
+i.icon.iwi:after {
+  content: "\f494";
+}
