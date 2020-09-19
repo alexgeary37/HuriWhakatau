@@ -13,6 +13,7 @@ export const VerdictForm = ({ discussionId }) => {
             <textarea
               placeholder="Type your verdict here..."
               rows="3"
+              autoFocus
               name="verdict"
               onChange={(e) => setText(e.currentTarget.value)}
             />

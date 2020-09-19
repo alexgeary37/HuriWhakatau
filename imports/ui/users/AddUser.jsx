@@ -7,6 +7,17 @@ export const AddUser = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [userAnon, setUserAnon] = useState(false);
+    const [userRolesList, setUserRolesList] = useState([]);
+    const userRoles = [
+        'ADMIN',
+        // 'CREATE_GROUPS',
+        // 'CREATE_SCENARIOS',
+        // 'CREATE_SCENARIOSETS',
+        'GROUP_LEADER',
+        'PARTICIPANT_I',
+        'PARTICIPANT_W',
+        'RESEARCHER'];
+
     // const [submitDisabled, setSubmitDisabled] = useState(true);
     // covering every situation where we want the form submit to be enabled or disabled and setting appropriately.
     // There has to be a simpler way. and probably needs to use a hook, so get on that will you?
@@ -46,6 +57,20 @@ export const AddUser = () => {
                               readOnly={userName !== ""}
                               onClick={(e, data) => setUserAnon(data.checked)}
                               />
+                    <Form.Dropdown
+                        label="Which Roles do you want to assign?"
+                        selection
+                        multiple
+                        options={userRoles && userRoles.map((role) => ({
+                            key: role,
+                            text: role[0] + role.substring(1,).toLowerCase(),
+                            // description: role,
+                            value: role,
+                        }))}
+                        name="roles"
+                        value={userRolesList}
+                        onChange={(e, {value}) => setUserRolesList(value.concat())}
+                    />
                     {/*<Form.Input*/}
                     {/*    label="Password"*/}
                     {/*    type="text"*/}
@@ -64,7 +89,7 @@ export const AddUser = () => {
                         onClick={() => {
                             // userName !== "" || userAnon &&
                             // // password !== "" &&
-                            Meteor.call("security.addUser", userName, password, email, userAnon);
+                            Meteor.call("security.addUser", userName, password, email, userAnon, userRolesList);
                             history.back();
                         }
                         }

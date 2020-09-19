@@ -10,7 +10,7 @@ Accounts.emailTemplates.enrollAccount = {
         const id = url.substring(url.lastIndexOf('/') + 1);
         return `Hi, you've been invited to participate in Huri Whakatau, 
 Click the link below to get started.
-${process.env.ROOT_URL}/enroll-account/${id}
+${process.env.ROOT_URL}enroll-account/${id}
 
 please use username: ${user.username}
 If you didn't request this email, please ignore it.
@@ -19,13 +19,7 @@ Thanks,
     },
     html(user, url) {
         // This is where HTML email content would go. may need to create a component to go here
-        `</p>Hi, you've been invited to participate in Huri Whakatau, 
-Click the link below to get started.
-${process.env.ROOT_URL}/enroll-account/${id}
-
-please use username: ${user.username}
-If you didn't request this email, please ignore it.
-Thanks,</p>
+        `</p></p>
 `
     }
 };

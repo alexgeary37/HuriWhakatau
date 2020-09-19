@@ -107,13 +107,13 @@ export const MyDashboard = () => {
         };
     });
 
-    if (!user) {
-        return (
-            <div className="dashboard-login">
-                <LoginForm/>
-            </div>
-        );
-    }
+    // if (!user) {
+    //     return (
+    //         <div className="dashboard-login">
+    //             <LoginForm/>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div>
