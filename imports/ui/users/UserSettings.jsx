@@ -163,7 +163,7 @@ export const UserSettings = () => {
 
                     {/*</GridColumn>*/}
                     <GridColumn width={7}>
-                        {!isIndigenous &&
+                        {isIndigenous &&
                         <Card>
                             <Card.Content header="Pepeha"/>
                             <CardContent>
