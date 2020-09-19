@@ -35,7 +35,7 @@ Meteor.methods({
         };
     },
 
-    "security.addUser"(userName, password, email, userAnon){
+    "security.addUser"(userName, password, email, userAnon, roles){
         if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
             throw new Meteor.Error('not-authorized');
         } else {
@@ -61,6 +61,7 @@ Meteor.methods({
                 email:email,
             });
             Accounts.sendEnrollmentEmail(userId);
+            Roles.addUsersToRoles(userId, roles);
         };
     },
 })
