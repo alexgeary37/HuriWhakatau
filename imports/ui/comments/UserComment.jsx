@@ -100,7 +100,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
             id: "+1",
             name: "+1",
             short_names: ["+1"],
-            text: "",
+            // text: "",
             emoticons: [],
             keywords: ["thumbsup"],
         },

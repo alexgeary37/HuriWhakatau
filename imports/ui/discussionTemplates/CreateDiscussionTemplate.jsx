@@ -21,6 +21,7 @@ export const CreateDiscussionTemplate = (handletoggleCreation) => {
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            size="mini"
         >
             <Modal.Header>Create A Discussion Template</Modal.Header>
             <Form >

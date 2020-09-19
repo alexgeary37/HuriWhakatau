@@ -64,4 +64,12 @@ Meteor.methods({
             Roles.addUsersToRoles(userId, roles);
         };
     },
+
+    "security.changeUsername"(username){
+      Accounts.setUsername(Meteor.userId(), username);
+    },
+
+    "security.changePassword"(oldPassword, newPassword){
+        Accounts.changePassword(oldPassword, newPassword);
+    },
 })
