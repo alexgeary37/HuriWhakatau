@@ -17,6 +17,7 @@ import {MyDashboard} from "./MyDashboard";
 import {AssignRoles} from "/imports/ui/users/AssignRoles";
 import {AddUser } from "/imports/ui/users/AddUser";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
+import { UserSettings } from "/imports/ui/users/UserSettings"
 
 const browserHistory = history.createBrowserHistory();
 
@@ -42,6 +43,7 @@ export const App = () => {
                     <Route exact path="/scenarioSets" component={BrowseScenarioSets}/>
                     <Route exact path="/assignroles" component={AssignRoles}/>
                     <Route exact path="/AddUser" component={AddUser}/>
+                    <Route exact path="/UserSettings" component={UserSettings}/>
                     <Route
                         exact
                         path="/scenarioSets/create"

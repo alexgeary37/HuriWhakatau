@@ -62,6 +62,7 @@ export const NavBar = () => {
                 to="/scenarioSets"
               />
               <Dropdown.Item content="My Dash" as={Link} to="/mydashboard" />
+              <Dropdown.Item content="User settings" as={Link} to="/UserSettings" />
             </Dropdown.Menu>
           </Dropdown>
           <MenuMenu position="right">
