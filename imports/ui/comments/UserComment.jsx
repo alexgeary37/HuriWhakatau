@@ -63,6 +63,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
         Meteor.call("comments.update", text, _id);
     };
 
+    //boolean that controls the show or hide of the emoji picker
     const handleShowEmojis = () => {
         setReactionShown(!reactionShown);
     };
@@ -77,7 +78,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
             return item.emoji.id;
         });
         if (!existingEmojiIds.includes(emoOb.emoji.id)) {
-            //trigger the useEffect callback to udate db when selectedEmojis state variable has changed.
+            //trigger the useEffect callback to update db when selectedEmojis state variable has changed.
             settingEmojisRef.current = true;
             setSelectedEmojis([...selectedEmojis, emoOb]);
             setReactionShown(false);

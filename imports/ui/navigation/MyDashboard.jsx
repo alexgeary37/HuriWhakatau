@@ -309,7 +309,7 @@ export const MyDashboard = () => {
             {/*    Modals    */}
                 {isOpenTemplateCreation &&
                 <CreateDiscussionTemplate
-                isCreationOpen={handletoggleCreation}/>
+                    toggleModal={handletoggleCreation}/>
                 }
 
 
