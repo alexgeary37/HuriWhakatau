@@ -151,11 +151,6 @@ export const Discussion = () => {
     timedDiscussion
   );
 
-  // check if user is in the discussion group
-  if (group && Meteor.userId() in group.members){
-    setUserInGroup(true);
-  }
-
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit === 0) {
@@ -298,7 +293,6 @@ export const Discussion = () => {
                 {!userHasSubmittedVerdict() &&
                   discussionVerdictProposers &&
                 discussionStatus === "active" &&
-                userInGroup &&
                     (discussionVerdictProposers.includes(Meteor.userId()) ? (
                     <VerdictForm discussionId={discussionId} />
                   ) : (

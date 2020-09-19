@@ -13,9 +13,9 @@ export const AssignRoles = () => {
 
         const userRoles = [
             'ADMIN',
-            'CREATE_GROUPS',
-            'CREATE_SCENARIOS',
-            'CREATE_SCENARIOSETS',
+            // 'CREATE_GROUPS',
+            // 'CREATE_SCENARIOS',
+            // 'CREATE_SCENARIOSETS',
             'GROUP_LEADER',
             'PARTICIPANT_I',
             'PARTICIPANT_W',
