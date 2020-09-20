@@ -39,7 +39,6 @@ Meteor.startup(() => {
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
     // console.log("email set");
 
-
     // Create accounts
     if (!Accounts.findUserByUsername("OpenlyOctopus")) {
         Accounts.createUser({
