@@ -69,6 +69,8 @@ export const NavBar = () => {
             {user ?
               <MenuItem as={Link} to="/" name="logout" onClick={logUserOut}>
                 Logout {user.username}
+                {/*replace icon with profile pic when that is ready*/}
+                <Icon name={"user"} size={"large"}/>
               </MenuItem>
               :
                 <MenuItem as={Link} to="/" name="login" onClick={logUserIn}>

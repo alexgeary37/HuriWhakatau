@@ -18,6 +18,7 @@ import {AssignRoles} from "/imports/ui/users/AssignRoles";
 import {AddUser } from "/imports/ui/users/AddUser";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
 import { UserSettings } from "/imports/ui/users/UserSettings"
+import {HuiChat} from "/imports/ui/discussions/HuiChat"
 
 const browserHistory = history.createBrowserHistory();
 
@@ -44,6 +45,7 @@ export const App = () => {
                     <Route exact path="/assignroles" component={AssignRoles}/>
                     <Route exact path="/AddUser" component={AddUser}/>
                     <Route exact path="/UserSettings" component={UserSettings}/>
+                    <Route exact path="/huichat/:discussionId" component={HuiChat}/>
                     <Route
                         exact
                         path="/scenarioSets/create"

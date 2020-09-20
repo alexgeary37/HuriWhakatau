@@ -1,6 +1,9 @@
 import { Roles } from "meteor/alanning:roles";
 import { Usernames, Maorinames } from "/imports/api/usernames";
 import { Random } from 'meteor/random'
+import {check} from "meteor/check";
+import {Comments} from "./comments";
+import {Mongo} from "meteor/mongo";
 
 Meteor.methods({
   //Note these methods take time to return a value from the database,
@@ -65,11 +68,16 @@ Meteor.methods({
         };
     },
 
-    "security.changeUsername"(username){
-      Accounts.setUsername(Meteor.userId(), username);
-    },
+    "security.updatePepeha"(pepeha, userId){
+            console.log("updating user pepeha");
+            check(userId, String);
+            check(pepeha, Array);
 
-    "security.changePassword"(oldPassword, newPassword){
-        Accounts.changePassword(oldPassword, newPassword);
+            Meteor.users.update(userId, {
+                $set: {
+                    pepeha: pepeha,
+                },
+            });
+            return true;
     },
 })
