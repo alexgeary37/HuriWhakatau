@@ -79,6 +79,7 @@ if (Meteor.isServer) {
                     createdAt: 1,
                     createdBy: 1,
                     leaderVotes: 1,
+                    groupLeader: 1,
                 },
             }
         );
