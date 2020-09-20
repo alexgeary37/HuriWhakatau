@@ -32,7 +32,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
         datetime = new Intl.DateTimeFormat('en-AU', options).format(editedDateTime);
     };
 
-    //reference boolean to for the useEffect callback sending the changed emoji list to the db
+    //reference boolean for the useEffect callback sending the changed emoji list to the db
     const settingEmojisRef = useRef(false);
     //ensure the selectedEmojis state variable is finished updating before sending to db.
     useEffect(() => {
