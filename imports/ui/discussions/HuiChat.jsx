@@ -39,6 +39,7 @@ export const HuiChat = () => {
     console.log("Entered hui");
     const filter = {};
     const {discussionId} = useParams();
+    const [userVotedForLeader, setUserVotedForLeader] = useState(false);
     const [isDiscussion, setIsDiscussion] = useState(false); //display differently if a discussion vs
     // introduction eg show/hide verdict proposal etc
     const [timedDiscussion, setTimedDiscussion] = useState(false);
@@ -93,6 +94,7 @@ export const HuiChat = () => {
     discussionDeadline,
     discussionTimeLimit,
     groupMembers,
+    groupLeader,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
     const scenarioSub = Meteor.subscribe("scenarios");
@@ -113,6 +115,7 @@ export const HuiChat = () => {
     let discussionTopic;
     let discussionTemplate;
     let groupMembers = [];
+    let theGroupLeader;
     if (
       discussionSub.ready() &&
       scenarioSub.ready() &&
@@ -134,11 +137,13 @@ export const HuiChat = () => {
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
 
+      groupMembers = Meteor.users.find({_id: {$in: discussionGroup.members}})
+        theGroupLeader = discussionGroup.groupLeader;
       //get group members an usernames for showing in the participants panel
-        discussionGroup.members.forEach((member) => {
-            // let user =
-            groupMembers.push(Meteor.users.findOne({_id: member}).username);
-        })
+      //   discussionGroup.members.forEach((member) => {
+      //       // let user =
+      //       groupMembers.push(Meteor.users.findOne({_id: member}).username);
+      //   })
     }
 
     return {
@@ -153,6 +158,7 @@ export const HuiChat = () => {
       discussionTimeLimit: discussionTimeLimit,
       discussionDeadline: discussionDeadline,
       groupMembers: groupMembers,
+        groupLeader: theGroupLeader,
     };
   });
   // debug msg
@@ -163,8 +169,8 @@ export const HuiChat = () => {
     discussionDeadline,
     "timed: ",
     timedDiscussion,
-      "groupMembers: ",
-      groupMembers,
+      "group leader",
+      groupLeader,
   );
 
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
@@ -202,6 +208,10 @@ export const HuiChat = () => {
   };
 
   useEffect(scrollToBottom, [comments]);
+
+  const handleUserGroupLeaderVote = () => {
+      setUserVotedForLeader(true);
+  }
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -311,8 +321,12 @@ export const HuiChat = () => {
                   <Segment style={{position: "absolute", bottom: "0px"}}>
                       <Header content="Participants"/>
                   {!isDiscussion && groupMembers.map((member) => (
-                      <List.Item key={member}>
-                          <UserSummary userName={member} />
+                      <List.Item key={member._id}>
+                          <UserSummary member={member}
+                                       handleUserVoted={handleUserGroupLeaderVote}
+                                       userHasVoted={userVotedForLeader}
+                                       groupId={group._id}
+                                       />
                       </List.Item>
                   ))}
                   </Segment>
