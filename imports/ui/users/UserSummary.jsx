@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {Button, List, ModalActions, Segment} from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
-export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId}) => {
+export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, groupLeader, discussionStatus}) => {
     // based on dicussionsummary, update to take an actual user object and
     // display info. in the mean time it just takes a username and shows that
     // const [isIndigenous, setIsIndigenous] = useState(participantRole);
@@ -33,7 +33,7 @@ export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId}) =
         as={Segment}
       >
           {member.username}
-          {Meteor.userId() !== member._id && <ModalActions>
+          {Meteor.userId() !== member._id && !groupLeader && (discussionStatus = "active") && <ModalActions>
               <Button disabled={userHasVoted} positive value={member._id} content={"vote"} onClick={({target}) => {
                   submitLeaderVote(target.value)
               }}/></ModalActions>
