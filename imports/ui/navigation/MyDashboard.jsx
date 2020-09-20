@@ -38,7 +38,6 @@ export const MyDashboard = () => {
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
-
     const handletoggleCreation = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
     }
@@ -197,6 +196,7 @@ console.log( isIndigenous);
                                                   <DiscussionSummary
                                                       key={discussion._id}
                                                       discussion={discussion}
+                                                      participantRole={true}
                                                   />
                                               ))}/>
                                 <Card.Content extra>
