@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 
-export const CreateDiscussionTemplate = (handletoggleCreation) => {
+export const CreateDiscussionTemplate = ({toggleModal}) => {
     // console.log(isCreationOpen.isCreationOpen);
     const [anonymous, setAnonymous] = useState(false);
     const [typing, setTyping] = useState(false);
@@ -15,15 +15,21 @@ export const CreateDiscussionTemplate = (handletoggleCreation) => {
     const [charLimit, setCharLimit] = useState(0);
     const [isOpen, setIsOpen] = useState(true);
 
+    const toggleIt = () => {
+        setIsOpen(false);
+        toggleModal();
+    }
+
     // enable form items as this functionality becomes available
     return (
         <Modal
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
-            size="mini"
+            size="small"
         >
             <Modal.Header>Create A Discussion Template</Modal.Header>
+            <Modal.Content>
             <Form >
                 <Input
                     label="Template Name"
@@ -72,6 +78,7 @@ export const CreateDiscussionTemplate = (handletoggleCreation) => {
                 </Input>
                 <br/>
                 <br/>
+
                 <Modal.Actions>
                     <Button
                         content="Save"
@@ -80,18 +87,17 @@ export const CreateDiscussionTemplate = (handletoggleCreation) => {
                             templateName &&
                             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
                                 isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
-                            setIsOpen(false);
+                            toggleIt();
                             // history.back();
                         }
-
                         }
                     />
-
-                    <Button color='black' onClick={() => setIsOpen(false)}>
+                    <Button color='black' onClick={toggleIt}>
                         Cancel
                     </Button>
                 </Modal.Actions>
             </Form>
+            </Modal.Content>
         </Modal>
     );
 };
