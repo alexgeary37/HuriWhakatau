@@ -29,6 +29,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
             size="small"
         >
             <Modal.Header>Create A Discussion Template</Modal.Header>
+            <Modal.Content>
             <Form >
                 <Input
                     label="Template Name"
@@ -77,6 +78,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                 </Input>
                 <br/>
                 <br/>
+
                 <Modal.Actions>
                     <Button
                         content="Save"
@@ -95,6 +97,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                     </Button>
                 </Modal.Actions>
             </Form>
+            </Modal.Content>
         </Modal>
     );
 };

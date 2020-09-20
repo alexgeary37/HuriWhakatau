@@ -35,7 +35,8 @@ import {Link} from "react-router-dom";
 export const MyDashboard = () => {
     const [showInfo, setShowInfo] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [isresearcher, setIsresearcher] = useState(false);
+    const [isResearcher, setIsResearcher] = useState(false);
+    const [isIndigenous, setIsIndigenous] = useState(false);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
 
     const handletoggleCreation = () => {
@@ -58,7 +59,16 @@ export const MyDashboard = () => {
             console.log(error.reason);
             return;
         }
-        setIsresearcher(result);
+        setIsResearcher(result);
+    });
+    //get user indigenous role status and update isIndigenous variable with call back.
+    Meteor.call("security.hasRole", Meteor.userId(), "PARTICIPANT_I", (error, result) => {
+        if (error) {
+            console.log(error.reason);
+            return;
+        }
+        setIsIndigenous(result);
+        console.log(result);
     });
 
     const {user, myDiscussions, allFinishedDiscussions, groups, scenarios, scenarioSets, discussionTemplates, experiments} = useTracker(() => {
@@ -168,6 +178,7 @@ export const MyDashboard = () => {
                                                   <DiscussionSummary
                                                       key={discussion._id}
                                                       discussion={discussion}
+                                                      participantRole={isIndigenous}
                                                   />
                                               ))}/>
                                 <Card.Content extra>
