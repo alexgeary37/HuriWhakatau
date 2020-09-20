@@ -230,10 +230,10 @@ export const Discussion = () => {
       <NavBar />
       {/*hacky way to move content out from under menu*/}
       {/*<br/><br/>*/}
-      <Container attached="bottom">
+      <Container attached="bottom"style={{position: "fixed", width:"110vh"}}>
         <Grid columns={3} celled divided>
           <Grid.Row>
-            <GridColumn width={3}>
+            <GridColumn width={3} style={{height:"80vh"}}>
               <Header
                 content={(scenario && scenario.title) || (topic && topic.title)}
                 size="medium"
@@ -242,8 +242,8 @@ export const Discussion = () => {
                 (topic && topic.description)}
               {timedDiscussion && <Timer time={timeLeft} />}
             </GridColumn>
-            <GridColumn width={10}>
-              <Comment.Group style={{ overflow: "auto", maxHeight: "80vh" }}>
+            <GridColumn width={10} >
+              <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
                 {comments &&
                   comments.map((comment) => (
                     <UserComment
@@ -262,7 +262,7 @@ export const Discussion = () => {
                 <div ref={commentsEndRef} />
               </Comment.Group>
               {discussionStatus === "active" && (
-                <CommentForm discussionId={discussionId} />
+                <CommentForm discussionId={discussionId}/>
               )}
             </GridColumn>
             <GridColumn width={3}>

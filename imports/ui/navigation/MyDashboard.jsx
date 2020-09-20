@@ -36,9 +36,8 @@ export const MyDashboard = () => {
     const [showInfo, setShowInfo] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isResearcher, setIsResearcher] = useState(false);
-    const [isIndigenous, setIsIndigenous] = useState(false);
+    const [isIndigenous, setIsIndigenous] = useState(null);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
-
     const handletoggleCreation = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
     }
@@ -124,7 +123,7 @@ export const MyDashboard = () => {
     //         </div>
     //     );
     // }
-
+console.log( isIndigenous);
     return (
         <div>
             <NavBar/>
@@ -172,6 +171,9 @@ export const MyDashboard = () => {
                         <GridColumn width={4}>
                             <Card style={{height: "35vh"}}>
                                 <Card.Content header='My Discussions'/>
+                                {/* attempting to only load this when user
+                                role is known and render with correct link path*/}
+                                { (isIndigenous !== null) &&
                                 <Card.Content style={{overflow: "auto", height: "25vh"}}
                                               description={myDiscussions &&
                                               myDiscussions.map((discussion) => (
@@ -180,7 +182,7 @@ export const MyDashboard = () => {
                                                       discussion={discussion}
                                                       participantRole={isIndigenous}
                                                   />
-                                              ))}/>
+                                              ))}/>}
                                 <Card.Content extra>
                                 </Card.Content>
                             </Card>
@@ -194,6 +196,7 @@ export const MyDashboard = () => {
                                                   <DiscussionSummary
                                                       key={discussion._id}
                                                       discussion={discussion}
+                                                      participantRole={true}
                                                   />
                                               ))}/>
                                 <Card.Content extra>
@@ -298,7 +301,7 @@ export const MyDashboard = () => {
                                 {/*<Card.Content>*/}
 
                                 {/*</Card.Content>*/}
-                                <Card.Content extra>
+                                <Card.Content>
                                     <Button
                                         content="Assign Roles"
                                         as={Link}
