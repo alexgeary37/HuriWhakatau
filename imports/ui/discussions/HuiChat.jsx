@@ -36,7 +36,7 @@ import {UserSummary} from "../users/UserSummary";
 
 //adaption of the Discussion.jsx to bring it in line with Tamahau's designs
 export const HuiChat = () => {
-    console.log("Entered discussion");
+    console.log("Entered hui");
     const filter = {};
     const {discussionId} = useParams();
     const [isDiscussion, setIsDiscussion] = useState(false); //display differently if a discussion vs
