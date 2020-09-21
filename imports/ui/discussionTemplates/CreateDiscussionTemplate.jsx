@@ -82,7 +82,6 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                 <Modal.Actions>
                     <Button
                         content="Save"
-                        color='green'
                         onClick={() => {
                             templateName &&
                             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
@@ -91,6 +90,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                             // history.back();
                         }
                         }
+                        positive
                     />
                     <Button color='black' onClick={toggleIt}>
                         Cancel

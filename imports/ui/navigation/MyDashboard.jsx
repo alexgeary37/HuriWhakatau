@@ -31,6 +31,10 @@ import {ScenarioSets} from "/imports/api/scenarioSets";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {Experiments} from "/imports/api/experiments";
 import {Link} from "react-router-dom";
+import {CreateGroup} from "../groups/CreateGroup";
+import {CreateScenario} from "../scenarios/CreateScenario";
+import {CreateScenarioSet} from "../scenarioSets/CreateScenarioSet";
+import {CreateExperiment} from "../experiments/CreateExperiment";
 
 export const MyDashboard = () => {
     const [showInfo, setShowInfo] = useState(true);
@@ -38,8 +42,25 @@ export const MyDashboard = () => {
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
-    const handletoggleCreation = () => {
+    const [isOpenScenarioCreation, setIsOpenScenarioCreation] = useState(false);
+    const [isOpenScenarioSetCreation, setIsOpenScenarioSetCreation] = useState(false);
+    const [isOpenExperimentCreation, setIsOpenExperimentCreation] = useState(false);
+    const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
+    //is there a more abstracted way to handle all these modal open/closes?
+    const handleToggleTemplate = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
+    }
+    const handleToggleScenario = () => {
+        setIsOpenScenarioCreation(!isOpenScenarioCreation);
+    }
+    const handleToggleScenarioSet = () => {
+        setIsOpenScenarioSetCreation(!isOpenScenarioSetCreation);
+    }
+    const handleToggleExperiment = () => {
+        setIsOpenExperimentCreation(!isOpenExperimentCreation);
+    }
+    const handleToggleGroup = () => {
+        setIsOpenGroupCreation(!isOpenGroupCreation);
     }
 
     //get user admin role status and update isAdmin variable with call back.
@@ -123,7 +144,7 @@ export const MyDashboard = () => {
     //         </div>
     //     );
     // }
-console.log( isIndigenous);
+    console.log(isIndigenous);
     return (
         <div>
             <NavBar/>
@@ -160,9 +181,10 @@ console.log( isIndigenous);
                                 <Card.Content extra>
                                     {isAdmin &&
                                     <Button
+                                        onClick={handleToggleGroup}
                                         content="Create New Group"
-                                        as={Link}
-                                        to="/groups/create"
+                                        // as={Link}
+                                        // to="/groups/create"
                                         color="green"
                                     />}
                                 </Card.Content>
@@ -173,7 +195,7 @@ console.log( isIndigenous);
                                 <Card.Content header='My Discussions'/>
                                 {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
-                                { (isIndigenous !== null) &&
+                                {(isIndigenous !== null) &&
                                 <Card.Content style={{overflow: "auto", height: "25vh"}}
                                               description={myDiscussions &&
                                               myDiscussions.map((discussion) => (
@@ -218,7 +240,7 @@ console.log( isIndigenous);
                                 />
                                 <Card.Content extra>
                                     <Button
-                                        onClick={handletoggleCreation}
+                                        onClick={handleToggleTemplate}
                                         content="Create New Template"
                                         // as={Link}
                                         // to="/discussionTemplates/create"
@@ -244,9 +266,10 @@ console.log( isIndigenous);
                                               ))}/>
                                 <Card.Content extra>
                                     <Button
+                                        onClick={handleToggleScenario}
                                         content="Create New"
-                                        as={Link}
-                                        to="/scenarios/create"
+                                        // as={Link}
+                                        // to="/scenarios/create"
                                         color="green"
                                     />
                                 </Card.Content>
@@ -266,9 +289,10 @@ console.log( isIndigenous);
                                               ))}/>
                                 <Card.Content extra>
                                     <Button
+                                        onClick={handleToggleScenarioSet}
                                         content="Create New Set"
-                                        as={Link}
-                                        to="/scenarioSets/create"
+                                        // as={Link}
+                                        // to="/scenarioSets/create"
                                         color="green"
                                     />
                                 </Card.Content>
@@ -287,9 +311,10 @@ console.log( isIndigenous);
                                               ))}/>
                                 <Card.Content extra>
                                     <Button
+                                        onClick={handleToggleExperiment}
                                         content="Create New Experiment"
-                                        as={Link}
-                                        to="/experiments/create"
+                                        // as={Link}
+                                        // to="/experiments/create"
                                         color="green"
                                     />
                                 </Card.Content>
@@ -320,12 +345,25 @@ console.log( isIndigenous);
                     </GridRow>
                     }
                 </Grid>
-            {/*    Modals    */}
+                {/*    Modals    */}
+                {isOpenGroupCreation &&
+                <CreateGroup toggleModal={handleToggleGroup}/>}
                 {isOpenTemplateCreation &&
                 <CreateDiscussionTemplate
-                    toggleModal={handletoggleCreation}/>
+                    toggleModal={handleToggleTemplate}/>
                 }
-
+                {isOpenScenarioCreation &&
+                <CreateScenario
+                    toggleModal={handleToggleScenario}/>
+                }
+                {isOpenScenarioSetCreation &&
+                <CreateScenarioSet
+                    toggleModal={handleToggleScenarioSet}/>
+                }
+                {isOpenExperimentCreation &&
+                <CreateExperiment
+                    toggleModal={handleToggleExperiment}/>
+                }
 
             </Container>
         </div>
