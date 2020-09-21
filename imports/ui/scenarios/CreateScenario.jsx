@@ -11,6 +11,46 @@ export const CreateScenario = ({toggleModal}) => {
     const [topicId, setTopicId] = useState("");
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
+    const [errScenarioTitle, setErrScenarioTitle] = useState("");
+    const [errScenarioDesc, setErrScenarioDesc] = useState("");
+    const [errTopic, setErrTopic] = useState("");
+    const [errDiscussionTemplateId, setErrDiscussionTemplateId] = useState("");
+
+    const submitScenario = () => {
+        if (title.length === 0) {
+            setErrScenarioTitle("Scenarios must have a title")
+        } else {
+            setErrScenarioTitle("")
+        }
+        if (description.length === 0) {
+            setErrScenarioDesc("Scenarios must have a description")
+        } else {
+            setErrScenarioDesc("")
+        }
+        if (topicId.length === 0){
+            setErrTopic("Scenarios must have a topic")
+        } else {
+            setErrTopic("")
+        }
+        if (discussionTemplateId.length === 0){
+            setErrDiscussionTemplateId("Scenarios must have a discussion template")
+        } else {
+            setErrDiscussionTemplateId("")
+        }
+        console.log("stuff that is submitted for scenario","title:", title, "desc:", description, "topic:", topicId, "discuss:", discussionTemplateId);
+
+        if (title.length > 0 && description.length > 0 && topicId.length > 0 && discussionTemplateId.length > 0) {
+            Meteor.call(
+                "scenarios.create",
+                title,
+                description,
+                topicId,
+                discussionTemplateId
+            );
+            toggleIt()
+            console.log("stuff that is submitted for scenario","title:", title, "desc:", description, "topic:", topicId, "discuss:", discussionTemplateId);
+        }
+    }
 
     const toggleIt = () => {
         setIsOpen(false);
@@ -45,12 +85,22 @@ export const CreateScenario = ({toggleModal}) => {
                         value={title}
                         onInput={({target}) => setTitle(target.value)}
                     />
+                    {errScenarioTitle ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioTitle}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Form.Input
                         label="Description"
                         type="text"
                         value={description}
                         onInput={({target}) => setDescription(target.value)}
                     />
+                    {errScenarioDesc ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioDesc}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     {/*show topics and discussion templates, get ids for db*/}
                     <Form.Dropdown
                         label="Topic"
@@ -69,6 +119,11 @@ export const CreateScenario = ({toggleModal}) => {
                         value={topicId}
                         onChange={(e, {value}) => setTopicId(value)}
                     />
+                    {errTopic ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errTopic}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Form.Dropdown
                         label="Discussion Template"
                         loading={discussionTemplates.length === 0}
@@ -85,21 +140,15 @@ export const CreateScenario = ({toggleModal}) => {
                         value={discussionTemplateId}
                         onChange={(e, {value}) => setDiscussionTemplateId(value)}
                     />
+                    {errDiscussionTemplateId ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errDiscussionTemplateId}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Button
                         content="Save"
                         onClick={() => {
-                            title !== "" &&
-                            description !== "" &&
-                            topicId !== "" &&
-                            discussionTemplateId !== "" &&
-                            Meteor.call(
-                                "scenarios.create",
-                                title,
-                                description,
-                                topicId,
-                                discussionTemplateId
-                            );
-                            toggleIt();
+                            submitScenario();
                             // history.back();
                         }}
                         positive

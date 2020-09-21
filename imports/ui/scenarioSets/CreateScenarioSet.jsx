@@ -9,6 +9,37 @@ export const CreateScenarioSet = ({toggleModal}) => {
     const [description, setDescription] = useState("");
     const [scenarioSet, setScenarios] = useState([]);
     const [isOpen, setIsOpen] = useState(true);
+    const [errTitle, setErrTitle] = useState("");
+    const [errDescription, setErrDescription] = useState("");
+    const [errScenarioSet, setErrScenarioSet] = useState("");
+
+    const submitScenarioSet = () => {
+        if (title.length === 0) {
+            setErrTitle("Scenarios must have a title")
+        } else {
+            setErrTitle("")
+        }
+        if (description.length === 0) {
+            setErrDescription("Scenarios must have a description")
+        } else {
+            setErrDescription("")
+        }
+        if (scenarioSet.length === 0){
+            setErrScenarioSet("Scenarios must have a topic")
+        } else {
+            setErrScenarioSet("")
+        }
+
+        if (title.length > 0 && description.length > 0 && scenarioSet.length > 0) {
+            Meteor.call(
+                "scenarioSets.create",
+                title,
+                description,
+                scenarioSet
+            );
+            toggleIt();
+        }
+    }
 
     const toggleIt = () => {
         setIsOpen(false);
@@ -40,12 +71,22 @@ export const CreateScenarioSet = ({toggleModal}) => {
                         value={title}
                         onInput={({target}) => setTitle(target.value)}
                     />
+                    {errTitle ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errTitle}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Form.Input
                         label="Description"
                         type="text"
                         value={description}
                         onInput={({target}) => setDescription(target.value)}
                     />
+                    {errDescription ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errDescription}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Form.Dropdown
                         label="Scenarios"
                         loading={scenarios && scenarios.length === 0}
@@ -65,20 +106,15 @@ export const CreateScenarioSet = ({toggleModal}) => {
                         value={scenarioSet}
                         onChange={(e, {value}) => setScenarios(value.concat())}
                     />
+                    {errScenarioSet ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioSet}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Button
                         content="Save"
                         onClick={() => {
-                            title !== "" &&
-                            description !== "" &&
-                            scenarioSet.length > 0 &&
-                            Meteor.call(
-                                "scenarioSets.create",
-                                title,
-                                description,
-                                scenarioSet
-                            );
-                            toggleIt()
-                            // history.back();
+                            submitScenarioSet();
                         }}
                         positive
                     />
