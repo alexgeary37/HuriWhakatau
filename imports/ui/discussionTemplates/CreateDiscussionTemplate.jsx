@@ -52,9 +52,9 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                     autoFocus
                 />
                 {errName ? (
-                    <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errName}</div>
+                    <div style={{height: "10px", color: "red", marginBottom:"10px"}}>{errName}</div>
                 ) : (
-                    <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    <div style={{height: "10px", marginBottom:"10px"}}/>
                 )}
                 <br/>
                 <br/>
