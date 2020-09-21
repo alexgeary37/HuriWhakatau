@@ -14,6 +14,18 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
     const [timeLimit, setTimeLimit] = useState(0);
     const [charLimit, setCharLimit] = useState(0);
     const [isOpen, setIsOpen] = useState(true);
+    const [errName, setErrName] = useState("");
+
+    const submitTemplate = () => {
+        if (templateName.length === 0) {
+            setErrName("Templates must have a name");
+        } else {
+            setTemplateName("");
+            Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
+                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
+            toggleIt();
+        }
+    }
 
     const toggleIt = () => {
         setIsOpen(false);
@@ -39,6 +51,11 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                     onInput={({target}) => setTemplateName(target.value)}
                     autoFocus
                 />
+                {errName ? (
+                    <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errName}</div>
+                ) : (
+                    <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                )}
                 <br/>
                 <br/>
                 <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous' onClick={(e, data) => setAnonymous(data.checked)}/>
@@ -83,12 +100,8 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                     <Button
                         content="Save"
                         onClick={() => {
-                            templateName &&
-                            Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
-                                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
-                            toggleIt();
-                            // history.back();
-                        }
+                            submitTemplate();
+                            }
                         }
                         positive
                     />

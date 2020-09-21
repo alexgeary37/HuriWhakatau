@@ -11,6 +11,43 @@ export const CreateExperiment = ({toggleModal}) => {
     const [groupId, setGroupId] = useState("");
     const [scenarioSetId, setScenarioSetId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
+    const [errName, setErrName] = useState("");
+    const [errDescription, setErrDescription] = useState("");
+    const [errGroupId, setErrGroupId] = useState("");
+    const [errScenarioSetId, setErrScenarioSetId] = useState("");
+
+    const submitExperiment = () => {
+        if (name.length === 0) {
+            setErrName("Experiments must have a name");
+        } else {
+            setErrName("");
+        }
+        if (description.length === 0) {
+            setErrDescription("Experiments must have a description");
+        } else {
+            setErrDescription("");
+        }
+        if (scenarioSetId.length === 0){
+            setErrScenarioSetId("Experiments must have a scenario set");
+        } else {
+            setErrScenarioSetId("");
+        }
+        if (groupId.length === 0){
+            setErrGroupId("Experiments must have a group");
+        } else {
+            setErrGroupId("");
+        }
+        if (name.length > 0 && description.length > 0 && scenarioSetId.length > 0 && groupId.length > 0) {
+            Meteor.call(
+                "experiments.create",
+                name,
+                description,
+                groupId,
+                scenarioSetId
+            );
+            toggleIt();
+        }
+    }
 
     const toggleIt = () => {
         setIsOpen(false);
@@ -45,12 +82,22 @@ export const CreateExperiment = ({toggleModal}) => {
                         value={name}
                         onInput={({target}) => setName(target.value)}
                     />
+                    {errName ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errName}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Form.Input
                         label="Description"
                         type="text"
                         value={description}
                         onInput={({target}) => setDescription(target.value)}
                     />
+                    {errDescription ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errDescription}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     {/*show groups and scenarioSets, get ids for db*/}
                     <Form.Dropdown
                         label="Group"
@@ -68,6 +115,11 @@ export const CreateExperiment = ({toggleModal}) => {
                         value={groupId}
                         onChange={(e, {value}) => setGroupId(value)}
                     />
+                    {errGroupId ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errGroupId}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Form.Dropdown
                         label="Scenario Set"
                         loading={scenarioSets.length === 0}
@@ -84,22 +136,15 @@ export const CreateExperiment = ({toggleModal}) => {
                         value={scenarioSetId}
                         onChange={(e, {value}) => setScenarioSetId(value)}
                     />
+                    {errScenarioSetId ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioSetId}</div>
+                    ) : (
+                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                    )}
                     <Button
                         content="Save"
                         onClick={() => {
-                            name !== "" &&
-                            description !== "" &&
-                            groupId !== "" &&
-                            scenarioSetId !== "" &&
-                            Meteor.call(
-                                "experiments.create",
-                                name,
-                                description,
-                                groupId,
-                                scenarioSetId
-                            );
-                            toggleIt()
-                            // history.back();
+                            submitExperiment();
                         }}
                         positive
                     />
