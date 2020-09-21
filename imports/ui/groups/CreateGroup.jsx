@@ -1,13 +1,19 @@
-import React, { useState } from "react";
-import { useTracker } from "meteor/react-meteor-data";
-import { Container, Segment, Form } from "semantic-ui-react";
-import { NavBar } from "/imports/ui/navigation/NavBar";
+import React, {useState} from "react";
+import {useTracker} from "meteor/react-meteor-data";
+import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+// import { NavBar } from "/imports/ui/navigation/NavBar";
 
-export const CreateGroup = () => {
+export const CreateGroup = ({toggleModal}) => {
     const [members, setMembers] = useState([]);
     const [groupName, setGroupName] = useState("");
+    const [isOpen, setIsOpen] = useState(true);
 
-    const {users } = useTracker(() => {
+    const toggleIt = () => {
+        setIsOpen(false);
+        toggleModal();
+    }
+
+    const {users} = useTracker(() => {
         Meteor.subscribe("scenarioSets");
 
         return {
@@ -16,9 +22,14 @@ export const CreateGroup = () => {
     });
 
     return (
-        <div>
-            <NavBar/>
-            <Container>
+        <Modal
+            onClose={() => setIsOpen(false)}
+            onOpen={() => setIsOpen(true)}
+            open={isOpen}
+            size="small"
+        >
+            <Modal.Header>Create a Group</Modal.Header>
+            <Modal.Content>
                 <Form as={Segment} attached="bottom">
                     <Form.Input
                         label="Name"
@@ -47,19 +58,23 @@ export const CreateGroup = () => {
                             onChange={(e, {value}) => setMembers(value.concat())}
                         />
                     </Form.Field>
-                    <Form.Button
-                        content="Submit"
+                    <Button
+                        content="Save"
                         onClick={() => {
                             groupName !== "" &&
                             members.length > 1 &&
                             // scenarioSet !== "" &&
-                            Meteor.call("groups.create", groupName, members );
-                            history.back();
+                            Meteor.call("groups.create", groupName, members);
+                            toggleIt()
+                            // history.back();
                         }
                         }
                     />
+                    <Button color='black' onClick={toggleIt}>
+                        Cancel
+                    </Button>
                 </Form>
-            </Container>
-        </div>
+            </Modal.Content>
+        </Modal>
     );
 };
