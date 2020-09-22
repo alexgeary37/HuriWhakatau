@@ -20,6 +20,7 @@ import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
 import {ExperimentSummary} from "/imports/ui/experiments/ExperimentSummary";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
+import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate"
 import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
 import {LoginForm} from "/imports/ui/users/LoginForm";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
@@ -46,6 +47,7 @@ export const MyDashboard = () => {
     const [isOpenScenarioSetCreation, setIsOpenScenarioSetCreation] = useState(false);
     const [isOpenExperimentCreation, setIsOpenExperimentCreation] = useState(false);
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
+    const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
     //is there a more abstracted way to handle all these modal open/closes?
     const handleToggleTemplate = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
@@ -56,8 +58,11 @@ export const MyDashboard = () => {
     const handleToggleScenarioSet = () => {
         setIsOpenScenarioSetCreation(!isOpenScenarioSetCreation);
     }
-    const handleToggleExperiment = () => {
+    const handleToggleExperimentCreation = () => {
         setIsOpenExperimentCreation(!isOpenExperimentCreation);
+    }
+    const handleToggleTemplateDisplay = () => {
+        setIsOpenTemplateDisplay(!isOpenTemplateDisplay);
     }
     const handleToggleGroup = () => {
         setIsOpenGroupCreation(!isOpenGroupCreation);
@@ -238,6 +243,7 @@ export const MyDashboard = () => {
                                                   <DiscussionTemplateSummary
                                                       key={discussionTemplate._id}
                                                       template={discussionTemplate}
+                                                      toggleModal={handleToggleTemplateDisplay}
                                                   />
                                               ))}
                                 />
@@ -309,7 +315,7 @@ export const MyDashboard = () => {
                                               ))}/>
                                 <Card.Content extra>
                                     <Button
-                                        onClick={handleToggleExperiment}
+                                        onClick={handleToggleExperimentCreation}
                                         content="Create New Experiment"
                                         color="green"
                                     />
@@ -353,7 +359,12 @@ export const MyDashboard = () => {
                 }
                 {isOpenExperimentCreation &&
                 <CreateExperiment
-                    toggleModal={handleToggleExperiment}/>
+                    toggleModal={handleToggleExperimentCreation}/>
+                }
+                {isOpenTemplateDisplay &&
+                <DisplayDiscussionTemplate
+                    toggleModal={handleToggleTemplateDisplay}
+                    template={"hi"}/>
                 }
 
             </Container>

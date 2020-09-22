@@ -16,9 +16,9 @@ export const ScenarioSummary = ({ scenario }) => {
   });
 
   return (
-    <List.Item as={Link} to={`/scenarios/${scenario._id}`}>
+    <List.Item /*as={Link} to={`/scenarios/${scenario._id}`}*/>
       <List.Content as={Segment}>
-        <List.Header content={scenario && scenario.title} />
+        <List.Header as={'h4'} content={scenario && scenario.title} />
         <List.Description
           content={discussionTemplate && "Template: " + discussionTemplate.name}
         />

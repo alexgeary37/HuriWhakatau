@@ -1,14 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { List, Segment } from "semantic-ui-react";
+import {DisplayDiscussionTemplate} from "./DisplayDiscussionTemplate";
 
-export const DiscussionTemplateSummary = ({ template }) => {
+export const DiscussionTemplateSummary = ({toggleModal, template }) => {
+    //need to make the DisplayDiscussionTemplate Modal component show from clicking this component
+    // const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
+    // const handleToggleTemplateDisplay = () => {
+    //     setIsOpenTemplateDisplay(!isOpenTemplateDisplay);
+    // };
+    // const toggleIt = () =>{
+    //     toggleModal();
+    // };
+
   return (
-    <List.Item as={Link} to={`/discussionTemplates/${template._id}`}>
+      <span>
+    <List.Item>
       <List.Content as={Segment}>
-        <List.Header as={"h5"} content={template && template.name} />
-        <List.Description content={template && template.name} />
+        <List.Header as={"h4"} content={template && template.name} />
+        {/*<List.Description content={template && template.description} />*/}
       </List.Content>
     </List.Item>
+    </span>
   );
 };

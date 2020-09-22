@@ -17,9 +17,9 @@ export const GroupSummary = ({ group }) => {
   }
 
   return (
-    <List.Item as={Link} to={`/groups/${group._id}`}>
+    <List.Item>
       <List.Content as={Segment}>
-        <List.Header content={group && group.name} />
+        <List.Header as={'h4'} content={group && group.name} />
         <List.Description
           content={users && "Members: " + userList.join(", ")}
         />
