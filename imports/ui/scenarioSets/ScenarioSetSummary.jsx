@@ -13,9 +13,9 @@ export const ScenarioSetSummary = ({ scenarioSet }) => {
   });
 
   return (
-    <List.Item as={Link} to={`/scenarioSets/${scenarioSet._id}`}>
+    <List.Item /*as={Link} to={`/scenarioSets/${scenarioSet._id}`}*/>
       <List.Content as={Segment}>
-        <List.Header content={scenarioSet && scenarioSet.title} />
+        <List.Header as={'h4'} content={scenarioSet && scenarioSet.title} />
         <List.Description
           content={scenarioSet && "desc: " + scenarioSet.description}
         />

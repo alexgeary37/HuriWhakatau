@@ -4,11 +4,11 @@ import { List, Segment } from "semantic-ui-react";
 
 export const ExperimentSummary = ({ experiment }) => {
   return (
-    <List.Item as={Link} to={`/experiments/${experiment._id}`}>
+    <List.Item /*as={Link} to={`/experiments/${experiment._id}`}*/>
       <List.Content as={Segment}>
-        <List.Header content={experiment && experiment.name} />
+        <List.Header as={'h4'} content={experiment && experiment.name} />
         <List.Description
-          content={experiment && "Desc: " + experiment.description}
+          content={experiment && "Description: " + experiment.description}
         />
       </List.Content>
     </List.Item>
