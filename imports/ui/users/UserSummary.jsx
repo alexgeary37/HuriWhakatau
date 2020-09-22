@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {Button, List, ModalActions, Segment} from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
-export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, groupLeader, discussionStatus}) => {
+export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, groupLeader, discussionStatus, closeChat}) => {
     // based on dicussionsummary, update to take an actual user object and
     // display info. in the mean time it just takes a username and shows that
     // const [isIndigenous, setIsIndigenous] = useState(participantRole);
@@ -24,6 +24,11 @@ export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, gr
         handleUserVoted();
     }
 
+    const handleCloseChat = () =>{
+        //add an "are you sure" modal before changing discussion status.
+        closeChat();
+    }
+
   return (
     <List.Item>
       <List.Content
@@ -33,11 +38,25 @@ export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, gr
         as={Segment}
       >
           {member.username}
-          {Meteor.userId() !== member._id && !groupLeader && (discussionStatus = "active") && <ModalActions>
+          {(Meteor.userId() !== groupLeader) && (member._id === groupLeader) && <div>Group Leader</div>}
+          <ModalActions>
+          {Meteor.userId() !== member._id && !groupLeader && (discussionStatus = "active") &&
               <Button disabled={userHasVoted} positive value={member._id} content={"vote"} onClick={({target}) => {
                   submitLeaderVote(target.value)
-              }}/></ModalActions>
+              }}/>
           }
+          {groupLeader === Meteor.userId() &&
+              groupLeader === member._id &&
+          discussionStatus === "active" &&
+          <div style={{textAlign: "center"}}>
+              <Button
+                  style={{margin: 10}}
+                  content="Close chat"
+                  onClick={handleCloseChat}
+                  primary
+              />
+          </div>
+          }</ModalActions>
         {/*<List.Header content={scenario && scenario.title} />*/}
         {/*<List.Description content={scenario && scenario.description} />*/}
       </List.Content>
