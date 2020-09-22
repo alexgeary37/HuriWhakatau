@@ -323,17 +323,17 @@ export const HuiChat = () => {
                                     </div>
                                 ))}
                                 {/* isf user is the group leader show this button */}
-                                {groupLeader === Meteor.userId() &&
-                                discussionStatus === "active" &&
-                                <div style={{textAlign: "center"}}>
-                                    <Button
-                                        style={{margin: 10}}
-                                        content="Close chat"
-                                        onClick={closeChat}
-                                        primary
-                                    />
-                                </div>
-                                }
+                                {/*{groupLeader === Meteor.userId() &&*/}
+                                {/*discussionStatus === "active" &&*/}
+                                {/*<div style={{textAlign: "center"}}>*/}
+                                {/*    <Button*/}
+                                {/*        style={{margin: 10}}*/}
+                                {/*        content="Close chat"*/}
+                                {/*        onClick={closeChat}*/}
+                                {/*        primary*/}
+                                {/*    />*/}
+                                {/*</div>*/}
+                                {/*}*/}
                                 {/* tried to put this break in the above conditional but it didn't work, to refactor */}
                                 <Segment style={{position: "absolute", bottom: "0px"}}>
                                     <Header content="Participants"/>
@@ -345,6 +345,7 @@ export const HuiChat = () => {
                                                          groupId={group._id}
                                                          groupLeader={groupLeader}
                                                          discussionStatus={discussionStatus}
+                                                         closeChat={closeChat}
                                             />
                                         </List.Item>
                                     ))}
