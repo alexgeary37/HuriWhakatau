@@ -42,12 +42,16 @@ export const MyDashboard = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
+    const [isOpenWizard, setIsOpenWizard] = useState(false);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
     const [isOpenScenarioCreation, setIsOpenScenarioCreation] = useState(false);
     const [isOpenScenarioSetCreation, setIsOpenScenarioSetCreation] = useState(false);
     const [isOpenExperimentCreation, setIsOpenExperimentCreation] = useState(false);
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
+    const handleToggleWizard = () => {
+        setIsOpenWizard(!isOpenWizard);
+    }
     //is there a more abstracted way to handle all these modal open/closes?
     const handleToggleTemplate = () => {
         setIsOpenTemplateCreation(!isOpenTemplateCreation);
@@ -157,15 +161,16 @@ export const MyDashboard = () => {
                 <Segment attached="top" clearing>
                     <Header size="huge">
                         <Header.Content as={Container} fluid>
-                            <Button
-                                floated="right"
-                                circular
-                                color="blue"
-                                size="large"
-                                icon="help"
-                                onClick={() => setShowInfo(!showInfo)}
-                            />
                             My Dashboard {isAdmin && <span>- Admin</span>}
+                            {isAdmin &&
+                        <Button
+                            floated="right"
+                            onClick={() => {handleToggleWizard();
+                                            handleToggleGroup();
+                                            }}
+                            content="Open Experiment Wizard"
+                            color="green"
+                        />}
                         </Header.Content>
                     </Header>
                 </Segment>
@@ -225,8 +230,6 @@ export const MyDashboard = () => {
                                     <Button
                                         onClick={handleToggleGroup}
                                         content="Create New Group"
-                                        // as={Link}
-                                        // to="/groups/create"
                                         color="green"
                                     />}
                                 </Card.Content>
@@ -344,23 +347,40 @@ export const MyDashboard = () => {
                 </Grid>
                 {/*    Modals    */}
                 {isOpenGroupCreation &&
-                <CreateGroup toggleModal={handleToggleGroup}/>}
-                {isOpenTemplateCreation &&
-                <CreateDiscussionTemplate
-                    toggleModal={handleToggleTemplate}/>
-                }
+                <CreateGroup toggleModal={handleToggleGroup}
+                             isWizard={isOpenWizard}
+                             toggleNextModal={handleToggleScenario}
+                             toggleIsWizard={handleToggleWizard}/>}
+
                 {isOpenScenarioCreation &&
                 <CreateScenario
-                    toggleModal={handleToggleScenario}/>
+                    toggleModal={handleToggleScenario}
+                    isWizard={isOpenWizard}
+                    toggleNextModal={handleToggleScenarioSet}
+                    toggleIsWizard={handleToggleWizard}/>
                 }
                 {isOpenScenarioSetCreation &&
                 <CreateScenarioSet
-                    toggleModal={handleToggleScenarioSet}/>
+                    toggleModal={handleToggleScenarioSet}
+                    isWizard={isOpenWizard}
+                    toggleNextModal={handleToggleExperimentCreation}
+                    toggleIsWizard={handleToggleWizard}/>
+                }
+                {isOpenTemplateCreation &&
+                <CreateDiscussionTemplate
+                    toggleModal={handleToggleTemplate}
+                    isWizard={isOpenWizard}
+                    toggleNextModal={handleToggleExperimentCreation}
+                    toggleIsWizard={handleToggleWizard}/>
                 }
                 {isOpenExperimentCreation &&
                 <CreateExperiment
-                    toggleModal={handleToggleExperimentCreation}/>
+                    toggleModal={handleToggleExperimentCreation}
+                    isWizard={isOpenWizard}
+                    // toggleNextModal={handleToggleScenarioSet}
+                    toggleIsWizard={handleToggleWizard}/>
                 }
+                {/* Item display modals */}
                 {isOpenTemplateDisplay &&
                 <DisplayDiscussionTemplate
                     toggleModal={handleToggleTemplateDisplay}

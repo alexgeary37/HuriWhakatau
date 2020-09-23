@@ -4,7 +4,7 @@ import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "s
 import {Scenarios} from "/imports/api/scenarios";
 // import { NavBar } from "/imports/ui/navigation/NavBar";
 
-export const CreateScenarioSet = ({toggleModal}) => {
+export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [scenarioSet, setScenarios] = useState([]);
@@ -13,7 +13,7 @@ export const CreateScenarioSet = ({toggleModal}) => {
     const [errDescription, setErrDescription] = useState("");
     const [errScenarioSet, setErrScenarioSet] = useState("");
 
-    const submitScenarioSet = () => {
+    const submitScenarioSet = (e) => {
         if (title.length === 0) {
             setErrTitle("Scenarios must have a title")
         } else {
@@ -37,13 +37,20 @@ export const CreateScenarioSet = ({toggleModal}) => {
                 description,
                 scenarioSet
             );
-            toggleIt();
+            toggleIt(e);
         }
     }
 
-    const toggleIt = () => {
+    const toggleIt = (e) => {
         setIsOpen(false);
         toggleModal();
+        if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
+            console.log(e.currentTarget.innerHTML);
+            toggleNextModal();
+        }
+        if(isWizard && e.currentTarget.innerHTML === "Cancel"){
+            toggleIsWizard();
+        }
     }
 
     const {scenarios} = useTracker(() => {
@@ -91,6 +98,7 @@ export const CreateScenarioSet = ({toggleModal}) => {
                         label="Scenarios"
                         loading={scenarios && scenarios.length === 0}
                         selection
+                        search
                         multiple
                         placeholder="Select scenarios for this set..."
                         options={
@@ -113,14 +121,19 @@ export const CreateScenarioSet = ({toggleModal}) => {
                     )}
                     <Button
                         content="Save"
-                        onClick={() => {
-                            submitScenarioSet();
+                        onClick={(e) => {
+                            submitScenarioSet(e);
                         }}
                         positive
                     />
-                    <Button color='black' onClick={toggleIt}>
+                    <Button color='black' onClick={(e) =>{toggleIt(e)}}>
                         Cancel
                     </Button>
+                    {isWizard && <Button
+                        content={"Save & Create Experiment"}
+                        onClick={(e) => {
+                            submitScenarioSet(e)}}
+                        positive />}
                 </Form>
             </Modal.Content>
         </Modal>
