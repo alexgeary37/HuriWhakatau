@@ -5,7 +5,7 @@ import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {Groups} from "/imports/api/groups";
 
-export const CreateExperiment = ({toggleModal}) => {
+export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [groupId, setGroupId] = useState("");
@@ -16,7 +16,7 @@ export const CreateExperiment = ({toggleModal}) => {
     const [errGroupId, setErrGroupId] = useState("");
     const [errScenarioSetId, setErrScenarioSetId] = useState("");
 
-    const submitExperiment = () => {
+    const submitExperiment = (e) => {
         if (name.length === 0) {
             setErrName("Experiments must have a name");
         } else {
@@ -45,13 +45,16 @@ export const CreateExperiment = ({toggleModal}) => {
                 groupId,
                 scenarioSetId
             );
-            toggleIt();
+            toggleIt(e);
         }
     }
 
-    const toggleIt = () => {
+    const toggleIt = (e) => {
         setIsOpen(false);
         toggleModal();
+        if(isWizard && e.currentTarget.innerHTML === "Cancel"){
+            toggleIsWizard();
+        }
     }
 
     const {groups, scenarioSets} = useTracker(() => {
@@ -103,6 +106,7 @@ export const CreateExperiment = ({toggleModal}) => {
                         label="Group"
                         loading={groups.length === 0}
                         selection
+                        search
                         options={
                             groups &&
                             groups.map((group) => ({
@@ -124,6 +128,7 @@ export const CreateExperiment = ({toggleModal}) => {
                         label="Scenario Set"
                         loading={scenarioSets.length === 0}
                         selection
+                        search
                         options={
                             scenarioSets &&
                             scenarioSets.map((scenarioSet) => ({
@@ -142,13 +147,13 @@ export const CreateExperiment = ({toggleModal}) => {
                         <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
                     )}
                     <Button
-                        content="Save"
-                        onClick={() => {
-                            submitExperiment();
+                        content="Save & Close"
+                        onClick={(e) => {
+                            submitExperiment(e);
                         }}
                         positive
                     />
-                    <Button color='black' onClick={toggleIt}>
+                    <Button color='black' onClick={(e) => {toggleIt(e)}}>
                         Cancel
                     </Button>
                 </Form>

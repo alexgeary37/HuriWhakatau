@@ -5,10 +5,10 @@ import {useTracker} from "meteor/react-meteor-data";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {Topics} from "/imports/api/topics";
 
-export const CreateScenario = ({toggleModal}) => {
+export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [topicId, setTopicId] = useState("");
+    const [topicId, setTopicId] = useState("wyXdeAoBGGKXPaEh5");
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
     const [errScenarioTitle, setErrScenarioTitle] = useState("");
@@ -16,7 +16,7 @@ export const CreateScenario = ({toggleModal}) => {
     const [errTopic, setErrTopic] = useState("");
     const [errDiscussionTemplateId, setErrDiscussionTemplateId] = useState("");
 
-    const submitScenario = () => {
+    const submitScenario = (e) => {
         if (title.length === 0) {
             setErrScenarioTitle("Scenarios must have a title")
         } else {
@@ -47,14 +47,20 @@ export const CreateScenario = ({toggleModal}) => {
                 topicId,
                 discussionTemplateId
             );
-            toggleIt()
-            console.log("stuff that is submitted for scenario","title:", title, "desc:", description, "topic:", topicId, "discuss:", discussionTemplateId);
+            toggleIt(e)
         }
     }
 
-    const toggleIt = () => {
+    const toggleIt = (e) => {
         setIsOpen(false);
         toggleModal();
+        if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
+            console.log(e.currentTarget.innerHTML);
+            toggleNextModal();
+        }
+        if(isWizard && e.currentTarget.innerHTML === "Cancel"){
+            toggleIsWizard();
+        }
     }
 
     const {topics, discussionTemplates} = useTracker(() => {
@@ -106,12 +112,13 @@ export const CreateScenario = ({toggleModal}) => {
                         label="Topic"
                         loading={topics.length === 0}
                         selection
+                        search
                         options={
                             topics &&
                             topics.map((topic) => ({
                                 key: topic._id,
                                 text: topic.title,
-                                description: topic.description,
+                                // description: topic.description,
                                 value: topic._id,
                             }))
                         }
@@ -128,6 +135,7 @@ export const CreateScenario = ({toggleModal}) => {
                         label="Discussion Template"
                         loading={discussionTemplates.length === 0}
                         selection
+                        search
                         options={
                             discussionTemplates &&
                             discussionTemplates.map((discussionTemplate) => ({
@@ -146,16 +154,20 @@ export const CreateScenario = ({toggleModal}) => {
                         <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
                     )}
                     <Button
-                        content="Save"
-                        onClick={() => {
-                            submitScenario();
-                            // history.back();
+                        content="Save & Close"
+                        onClick={(e) => {
+                            submitScenario(e);
                         }}
                         positive
                     />
-                    <Button color='black' onClick={toggleIt}>
+                    <Button color='black' onClick={(e) => toggleIt(e)}>
                         Cancel
                     </Button>
+                    {isWizard && <Button
+                        content={"Save & Create Scenario Set"}
+                        onClick={(e) => {
+                            submitScenario(e)}}
+                        positive />}
                 </Form>
             </Modal.Content>
         </Modal>
