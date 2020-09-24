@@ -226,11 +226,11 @@ export const Discussion = () => {
     Meteor.call("discussions.addProposer", discussionId);
 
   return (
-    <div>
+    <Container>
       <NavBar />
       {/*hacky way to move content out from under menu*/}
-      {/*<br/><br/>*/}
-      <Container attached="bottom" style={{position: "fixed", width:"110vh"}}>
+      <br/><br/><br/>
+      <Container attached="bottom" style={{width:"110vh"}}>
         <Grid columns={3} celled divided>
           <Grid.Row>
             <GridColumn width={3} style={{height:"80vh"}}>
@@ -310,6 +310,6 @@ export const Discussion = () => {
           </Grid.Row>
         </Grid>
       </Container>
-    </div>
+    </Container>
   );
 };

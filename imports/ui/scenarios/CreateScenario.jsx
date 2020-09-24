@@ -40,6 +40,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         console.log("stuff that is submitted for scenario","title:", title, "desc:", description, "topic:", topicId, "discuss:", discussionTemplateId);
 
         if (title.length > 0 && description.length > 0 && topicId.length > 0 && discussionTemplateId.length > 0) {
+            console.log("creating scenario");
             Meteor.call(
                 "scenarios.create",
                 title,
@@ -47,11 +48,13 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                 topicId,
                 discussionTemplateId
             );
-            toggleIt(e)
+            console.log("about to toggle");
+            toggleIt(e);
         }
     }
 
     const toggleIt = (e) => {
+        console.log("toggling");
         setIsOpen(false);
         toggleModal();
         if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
@@ -164,6 +167,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         Cancel
                     </Button>
                     {isWizard && <Button
+                        floated="right"
                         content={"Save & Create Scenario Set"}
                         onClick={(e) => {
                             submitScenario(e)}}

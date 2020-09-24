@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Container, Segment, Form, Modal, Button} from "semantic-ui-react";
+import {Container, Segment, Form, Modal, Button, Checkbox} from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
@@ -11,6 +11,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [groupId, setGroupId] = useState("");
     const [scenarioSetId, setScenarioSetId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
+    const [hasIntroduction, setHasIntroduction] = useState(false);
     const [errName, setErrName] = useState("");
     const [errDescription, setErrDescription] = useState("");
     const [errGroupId, setErrGroupId] = useState("");
@@ -43,7 +44,8 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                 name,
                 description,
                 groupId,
-                scenarioSetId
+                scenarioSetId,
+                hasIntroduction,
             );
             toggleIt(e);
         }
@@ -146,6 +148,8 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                     ) : (
                         <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
                     )}
+                    <Checkbox checked={hasIntroduction} label='Create an Introduction Lounge' onClick={(e, data) => setHasIntroduction(data.checked)}/>
+                    <br/>
                     <Button
                         content="Save & Close"
                         onClick={(e) => {

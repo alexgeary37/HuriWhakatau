@@ -130,6 +130,7 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                         Cancel
                     </Button>
                     {isWizard && <Button
+                        floated="right"
                         content={"Save & Create Experiment"}
                         onClick={(e) => {
                             submitScenarioSet(e)}}

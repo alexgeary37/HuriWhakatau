@@ -3,6 +3,7 @@ body {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif, "Font Awesome 5 Free";
   font-size: 14px;
   height: 100vh;
+  overflow: hidden;
 }
 
 /*********************************************************

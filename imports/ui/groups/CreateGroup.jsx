@@ -106,6 +106,7 @@ console.log("wizard? ", isWizard);
                     <Button content={"Cancel"} color='black' onClick={(e) => {
                         toggleIt(e)}}/>
                     {isWizard && <Button
+                        floated="right"
                         content={"Save & Create Scenario"}
                         onClick={(e) => {
                             submitGroup(e)}}
