@@ -41,6 +41,7 @@ export const Dashboard = () => {
   return (
     <div>
       <NavBar />
+      <br/>
       <Container>
         <Segment attached="top" clearing>
           <Header size="huge">
@@ -100,7 +101,7 @@ export const Dashboard = () => {
         <Segment attached="bottom">
           <Header content="Kōrerorero" />
           <Segment attached="top" clearing>
-            <List relaxed size="huge">
+            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
               {discussions &&
                 discussions.map((discussion) => (
                   <DiscussionSummary

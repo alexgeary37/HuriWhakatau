@@ -157,6 +157,7 @@ export const MyDashboard = () => {
     return (
         <div>
             <NavBar/>
+            <br/>
             <Container>
                 <Segment attached="top" clearing>
                     <Header size="huge">
@@ -175,7 +176,7 @@ export const MyDashboard = () => {
                     </Header>
                 </Segment>
 
-                <Grid>
+                <Grid style={{overflow: "auto", height: "87vh"}}>
                     <GridRow columns={2}>
                         <GridColumn width={8}>
                             <Segment style={{height: "35vh"}}>

@@ -240,12 +240,12 @@ export const HuiChat = () => {
         Meteor.call("discussions.addProposer", discussionId);
 
     return (
-        <div style={{width: "110vh"}}>
+        <Container style={{width: "110vh"}}>
             <NavBar/>
             {/*hacky way to move content out from under menu*/}
-            {/*<br/><br/>*/}
-            <Container style={{position: "fixed", width: "110vh"}}>
-                <Grid columns={2} style={{position: "fixed", width: "110vh"}}>
+            <br/><br/>
+            <Container style={{width: "110vh"}}>
+                <Grid columns={2} style={{width: "110vh"}}>
                     {/*<Grid.Row> //need to specify a row?*/}
                     {/*  <GridColumn width={3}>*/}
                     {/*    <Header*/}
@@ -356,6 +356,6 @@ export const HuiChat = () => {
                     {/*</Grid.Row>*/}
                 </Grid>
             </Container>
-        </div>
+        </Container>
     );
 };

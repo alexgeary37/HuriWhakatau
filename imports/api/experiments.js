@@ -11,7 +11,7 @@ Meteor.methods({
   // Insert a category into the category collection in the db.
   // name: the category name
   // Called from *****
-  "experiments.create"(name, description, groupId, scenarioSetId) {
+  "experiments.create"(name, description, groupId, scenarioSetId, hasIntroduction) {
     check(name, String);
     //addcheck for user admin/researcher role
 
@@ -37,7 +37,20 @@ Meteor.methods({
         "discussions.insert",
         scenarios[i]._id,
         groupId,
-        discussionTemplate.timeLimit
+        discussionTemplate.timeLimit,
+      );
+
+    };
+    if(hasIntroduction){
+      console.log("creating introduction");
+      // let discussionTemplate = DiscussionTemplates.findOne({
+      //   _id: scenarios[i].discussionTemplateId,
+      // });
+      Meteor.call(
+          "discussions.insertIntroduction",
+          "wWtYSX9zP7b5yeNo7",
+          groupId,
+          0,
       );
     }
   },

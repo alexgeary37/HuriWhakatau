@@ -24,6 +24,32 @@ Meteor.methods({
       status: "active",
       timeLimit: timeLimit,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
+      isIntroduction: false,
+    });
+  },
+
+  // Insert an introduction type  discussion into the discussions collection in the db.
+  // Called from experiments.js
+  "discussions.insertIntroduction"(scenarioId, groupId, timeLimit) {
+    check(scenarioId, String);
+    check(groupId, String);
+    check(timeLimit, Number);
+
+    if (!this.userId) {
+      throw new Meteor.Error("Not authorized.");
+    }
+
+    Discussions.insert({
+      scenarioId: scenarioId,
+      groupId: groupId,
+      createdAt: new Date(),
+      createdBy: this.userId,
+      activeVerdictProposers: [], // Contains the users currently proposing a verdict.
+      verdicts: [], // List of verdict._ids in this discussion.
+      status: "active",
+      timeLimit: timeLimit,
+      deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
+      isIntroduction: true,
     });
   },
 
@@ -91,6 +117,7 @@ if (Meteor.isServer) {
           status: 1,
           maxCommentLength: 1,
           deadline: 1,
+          isIntroduction: 1,
         },
       }
     );
@@ -110,6 +137,7 @@ if (Meteor.isServer) {
           status: 1,
           maxCommentLength: 1,
           deadline: 1,
+          isIntroduction: 1,
         },
       }
     );
