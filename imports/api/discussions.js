@@ -14,7 +14,7 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    Discussions.insert({
+    const discussionId = Discussions.insert({
       scenarioId: scenarioId,
       groupId: groupId,
       createdAt: new Date(),
@@ -26,6 +26,7 @@ Meteor.methods({
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: false,
     });
+    return discussionId;
   },
 
   // Insert an introduction type  discussion into the discussions collection in the db.
@@ -35,11 +36,12 @@ Meteor.methods({
     check(groupId, String);
     check(timeLimit, Number);
 
+
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    Discussions.insert({
+    const discussionId = Discussions.insert({
       scenarioId: scenarioId,
       groupId: groupId,
       createdAt: new Date(),
@@ -51,6 +53,7 @@ Meteor.methods({
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: true,
     });
+    return discussionId;
   },
 
   "discussions.updateDeadline"(discussionId, deadline) {
@@ -118,6 +121,7 @@ if (Meteor.isServer) {
           maxCommentLength: 1,
           deadline: 1,
           isIntroduction: 1,
+          nextDiscussion: 1,
         },
       }
     );
@@ -138,6 +142,7 @@ if (Meteor.isServer) {
           maxCommentLength: 1,
           deadline: 1,
           isIntroduction: 1,
+          nextDiscussion: 1,
         },
       }
     );
