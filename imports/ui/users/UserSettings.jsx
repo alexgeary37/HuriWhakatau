@@ -12,7 +12,7 @@ import {
     Icon,
     Form,
     Grid,
-    GridColumn, GridRow, CardHeader, CardContent
+    GridColumn, CardContent
 } from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 
@@ -25,13 +25,14 @@ export const UserSettings = () => {
     const [userMountain, setUserMountain] = useState("");
     const [userPepeha, setUserPepeha] = useState([]);
     const [userRiver, setUserRiver] = useState("");
-    const handleUsername = () => { // need to work out how to set this when user info is loaded rather than hard coded as below
-        setUsername(user.username);
-    };const [username, setUsername] = useState("OpenlyOctopus"); // todo, fix getting the username.
+    const [userRole, setUserRole] = useState("");
+    const [username, setUsername] = useState("OpenlyOctopus"); // todo, fix getting the username.
+    const [name, setName] = useState("");
     const [userWaka, setUserWaka] = useState("");
     const [userIwi, setUserIwi] = useState("");
     const [err, setErr] = useState("");
-
+    const handleUsername = () => { // need to work out how to set this when user info is loaded rather than hard coded as below
+        setUsername(user.username);};
     //reference boolean to for the useEffect callback sending the changed pepeha list to the db
     const settingPepehaRef = useRef(false);
     //ensure the pepeha state variable is finished updating before sending to db.
@@ -97,6 +98,18 @@ export const UserSettings = () => {
                                     {/*    change username stuff   */}
                                     <Input labelPosition="left"
                                            type="text"
+                                           value={user && name}
+                                           readOnly={"true"}
+                                           size="mini"
+                                           style={{width: "45%"}}
+                                           onInput={({target}) => setName(target.value)}>
+                                        <Label>Name</Label>
+                                        <input/>
+                                    </Input>
+                                    <br/>
+                                    <br/>
+                                    <Input labelPosition="left"
+                                           type="text"
                                            value={user && username}
                                            readOnly={!changeUsername}
                                            size="mini"
@@ -113,8 +126,7 @@ export const UserSettings = () => {
                                                 setChangeUsername(false);
                                                 updateUsername();
                                             }}/>
-                                        )
-                                        }
+                                        )}
                                     </Input>
                                     <br/>
                                     <br/>
@@ -180,9 +192,6 @@ export const UserSettings = () => {
                             </CardContent>
                         </Card>
                     </GridColumn>
-                    {/*<GridColumn width={5}>*/}
-
-                    {/*</GridColumn>*/}
                     <GridColumn width={7}>
                         {isIndigenous &&
                         <Card>
@@ -251,6 +260,23 @@ export const UserSettings = () => {
                                         <input/>
                                         <Button icon style={{marginLeft: "20px"}}>
                                             <Icon className="iwi"/>
+                                        </Button>
+                                    </Input>
+                                    <br/>
+                                    <br/>
+                                    <Input value={userRole}
+                                           labelPosition="left"
+                                           type="text"
+                                           size="mini"
+                                           style={{width: "45%"}}
+                                           onInput={({target}) => setUserRole(target.value)}
+                                           onChange={({target}) => {settingPepehaRef.current = true;
+                                               setUserPepeha([...userPepeha, target.value])}}
+                                    >
+                                        <Label style={{width: "55%"}}>Employment/Role</Label>
+                                        <input/>
+                                        <Button icon style={{marginLeft: "20px"}}>
+                                            <Icon className="role"/>
                                         </Button>
                                     </Input>
                                 </Form>
