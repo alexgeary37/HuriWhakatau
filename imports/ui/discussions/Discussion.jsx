@@ -1,37 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Sidebar,
   Container,
-  Segment,
   Header,
   Button,
-  Visibility,
   Comment,
   Modal,
-  Input,
-  Label,
   Grid,
   GridColumn,
   List,
-  Menu,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link, useParams } from "react-router-dom";
-import { Discussions } from "/imports/api/discussions";
-import { Comments } from "/imports/api/comments";
-import { Verdicts } from "/imports/api/verdicts";
-import { NavBar } from "/imports/ui/navigation/NavBar";
-import { UserComment } from "/imports/ui/comments/UserComment";
-import { Timer } from "./Timer";
-import { CommentForm } from "/imports/ui/comments/CommentForm";
-import { Verdict } from "/imports/ui/verdicts/Verdict";
-import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
-import { Scenarios } from "/imports/api/scenarios";
 import { Groups } from "/imports/api/groups";
 import { Topics } from "/imports/api/topics";
+import { Verdicts } from "/imports/api/verdicts";
+import { Comments } from "/imports/api/comments";
+import { Scenarios } from "/imports/api/scenarios";
+import { Discussions } from "/imports/api/discussions";
 import { DiscussionTemplates } from "/imports/api/discussionTemplate";
+import { Timer } from "./Timer";
+import { NavBar } from "/imports/ui/navigation/NavBar";
+import { Verdict } from "/imports/ui/verdicts/Verdict";
+import { UserComment } from "/imports/ui/comments/UserComment";
+import { CommentForm } from "/imports/ui/comments/CommentForm";
+import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 
 export const Discussion = () => {
     console.log("Entered discussion");
@@ -184,24 +178,6 @@ export const Discussion = () => {
   };
 
   useEffect(scrollToBottom, [comments]);
-  // Initializing firstRender as true, attempting to set scroll to bottom of comments
-  // to only run once, and thereafter is in the control of the user.
-  const [firstRender, setFirstRender] = useState(true);
-  const [renderCount, setRenderCount] = useState(0);
-
-//set reference for end of discussion and scroll to that point on page load
-//   const commentsEndRef = useRef(null);
-//   const scrollToBottom = () => {
-//     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-//   };
-//   setRenderCount(renderCount + 1);
-//   useEffect(() => {
-//
-//     if(firstRender && renderCount > 11){
-//       setFirstRender(false);
-//       scrollToBottom();
-//     }
-//   }, [comments]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -248,8 +224,6 @@ export const Discussion = () => {
                     <UserComment
                       key={comment._id}
                       comment={comment}
-                      // onEditClick={editComment}
-                      // onSubmitEditClick={updateComment}
                       discussionStatus={discussionStatus}
                       userCanEdit={
                         discussionTemplate

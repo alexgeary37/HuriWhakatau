@@ -13,7 +13,6 @@ import {
 import { Discussions } from "/imports/api/discussions";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
-import { LoginForm } from "/imports/ui/users/LoginForm";
 
 export const Dashboard = () => {
   const [showInfo, setShowInfo] = useState(true);
@@ -29,14 +28,6 @@ export const Dashboard = () => {
       ).fetch(),
     };
   });
-
-  // if (!user) {
-  //   return (
-  //     <div className="dashboard-login">
-  //       <LoginForm />
-  //     </div>
-  //   );
-  // }
 
   return (
     <div>

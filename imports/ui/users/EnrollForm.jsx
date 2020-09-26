@@ -8,7 +8,6 @@ import {Accounts} from "meteor/accounts-base";
 export const EnrollForm = () => {
     const {token} = useParams();
     console.log(token);
-    // const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
     let history = useHistory();

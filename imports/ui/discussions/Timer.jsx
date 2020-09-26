@@ -1,5 +1,5 @@
 import React from "react";
-import {List, Segment, Button, Icon, Label} from "semantic-ui-react";
+import {Button, Label} from "semantic-ui-react";
 
 export const Timer = ({time}) => {
     return (

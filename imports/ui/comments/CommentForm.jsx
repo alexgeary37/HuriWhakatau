@@ -27,8 +27,6 @@ export const CommentForm = ({ discussionId }) => {
     INLINE_STYLE_BUTTONS: [
       { label: "Bold", style: "BOLD", className: "custom-css-class" },
       { label: "Italic", style: "ITALIC" },
-      // {label: 'Underline', style: 'UNDERLINE'}, underline is not going through markdown/markup properly.
-      // possibly an issue with one of those packages
       { label: "Strikethrough", style: "STRIKETHROUGH" },
       { label: "Blockquote", style: "blockquote" },
     ],
@@ -42,15 +40,15 @@ export const CommentForm = ({ discussionId }) => {
   return (
     <Form>
       <RichTextEditor
-        value={editorValue}
-        onChange={handleChange}
-        toolbarConfig={toolbarConfig}
-        type="string"
-        style={{ minHeight: 100 }}
-        autoFocus
-        multiline
-        required
-      ></RichTextEditor>
+    value={editorValue}
+    onChange={handleChange}
+    toolbarConfig={toolbarConfig}
+    type="string"
+    style={{minHeight: 100}}
+    autoFocus
+    multiline
+    required
+    />
       <button color="green" onClick={handleSubmit}>
         Add Comment
       </button>

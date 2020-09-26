@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 
 export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
     // console.log(isCreationOpen.isCreationOpen);
@@ -14,17 +13,6 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
     const timeLimit = template.timeLimit;
     const charLimit = template.commentCharacterLimit;
     const [isOpen, setIsOpen] = useState(true);
-
-    // const submitTemplate = () => {
-    //     if (templateName.length === 0) {
-    //         setErrName("Templates must have a name");
-    //     } else {
-    //         setTemplateName("");
-    //         Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
-    //             isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
-    //         toggleIt();
-    //     }
-    // }
 
     const toggleIt = () => {
         setIsOpen(false);
@@ -50,11 +38,6 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                     // onInput={({target}) => setTemplateName(target.value)}
                     autoFocus
                 />
-                {/*{errName ? (*/}
-                {/*    <div style={{height: "10px", color: "red", marginBottom:"10px"}}>{errName}</div>*/}
-                {/*) : (*/}
-                {/*    <div style={{height: "10px", marginBottom:"10px"}}/>*/}
-                {/*)}*/}
                 <br/>
                 <br/>
                 <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous'

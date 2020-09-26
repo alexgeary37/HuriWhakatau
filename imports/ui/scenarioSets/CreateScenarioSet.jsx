@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {Scenarios} from "/imports/api/scenarios";
-// import { NavBar } from "/imports/ui/navigation/NavBar";
 
 export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");

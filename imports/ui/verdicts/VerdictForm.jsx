@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Input, Label, Form, TextArea } from "semantic-ui-react";
+import { Modal, Button, Form } from "semantic-ui-react";
 
 export const VerdictForm = ({ discussionId }) => {
   const [verdict, setText] = useState("");

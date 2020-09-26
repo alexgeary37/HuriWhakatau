@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import {
   Container,
   Segment,
-  Header,
-  Grid,
   List,
   Button,
 } from "semantic-ui-react";

@@ -1,17 +1,17 @@
+import "/imports/api/topics";
 import "/imports/api/groups";
 import "/imports/api/scenarios";
-import "/imports/api/scenarioSets";
-import "/imports/api/discussions";
-import "/imports/api/topics";
 import "/imports/api/categories";
+import "/imports/api/discussions";
+import "/imports/api/scenarioSets";
 import "/imports/api/discussionTemplate";
 import {Roles} from "meteor/alanning:roles";
+import {Meteor} from "meteor/meteor";
 import {Groups} from "/imports/api/groups";
 import {Scenarios} from "/imports/api/scenarios";
-import {ScenarioSets} from "/imports/api/scenarioSets";
 import {Categories} from "../imports/api/categories";
+import {ScenarioSets} from "/imports/api/scenarioSets";
 import {DiscussionTemplates} from "../imports/api/discussionTemplate"
-import {Meteor} from "meteor/meteor";
 
 // set up checks that each item doesn’t exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {

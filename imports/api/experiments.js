@@ -1,6 +1,5 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
-import { Groups } from "./groups";
 import { ScenarioSets } from "./scenarioSets";
 import { Scenarios } from "./scenarios";
 import { DiscussionTemplates } from "./discussionTemplate";
@@ -30,9 +29,6 @@ Meteor.methods({
     //create intro discussion if needed
     if (hasIntroduction) {
       console.log("creating introduction");
-      // let discussionTemplate = DiscussionTemplates.findOne({
-      //   _id: scenarios[i].discussionTemplateId,
-      // });
       const introId = Meteor.call(
           "discussions.insertIntroduction",
           "wWtYSX9zP7b5yeNo7",

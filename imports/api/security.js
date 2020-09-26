@@ -44,7 +44,6 @@ Meteor.methods({
         } else {
             // start of taking a list of only emails and generating
             // usernames and accounts, then sending invite emails
-            //let emails = email.split(/\s*(?:;|$)\s*/)
             let finalUserName = '';
             if(userAnon || (!userAnon && userName === "")) {
                 // add in a check for using maori names and sub in the Maorinames list
@@ -60,7 +59,6 @@ Meteor.methods({
 
             const userId = Accounts.createUser({
                 username: finalUserName,
-                // password: password,
                 email:email,
             });
             Accounts.sendEnrollmentEmail(userId);

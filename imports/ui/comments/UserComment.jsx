@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import classnames from "classnames";
+import {Picker, Emoji} from "emoji-mart";
 import {Button, Comment} from "semantic-ui-react";
 import ReactMarkdown from "react-markdown";
-import "emoji-mart/css/emoji-mart.css";
-import {Picker, Emoji} from "emoji-mart";
-import NotificationBadge, {Effect} from "react-notification-badge";
 import RichTextEditor from "react-rte";
+import "emoji-mart/css/emoji-mart.css";
+import NotificationBadge from "react-notification-badge";
 
 export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
     const [isEditing, setIsEditing] = useState(false);

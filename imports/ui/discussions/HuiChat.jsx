@@ -240,7 +240,6 @@ export const HuiChat = () => {
     };
 
     const closeChat = () => {
-        // console.log("push to: ");
         //this doesn't work.need to fix pushing to next discussion
         history.push("/huichat/" & nextDiscussion);
         // history.push("/huichat/" & nextDiscussion);
@@ -257,16 +256,6 @@ export const HuiChat = () => {
             <br/><br/><br/>
             <Container style={{width: "110vh"}}>
                 <Grid columns={2} style={{width: "110vh"}}>
-                    {/*<Grid.Row> //need to specify a row?*/}
-                    {/*  <GridColumn width={3}>*/}
-                    {/*    <Header*/}
-                    {/*      content={(scenario && scenario.title) || (topic && topic.title)}*/}
-                    {/*      size="medium"*/}
-                    {/*    />*/}
-                    {/*    {(scenario && scenario.description) ||*/}
-                    {/*      (topic && topic.description)}*/}
-                    {/*    {timedDiscussion && <Timer time={timeLeft} />}*/}
-                    {/*  </GridColumn>*/}
                     <GridColumn width={10} attached="left">
                         <Comment.Group style={{overflow: "auto", height: "75vh"}}>
                             {comments &&
@@ -274,8 +263,6 @@ export const HuiChat = () => {
                                 <UserComment
                                     key={comment._id}
                                     comment={comment}
-                                    // onEditClick={editComment}
-                                    // onSubmitEditClick={updateComment}
                                     discussionStatus={discussionStatus}
                                     userCanEdit={
                                         discussionTemplate
@@ -333,19 +320,6 @@ export const HuiChat = () => {
                                         />
                                     </div>
                                 ))}
-                                {/* isf user is the group leader show this button */}
-                                {/*{groupLeader === Meteor.userId() &&*/}
-                                {/*discussionStatus === "active" &&*/}
-                                {/*<div style={{textAlign: "center"}}>*/}
-                                {/*    <Button*/}
-                                {/*        style={{margin: 10}}*/}
-                                {/*        content="Close chat"*/}
-                                {/*        onClick={closeChat}*/}
-                                {/*        primary*/}
-                                {/*    />*/}
-                                {/*</div>*/}
-                                {/*}*/}
-                                {/* tried to put this break in the above conditional but it didn't work, to refactor */}
                                 <Segment style={{position: "absolute", bottom: "0px"}}>
                                     <Header content="Participants"/>
                                     {!isDiscussion && groupMembers.map((member) => (

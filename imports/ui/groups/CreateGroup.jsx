@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
-// import { NavBar } from "/imports/ui/navigation/NavBar";
 
 export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [members, setMembers] = useState([]);

@@ -58,7 +58,6 @@ Meteor.methods({
 
   "discussions.updateDeadline"(discussionId, deadline) {
     check(discussionId, String);
-    // check(deadline, Date);
 
     Discussions.update(discussionId, {
       $set: { deadline: deadline },
@@ -67,7 +66,6 @@ Meteor.methods({
 
   "discussions.updateStatus"(discussionId, status) {
     check(discussionId, String);
-    // check(deadline, Date);
 
     Discussions.update(discussionId, {
       $set: { status: status },

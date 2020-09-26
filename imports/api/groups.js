@@ -27,13 +27,6 @@ Meteor.methods({
             createdAt: new Date(),
             createdBy: this.userId,
         });
-
-    //     const set = ScenarioSets.findOne({_id: scenarioSet});
-    //     const scenarios = Scenarios.find({_id: {$in: set.scenarios}}).fetch();
-    //
-    //     for (i = 0; i < scenarios.length; i++) {
-    //         Meteor.call("discussions.insert", scenarios[i]._id, groupId);
-    //     }
     },
 
     "groups.voteLeader"(groupId, userId){

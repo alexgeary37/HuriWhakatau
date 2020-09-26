@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
-// import { NavBar } from "/imports/ui/navigation/NavBar";
 import {useTracker} from "meteor/react-meteor-data";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {Topics} from "/imports/api/topics";
