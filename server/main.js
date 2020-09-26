@@ -12,6 +12,7 @@ import "/imports/api/categories";
 import "/imports/api/discussionTemplate";
 import "/imports/api/experiments"
 import "/imports/api/accountsEmail"
+import "/server/defaultData";
 import { Roles } from "meteor/alanning:roles";
 
 import { Groups } from "/imports/api/groups";

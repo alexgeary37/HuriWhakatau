@@ -157,7 +157,7 @@ export const MyDashboard = () => {
     return (
         <div>
             <NavBar/>
-            <br/>
+            <span style={{height:"5em"}} />
             <Container>
                 <Segment attached="top" clearing>
                     <Header size="huge">
@@ -176,15 +176,15 @@ export const MyDashboard = () => {
                     </Header>
                 </Segment>
 
-                <Grid style={{overflow: "auto", height: "87vh"}}>
-                    <GridRow columns={2}>
+                <Grid doubling style={{overflow: "auto", height: "87vh"}}>
+                    <GridRow  columns={2}>
                         <GridColumn width={8}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment fluid style={{height: "21em"}}>
                                 <Header as={'h3'}>My Discussions</Header>
                                 {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
                                 {(isIndigenous !== null) &&
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "16em"}}
                                               description={myDiscussions &&
                                               myDiscussions.map((discussion) => (
                                                   <DiscussionSummary
@@ -198,9 +198,9 @@ export const MyDashboard = () => {
                             </Segment>
                         </GridColumn>
                         <GridColumn width={8}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment fluid style={{height: "21em"}}>
                                 <Header as={'h3'}>All Finished Discussions</Header>
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "16em"}}
                                               description={allFinishedDiscussions &&
                                               allFinishedDiscussions.map((discussion) => (
                                                   <DiscussionSummary
@@ -216,9 +216,9 @@ export const MyDashboard = () => {
                     </GridRow>
                     <GridRow columns={3}>
                         <GridColumn width={5}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment fluid style={{height: "21em"}}>
                                 <Header as={'h3'}>My Groups</Header>
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={groups &&
                                               groups.map((group) => (
                                                   <GroupSummary
@@ -226,10 +226,11 @@ export const MyDashboard = () => {
                                                       group={group}
                                                   />
                                               ))}/>
-                                <Card.Content extra>
+                                <Card.Content extra style={{margin:"1em"}}>
                                     {isAdmin &&
                                     <Button
-                                        onClick={handleToggleGroup}
+                                        fluid
+                                                 onClick={handleToggleGroup}
                                         content="Create New Group"
                                         color="green"
                                     />}
@@ -239,9 +240,9 @@ export const MyDashboard = () => {
                         {isAdmin &&
                             <>
                         <GridColumn width={6}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment fluid style={{height: "21em"}}>
                                 <Header as={'h3'}>My Discussion Templates</Header>
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={discussionTemplates &&
                                               discussionTemplates.map((discussionTemplate) => (
                                                   <DiscussionTemplateSummary
@@ -251,8 +252,9 @@ export const MyDashboard = () => {
                                                   />
                                               ))}
                                 />
-                                <Card.Content extra>
+                                <Card.Content extra style={{margin:"1em"}}>
                                     <Button
+                                        fluid
                                         onClick={handleToggleTemplate}
                                         content="Create New Template"
                                         color="green"
@@ -261,9 +263,9 @@ export const MyDashboard = () => {
                             </Segment>
                         </GridColumn>
                         <GridColumn width={5}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment fluid style={{height: "21em"}}>
                                 <Header as={'h3'}>My scenarios</Header>
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={scenarios &&
                                               scenarios.map((scenario) => (
                                                   <ScenarioSummary
@@ -271,8 +273,9 @@ export const MyDashboard = () => {
                                                       scenario={scenario}
                                                   />
                                               ))}/>
-                                <Card.Content extra>
+                                <Card.Content extra style={{margin:"1em"}}>
                                     <Button
+                                        fluid
                                         onClick={handleToggleScenario}
                                         content="Create New"
                                         color="green"
@@ -287,9 +290,9 @@ export const MyDashboard = () => {
                     <GridRow columns={3}>
 
                     <GridColumn width={5}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment style={{height: "21em"}}>
                                 <Header as={'h3'}>My Scenario Sets</Header>
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={scenarioSets &&
                                               scenarioSets.map((scenarioSet) => (
                                                   <ScenarioSetSummary
@@ -297,8 +300,9 @@ export const MyDashboard = () => {
                                                       scenarioSet={scenarioSet}
                                                   />
                                               ))}/>
-                                <Card.Content extra>
+                                <Card.Content extra style={{margin:"1em"}}>
                                     <Button
+                                        fluid
                                         onClick={handleToggleScenarioSet}
                                         content="Create New Set"
                                         color="green"
@@ -307,9 +311,9 @@ export const MyDashboard = () => {
                             </Segment>
                         </GridColumn>
                         <GridColumn width={6}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment style={{height: "21em"}}>
                                 <Header as={'h3'}>My Experiments</Header>
-                                <ListItem style={{overflow: "auto", height: "25vh"}}
+                                <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={experiments &&
                                               experiments.map((experiment) => (
                                                   <ExperimentSummary
@@ -317,8 +321,9 @@ export const MyDashboard = () => {
                                                       experiment={experiment}
                                                   />
                                               ))}/>
-                                <Card.Content extra>
+                                <Card.Content extra style={{margin:"1em"}}>
                                     <Button
+                                        fluid
                                         onClick={handleToggleExperimentCreation}
                                         content="Create New Experiment"
                                         color="green"
@@ -327,15 +332,18 @@ export const MyDashboard = () => {
                             </Segment>
                         </GridColumn>
                         <GridColumn width={5}>
-                            <Segment style={{height: "35vh"}}>
+                            <Segment style={{height: "21em"}}>
                                 <Header as={'h3'}>Add Users to roles</Header>
                                     <Button
+                                        fluid
                                         content="Assign Roles"
                                         as={Link}
                                         to="/assignroles"
                                         color="green"
                                     />
+                                    <br/>
                                     <Button
+                                        fluid
                                         content="Add user"
                                         as={Link}
                                         to="/AddUser"

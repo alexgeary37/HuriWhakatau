@@ -41,8 +41,8 @@ export const Dashboard = () => {
   return (
     <div>
       <NavBar />
-      <br/>
-      <Container>
+      <span style={{height:"5em"}} />
+      <Container style={{overflow: "auto", height: "90vh"}}>
         <Segment attached="top" clearing>
           <Header size="huge">
             <Header.Content as={Container} fluid>

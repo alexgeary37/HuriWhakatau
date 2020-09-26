@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {Button, List, ModalActions, Segment} from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
-export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, groupLeader, discussionStatus, closeChat}) => {
+export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, groupLeader, discussionStatus, closeChat, nextDiscussionId}) => {
     // based on dicussionsummary, update to take an actual user object and
     // display info. in the mean time it just takes a username and shows that
     // const [isIndigenous, setIsIndigenous] = useState(participantRole);
@@ -27,6 +27,7 @@ export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, gr
     const handleCloseChat = () =>{
         //add an "are you sure" modal before changing discussion status.
         closeChat();
+
     }
 
   return (

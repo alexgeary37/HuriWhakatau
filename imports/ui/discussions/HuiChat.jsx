@@ -18,7 +18,7 @@ import {
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
 import {useTracker} from "meteor/react-meteor-data";
-import {Link, useParams} from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 import {Discussions} from "/imports/api/discussions";
 import {Comments} from "/imports/api/comments";
 import {Verdicts} from "/imports/api/verdicts";
@@ -46,6 +46,7 @@ export const HuiChat = () => {
     const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(null);
     const [timeLeft, setTimeLeft] = useState(null);
     const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
+    let history = useHistory();
     // use to allow comments or proposing / voting on verdicts
     //todo, if the user uses the browser back button to go back to dash from a timed discussion
     // and then to a non-timed discussion the timedDiscussion state stays true
@@ -95,6 +96,7 @@ export const HuiChat = () => {
         discussionTimeLimit,
         groupMembers,
         groupLeader,
+        nextDiscussion,
     } = useTracker(() => {
         const discussionSub = Meteor.subscribe("discussions", discussionId);
         const scenarioSub = Meteor.subscribe("scenarios");
@@ -116,6 +118,7 @@ export const HuiChat = () => {
         let discussionTemplate;
         let groupMembers = [];
         let theGroupLeader;
+        let nextDiscussionId;
         if (
             discussionSub.ready() &&
             scenarioSub.ready() &&
@@ -136,6 +139,7 @@ export const HuiChat = () => {
                 : 0;
             discussionDeadline = discussion.deadline ? discussion.deadline : null;
             discussionTopic = Topics.findOne({_id: discussionScenario.topicId});
+            nextDiscussionId = discussion.nextDiscussion ? discussion.nextDiscussion : null;
 
             groupMembers = Meteor.users.find({_id: {$in: discussionGroup.members}})
             theGroupLeader = discussionGroup.groupLeader;
@@ -159,6 +163,7 @@ export const HuiChat = () => {
             discussionDeadline: discussionDeadline,
             groupMembers: groupMembers,
             groupLeader: theGroupLeader,
+            nextDiscussion: nextDiscussionId,
         };
     });
     // debug msg
@@ -169,9 +174,11 @@ export const HuiChat = () => {
         discussionDeadline,
         "timed: ",
         timedDiscussion,
-        "group leader",
+        "group leader: ",
         //this is undefined, even though the group does have a leader
         groupLeader,
+        "next discussion: ",
+        nextDiscussion,
     );
 
     //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
@@ -233,6 +240,10 @@ export const HuiChat = () => {
     };
 
     const closeChat = () => {
+        // console.log("push to: ");
+        //this doesn't work.need to fix pushing to next discussion
+        history.push("/huichat/" & nextDiscussion);
+        // history.push("/huichat/" & nextDiscussion);
         Meteor.call("discussions.updateStatus", discussionId, "finished");
     }
 
@@ -243,7 +254,7 @@ export const HuiChat = () => {
         <Container style={{width: "110vh"}}>
             <NavBar/>
             {/*hacky way to move content out from under menu*/}
-            <br/><br/>
+            <br/><br/><br/>
             <Container style={{width: "110vh"}}>
                 <Grid columns={2} style={{width: "110vh"}}>
                     {/*<Grid.Row> //need to specify a row?*/}
@@ -346,6 +357,7 @@ export const HuiChat = () => {
                                                          groupLeader={groupLeader}
                                                          discussionStatus={discussionStatus}
                                                          closeChat={closeChat}
+                                                         nextDiscussion={nextDiscussion}
                                             />
                                         </List.Item>
                                     ))}

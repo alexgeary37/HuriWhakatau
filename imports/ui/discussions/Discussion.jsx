@@ -74,7 +74,6 @@ export const Discussion = () => {
             return () => clearTimeout(timer);
           }
         });
-    // }
 
   const {
     scenario,

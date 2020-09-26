@@ -155,7 +155,6 @@ export const UserSettings = () => {
 
                                                 updateUserPassword();
                                             }}/>
-
                                         </Form.Input>
                                         {err ? (
                                             <div style={{height: "10px", color: "red"}}>{err}</div>

@@ -4,6 +4,8 @@ body {
   font-size: 14px;
   height: 100vh;
   overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /*********************************************************

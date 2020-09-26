@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Image, Button, Header, Input, Label, Form } from "semantic-ui-react";
+import { Modal, Image, Button, Header, Input, Label } from "semantic-ui-react";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
