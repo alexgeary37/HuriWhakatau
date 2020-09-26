@@ -26,10 +26,10 @@ export const UserSettings = () => {
     const [userPepeha, setUserPepeha] = useState([]);
     const [userRiver, setUserRiver] = useState("");
     const [userRole, setUserRole] = useState("");
-    const [username, setUsername] = useState("OpenlyOctopus"); // todo, fix getting the username.
-    const [name, setName] = useState("");
     const [userWaka, setUserWaka] = useState("");
+    const [username, setUsername] = useState("OpenlyOctopus"); // todo, fix getting the username.
     const [userIwi, setUserIwi] = useState("");
+    const [name, setName] = useState("");
     const [err, setErr] = useState("");
     const handleUsername = () => { // need to work out how to set this when user info is loaded rather than hard coded as below
         setUsername(user.username);};
