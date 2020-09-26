@@ -1,15 +1,8 @@
 import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import classnames from "classnames";
 import { List, Button, Card, Header } from "semantic-ui-react";
 
 export const Verdict = ({ verdict, onVote }) => {
-  // let classes = classnames("verdict");
-
-  // if (Meteor.userId() === verdict.authorId) {
-  //   classes = classnames("verdict usersVerdict");
-  // }
-
   // useTracker makes sure the component will re-render when the data changes.
   const { user } = useTracker(() => {
     Meteor.subscribe("users");

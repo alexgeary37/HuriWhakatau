@@ -1,6 +1,5 @@
 import "/imports/api/security";
 import React, {useState, useEffect, useRef} from "react";
-// import AvatarEditor from 'react-avatar-editor'
 import {useTracker} from "meteor/react-meteor-data";
 import {
     Input,
@@ -11,7 +10,6 @@ import {
     Segment,
     Header,
     Icon,
-    Divider,
     Form,
     Grid,
     GridColumn, GridRow, CardHeader, CardContent
@@ -155,7 +153,6 @@ export const UserSettings = () => {
 
                                                 updateUserPassword();
                                             }}/>
-
                                         </Form.Input>
                                         {err ? (
                                             <div style={{height: "10px", color: "red"}}>{err}</div>

@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form} from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
-import {Roles} from "meteor/alanning:roles";
 import {Meteor} from "meteor/meteor";
 
 export const AssignRoles = () => {
@@ -13,9 +12,6 @@ export const AssignRoles = () => {
 
         const userRoles = [
             'ADMIN',
-            // 'CREATE_GROUPS',
-            // 'CREATE_SCENARIOS',
-            // 'CREATE_SCENARIOSETS',
             'GROUP_LEADER',
             'PARTICIPANT_I',
             'PARTICIPANT_W',
