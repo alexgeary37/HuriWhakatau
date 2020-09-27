@@ -21,6 +21,7 @@ export const UserSettings = () => {
     const [userNewPassword, setUserNewPassword] = useState("");
     const [userOldPassword, setUserOldPassword] = useState("");
     const [changeUsername, setChangeUsername] = useState(false);
+    const [changeName, setChangeName] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(false);
     const [userMountain, setUserMountain] = useState("");
     const [userPepeha, setUserPepeha] = useState([]);
@@ -35,7 +36,8 @@ export const UserSettings = () => {
         setUsername(user.username);};
     //reference boolean to for the useEffect callback sending the changed pepeha list to the db
     const settingPepehaRef = useRef(false);
-    //ensure the pepeha state variable is finished updating before sending to db.
+    //ensure the pepeha state variable is finished updating before sending to db. Modeled
+    // on the comment reactions. Need to change so something more like a key:value is sent.
     useEffect(() => {
         if (settingPepehaRef.current) {
             settingPepehaRef.current = false;
@@ -69,6 +71,10 @@ export const UserSettings = () => {
         Accounts.setUsername(Meteor.userId(), username);
     };
 
+    const updateName = () => {
+        Meteor.call("security.updateName", name, Meteor.userId());
+    }
+
     const updateUserPassword = () => {
         if (userNewPassword.length < 8) {
             setErr("Password must have at least 8 characters")
@@ -99,12 +105,22 @@ export const UserSettings = () => {
                                     <Input labelPosition="left"
                                            type="text"
                                            value={user && name}
-                                           readOnly={"true"}
+                                           readOnly={!changeName}
                                            size="mini"
                                            style={{width: "45%"}}
-                                           onInput={({target}) => setName(target.value)}>
+                                           onChange={({target}) => setName(target.value)}>
                                         <Label>Name</Label>
                                         <input/>
+                                        {!changeName ? (
+                                            <Button size="mini" content="Change" onClick={() => {
+                                                setChangeName(true)
+                                            }}/>
+                                        ) : (
+                                            < Button size="mini" content="Save" onClick={() => {
+                                                setChangeName(false);
+                                                updateName();
+                                            }}/>
+                                        )}
                                     </Input>
                                     <br/>
                                     <br/>
@@ -114,7 +130,7 @@ export const UserSettings = () => {
                                            readOnly={!changeUsername}
                                            size="mini"
                                            style={{width: "45%"}}
-                                           onInput={({target}) => setUsername(target.value)}>
+                                           onChange={({target}) => setUsername(target.value)}>
                                         <Label>Username</Label>
                                         <input/>
                                         {!changeUsername ? (
@@ -137,7 +153,7 @@ export const UserSettings = () => {
                                            readOnly={!changeUserPassword}
                                            size="mini"
                                            style={{width: "45%"}}
-                                           onInput={({target}) => setUserOldPassword(target.value)}>
+                                           onChange={({target}) => setUserOldPassword(target.value)}>
                                         <Label>Password</Label>
                                         <input/>
                                         {!changeUserPassword &&
@@ -153,11 +169,10 @@ export const UserSettings = () => {
                                         <Form.Input labelPosition="left"
                                                     type="password"
                                                     value={userNewPassword}
-                                            // readOnly={!changeUserPassword}
                                                     error={userNewPassword.length < 8}
                                                     size="mini"
                                                     style={{width: "45%"}}
-                                                    onInput={({target}) => setUserNewPassword(target.value)}>
+                                                    onChange={({target}) => setUserNewPassword(target.value)}>
                                             <Label>New Password</Label>
                                             <input/>
                                             <Form.Button size="mini" content="Save" onClick={() => {
@@ -194,7 +209,7 @@ export const UserSettings = () => {
                     </GridColumn>
                     <GridColumn width={7}>
                         {isIndigenous &&
-                        <Card>
+                        <Card as={Segment} fluid>
                             <Card.Content header="Pepeha"/>
                             <CardContent>
                                 <Form>
@@ -219,8 +234,7 @@ export const UserSettings = () => {
                                            type="text"
                                            size="mini"
                                            style={{width: "45%"}}
-                                           onInput={({target}) => setUserRiver(target.value)}
-                                           onChange={console.log("changed")}
+                                           onChange={({target}) => setUserRiver(target.value)}
                                     >
                                         <Label style={{width: "55%"}}>River</Label>
                                         <input/>
@@ -270,10 +284,10 @@ export const UserSettings = () => {
                                            size="mini"
                                            style={{width: "45%"}}
                                            onInput={({target}) => setUserRole(target.value)}
-                                           onChange={({target}) => {settingPepehaRef.current = true;
-                                               setUserPepeha([...userPepeha, target.value])}}
+                                           // onChange={({target}) => {settingPepehaRef.current = true;
+                                           //     setUserPepeha([...userPepeha, target.value])}}
                                     >
-                                        <Label style={{width: "55%"}}>Employment/Role</Label>
+                                        <Label style={{width: "55%"}}>Employment /Role</Label>
                                         <input/>
                                         <Button icon style={{marginLeft: "20px"}}>
                                             <Icon className="role"/>
