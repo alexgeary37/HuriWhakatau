@@ -78,4 +78,17 @@ Meteor.methods({
             });
             return true;
     },
+
+    "security.updateName"(name, userId){
+        console.log("updating user name");
+        check(userId, String);
+        check(name, String);
+
+        Meteor.users.update(userId, {
+            $set: {
+                name: name,
+            },
+        });
+        return true;
+    },
 })
