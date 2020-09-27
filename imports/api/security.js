@@ -69,7 +69,7 @@ Meteor.methods({
     "security.updatePepeha"(pepeha, userId){
             console.log("updating user pepeha");
             check(userId, String);
-            check(pepeha, Array);
+            check(pepeha, Object);
 
             Meteor.users.update(userId, {
                 $set: {
