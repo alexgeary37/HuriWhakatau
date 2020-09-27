@@ -17,6 +17,12 @@ import {
 import {NavBar} from "/imports/ui/navigation/NavBar";
 
 export const UserSettings = () => {
+    const {user} = useTracker(() => {
+        Meteor.subscribe("users");
+        return {
+            user: Meteor.users.findOne({_id: Meteor.userId()}),
+        };
+    });
     const [changeUserPassword, setChangeUserPassword] = useState(false);
     const [userNewPassword, setUserNewPassword] = useState("");
     const [userOldPassword, setUserOldPassword] = useState("");
@@ -25,10 +31,16 @@ export const UserSettings = () => {
     const [isIndigenous, setIsIndigenous] = useState(false);
     const [userMountain, setUserMountain] = useState("");
     const [userPepeha, setUserPepeha] = useState([]);
+    const [pepehaObject, setPepehaObject] =
+        useState({mountain:"",
+                            river:"",
+                            waka:"",
+                            iwi:"",
+                            role:""});
     const [userRiver, setUserRiver] = useState("");
     const [userRole, setUserRole] = useState("");
     const [userWaka, setUserWaka] = useState("");
-    const [username, setUsername] = useState("OpenlyOctopus"); // todo, fix getting the username.
+    const [username, setUsername] = useState("");
     const [userIwi, setUserIwi] = useState("");
     const [name, setName] = useState("");
     const [err, setErr] = useState("");
@@ -40,14 +52,18 @@ export const UserSettings = () => {
     // on the comment reactions. Need to change so something more like a key:value is sent.
     useEffect(() => {
         if (settingPepehaRef.current) {
+            console.log("sending to db");
+
             settingPepehaRef.current = false;
-            Meteor.call("security.updatePepeha", userPepeha, Meteor.userId());
+            Meteor.call("security.updatePepeha", pepehaObject, Meteor.userId());
         }
-    }, [userPepeha]);
+    }, [pepehaObject]);
 
     const handlePepehaSelect = () => {
+        console.log("updating pepeha");
         settingPepehaRef.current = true;
-        setUserPepeha([...userPepeha, userRiver]);
+        setPepehaObject({mountain: userMountain, river: userRiver, waka: userWaka, iwi: userIwi, role: userRole})
+        // setUserPepeha([...userPepeha, userRiver]);
     }
     //get user participant role status and update variable with call back.
     // possibly this should be a Promise?
@@ -59,13 +75,7 @@ export const UserSettings = () => {
         setIsIndigenous(result);
     });
 
-    // useTracker makes sure the component will re-render when the data changes.
-    const {user} = useTracker(() => {
-        Meteor.subscribe("users");
-        return {
-            user: Meteor.users.findOne({_id: Meteor.userId()}),
-        };
-    });
+
 
     const updateUsername = () => {
         Accounts.setUsername(Meteor.userId(), username);
@@ -104,12 +114,12 @@ export const UserSettings = () => {
                                     {/*    change username stuff   */}
                                     <Input labelPosition="left"
                                            type="text"
-                                           value={user && name}
+                                           value={user && user.name}
                                            readOnly={!changeName}
                                            size="mini"
                                            style={{width: "45%"}}
                                            onChange={({target}) => setName(target.value)}>
-                                        <Label>Name</Label>
+                                        <Label style={{width: "55%"}}>Name</Label>
                                         <input/>
                                         {!changeName ? (
                                             <Button size="mini" content="Change" onClick={() => {
@@ -126,12 +136,12 @@ export const UserSettings = () => {
                                     <br/>
                                     <Input labelPosition="left"
                                            type="text"
-                                           value={user && username}
+                                           value={user && user.username}
                                            readOnly={!changeUsername}
                                            size="mini"
                                            style={{width: "45%"}}
                                            onChange={({target}) => setUsername(target.value)}>
-                                        <Label>Username</Label>
+                                        <Label style={{width: "55%"}}>Username</Label>
                                         <input/>
                                         {!changeUsername ? (
                                             <Button size="mini" content="Change" onClick={() => {
@@ -154,7 +164,7 @@ export const UserSettings = () => {
                                            size="mini"
                                            style={{width: "45%"}}
                                            onChange={({target}) => setUserOldPassword(target.value)}>
-                                        <Label>Password</Label>
+                                        <Label style={{width: "55%"}}>Password</Label>
                                         <input/>
                                         {!changeUserPassword &&
                                         <Button size="mini" content="Change" onClick={() => {
@@ -213,7 +223,7 @@ export const UserSettings = () => {
                             <Card.Content header="Pepeha"/>
                             <CardContent>
                                 <Form>
-                                    <Input value={userMountain}
+                                    <Input value={user && user.pepeha.mountain}
                                            labelPosition="left"
                                            type="text"
                                            size="mini"
@@ -229,12 +239,13 @@ export const UserSettings = () => {
                                     </Input>
                                     <br/>
                                     <br/>
-                                    <Input value={userRiver}
+                                    <Input value={user && user.pepeha.river}
                                            labelPosition="left"
                                            type="text"
                                            size="mini"
                                            style={{width: "45%"}}
-                                           onChange={({target}) => setUserRiver(target.value)}
+                                           onInput={({target}) => setUserRiver(target.value)}
+                                           onChange={handlePepehaSelect}
                                     >
                                         <Label style={{width: "55%"}}>River</Label>
                                         <input/>
@@ -244,14 +255,15 @@ export const UserSettings = () => {
                                     </Input>
                                     <br/>
                                     <br/>
-                                    <Input value={userWaka}
+                                    <Input value={user && user.pepeha.waka}
                                            labelPosition="left"
                                            type="text"
                                            size="mini"
                                            style={{width: "45%"}}
                                            onInput={({target}) => setUserWaka(target.value)}
-                                           onChange={() => {settingPepehaRef.current = true;
-                                               setUserPepeha([...userPepeha, target.value])}}
+                                           onChange={handlePepehaSelect}
+                                        // onChange={() => {settingPepehaRef.current = true;
+                                           //     setUserPepeha([...userPepeha, target.value])}}
                                     >
                                         <Label style={{width: "55%"}}>Waka</Label>
                                         <input/>
@@ -261,14 +273,15 @@ export const UserSettings = () => {
                                     </Input>
                                     <br/>
                                     <br/>
-                                    <Input value={userIwi}
+                                    <Input value={user && user.pepeha.iwi}
                                            labelPosition="left"
                                            type="text"
                                            size="mini"
                                            style={{width: "45%"}}
                                            onInput={({target}) => setUserIwi(target.value)}
-                                           onChange={({target}) => {settingPepehaRef.current = true;
-                                               setUserPepeha([...userPepeha, target.value])}}
+                                           onChange={handlePepehaSelect}
+                                            // onChange={({target}) => {settingPepehaRef.current = true;
+                                           //     setUserPepeha([...userPepeha, target.value])}}
                                     >
                                         <Label style={{width: "55%"}}>Iwi</Label>
                                         <input/>
@@ -278,16 +291,17 @@ export const UserSettings = () => {
                                     </Input>
                                     <br/>
                                     <br/>
-                                    <Input value={userRole}
+                                    <Input value={user && user.pepeha.role}
                                            labelPosition="left"
                                            type="text"
                                            size="mini"
                                            style={{width: "45%"}}
                                            onInput={({target}) => setUserRole(target.value)}
-                                           // onChange={({target}) => {settingPepehaRef.current = true;
+                                           onChange={handlePepehaSelect}
+                                            // onChange={({target}) => {settingPepehaRef.current = true;
                                            //     setUserPepeha([...userPepeha, target.value])}}
                                     >
-                                        <Label style={{width: "55%"}}>Employment /Role</Label>
+                                        <Label style={{width: "55%"}}>Employment / Role</Label>
                                         <input/>
                                         <Button icon style={{marginLeft: "20px"}}>
                                             <Icon className="role"/>

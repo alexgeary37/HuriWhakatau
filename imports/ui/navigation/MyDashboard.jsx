@@ -94,7 +94,15 @@ export const MyDashboard = () => {
         console.log(result);
     });
 
-    const {user, myDiscussions, allFinishedDiscussions, groups, scenarios, scenarioSets, discussionTemplates, experiments} = useTracker(() => {
+    const {user,
+        myDiscussions,
+        allFinishedDiscussions,
+        groups,
+        scenarios,
+        scenarioSets,
+        discussionTemplates,
+        experiments
+    } = useTracker(() => {
         //subscribe to roles for user permissions check, should this be ^^ up there?
         let fetchedDiscussionTemplates = null;
         Meteor.subscribe("roles");
@@ -144,7 +152,7 @@ export const MyDashboard = () => {
     return (
         <div>
             <NavBar/>
-            <span style={{height: "5em"}}/>
+            <span style={{height: "10em"}}/>
             <Container>
                 <Segment attached="top" clearing>
                     <Header size="huge">
