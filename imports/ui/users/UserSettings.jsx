@@ -46,6 +46,12 @@ export const UserSettings = () => {
     const [err, setErr] = useState("");
     const handleUsername = () => { // need to work out how to set this when user info is loaded rather than hard coded as below
         setUsername(user.username);};
+
+    useEffect(() => {
+        if (user){
+            setUserMountain(user.pepeha.mountain);
+        }
+    }, [user]);
     //reference boolean to for the useEffect callback sending the changed pepeha list to the db
     const settingPepehaRef = useRef(false);
     //ensure the pepeha state variable is finished updating before sending to db. Modeled
@@ -74,8 +80,6 @@ export const UserSettings = () => {
         }
         setIsIndigenous(result);
     });
-
-
 
     const updateUsername = () => {
         Accounts.setUsername(Meteor.userId(), username);
