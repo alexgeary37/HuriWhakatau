@@ -50,15 +50,19 @@ export const UserSettings = () => {
     const [name, setName] = useState("");
     const [err, setErr] = useState("");
     useEffect(() => {
-        if (user && isIndigenous && !changeUserPepeha && !changeName && !changeUsername){
+        if (user && isIndigenous && !changeUserPepeha && !changeName && !changeUsername) {
             console.log("Adding info to states");
-            setUserMountain(user.pepeha.mountain);
-            setUserRiver(user.pepeha.river);
-            setUserWaka(user.pepeha.waka);
-            setUserIwi(user.pepeha.iwi);
-            setUserRole(user.pepeha.role);
             setUsername(user.username);
-            setName(user.name);
+            if(user.name){
+                setName(user.name);
+            }
+            if (user.pepeha) {
+                setUserMountain(user.pepeha.mountain);
+                setUserRiver(user.pepeha.river);
+                setUserWaka(user.pepeha.waka);
+                setUserIwi(user.pepeha.iwi);
+                setUserRole(user.pepeha.role);
+        }
     }
         console.log(pepehaObject);
     }, [user]);
