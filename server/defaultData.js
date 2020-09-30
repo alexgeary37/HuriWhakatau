@@ -13,6 +13,8 @@ import {Categories} from "../imports/api/categories";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {DiscussionTemplates} from "../imports/api/discussionTemplate"
 
+// const Mountains = new Mongo.Collection("mountains");
+
 // set up checks that each item doesn’t exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
 //create categories if the basic set doesn't exist
@@ -186,4 +188,11 @@ if (Meteor.isServer) {
             Roles.addRolesToParent("CREATE_SCENARIOSETS", role);
         }
     });
+
+    // let newMountains = [];
+    //
+    // newMountains.forEach((mountain) => {
+    //     Mountains.insert({name: mountain});
+    // })
+
 }

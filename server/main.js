@@ -13,6 +13,7 @@ import "/imports/api/discussionTemplate";
 import "/imports/api/experiments"
 import "/imports/api/accountsEmail"
 import "/server/defaultData";
+import "/imports/api/mountains";
 
 Meteor.startup(() => {
     process.env.MAIL_URL =

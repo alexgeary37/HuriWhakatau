@@ -15,14 +15,19 @@ import {
     GridColumn, CardContent
 } from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
+import {Mountains} from "/imports/api/mountains";
 
 export const UserSettings = () => {
-    const {user} = useTracker(() => {
+    const {user, mountains} = useTracker(() => {
         Meteor.subscribe("users");
+        Meteor.subscribe("mountains");
         return {
             user: Meteor.users.findOne({_id: Meteor.userId()}),
+            mountains: Mountains.find().fetch(),
         };
     });
+
+    console.log("mount", mountains[0]);
     const [changeUserPassword, setChangeUserPassword] = useState(false);
     const [userNewPassword, setUserNewPassword] = useState("");
     const [userOldPassword, setUserOldPassword] = useState("");
@@ -248,6 +253,33 @@ export const UserSettings = () => {
                             <Card.Content header="Pepeha"/>
                             <CardContent>
                                 <Form>
+                                    <Form.Dropdown
+                                        // labelPosition="left"
+                                        size="mini"
+                                        style={{width: "60%"}}
+                                        text={userMountain}
+                                        placeholder={userMountain.length === 0 && 'Select Mountain'}
+                                        labeled
+                                        lazyLoad
+                                        readOnly={!changeUserPepeha}
+                                        disabled={!changeUserPepeha}
+                                        loading={mountains.length === 0}
+                                        selection
+                                        search
+                                        options={
+                                            mountains &&
+                                            mountains.map((mountain) => ({
+                                                key: mountain._id,
+                                                text: mountain.name,
+                                                value: mountain.name,
+                                            }))
+                                        }
+                                        name="mountain"
+                                        value={userMountain}
+                                        onChange={(e, {value}) => setUserMountain(value)}
+                                    />
+                                        {/*<Label style={{width: "55%"}}>Mountain</Label>*/}
+                                    {/*</Form.Dropdown>*/}
                                     <Input value={user && userMountain}
                                            labelPosition="left"
                                            type="text"
