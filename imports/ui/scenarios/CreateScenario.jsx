@@ -75,6 +75,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
             discussionTemplates: DiscussionTemplates.find().fetch(),
         };
     });
+    console.log(topics[0]);
 
     return (
         <Modal
