@@ -12,12 +12,17 @@ export const DiscussionTemplateSummary = ({toggleModal, template }) => {
     // const toggleIt = () =>{
     //     toggleModal();
     // };
+  const toggleIt = () => {
+    // setIsOpen(false);
+    toggleModal();
+  }
 
   return (
       <span>
     <List.Item>
       <List.Content as={Segment}>
         <List.Header as={"h4"} content={template && template.name} />
+        <Segment as={Link} onClick={toggleIt} content={"Hiiii"}/>
         {/*<List.Description content={template && template.description} />*/}
       </List.Content>
     </List.Item>

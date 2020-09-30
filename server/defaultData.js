@@ -41,9 +41,9 @@ if (Meteor.isServer) {
         });
         defaultUsers.push(defaultUser);
     } else {
-        let username = Accounts.findUserByUsername("Larry")
-        console.log(username);
-        defaultUsers.push(username);
+        let username = Accounts.findUserByUsername("Mary")
+        console.log("a default user: " + username.username);
+        defaultUsers.push(username._id);
     }
 
     if (!Accounts.findUserByUsername("Gary")) {
@@ -53,7 +53,7 @@ if (Meteor.isServer) {
         });
         defaultUsers.push(defaultUser);
     } else {
-        defaultUsers.push(Accounts.findUserByUsername("Gary"));
+        defaultUsers.push(Accounts.findUserByUsername("Gary")._id);
     }
 
     if (!Accounts.findUserByUsername("Daisy")) {
@@ -63,7 +63,7 @@ if (Meteor.isServer) {
         });
         defaultUsers.push(defaultUser);
     } else {
-        defaultUsers.push(Accounts.findUserByUsername("Daisy"));
+        defaultUsers.push(Accounts.findUserByUsername("Daisy")._id);
     }
 
 
@@ -160,7 +160,7 @@ if (Meteor.isServer) {
     createdRoles.forEach((role) => {
         roleList.push(role._id);
     });
-    console.log(roleList);
+    // console.log(roleList);
 //set up roles
     const userRoles = [
         "CREATE_GROUPS",

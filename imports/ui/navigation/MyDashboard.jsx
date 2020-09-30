@@ -43,6 +43,7 @@ export const MyDashboard = () => {
     const [isOpenExperimentCreation, setIsOpenExperimentCreation] = useState(false);
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
+    const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
     }
@@ -59,7 +60,8 @@ export const MyDashboard = () => {
     const handleToggleExperimentCreation = () => {
         setIsOpenExperimentCreation(!isOpenExperimentCreation);
     }
-    const handleToggleTemplateDisplay = () => {
+    const handleToggleTemplateDisplay = (template) => {
+        setTemplate(template); // template is undefined. make async
         setIsOpenTemplateDisplay(!isOpenTemplateDisplay);
     }
     const handleToggleGroup = () => {
@@ -389,7 +391,7 @@ export const MyDashboard = () => {
                 {isOpenTemplateDisplay &&
                 <DisplayDiscussionTemplate
                     toggleModal={handleToggleTemplateDisplay}
-                    template={"hi"}/>
+                    template={template}/>
                 }
 
             </Container>

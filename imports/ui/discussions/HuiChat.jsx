@@ -240,9 +240,7 @@ export const HuiChat = () => {
     };
 
     const closeChat = () => {
-        //this doesn't work.need to fix pushing to next discussion
-        history.push("/huichat/" & nextDiscussion);
-        // history.push("/huichat/" & nextDiscussion);
+        history.push("/huichat/" + nextDiscussion);
         Meteor.call("discussions.updateStatus", discussionId, "finished");
     }
 

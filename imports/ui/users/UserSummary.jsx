@@ -34,12 +34,23 @@ export const UserSummary = ({ member, handleUserVoted, userHasVoted, groupId, gr
           <div style={{textAlign: "center"}}>
               <Button
                   style={{margin: 10}}
-                  content="Close chat"
+                  content={"Close chat"}
                   onClick={handleCloseChat}
                   primary
               />
           </div>
-          }</ModalActions>
+          }
+              {discussionStatus !== "active" &&
+              <div style={{textAlign: "center"}}>
+                  <Button
+                      style={{margin: 10}}
+                      content={"Go to next"}
+                      onClick={handleCloseChat}
+                      primary
+                  />
+              </div>
+              }
+          </ModalActions>
       </List.Content>
     </List.Item>
   );

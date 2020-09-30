@@ -3,7 +3,6 @@ import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 
 export const CreateDiscussionTemplate = ({toggleModal}) => {
-    // console.log(isCreationOpen.isCreationOpen);
     const [anonymous, setAnonymous] = useState(false);
     const [typing, setTyping] = useState(false);
     const [templateName, setTemplateName] = useState("");

@@ -27,14 +27,14 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
             open={isOpen}
             size="small"
         >
-            <Modal.Header>Create A Discussion Template</Modal.Header>
+            <Modal.Header>Discussion Template</Modal.Header>
             <Modal.Content>
             <Form >
                 <Input
                     label="Template Name"
                     type="text"
                     placeholder="Template Name"
-                    value={templateName}
+                    value={template.name}
                     // onInput={({target}) => setTemplateName(target.value)}
                     autoFocus
                 />
