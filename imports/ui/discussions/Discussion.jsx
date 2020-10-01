@@ -7,7 +7,7 @@ import {
   Modal,
   Grid,
   GridColumn,
-  List,
+  List, Segment,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -206,9 +206,9 @@ export const Discussion = () => {
       {/*hacky way to move content out from under menu*/}
       <br/><br/><br/>
       <Container attached="bottom" style={{width:"110vh"}}>
-        <Grid columns={3} celled divided>
+        <Grid columns={3}  >
           <Grid.Row>
-            <GridColumn width={3} style={{height:"80vh"}}>
+            <GridColumn width={3} style={{height:"90vh"}}>
               <Header
                 content={(scenario && scenario.title) || (topic && topic.title)}
                 size="medium"
@@ -217,7 +217,8 @@ export const Discussion = () => {
                 (topic && topic.description)}
               {timedDiscussion && <Timer time={timeLeft} />}
             </GridColumn>
-            <GridColumn width={10} >
+            <GridColumn width={10}>
+              <div style={{position: "absolute", bottom: "0px", width: "95%"}}>
               <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
                 {comments &&
                   comments.map((comment) => (
@@ -237,6 +238,7 @@ export const Discussion = () => {
               {discussionStatus === "active" && (
                 <CommentForm discussionId={discussionId}/>
               )}
+              </div>
             </GridColumn>
             <GridColumn width={3}>
               <Header content="Verdicts" size="medium" />
