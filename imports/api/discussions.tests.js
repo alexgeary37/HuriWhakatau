@@ -1,7 +1,3 @@
-/*
-This is copy pasted from comments.tests.js so it may not work properly
-*/
-
 import {Meteor} from "meteor/meteor";
 import {Random} from "meteor/random";
 import {assert} from "chai";

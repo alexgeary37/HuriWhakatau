@@ -39,7 +39,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  console.log("Topics:", Topics.find().fetch());
+  // console.log("Topics:", Topics.find().fetch());
 
   Meteor.publish("topics", function () {
     return Topics.find(

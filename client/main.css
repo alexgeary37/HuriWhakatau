@@ -1,220 +1,14 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif,
+    "Font Awesome 5 Free";
   font-size: 14px;
   width: 100vw;
   height: 100vh;
-}
-
-/********************************************************
-App.jsx
-*********************************************************/
-
-.discussion-grid-container {
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 20vw 60vw 20vw;
-  height: 100vh;
-  width: inherit;
-  /* background-color: #2196f3; */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-
-.grid-item {
-  /* background-color: rgba(255, 255, 255, 0.8); */
-  /* border: 1px solid rgba(0, 0, 0, 0.8); */
-  padding: 1rem;
-  overflow-y: scroll;
-}
-
-.grid-item .grid-item-comments {
-  margin-bottom: 13rem;
-  /* width: 60vw; */
-}
-
-.grid-item .commentForm {
-  /* background-color: rgba(255, 255, 25, 0.8); */
-  position: fixed;
-  width: 100%;
-  bottom: 1rem;
-  padding: 2px;
-}
-
-.grid-item .timer {
-  position: fixed;
-  float: right;
-  padding: 2px;
-  bottom: 1rem;
-}
-
-/* .juryroom {
-  margin: 0 auto;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.juryroom .login-form {
-  margin-top: 100rem;
-  padding-top: 100rem;
-}
-
-.juryroom h2 {
-  height: 7vh;
-}
- 
-.juryroom h5 {
-  height: 5vh;
-} */
-
-.navbar {
-  margin: 4rem;
-}
-
-/* .comments-and-form {
-  padding: 0;
-  margin: 0;
-  position: fixed;
-  bottom: 0;
-  height: 50%;
-  overflow: hidden;
-}
-
-.juryroom .discussion-right-panel {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  list-style: none;
-  overflow-y: scroll;
-  height: 100%;
-  background: lightgray;
-}
-
-.juryroom .discussion-right-panel .verdict {
-  list-style: none;
-  margin: 3px;
-  align-items: start;
-  align-self: flex-end;
-  width: 100%;
-  height: fit-content;
-  background: whitesmoke;
-  padding: 10px;
-  border-radius: 1px 1px 1px 1px;
-  border-style: solid;
-  border-color: black;
-  border-width: 2px;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-}
-
-.juryroom .comments-and-form .comments {
-  padding: 0;
-  position: relative;
-  margin: auto 0 0;
-  width: 100%;
-  list-style: none;
-  overflow-y: scroll;
-  height: 90vh;
-} */
-
-::-webkit-scrollbar {
-  width: 0; /* Remove scrollbar space */
-}
-
-/* .juryroom .comments-and-form .comments .commentContainer {
-  padding: 0;
-  margin: 0;
-  width: inherit;
-  height: max-content;
-  overflow: hidden;
-  align-self: flex-end;
-  flex: 100%;
-  min-height: max-content;
-}
-
-.juryroom .comments-and-form .comments .comment {
-  display: flex;
-  margin: 3px;
-  align-items: start;
-  align-self: flex-end;
-  width: 52%;
-  height: fit-content;
-  background: aliceblue;
-  padding: 10px;
-  border-radius: 10px 25px 25px 10px;
-  border-style: solid;
-  border-width: thin;
-  border-color: cadetblue;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-}
-
-.juryroom .comments-and-form .comment span {
-  margin-left: 2px;
-}
-
-.juryroom .comments-and-form .comment button {
-  display: none;
-}
-
-.authorName {
-  font-weight: bold;
-}
-
-.commentTime {
-  font-weight: lighter;
-  font-size: smaller;
-}
-
-.juryroom .comments-and-form .comments .comment.usersComment {
-  width: 52%;
-  background: aqua;
-  align-self: end;
-  float: right;
-  border-radius: 25px 10px 10px 25px;
-}
-
-.juryroom .comments-and-form .comments .comment.usersComment button {
-  display: initial;
-}
-
-.juryroom .comments-and-form .comment-form {
-  margin-top: 2rem;
-  width: inherit;
-  align-self: end;
-  display: flex;
-}
-
-.juryroom .comments-and-form .comments .comment span {
-  flex-grow: 1;
-}
-
-.juryroom .comments-and-form .comments .comment button {
-  cursor: pointer;
-  background: transparent;
-  outline: none;
-  border: none;
-}
-
-.juryroom .comments-and-form .comment-form input {
-  flex-grow: 1;
-  width: 100vw;
-} 
-.juryroom .login-form input {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 0.8rem;
-}
-
-.juryroom .login-form label {
-  margin-bottom: 0.4rem;
-}
-
-.juryroom .login-form button[type="submit"] {
-  float: right;
-} */
 
 /*********************************************************
 Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reaction-in-react-bd68e03ad7b8
@@ -249,4 +43,34 @@ Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reacti
 
 .badge {
   top: 15px;
+}
+
+/*********************************************************
+Pepeha icons
+********************************************************/
+i.icon.mountain:after {
+  content: "\f102";
+}
+
+i.icon.river:after {
+  content: "\f1de";
+}
+
+i.icon.waka:after {
+  content: "\f13d";
+}
+
+i.icon.iwi:after {
+  content: "\f494";
+}
+
+/********************************************************
+App
+*********************************************************/
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+}
+
+.navbar {
+  margin: 4rem;
 }

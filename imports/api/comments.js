@@ -23,7 +23,6 @@ Meteor.methods({
       authorId: this.userId, // _id of user
       text: text,
       emojis: [],
-      editedDate: new Date(),
     });
   },
 
@@ -59,6 +58,7 @@ Meteor.methods({
     Comments.update(commentId, {
       $set: {
         text: text,
+        editedDate: new Date(),
       },
       $push: { previousEdits: comment.text },
     });
@@ -79,8 +79,6 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Comments.remove({});
-
   Meteor.publish("comments", function (discussionId) {
     return Comments.find(
       { discussionId: discussionId },
@@ -90,6 +88,7 @@ if (Meteor.isServer) {
           authorId: 1,
           text: 1,
           emojis: 1,
+          editedDate: 1,
         },
       }
     );

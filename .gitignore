@@ -1,3 +1,4 @@
 node_modules/
 /app-deploy/
 /run.bat
+/.idea/
