@@ -8,7 +8,7 @@ Meteor.methods({
   // text: the text of the comment
   // discussionId: _id of the discussion this comment belongs to
   // Called from CommentForm.jsx
-  "comments.insert"(text, discussionId) {
+  "comments.insert"(text, pasted, keystrokes, discussionId) {
     check(text, String);
     check(discussionId, String);
 
@@ -23,6 +23,8 @@ Meteor.methods({
       authorId: this.userId, // _id of user
       text: text,
       emojis: [],
+      keystrokes: keystrokes,
+      pastedItems: pasted,
     });
   },
 
@@ -88,6 +90,8 @@ if (Meteor.isServer) {
           authorId: 1,
           text: 1,
           emojis: 1,
+          keystrokes: 1,
+          pasted: 1,
           editedDate: 1,
         },
       }
