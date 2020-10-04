@@ -20,9 +20,10 @@ import {DiscussionSummary} from "/imports/ui/discussions/DiscussionSummary";
 import {ExperimentSummary} from "/imports/ui/experiments/ExperimentSummary";
 import {CreateScenarioSet} from "../scenarioSets/CreateScenarioSet";
 import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
+import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
-import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate"
+import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 import {Link} from "react-router-dom";
 import {Groups} from "/imports/api/groups";
 import {Scenarios} from "/imports/api/scenarios";
@@ -43,6 +44,7 @@ export const MyDashboard = () => {
     const [isOpenExperimentCreation, setIsOpenExperimentCreation] = useState(false);
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
+    const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
     const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -66,6 +68,9 @@ export const MyDashboard = () => {
     }
     const handleToggleGroup = () => {
         setIsOpenGroupCreation(!isOpenGroupCreation);
+    }
+    const handleToggleDiscussion = () => {
+        setIsOpenDiscussionCreation(!isOpenDiscussionCreation);
     }
 
     //get user admin role status and update isAdmin variable with call back.
@@ -115,7 +120,6 @@ export const MyDashboard = () => {
         Meteor.subscribe("discussionTemplates");
         Meteor.subscribe("experiments");
 
-
         let userId = Meteor.userId();
 
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
@@ -130,7 +134,7 @@ export const MyDashboard = () => {
             groupIds.push(fetchedGroups[i]._id);
         }
         let fetchedAllFinishedDiscussions = Discussions.find({status: {$ne: "active"}}, {sort: {createdAt: -1}}).fetch();
-        let fetchedMyDiscussions = Discussions.find({groupId: {$in: groupIds}}, {
+        let fetchedMyDiscussions = Discussions.find({$or: [{groupId: {$in: groupIds}}, {createdBy: userId}]}, {
             sort: {
                 createdAt: -1,
                 status: 1
@@ -149,6 +153,7 @@ export const MyDashboard = () => {
         };
     });
 
+    console.log(myDiscussions);
     console.log(isIndigenous);
     return (
         <div>
@@ -177,7 +182,15 @@ export const MyDashboard = () => {
                     <GridRow columns={2}>
                         <GridColumn width={8}>
                             <Segment fluid style={{height: "21em"}}>
-                                <Header as={'h3'}>My Discussions</Header>
+                                <Header as={'h3'}>My Discussions <Button
+                                    floated={"right"}
+                                    onClick={handleToggleDiscussion}
+                                    content="New Discussion"
+                                    positive
+                                    compact
+                                />
+                                </Header>
+
                                 {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
                                 {(isIndigenous !== null) &&
@@ -229,7 +242,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleGroup}
                                         content="Create New Group"
-                                        color="green"
+                                        positive
                                     />}
                                 </Card.Content>
                             </Segment>
@@ -254,7 +267,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleTemplate}
                                             content="Create New Template"
-                                            color="green"
+                                            positive
                                         />
                                     </Card.Content>
                                 </Segment>
@@ -275,7 +288,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleScenario}
                                             content="Create New"
-                                            color="green"
+                                            positive
                                         />
                                     </Card.Content>
                                 </Segment>
@@ -302,7 +315,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleScenarioSet}
                                         content="Create New Set"
-                                        color="green"
+                                        positive
                                     />
                                 </Card.Content>
                             </Segment>
@@ -323,7 +336,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleExperimentCreation}
                                         content="Create New Experiment"
-                                        color="green"
+                                        positive
                                     />
                                 </Card.Content>
                             </Segment>
@@ -336,7 +349,7 @@ export const MyDashboard = () => {
                                     content="Assign Roles"
                                     as={Link}
                                     to="/assignroles"
-                                    color="green"
+                                    positive
                                 />
                                 <br/>
                                 <Button
@@ -344,7 +357,7 @@ export const MyDashboard = () => {
                                     content="Add user"
                                     as={Link}
                                     to="/AddUser"
-                                    color="green"
+                                    positive
                                 />
                             </Segment>
                         </GridColumn>
@@ -385,6 +398,11 @@ export const MyDashboard = () => {
                     isWizard={isOpenWizard}
                     // toggleNextModal={handleToggleScenarioSet}
                     toggleIsWizard={handleToggleWizard}/>
+                }
+                {isOpenDiscussionCreation &&
+                <CreateDiscussion
+                    toggleModal={handleToggleDiscussion}
+                    />
                 }
                 {/* Item display modals */}
                 {isOpenTemplateDisplay &&

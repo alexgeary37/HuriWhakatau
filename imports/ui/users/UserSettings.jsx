@@ -33,7 +33,7 @@ export const UserSettings = () => {
     const [userOldPassword, setUserOldPassword] = useState("");
     const [changeUserDetails, setChangeUserDetails] = useState(false);
     const [changeUsername, setChangeUsername] = useState(false);
-    const [changeName, setChangeName] = useState(false);
+    // const [changeName, setChangeName] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(false);
     const [userMountain, setUserMountain] = useState("");
     const [changeUserPepeha, setChangeUserPepeha] = useState(false);
@@ -64,7 +64,7 @@ export const UserSettings = () => {
     const [userGender, setUserGender] = useState("");
     const [userReligion, setUserReligion] = useState("");
     const [userDoB, setUserDoB] = useState("");
-    const [name, setName] = useState("");
+    // const [name, setName] = useState("");
     const [err, setErr] = useState("");
     useEffect(() => {
         if (user /*&& isIndigenous*/ && !changeUserPepeha && !changeUserDetails && !changeUsername) {
@@ -72,7 +72,6 @@ export const UserSettings = () => {
             setUsername(user.username);
 
             if(user.userDetails){
-                // setName(user.name);
                 setUserFirstName(user.userDetails.firstName);
                 setUserLastName(user.userDetails.lastName);
                 setUserGender(user.userDetails.gender);
@@ -145,16 +144,16 @@ export const UserSettings = () => {
         Meteor.call("security.updateUsername", username, Meteor.userId());
     };
 
-    const updateName = () => {
-        Meteor.call("security.updateName", name, Meteor.userId());
-    }
-
-    const handleChangeName = () => {
-        if(changeName){
-            updateName();
-        }
-        setChangeName(!changeName);
-    }
+    // const updateName = () => {
+    //     Meteor.call("security.updateName", name, Meteor.userId());
+    // }
+    //
+    // const handleChangeName = () => {
+    //     if(changeName){
+    //         updateName();
+    //     }
+    //     setChangeName(!changeName);
+    // }
 
     const updateUserPassword = () => {
         if (userNewPassword.length < 8) {
@@ -268,29 +267,29 @@ export const UserSettings = () => {
                                     }
                                     <Divider/>
                                     <Card.Content header="User Details"/>
-                                    <br/>
-                                    <Input value={user && name}
-                                           labelPosition="left"
-                                           type="text"
-                                           readOnly={!changeName}
-                                        // size="mini"
-                                           style={{width: "45%"}}
-                                           onChange={({target}) => setName(target.value)}>
-                                        <Label style={{width: "55%"}}>Name</Label>
-                                        <input/>
-                                        {!changeName ? (
-                                            <Button type="button" size="mini" content="Change" onClick={() => {
-                                                handleChangeName();
-                                            }}/>
-                                        ) : (
-                                            < Button type="button" size="mini" content="Save" onClick={() => {
-                                                handleChangeName();
-                                                // setChangeName(false);
-                                                // updateName();
-                                            }}/>
-                                        )}
-                                    </Input>
-                                    <br/>
+                                    {/*<br/>*/}
+                                    {/*<Input value={user && name}*/}
+                                    {/*       labelPosition="left"*/}
+                                    {/*       type="text"*/}
+                                    {/*       readOnly={!changeName}*/}
+                                    {/*    // size="mini"*/}
+                                    {/*       style={{width: "45%"}}*/}
+                                    {/*       onChange={({target}) => setName(target.value)}>*/}
+                                    {/*    <Label style={{width: "55%"}}>Name</Label>*/}
+                                    {/*    <input/>*/}
+                                    {/*    {!changeName ? (*/}
+                                    {/*        <Button type="button" size="mini" content="Change" onClick={() => {*/}
+                                    {/*            handleChangeName();*/}
+                                    {/*        }}/>*/}
+                                    {/*    ) : (*/}
+                                    {/*        < Button type="button" size="mini" content="Save" onClick={() => {*/}
+                                    {/*            handleChangeName();*/}
+                                    {/*            // setChangeName(false);*/}
+                                    {/*            // updateName();*/}
+                                    {/*        }}/>*/}
+                                    {/*    )}*/}
+                                    {/*</Input>*/}
+                                    {/*<br/>*/}
                                     <br/>
                                     <Input value={user && userFirstName}
                                            placeholder={"Enter First Name"}

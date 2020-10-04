@@ -109,7 +109,6 @@ Meteor.methods({
         console.log("updating user details");
         check(userId, String);
         check(detailsObject, Object);
-        console.log(detailsObject);
 
         Meteor.users.update(userId, {
             $set: {
