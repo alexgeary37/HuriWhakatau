@@ -77,7 +77,7 @@ export const MyDashboard = () => {
         }
         setIsAdmin(result);
     });
-    //get user researcher role status and update isresearcher variable with call back.
+    //get user researcher role status and update isResearcher variable with call back.
     // possibly this should be a Promise?
     Meteor.call("security.hasRole", Meteor.userId(), "RESEARCHER", (error, result) => {
         if (error) {
@@ -123,7 +123,6 @@ export const MyDashboard = () => {
         let fetchedScenarioSets = ScenarioSets.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         let fetchedExperiments = Experiments.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
-        // console.log(fetchedDiscussionTemplates[0].name);
 
         // need to handle case where user has no groups or discussions yet.
         let groupIds = [];
