@@ -116,11 +116,11 @@ Meteor.methods({
                 userDetails: {
                     firstName: detailsObject.firstName,
                     lastName: detailsObject.lastName,
-                    // ethnicity: detailsObject.ethnicity,
-                    // location: detailsObject.location,
-                    // gender: detailsObject.gender,
-                    // dob: detailsObject.dob,
-                    // religion: detailsObject.religion,
+                    ethnicity: detailsObject.ethnicity,
+                    location: detailsObject.location,
+                    gender: detailsObject.gender,
+                    dob: detailsObject.dob,
+                    religion: detailsObject.religion,
                 }
             },
         });

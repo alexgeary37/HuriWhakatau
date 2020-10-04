@@ -67,13 +67,19 @@ export const UserSettings = () => {
     const [name, setName] = useState("");
     const [err, setErr] = useState("");
     useEffect(() => {
-        if (user && isIndigenous && !changeUserPepeha && !changeUserDetails && !changeUsername) {
+        if (user /*&& isIndigenous*/ && !changeUserPepeha && !changeUserDetails && !changeUsername) {
             console.log("Adding info to states");
             setUsername(user.username);
+
             if(user.userDetails){
                 // setName(user.name);
                 setUserFirstName(user.userDetails.firstName);
                 setUserLastName(user.userDetails.lastName);
+                setUserGender(user.userDetails.gender);
+                setUserReligion(user.userDetails.religion);
+                setUserEthnicity(user.userDetails.ethnicity);
+                setUserLocation(user.userDetails.location);
+                setUserDoB(user.userDetails.dob);
             }
             if (user.pepeha) {
                 setUserMountain(user.pepeha.mountain);
@@ -83,7 +89,7 @@ export const UserSettings = () => {
                 setUserRole(user.pepeha.role);
         }
     }
-        console.log(pepehaObject);
+        // console.log(pepehaObject);
     }, [user]);
 
     //get user participant role status and update variable with call back.
@@ -204,11 +210,11 @@ export const UserSettings = () => {
                                         <Label style={{width: "55%"}}>Username</Label>
                                         <input/>
                                         {!changeUsername ? (
-                                            <Button size="mini" content="Change" onClick={() => {
+                                            <Button type="button" size="mini" content="Change" onClick={() => {
                                                 setChangeUsername(true)
                                             }}/>
                                         ) : (
-                                            < Button size="mini" content="Save" onClick={() => {
+                                            < Button type="button" size="mini" content="Save" onClick={() => {
                                                 setChangeUsername(false);
                                                 updateUsername();
                                             }}/>
@@ -228,7 +234,7 @@ export const UserSettings = () => {
                                         <Label style={{width: "55%"}}>Password</Label>
                                         <input/>
                                         {!changeUserPassword &&
-                                        <Button size="mini" content="Change" onClick={() => {
+                                        <Button type="button" size="mini" content="Change" onClick={() => {
                                             setChangeUserPassword(true);
                                             setUserOldPassword("");
                                         }}/>
@@ -247,7 +253,7 @@ export const UserSettings = () => {
                                                     onChange={({target}) => setUserNewPassword(target.value)}>
                                             <Label>New Password</Label>
                                             <input/>
-                                            <Form.Button size="mini" content="Save" onClick={() => {
+                                            <Form.Button type="button" size="mini" content="Save" onClick={() => {
                                                 // setChangeUserPassword(false);
 
                                                 updateUserPassword();
@@ -273,11 +279,11 @@ export const UserSettings = () => {
                                         <Label style={{width: "55%"}}>Name</Label>
                                         <input/>
                                         {!changeName ? (
-                                            <Button size="mini" content="Change" onClick={() => {
+                                            <Button type="button" size="mini" content="Change" onClick={() => {
                                                 handleChangeName();
                                             }}/>
                                         ) : (
-                                            < Button size="mini" content="Save" onClick={() => {
+                                            < Button type="button" size="mini" content="Save" onClick={() => {
                                                 handleChangeName();
                                                 // setChangeName(false);
                                                 // updateName();
@@ -324,7 +330,7 @@ export const UserSettings = () => {
                                     <br/>
                                     <Input value={user && userDoB}
                                            placeholder={"Enter Date of Birth"}
-                                           type="text"
+                                           type="date"
                                            readOnly={!changeUserDetails}
                                            onChange={({target}) => setUserDoB(target.value)}
                                            onClick={() => {
@@ -335,7 +341,7 @@ export const UserSettings = () => {
                                     <br/>
                                     <br/>
                                     <Input value={user && userEthnicity}
-                                           placeholder={"Enter First Name"}
+                                           placeholder={"Enter Ethnic Identity"}
                                            type="text"
                                            readOnly={!changeUserDetails}
                                            onChange={({target}) => setUserEthnicity(target.value)}
@@ -347,7 +353,7 @@ export const UserSettings = () => {
                                     <br/>
                                     <br/>
                                     <Input value={user && userReligion}
-                                           placeholder={"Enter First Name"}
+                                           placeholder={"Enter Religion"}
                                            type="text"
                                            readOnly={!changeUserDetails}
                                            onChange={({target}) => setUserReligion(target.value)}
@@ -460,7 +466,7 @@ export const UserSettings = () => {
                                     {/*>*/}
                                     {/*    <Label style={{width: "55%"}}>Mountain</Label>*/}
                                     {/*    <input/>*/}
-                                        <Button icon style={{marginLeft: "20px"}}>
+                                        <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="mountain"/>
                                         </Button>
                                     {/*</Input>*/}
@@ -482,7 +488,7 @@ export const UserSettings = () => {
                                     >
                                         {/*<Label style={{width: "55%"}}>River</Label>*/}
                                         <input/>
-                                        <Button icon style={{marginLeft: "20px"}}>
+                                        <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="river"/>
                                         </Button>
                                     </Input>
@@ -506,7 +512,7 @@ export const UserSettings = () => {
                                     >
                                         {/*<Label style={{width: "55%"}}>Waka</Label>*/}
                                         <input/>
-                                        <Button icon style={{marginLeft: "20px"}}>
+                                        <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="waka"/>
                                         </Button>
                                     </Input>
@@ -530,7 +536,7 @@ export const UserSettings = () => {
                                     >
                                         {/*<Label style={{width: "55%"}}>Iwi</Label>*/}
                                         <input/>
-                                        <Button icon style={{marginLeft: "20px"}}>
+                                        <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="iwi"/>
                                         </Button>
                                     </Input>
@@ -554,7 +560,7 @@ export const UserSettings = () => {
                                     >
                                         {/*<Label style={{width: "55%"}}>Employment / Role</Label>*/}
                                         <input/>
-                                        <Button icon style={{marginLeft: "20px"}}>
+                                        <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="role"/>
                                         </Button>
                                     </Input>
