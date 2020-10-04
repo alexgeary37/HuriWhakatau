@@ -79,18 +79,18 @@ Meteor.methods({
             return true;
     },
 
-    "security.updateName"(name, userId){
-        console.log("updating user name");
-        check(userId, String);
-        check(name, String);
-
-        Meteor.users.update(userId, {
-            $set: {
-                name: name,
-            },
-        });
-        return true;
-    },
+    // "security.updateName"(name, userId){
+    //     console.log("updating user name");
+    //     check(userId, String);
+    //     check(name, String);
+    //
+    //     Meteor.users.update(userId, {
+    //         $set: {
+    //             name: name,
+    //         },
+    //     });
+    //     return true;
+    // },
 
     "security.updateUsername"(username, userId){
         console.log("updating username");
@@ -100,6 +100,28 @@ Meteor.methods({
         Meteor.users.update(userId, {
             $set: {
                 username: username,
+            },
+        });
+        return true;
+    },
+
+    "security.updateUserDetails"(detailsObject, userId){
+        console.log("updating user details");
+        check(userId, String);
+        check(detailsObject, Object);
+        console.log(detailsObject);
+
+        Meteor.users.update(userId, {
+            $set: {
+                userDetails: {
+                    firstName: detailsObject.firstName,
+                    lastName: detailsObject.lastName,
+                    ethnicity: detailsObject.ethnicity,
+                    location: detailsObject.location,
+                    gender: detailsObject.gender,
+                    dob: detailsObject.dob,
+                    religion: detailsObject.religion,
+                }
             },
         });
         return true;
