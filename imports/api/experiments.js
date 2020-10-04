@@ -78,9 +78,9 @@ Meteor.methods({
 
   },
 
-  // Remove a category from the categories collection in the db.
-  // categoryId: _id of the comment to be removed
-  // Called from Discussion.jsx
+  // Remove an experiment from the experiments collection in the db.
+  // experimentId: _id of the comment to be removed
+  //
   "experiments.remove"(experimentId) {
     check(experimentId, String);
     //add role check
