@@ -1,2 +1,9 @@
-Initial project files. To migrate functionality from previous juryromm project to this project.
-A new change added via webstorm
+Jury Room / Huri Whakatau is an online platform for facilitating discussions with the aim of encouraging a consensus outcome.
+
+Libraries used:
+* emoji-mart
+* react
+* react-markdown
+* react-notification-badge
+* semantic-ui-css
+* semantic-ui-react
