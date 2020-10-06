@@ -28,7 +28,7 @@ import { CommentForm } from "/imports/ui/comments/CommentForm";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 
 export const Discussion = () => {
-    console.log("Entered discussion");
+    // console.log("Entered discussion");
     const filter = {};
     const {discussionId} = useParams();
     const [timedDiscussion, setTimedDiscussion] = useState(false);
@@ -51,7 +51,7 @@ export const Discussion = () => {
         let hours = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let minutes = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor(((discussionDeadline - current) % (1000 * 60)) / 1000);
-        console.log("timeleft: ", minutes);
+        // console.log("timeleft: ", minutes);
         return hours.toString().padStart(2, '0')
             + ":" +
             minutes.toString().padStart(2, '0')
@@ -135,14 +135,14 @@ export const Discussion = () => {
     };
   });
   // setMutableDiscussionDeadline(discussionDeadline);
-  console.log(
-    "time limit: ",
-    discussionTimeLimit,
-    "\ndiscussion deadline: ",
-    discussionDeadline,
-    "timed: ",
-    timedDiscussion
-  );
+  // console.log(
+  //   "time limit: ",
+  //   discussionTimeLimit,
+  //   "\ndiscussion deadline: ",
+  //   discussionDeadline,
+  //   "timed: ",
+  //   timedDiscussion
+  // );
 
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.

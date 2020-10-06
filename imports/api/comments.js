@@ -11,6 +11,8 @@ Meteor.methods({
   "comments.insert"(text, pasted, keystrokes, discussionId) {
     check(text, String);
     check(discussionId, String);
+    check(keystrokes, Array);
+    check(pasted, Array);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
