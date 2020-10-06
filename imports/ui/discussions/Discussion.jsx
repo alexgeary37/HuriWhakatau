@@ -7,7 +7,8 @@ import {
   Modal,
   Grid,
   GridColumn,
-  List, Segment,
+  List,
+  Segment,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -28,46 +29,57 @@ import { CommentForm } from "/imports/ui/comments/CommentForm";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 
 export const Discussion = () => {
-    // console.log("Entered discussion");
-    const filter = {};
-    const {discussionId} = useParams();
-    const [timedDiscussion, setTimedDiscussion] = useState(false);
-    const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(null);
-    const [timeLeft, setTimeLeft] = useState(null);
-    const [userInGroup, setUserInGroup] = useState(false);
-    //todo, if the user uses the browser back button to go back to dash from a timed discussion
-    // and then to a non-timed discussion the timedDiscussion state stays true
-    const updateTimed = () => {
-        setTimedDiscussion(true);
-    }
-    const updateDeadline = (deadline) => {
-        setMutableDiscussionDeadline(deadline);
-        console.log("deadline updated", mutableDiscussionDeadline);
-    }
+  console.log("Entered discussion");
+  const filter = {};
+  const { discussionId } = useParams();
+  const [timedDiscussion, setTimedDiscussion] = useState(false);
+  const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(
+    null
+  );
+  const [timeLeft, setTimeLeft] = useState(null);
+  const [userInGroup, setUserInGroup] = useState(false);
+  //todo, if the user uses the browser back button to go back to dash from a timed discussion
+  // and then to a non-timed discussion the timedDiscussion state stays true
+  const updateTimed = () => {
+    setTimedDiscussion(true);
+  };
+  const updateDeadline = (deadline) => {
+    setMutableDiscussionDeadline(deadline);
+    console.log("deadline updated", mutableDiscussionDeadline);
+  };
 
-    //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
-    const calculateTimeLeft = () => {
-        let current = new Date();
-        let hours = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        let minutes = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor(((discussionDeadline - current) % (1000 * 60)) / 1000);
-        // console.log("timeleft: ", minutes);
-        return hours.toString().padStart(2, '0')
-            + ":" +
-            minutes.toString().padStart(2, '0')
-            + ":" +
-            seconds.toString().padStart(2, '0');
-    }
+  //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
+  const calculateTimeLeft = () => {
+    let current = new Date();
+    let hours = Math.floor(
+      ((discussionDeadline - current) % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+    );
+    let minutes = Math.floor(
+      ((discussionDeadline - current) % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    let seconds = Math.floor(
+      ((discussionDeadline - current) % (1000 * 60)) / 1000
+    );
+    console.log("timeleft: ", minutes);
+    return (
+      hours.toString().padStart(2, "0") +
+      ":" +
+      minutes.toString().padStart(2, "0") +
+      ":" +
+      seconds.toString().padStart(2, "0")
+    );
+  };
 
-        useEffect(() => {
-          if (timedDiscussion) {
-            const timer = setTimeout(() => {
-              setTimeLeft(calculateTimeLeft());
-            }, 1000);
-            // Clear timeout if the component is unmounted
-            return () => clearTimeout(timer);
-          }
-        });
+  useEffect(() => {
+    if (timedDiscussion) {
+      const timer = setTimeout(() => {
+        setTimeLeft(calculateTimeLeft());
+      }, 1000);
+      // Clear timeout if the component is unmounted
+      return () => clearTimeout(timer);
+    }
+  });
 
   const {
     scenario,
@@ -164,7 +176,11 @@ export const Discussion = () => {
     let currentTime = new Date();
     if (discussionDeadline < currentTime && discussionStatus === "active") {
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
-    } else if (discussionDeadline > currentTime && !timedDiscussion && discussionStatus === "active") {
+    } else if (
+      discussionDeadline > currentTime &&
+      !timedDiscussion &&
+      discussionStatus === "active"
+    ) {
       updateTimed();
       calculateTimeLeft();
       //maybe put the useEffect scroll to bottom controlling state change (vv line 189) here
@@ -204,11 +220,13 @@ export const Discussion = () => {
     <Container>
       <NavBar />
       {/*hacky way to move content out from under menu*/}
-      <br/><br/><br/>
-      <Container attached="bottom" style={{width:"110vh"}}>
-        <Grid columns={3}  >
+      <br />
+      <br />
+      <br />
+      <Container attached="bottom" style={{ width: "110vh" }}>
+        <Grid columns={3}>
           <Grid.Row>
-            <GridColumn width={3} style={{height:"90vh"}}>
+            <GridColumn width={3} style={{ height: "90vh" }}>
               <Header
                 content={(scenario && scenario.title) || (topic && topic.title)}
                 size="medium"
@@ -218,26 +236,28 @@ export const Discussion = () => {
               {timedDiscussion && <Timer time={timeLeft} />}
             </GridColumn>
             <GridColumn width={10}>
-              <div style={{position: "absolute", bottom: "0px", width: "95%"}}>
-              <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
-                {comments &&
-                  comments.map((comment) => (
-                    <UserComment
-                      key={comment._id}
-                      comment={comment}
-                      discussionStatus={discussionStatus}
-                      userCanEdit={
-                        discussionTemplate
-                          ? discussionTemplate.usersCanEditComments
-                          : true
-                      }
-                    />
-                  ))}
-                <div ref={commentsEndRef} />
-              </Comment.Group>
-              {discussionStatus === "active" && (
-                <CommentForm discussionId={discussionId}/>
-              )}
+              <div
+                style={{ position: "absolute", bottom: "0px", width: "95%" }}
+              >
+                <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
+                  {comments &&
+                    comments.map((comment) => (
+                      <UserComment
+                        key={comment._id}
+                        comment={comment}
+                        discussionStatus={discussionStatus}
+                        userCanEdit={
+                          discussionTemplate
+                            ? discussionTemplate.usersCanEditComments
+                            : true
+                        }
+                      />
+                    ))}
+                  <div ref={commentsEndRef} />
+                </Comment.Group>
+                {discussionStatus === "active" && (
+                  <CommentForm discussionId={discussionId} />
+                )}
               </div>
             </GridColumn>
             <GridColumn width={3}>
@@ -257,18 +277,14 @@ export const Discussion = () => {
                   <Modal open={true}>
                     <Modal.Content>Consensus</Modal.Content>
                     <Modal.Actions>
-                      <Button
-    as={Link}
-    to="/"
-    content="Return to Dashboard"
-    />
+                      <Button as={Link} to="/" content="Return to Dashboard" />
                     </Modal.Actions>
                   </Modal>
                 )}
                 {!userHasSubmittedVerdict() &&
                   discussionVerdictProposers &&
-                discussionStatus === "active" &&
-                    (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                  discussionStatus === "active" &&
+                  (discussionVerdictProposers.includes(Meteor.userId()) ? (
                     <VerdictForm discussionId={discussionId} />
                   ) : (
                     <div style={{ textAlign: "center" }}>

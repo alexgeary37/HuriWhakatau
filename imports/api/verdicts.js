@@ -56,6 +56,8 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // Verdicts.remove();
+
   Meteor.publish("verdicts", function (discussionId) {
     return Verdicts.find(
       { discussionId: discussionId },
