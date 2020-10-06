@@ -4,16 +4,15 @@ import { check } from "meteor/check";
 export const Scenarios = new Mongo.Collection("scenarios");
 
 Meteor.methods({
-  // Insert a Group into the scenarios collection in the db.
+  // Insert a Scenario into the scenarios collection in the db.
   // Called from ...
   //todo, work out how this can transition from existing data to new schema.
   "scenarios.create"(title, description, topicId, discussionTemplateId) {
-    // topicId: String,
-    // discussionTemplateId: String,
     console.log("Enter scenarios.create");
-
     check(title, String);
     check(description, String);
+    check(topicId, String);
+    check(discussionTemplateId, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
@@ -21,7 +20,7 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    // Insert new Group and get its _id.
+    // Insert new Scenario and get its _id.
     Scenarios.insert({
       title: title,
       description: description,

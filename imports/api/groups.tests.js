@@ -9,7 +9,7 @@ if (Meteor.isServer) {
     describe("methods", function () {
       const userId = Random.id();
       const randName = Random.secret();
-      const randMembers = ["member1", "member2", "member3", "member4"];
+      const randMembers = [Random.id(), Random.id(), Random.id(), Random.id()];
 
       // Set up a fake method call context.
       const invocation = { userId };

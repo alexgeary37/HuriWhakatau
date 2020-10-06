@@ -3,6 +3,8 @@ import assert from "assert";
 import "../imports/api/comments.tests.js";
 import "../imports/api/discussions.tests.js";
 import "../imports/api/groups.tests.js";
+import "../imports/api/scenarios.tests.js";
+import "../imports/api/scenarioSets.tests.js";
 
 //todo add testing
 describe("juryroom", function () {
