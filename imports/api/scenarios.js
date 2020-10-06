@@ -25,7 +25,7 @@ Meteor.methods({
     const scenarioId = Scenarios.insert({
       title: title,
       description: description,
-      topicId: topicId,
+      // topicId: topicId,
       discussionTemplateId: discussionTemplateId,
       createdAt: new Date(),
       createdBy: this.userId,
