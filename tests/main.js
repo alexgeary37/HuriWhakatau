@@ -1,6 +1,9 @@
 import assert from "assert";
 
 import "../imports/api/comments.tests.js";
+import "../imports/api/discussions.tests.js";
+import "../imports/api/groups.tests.js";
+
 //todo add testing
 describe("juryroom", function () {
   it("package.json has correct name", async function () {
