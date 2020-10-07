@@ -16,7 +16,6 @@ export const CommentForm = ({discussionId}) => {
             t: Date.now(),
         }
         setPastedItems(pastedItems => [...pastedItems, pastedItem]);
-        console.log(pastedItem);
     };
 
     const keystroke = (event) => {
@@ -31,10 +30,9 @@ export const CommentForm = ({discussionId}) => {
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
     useEffect (()=>{
-        const elem = document.getElementsByClassName("public-DraftEditor-content");
-        console.log(elem[0].classList);
-        elem[0].addEventListener('paste', (event) => { pasted(event) });
-        elem[0].addEventListener('keypress', (event) => { keystroke(event) });
+        const editorContent = document.getElementsByClassName("public-DraftEditor-content")[0];
+        editorContent.addEventListener('paste', (event) => { pasted(event) });
+        editorContent.addEventListener('keypress', (event) => { keystroke(event) });
         },[]);
 
     const handleChange = (value) => {
@@ -42,9 +40,9 @@ export const CommentForm = ({discussionId}) => {
     };
 
     const handleSubmit = () => {
-        if (typeof (editorValue.editorValue) == "undefined") {
-            return;
-        } // If text is empty, don't submit anything.
+        // if (typeof (editorValue.editorValue) == "undefined") { //this doesn't work
+        //     return;
+        // } // If text is empty, don't submit anything.
         Meteor.call(
             "comments.insert",
             editorValue.toString("markdown"),
@@ -52,7 +50,6 @@ export const CommentForm = ({discussionId}) => {
             keyStrokes,
             discussionId
         );
-        console.log(editorValue.toString("markdown"));
         setEditorValue(RichTextEditor.createEmptyValue());
         setPastedItems([]);
         setKeyStrokes([]);

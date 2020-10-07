@@ -1,5 +1,5 @@
 import {useTracker} from "meteor/react-meteor-data";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Card,
@@ -7,11 +7,13 @@ import {
     Segment,
     Header,
     Grid,
-    GridColumn, GridRow, ListItem
+    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating
 } from "semantic-ui-react";
+import NotificationBadge from "react-notification-badge";
 import '/imports/api/security'
 import {NavBar} from "./NavBar";
 import {CreateGroup} from "../groups/CreateGroup";
+import {UserSummary} from "../users/UserSummary";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
@@ -25,6 +27,7 @@ import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDi
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 import {Link} from "react-router-dom";
+import {Users} from "/imports/api/users"
 import {Groups} from "/imports/api/groups";
 import {Scenarios} from "/imports/api/scenarios";
 import {Experiments} from "/imports/api/experiments";
@@ -38,6 +41,7 @@ export const MyDashboard = () => {
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
     const [isOpenWizard, setIsOpenWizard] = useState(false);
+    const [showSidebar, setShowSidebar] = useState(false);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
     const [isOpenScenarioCreation, setIsOpenScenarioCreation] = useState(false);
     const [isOpenScenarioSetCreation, setIsOpenScenarioSetCreation] = useState(false);
@@ -101,14 +105,16 @@ export const MyDashboard = () => {
         console.log(result);
     });
 
-    const {user,
+    const {
+        user,
         myDiscussions,
         allFinishedDiscussions,
         groups,
         scenarios,
         scenarioSets,
         discussionTemplates,
-        experiments
+        experiments,
+        friends
     } = useTracker(() => {
         //subscribe to roles for user permissions check, should this be ^^ up there?
         let fetchedDiscussionTemplates = null;
@@ -119,8 +125,29 @@ export const MyDashboard = () => {
         Meteor.subscribe("scenarioSets");
         Meteor.subscribe("discussionTemplates");
         Meteor.subscribe("experiments");
+        const userSub = Meteor.subscribe("users");
+        let fetchedFriendIds = [];
+        let fetchedFriends = [];
+        let currentUser;
 
         let userId = Meteor.userId();
+        if(userSub.ready()) {
+            currentUser = Meteor.users.findOne({_id: userId});
+            if(currentUser.friends) {
+                fetchedFriendIds = currentUser.friends;
+                fetchedFriendIds.forEach((friendId) => {
+                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}));
+                    console.log(friendId);
+                })
+            }
+        }
+        console.log(fetchedFriends);
+        // let fetchedFriends;
+        // let currentUser = Meteor.users.findOne({_id: Meteor.userId()});
+        // let currentUser = Users.findOne({_id: Meteor.userId()});
+        // // ,(err, result)=>{
+        //     fetchedFriends = Meteor.users.find({_id: {$in: currentUser.friends}});
+        // // })
 
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
         let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
@@ -142,7 +169,7 @@ export const MyDashboard = () => {
         }).fetch();
 
         return {
-            user: userId,
+            user: currentUser,
             myDiscussions: fetchedMyDiscussions,
             allFinishedDiscussions: fetchedAllFinishedDiscussions,
             groups: fetchedGroups,
@@ -150,16 +177,48 @@ export const MyDashboard = () => {
             scenarioSets: fetchedScenarioSets,
             discussionTemplates: fetchedDiscussionTemplates,
             experiments: fetchedExperiments,
+            friends: fetchedFriends,
         };
     });
 
-    console.log(myDiscussions);
-    console.log(isIndigenous);
+    console.log(user);
+
+    const handleShowSidebar = () => {
+        setShowSidebar(!showSidebar);
+    }
+
     return (
         <div>
             <NavBar/>
             <span style={{height: "10em"}}/>
+            {/*start sidebar*/}
+            <Sidebar.Pushable as={Segment}>
+                <Sidebar
+                    as={Segment}
+                    animation='overlay'
+                    icon='labeled'
+                    inverted
+                    vertical
+                    visible
+                    width={showSidebar ? "thin" : "very thin"}
+                >
+
+                    <Menu.Item onClick={handleShowSidebar}>
+                        <Icon size={'big'} name='users' />
+                        Friends
+                    </Menu.Item>
+                    {showSidebar && friends && friends.map((friend) => (
+                        <Menu.Item key={friend._id} >
+                            {friend.username}
+                            <Rating icon='star' defaultRating={!friend.online ? 1 : 0} maxRating={1} disabled />
+                        </Menu.Item>
+                    ))}
+                </Sidebar>
+
+                <Sidebar.Pusher>
+                {/*end sidebar*/}
             <Container>
+
                 <Segment attached="top" clearing>
                     <Header size="huge">
                         <Header.Content as={Container} fluid>
@@ -412,6 +471,8 @@ export const MyDashboard = () => {
                 }
 
             </Container>
+            </Sidebar.Pusher>
+            </Sidebar.Pushable>
         </div>
     );
 };

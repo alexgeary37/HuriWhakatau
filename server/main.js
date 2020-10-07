@@ -14,6 +14,7 @@ import "/imports/api/experiments"
 import "/imports/api/accountsEmail"
 import "/server/defaultData";
 import "/imports/api/mountains";
+import "/imports/api/users"
 
 Meteor.startup(() => {
     process.env.MAIL_URL =
@@ -27,8 +28,8 @@ Meteor.startup(() => {
     Meteor.publish("roles", function () {
       return Meteor.roleAssignment.find({});
     });
-    Meteor.publish("users", function () {
-      return Meteor.users.find();
-    });
+    // Meteor.publish("users", function () {
+    //   return Meteor.users.find();
+    // });
   }
 });
