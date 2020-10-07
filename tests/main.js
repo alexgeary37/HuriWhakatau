@@ -5,6 +5,7 @@ import "../imports/api/discussions.tests.js";
 import "../imports/api/groups.tests.js";
 import "../imports/api/scenarios.tests.js";
 import "../imports/api/scenarioSets.tests.js";
+import "../imports/api/verdicts.tests.js";
 
 //todo add testing
 describe("juryroom", function () {
