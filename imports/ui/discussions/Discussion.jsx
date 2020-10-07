@@ -13,7 +13,7 @@ import {
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
 import { useTracker } from "meteor/react-meteor-data";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Groups } from "/imports/api/groups";
 import { Topics } from "/imports/api/topics";
 import { Verdicts } from "/imports/api/verdicts";
@@ -38,6 +38,7 @@ export const Discussion = () => {
   );
   const [timeLeft, setTimeLeft] = useState(null);
   const [userInGroup, setUserInGroup] = useState(false);
+  let history = useHistory();
   //todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
   const updateTimed = () => {
@@ -92,6 +93,7 @@ export const Discussion = () => {
     discussionTemplate,
     discussionDeadline,
     discussionTimeLimit,
+    nextDiscussionId,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
     const scenarioSub = Meteor.subscribe("scenarios");
@@ -110,7 +112,7 @@ export const Discussion = () => {
     let discussionDeadline;
     let discussionTopic;
     let discussionTemplate;
-
+    let nextDiscussionId;
     if (
       discussionSub.ready() &&
       scenarioSub.ready() &&
@@ -131,6 +133,9 @@ export const Discussion = () => {
         : 0;
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
+      nextDiscussionId = discussion.nextDiscussion
+          ? discussion.nextDiscussion
+          : null;
     }
 
     return {
@@ -144,6 +149,7 @@ export const Discussion = () => {
       discussionTemplate: discussionTemplate,
       discussionTimeLimit: discussionTimeLimit,
       discussionDeadline: discussionDeadline,
+      nextDiscussionId: nextDiscussionId,
     };
   });
   // setMutableDiscussionDeadline(discussionDeadline);
@@ -215,6 +221,10 @@ export const Discussion = () => {
 
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
+
+  const nextDiscussion = () => {
+    history.push("/discussion/" + nextDiscussionId);
+  };
 
   return (
     <Container>
@@ -296,6 +306,17 @@ export const Discussion = () => {
                       />
                     </div>
                   ))}
+                {discussionStatus !== "active" &&
+                nextDiscussionId && (
+                    <div style={{ textAlign: "center" }}>
+                      <Button
+                          style={{ margin: 10 }}
+                          content={"Go to next"}
+                          onClick={nextDiscussion}
+                          primary
+                      />
+                    </div>
+                )}
               </List>
             </GridColumn>
           </Grid.Row>

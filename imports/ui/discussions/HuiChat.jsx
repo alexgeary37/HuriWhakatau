@@ -352,7 +352,7 @@ export const HuiChat = () => {
                           groupLeader={groupLeader}
                           discussionStatus={discussionStatus}
                           closeChat={closeChat}
-                          nextDiscussion={nextDiscussion}
+                          nextDiscussionId={nextDiscussion}
                         />
                       </List.Item>
                     ))}

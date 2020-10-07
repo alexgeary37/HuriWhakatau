@@ -63,7 +63,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
         Meteor.subscribe("groups");
         Meteor.subscribe("scenarioSets");
 
-        //todo filter by user
+        //todo filter by user who created group
         return {
             groups: Groups.find().fetch(),
             scenarioSets: ScenarioSets.find().fetch(),
