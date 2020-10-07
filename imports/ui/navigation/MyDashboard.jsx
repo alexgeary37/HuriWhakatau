@@ -137,17 +137,9 @@ export const MyDashboard = () => {
                 fetchedFriendIds = currentUser.friends;
                 fetchedFriendIds.forEach((friendId) => {
                     fetchedFriends.push(Meteor.users.findOne({_id: friendId}));
-                    console.log(friendId);
                 })
             }
         }
-        console.log(fetchedFriends);
-        // let fetchedFriends;
-        // let currentUser = Meteor.users.findOne({_id: Meteor.userId()});
-        // let currentUser = Users.findOne({_id: Meteor.userId()});
-        // // ,(err, result)=>{
-        //     fetchedFriends = Meteor.users.find({_id: {$in: currentUser.friends}});
-        // // })
 
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
         let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
@@ -180,8 +172,6 @@ export const MyDashboard = () => {
             friends: fetchedFriends,
         };
     });
-
-    console.log(user);
 
     const handleShowSidebar = () => {
         setShowSidebar(!showSidebar);

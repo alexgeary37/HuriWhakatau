@@ -1,7 +1,5 @@
 import {check} from "meteor/check";
-import {Mongo} from "meteor/mongo";
 
-// export const Users = new Mongo.Collection("users");
 
 Meteor.methods({
     "users.updatePepeha"(pepeha, userId){

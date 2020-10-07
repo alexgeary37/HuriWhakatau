@@ -57,7 +57,8 @@ export const UserSummary = ({
                 />
               </div>
             )}
-          {discussionStatus !== "active" && (
+          {discussionStatus !== "active" &&
+          nextDiscussionId && (
             <div style={{ textAlign: "center" }}>
               <Button
                 style={{ margin: 10 }}

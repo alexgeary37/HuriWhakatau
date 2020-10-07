@@ -26,7 +26,6 @@ export const CommentForm = ({discussionId}) => {
         setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
     };
 
-
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
     useEffect (()=>{
@@ -55,19 +54,20 @@ export const CommentForm = ({discussionId}) => {
         setKeyStrokes([]);
     };
 
-  const handleSubmit = () => {
-    if (!editorValue) return; // If text is empty, don't submit anything.
-    Meteor.call(
-      "comments.insert",
-      editorValue.toString("markdown"),
-      discussionId
-    );
-    console.log(editorValue.toString("markdown"));
-    setEditorValue(RichTextEditor.createEmptyValue());
-  };
-
-
-
+    const toolbarConfig = {
+        // Optionally specify the groups to display (displayed in the order listed).
+        INLINE_STYLE_BUTTONS: [
+            {label: "Bold", style: "BOLD", className: "custom-css-class"},
+            {label: "Italic", style: "ITALIC"},
+            {label: "Strikethrough", style: "STRIKETHROUGH"},
+            {label: "Blockquote", style: "blockquote"},
+        ],
+        BLOCK_TYPE_BUTTONS: [
+            {label: "UL", style: "unordered-list-item"},
+            {label: "OL", style: "ordered-list-item"},
+        ],
+        display: ["INLINE_STYLE_BUTTONS", "BLOCK_TYPE_BUTTONS", "LINK_BUTTONS"],
+    };
 
     return (
         <Form>

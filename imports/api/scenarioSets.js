@@ -17,7 +17,7 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    // Insert new ScenarioSet and get its _id.
+    // Insert new ScenarioSet
     ScenarioSets.insert({
       title: title,
       description: description,
