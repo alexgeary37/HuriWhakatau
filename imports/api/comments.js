@@ -42,6 +42,7 @@ Meteor.methods({
     if (!this.userId || comment.authorId !== this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
+
     Comments.remove(commentId);
   },
 
@@ -78,6 +79,7 @@ Meteor.methods({
         emojis: emojis,
       },
     });
+
     return true;
   },
 });

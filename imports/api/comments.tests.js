@@ -1,38 +1,88 @@
-import {Meteor} from "meteor/meteor";
-import {Random} from "meteor/random";
-import {assert} from "chai";
+import { Meteor } from "meteor/meteor";
+import { Random } from "meteor/random";
+import { assert } from "chai";
 
-import {Comments} from "./comments.js";
+import { Comments } from "./comments.js";
 
 if (Meteor.isServer) {
-    describe("Comments", () => {
-        describe("methods", () => {
-            const userId = Random.id();
-            let commentId;
+  describe("Comments", function () {
+    describe("methods", function () {
+      const userId = Random.id();
+      const randDiscussionId = Random.id();
+      const randText = "Test comment";
+      const updatedText = "Updated text";
+      const invocation = { userId }; // Set up a fake method call context.
+      let commentId;
 
-            beforeEach(() => {
-                Comments.remove({});
+      // Remove all comments before and after all of the tests.
+      before(function () {
+        Comments.remove({});
+      });
+      after(function () {
+        Comments.remove({});
+      });
 
-                commentId = Comments.insert({
-                    postedTime: new Date(),
-                    authorId: userId,
-                    text: "Test Comment",
-                });
-            });
+      // Test that a comment can be inserted.
+      it("Insert own comment", function () {
+        // Isolate internal method implementation.
+        const insertComment = Meteor.server.method_handlers["comments.insert"];
 
-            it("can delete owned comment", () => {
-                // Isolate internal method implementation.
-                const deleteComment = Meteor.server.method_handlers["comments.remove"];
+        // Run the method with `this` set to the mock context.
+        insertComment.apply(invocation, [randText, randDiscussionId]);
 
-                // Set up a fake method call context.
-                const invocation = {userId};
+        // Check its behaviour.
+        const comment = Comments.find().fetch()[0];
+        commentId = comment._id;
+        performAssertions(comment, randText, randDiscussionId, userId, []);
 
-                // Run the method with `this` set to the mock context.
-                deleteComment.apply(invocation, [commentId]);
+        // Check number of documents in collection.
+        assert.equal(Comments.find().count(), 1);
+      });
 
-                // Check its behavior.
-                assert.equal(Comments.find().count(), 0);
-            });
-        });
+      // Test that a comment's text can be updated.
+      it("Update own comment", function () {
+        const updateComment = Meteor.server.method_handlers["comments.update"];
+        updateComment.apply(invocation, [updatedText, commentId]);
+        const comment = Comments.findOne({ _id: commentId });
+        performAssertions(comment, updatedText, randDiscussionId, userId, []);
+        assert.equal(Comments.find().count(), 1);
+      });
+
+      const updatedEmojis = [5, 6, 7, 4];
+
+      // Test that a comment's emojis can be updated.
+      it("Update own comment's emojis", function () {
+        const updateEmojis =
+          Meteor.server.method_handlers["comments.updateEmojis"];
+        updateEmojis.apply(invocation, [updatedEmojis, commentId]);
+
+        const comment = Comments.findOne({ _id: commentId });
+        performAssertions(
+          comment,
+          updatedText,
+          randDiscussionId,
+          userId,
+          updatedEmojis
+        );
+        assert.equal(Comments.find().count(), 1);
+      });
+
+      // Test that a comment can be deleted.
+      it("Delete own comment", function () {
+        const deleteComment = Meteor.server.method_handlers["comments.remove"];
+        deleteComment.apply(invocation, [commentId]);
+        assert.equal(Comments.find().count(), 0);
+      });
     });
+  });
+}
+
+function performAssertions(comment, text, discussion, author, emojis) {
+  assert.equal(comment.text, text);
+  assert.equal(comment.discussionId, discussion);
+  assert.equal(comment.authorId, author);
+  assert.equal(comment.emojis.length, emojis.length);
+  for (i = 0; i < emojis.length; i++) {
+    assert.equal(comment.emojis[i], emojis[i]);
+  }
 }
