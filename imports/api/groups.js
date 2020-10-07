@@ -1,29 +1,24 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
-import { ScenarioSets } from "/imports/api/scenarioSets";
-import { Scenarios } from "/imports/api/scenarios";
 
 export const Groups = new Mongo.Collection("groups");
 
 Meteor.methods({
   // Insert a Group into the groups collection in the db.
   // members: _ids of the users in this group
-  // discussions: _ids of the discussions this Group will discuss
   // Called from CreateGroup.jsx
-  "groups.create"(name, members, scenarioSet) {
+  "groups.create"(name, members) {
     check(name, String);
     check(members, Array);
-    // check(scenarioSet, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    const groupId = Groups.insert({
+    Groups.insert({
       name: name,
       members: members,
-      // scenarioSet: scenarioSet,
       createdAt: new Date(),
       createdBy: this.userId,
     });
@@ -70,7 +65,6 @@ if (Meteor.isServer) {
         fields: {
           name: 1,
           members: 1,
-          // scenarioSet: 1,
           createdAt: 1,
           createdBy: 1,
           leaderVotes: 1,

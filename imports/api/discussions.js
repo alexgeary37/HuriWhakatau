@@ -26,16 +26,16 @@ Meteor.methods({
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: false,
     });
+
     return discussionId;
   },
 
-  // Insert an introduction type  discussion into the discussions collection in the db.
+  // Insert an introduction type discussion into the discussions collection in the db.
   // Called from experiments.js
   "discussions.insertIntroduction"(scenarioId, groupId, timeLimit) {
     check(scenarioId, String);
     check(groupId, String);
     check(timeLimit, Number);
-
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
@@ -53,6 +53,7 @@ Meteor.methods({
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: true,
     });
+
     return discussionId;
   },
 
