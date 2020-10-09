@@ -8,8 +8,10 @@ if (Meteor.isServer) {
   describe("Comments", function () {
     describe("methods", function () {
       const userId = Random.id();
-      const randDiscussionId = Random.id();
       const randText = "Test comment";
+      const randPasted = [];
+      const randKeystrokes = [];
+      const randDiscussionId = Random.id();
       const updatedText = "Updated text";
       const invocation = { userId }; // Set up a fake method call context.
       let commentId;
@@ -28,7 +30,12 @@ if (Meteor.isServer) {
         const insertComment = Meteor.server.method_handlers["comments.insert"];
 
         // Run the method with `this` set to the mock context.
-        insertComment.apply(invocation, [randText, randDiscussionId]);
+        insertComment.apply(invocation, [
+          randText,
+          randPasted,
+          randKeystrokes,
+          randDiscussionId,
+        ]);
 
         // Check its behaviour.
         const comment = Comments.find().fetch()[0];

@@ -5,7 +5,7 @@ import { assert } from "chai";
 import { ScenarioSets } from "./scenarioSets.js";
 
 if (Meteor.isServer) {
-  describe("Scenarios", function () {
+  describe("ScenarioSets", function () {
     describe("methods", function () {
       const userId = Random.id();
       const randTitle = Random.secret();
