@@ -35,7 +35,15 @@ Meteor.methods({
     });
 
     // Remove this user from the list of activeVerdictProposers in the Discussion.
-    Meteor.call("discussions.removeProposer", discussionId);
+    console.log("verdicts.insert this.userId::", this.userId);
+
+    // Meteor.call("discussions.removeProposer", discussionId);
+    // This method call is being made from the server, which means the userId will be null for unit tests.
+    // Hence the code below is being used instead.
+
+    Discussions.update(discussionId, {
+      $pull: { activeVerdictProposers: this.userId },
+    });
   },
 
   "verdicts.addVote"(verdictId, vote) {
