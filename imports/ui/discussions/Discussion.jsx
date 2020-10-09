@@ -147,14 +147,14 @@ export const Discussion = () => {
     };
   });
   // setMutableDiscussionDeadline(discussionDeadline);
-  console.log(
-    "time limit: ",
-    discussionTimeLimit,
-    "\ndiscussion deadline: ",
-    discussionDeadline,
-    "timed: ",
-    timedDiscussion
-  );
+  // console.log(
+  //   "time limit: ",
+  //   discussionTimeLimit,
+  //   "\ndiscussion deadline: ",
+  //   discussionDeadline,
+  //   "timed: ",
+  //   timedDiscussion
+  // );
 
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.

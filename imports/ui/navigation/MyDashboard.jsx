@@ -1,5 +1,5 @@
 import {useTracker} from "meteor/react-meteor-data";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Card,
@@ -7,11 +7,13 @@ import {
     Segment,
     Header,
     Grid,
-    GridColumn, GridRow, ListItem
+    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating
 } from "semantic-ui-react";
+import NotificationBadge from "react-notification-badge";
 import '/imports/api/security'
 import {NavBar} from "./NavBar";
 import {CreateGroup} from "../groups/CreateGroup";
+import {UserSummary} from "../users/UserSummary";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
@@ -20,10 +22,12 @@ import {DiscussionSummary} from "/imports/ui/discussions/DiscussionSummary";
 import {ExperimentSummary} from "/imports/ui/experiments/ExperimentSummary";
 import {CreateScenarioSet} from "../scenarioSets/CreateScenarioSet";
 import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
+import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
-import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate"
+import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 import {Link} from "react-router-dom";
+import {Users} from "/imports/api/users"
 import {Groups} from "/imports/api/groups";
 import {Scenarios} from "/imports/api/scenarios";
 import {Experiments} from "/imports/api/experiments";
@@ -37,12 +41,14 @@ export const MyDashboard = () => {
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
     const [isOpenWizard, setIsOpenWizard] = useState(false);
+    const [showSidebar, setShowSidebar] = useState(false);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
     const [isOpenScenarioCreation, setIsOpenScenarioCreation] = useState(false);
     const [isOpenScenarioSetCreation, setIsOpenScenarioSetCreation] = useState(false);
     const [isOpenExperimentCreation, setIsOpenExperimentCreation] = useState(false);
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
+    const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
     const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -67,6 +73,9 @@ export const MyDashboard = () => {
     const handleToggleGroup = () => {
         setIsOpenGroupCreation(!isOpenGroupCreation);
     }
+    const handleToggleDiscussion = () => {
+        setIsOpenDiscussionCreation(!isOpenDiscussionCreation);
+    }
 
     //get user admin role status and update isAdmin variable with call back.
     // possibly this should be a Promise?
@@ -77,7 +86,7 @@ export const MyDashboard = () => {
         }
         setIsAdmin(result);
     });
-    //get user researcher role status and update isresearcher variable with call back.
+    //get user researcher role status and update isResearcher variable with call back.
     // possibly this should be a Promise?
     Meteor.call("security.hasRole", Meteor.userId(), "RESEARCHER", (error, result) => {
         if (error) {
@@ -96,14 +105,16 @@ export const MyDashboard = () => {
         console.log(result);
     });
 
-    const {user,
+    const {
+        user,
         myDiscussions,
         allFinishedDiscussions,
         groups,
         scenarios,
         scenarioSets,
         discussionTemplates,
-        experiments
+        experiments,
+        friends
     } = useTracker(() => {
         //subscribe to roles for user permissions check, should this be ^^ up there?
         let fetchedDiscussionTemplates = null;
@@ -114,16 +125,35 @@ export const MyDashboard = () => {
         Meteor.subscribe("scenarioSets");
         Meteor.subscribe("discussionTemplates");
         Meteor.subscribe("experiments");
-
+        const userSub = Meteor.subscribe("users");
+        let fetchedFriendIds = [];
+        let fetchedFriends = [];
+        let currentUser;
 
         let userId = Meteor.userId();
+        if(userSub.ready()) {
+            currentUser = Meteor.users.findOne({_id: userId});
+            if(currentUser.friends) {
+                fetchedFriendIds = currentUser.friends;
+                fetchedFriendIds.forEach((friendId) => {
+                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}));
+                    console.log(friendId);
+                })
+            }
+        }
+        console.log(fetchedFriends);
+        // let fetchedFriends;
+        // let currentUser = Meteor.users.findOne({_id: Meteor.userId()});
+        // let currentUser = Users.findOne({_id: Meteor.userId()});
+        // // ,(err, result)=>{
+        //     fetchedFriends = Meteor.users.find({_id: {$in: currentUser.friends}});
+        // // })
 
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
         let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         let fetchedScenarioSets = ScenarioSets.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
         let fetchedExperiments = Experiments.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
-        // console.log(fetchedDiscussionTemplates[0].name);
 
         // need to handle case where user has no groups or discussions yet.
         let groupIds = [];
@@ -131,7 +161,7 @@ export const MyDashboard = () => {
             groupIds.push(fetchedGroups[i]._id);
         }
         let fetchedAllFinishedDiscussions = Discussions.find({status: {$ne: "active"}}, {sort: {createdAt: -1}}).fetch();
-        let fetchedMyDiscussions = Discussions.find({groupId: {$in: groupIds}}, {
+        let fetchedMyDiscussions = Discussions.find({$or: [{groupId: {$in: groupIds}}, {createdBy: userId}]}, {
             sort: {
                 createdAt: -1,
                 status: 1
@@ -139,7 +169,7 @@ export const MyDashboard = () => {
         }).fetch();
 
         return {
-            user: userId,
+            user: currentUser,
             myDiscussions: fetchedMyDiscussions,
             allFinishedDiscussions: fetchedAllFinishedDiscussions,
             groups: fetchedGroups,
@@ -147,15 +177,48 @@ export const MyDashboard = () => {
             scenarioSets: fetchedScenarioSets,
             discussionTemplates: fetchedDiscussionTemplates,
             experiments: fetchedExperiments,
+            friends: fetchedFriends,
         };
     });
 
-    console.log(isIndigenous);
+    console.log(user);
+
+    const handleShowSidebar = () => {
+        setShowSidebar(!showSidebar);
+    }
+
     return (
         <div>
             <NavBar/>
             <span style={{height: "10em"}}/>
+            {/*start sidebar*/}
+            <Sidebar.Pushable as={Segment}>
+                <Sidebar
+                    as={Segment}
+                    animation='overlay'
+                    icon='labeled'
+                    inverted
+                    vertical
+                    visible
+                    width={showSidebar ? "thin" : "very thin"}
+                >
+
+                    <Menu.Item onClick={handleShowSidebar}>
+                        <Icon size={'big'} name='users' />
+                        Friends
+                    </Menu.Item>
+                    {showSidebar && friends && friends.map((friend) => (
+                        <Menu.Item key={friend._id} >
+                            {friend.username}
+                            <Rating icon='star' defaultRating={!friend.online ? 1 : 0} maxRating={1} disabled />
+                        </Menu.Item>
+                    ))}
+                </Sidebar>
+
+                <Sidebar.Pusher>
+                {/*end sidebar*/}
             <Container>
+
                 <Segment attached="top" clearing>
                     <Header size="huge">
                         <Header.Content as={Container} fluid>
@@ -178,7 +241,15 @@ export const MyDashboard = () => {
                     <GridRow columns={2}>
                         <GridColumn width={8}>
                             <Segment fluid style={{height: "21em"}}>
-                                <Header as={'h3'}>My Discussions</Header>
+                                <Header as={'h3'}>My Discussions <Button
+                                    floated={"right"}
+                                    onClick={handleToggleDiscussion}
+                                    content="New Discussion"
+                                    positive
+                                    compact
+                                />
+                                </Header>
+
                                 {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
                                 {(isIndigenous !== null) &&
@@ -230,7 +301,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleGroup}
                                         content="Create New Group"
-                                        color="green"
+                                        positive
                                     />}
                                 </Card.Content>
                             </Segment>
@@ -255,7 +326,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleTemplate}
                                             content="Create New Template"
-                                            color="green"
+                                            positive
                                         />
                                     </Card.Content>
                                 </Segment>
@@ -276,7 +347,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleScenario}
                                             content="Create New"
-                                            color="green"
+                                            positive
                                         />
                                     </Card.Content>
                                 </Segment>
@@ -303,7 +374,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleScenarioSet}
                                         content="Create New Set"
-                                        color="green"
+                                        positive
                                     />
                                 </Card.Content>
                             </Segment>
@@ -324,7 +395,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleExperimentCreation}
                                         content="Create New Experiment"
-                                        color="green"
+                                        positive
                                     />
                                 </Card.Content>
                             </Segment>
@@ -337,7 +408,7 @@ export const MyDashboard = () => {
                                     content="Assign Roles"
                                     as={Link}
                                     to="/assignroles"
-                                    color="green"
+                                    positive
                                 />
                                 <br/>
                                 <Button
@@ -345,7 +416,7 @@ export const MyDashboard = () => {
                                     content="Add user"
                                     as={Link}
                                     to="/AddUser"
-                                    color="green"
+                                    positive
                                 />
                             </Segment>
                         </GridColumn>
@@ -387,6 +458,11 @@ export const MyDashboard = () => {
                     // toggleNextModal={handleToggleScenarioSet}
                     toggleIsWizard={handleToggleWizard}/>
                 }
+                {isOpenDiscussionCreation &&
+                <CreateDiscussion
+                    toggleModal={handleToggleDiscussion}
+                    />
+                }
                 {/* Item display modals */}
                 {isOpenTemplateDisplay &&
                 <DisplayDiscussionTemplate
@@ -395,6 +471,8 @@ export const MyDashboard = () => {
                 }
 
             </Container>
+            </Sidebar.Pusher>
+            </Sidebar.Pushable>
         </div>
     );
 };

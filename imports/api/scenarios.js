@@ -20,8 +20,8 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    // Insert new Scenario and get its _id.
-    Scenarios.insert({
+    // Insert new Group and get its _id.
+    const scenarioId = Scenarios.insert({
       title: title,
       description: description,
       // topicId: topicId,
@@ -29,6 +29,7 @@ Meteor.methods({
       createdAt: new Date(),
       createdBy: this.userId,
     });
+    return scenarioId;
   },
 });
 
