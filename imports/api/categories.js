@@ -34,8 +34,7 @@ if (Meteor.isServer) {
       {},
       {
         fields: {
-          name: 1,
-          createdBy: 1,
+          title: 1,
         },
       }
     );

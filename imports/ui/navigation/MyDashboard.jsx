@@ -149,8 +149,9 @@ export const MyDashboard = () => {
             }
         }).fetch();
 
-        //once user collection subscription ready find user and get friends and users that the user is in groups with
-        if(userSub.ready()) {
+        //once user collection subscription ready and there is a logged in user, find user
+        // and get friends and users that the user is in groups with
+        if(userSub.ready() && userId) {
             currentUser = Meteor.users.findOne({_id: userId});
             if(currentUser.friends) {
                 fetchedFriendIds = currentUser.friends;
@@ -274,11 +275,14 @@ export const MyDashboard = () => {
                 <Grid doubling style={{overflow: "auto", height: "87vh"}}>
                     <GridRow columns={2}>
                         <GridColumn width={8}>
-                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}
+                                     title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
+                            >
                                 <Header as={'h3'} >My Discussions <Button
                                     floated={"right"}
                                     onClick={handleToggleDiscussion}
                                     content="New Discussion"
+                                    disabled={!user}
                                     negative
                                     compact
                                 />
