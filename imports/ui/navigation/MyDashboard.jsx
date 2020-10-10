@@ -9,11 +9,9 @@ import {
     Grid,
     GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating
 } from "semantic-ui-react";
-import NotificationBadge from "react-notification-badge";
 import '/imports/api/security'
 import {NavBar} from "./NavBar";
 import {CreateGroup} from "../groups/CreateGroup";
-import {UserSummary} from "../users/UserSummary";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
@@ -27,7 +25,6 @@ import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDi
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 import {Link} from "react-router-dom";
-import {Users} from "/imports/api/users"
 import {Groups} from "/imports/api/groups";
 import {Scenarios} from "/imports/api/scenarios";
 import {Experiments} from "/imports/api/experiments";
@@ -102,7 +99,6 @@ export const MyDashboard = () => {
             return;
         }
         setIsIndigenous(result);
-        console.log(result);
     });
 
     const {
@@ -114,10 +110,11 @@ export const MyDashboard = () => {
         scenarioSets,
         discussionTemplates,
         experiments,
-        friends
+        friends,
+        groupMembers,
     } = useTracker(() => {
         //subscribe to roles for user permissions check, should this be ^^ up there?
-        let fetchedDiscussionTemplates = null;
+        // let fetchedDiscussionTemplates = null;
         Meteor.subscribe("roles");
         Meteor.subscribe("allDiscussions");
         Meteor.subscribe("groups");
@@ -128,9 +125,29 @@ export const MyDashboard = () => {
         const userSub = Meteor.subscribe("users");
         let fetchedFriendIds = [];
         let fetchedFriends = [];
+        let fetchedGroupMemberIds = [];
+        let fetchedGroupMembers = [];
         let currentUser;
-
+        let groupIds = [];
         let userId = Meteor.userId();
+        let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
+        let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedExperiments = Experiments.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
+        let fetchedAllFinishedDiscussions = Discussions.find({status: {$ne: "active"}}, {sort: {createdAt: -1}}).fetch();
+        // need to handle case where user has no groups or discussions yet.
+        for (let i = 0; i < fetchedGroups.length; i++) {
+            groupIds.push(fetchedGroups[i]._id);
+        }
+        let fetchedMyDiscussions = Discussions.find({$or: [{groupId: {$in: groupIds}}, {createdBy: userId}]}, {
+            sort: {
+                createdAt: -1,
+                status: 1
+            }
+        }).fetch();
+
+        //once user collection subscription ready find user and get friends
         if(userSub.ready()) {
             currentUser = Meteor.users.findOne({_id: userId});
             if(currentUser.friends) {
@@ -139,26 +156,17 @@ export const MyDashboard = () => {
                     fetchedFriends.push(Meteor.users.findOne({_id: friendId}));
                 })
             }
+
+            fetchedGroups.forEach((group) => {
+                fetchedGroupMemberIds.push(...group.members);
+            })
+
+            fetchedGroupMemberIds.forEach((memberId) => {
+                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}));
+            })
         }
 
-        let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
-        let fetchedScenarios = Scenarios.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
-        let fetchedScenarioSets = ScenarioSets.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
-        fetchedDiscussionTemplates = DiscussionTemplates.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
-        let fetchedExperiments = Experiments.find({createdBy: {$in: [userId, "ADMIN"]}}).fetch(); //,
 
-        // need to handle case where user has no groups or discussions yet.
-        let groupIds = [];
-        for (let i = 0; i < fetchedGroups.length; i++) {
-            groupIds.push(fetchedGroups[i]._id);
-        }
-        let fetchedAllFinishedDiscussions = Discussions.find({status: {$ne: "active"}}, {sort: {createdAt: -1}}).fetch();
-        let fetchedMyDiscussions = Discussions.find({$or: [{groupId: {$in: groupIds}}, {createdBy: userId}]}, {
-            sort: {
-                createdAt: -1,
-                status: 1
-            }
-        }).fetch();
 
         return {
             user: currentUser,
@@ -170,6 +178,7 @@ export const MyDashboard = () => {
             discussionTemplates: fetchedDiscussionTemplates,
             experiments: fetchedExperiments,
             friends: fetchedFriends,
+            groupMembers: fetchedGroupMembers,
         };
     });
 
@@ -180,7 +189,7 @@ export const MyDashboard = () => {
     return (
         <div>
             <NavBar/>
-            <span style={{height: "10em"}}/>
+            <span style={{height: "20em"}}/>
             {/*start sidebar*/}
             <Sidebar.Pushable as={Segment}>
                 <Sidebar
@@ -191,18 +200,34 @@ export const MyDashboard = () => {
                     vertical
                     visible
                     width={showSidebar ? "thin" : "very thin"}
+                    onClick={handleShowSidebar}
                 >
-
-                    <Menu.Item onClick={handleShowSidebar}>
+                    {/*my friends*/}
+                    <Menu.Item>
                         <Icon size={'big'} name='users' />
                         Friends
                     </Menu.Item>
+                    <List style={{height: "15em"}}>
                     {showSidebar && friends && friends.map((friend) => (
-                        <Menu.Item key={friend._id} >
+                        <Menu.Item key={friend._id} title={friend.online ? 'online' : 'offline'} >
                             {friend.username}
-                            <Rating icon='star' defaultRating={!friend.online ? 1 : 0} maxRating={1} disabled />
+                            <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled />
                         </Menu.Item>
                     ))}
+                    </List>
+                    {/*my group members, update to have a group member specific user set*/}
+                    <Menu.Item>
+                        <Icon size={'big'} name='users' />
+                        Group Members
+                    </Menu.Item>
+                    <List style={{height: "15em"}}>
+                        {showSidebar && groupMembers && groupMembers.map((groupMember) => (
+                            <Menu.Item key={groupMember._id} title={groupMember.online ? 'online' : 'offline'} >
+                                {groupMember.username}
+                                <Rating icon='star' defaultRating={groupMember.online ? 1 : 0} maxRating={1} disabled />
+                            </Menu.Item>
+                        ))}
+                    </List>
                 </Sidebar>
 
                 <Sidebar.Pusher>
