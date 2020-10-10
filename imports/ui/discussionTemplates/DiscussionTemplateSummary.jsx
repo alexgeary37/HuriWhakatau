@@ -20,7 +20,9 @@ export const DiscussionTemplateSummary = ({toggleModal, template }) => {
   return (
       <span>
     <List.Item>
-      <List.Content as={Segment}>
+      <List.Content as={Segment} style={{
+        backgroundColor: "#c4c4c4",
+      }}>
         <List.Header as={"h4"} content={template && template.name} />
         {/* attempting to add link that will show the template details. hiding for now */}
         {/*<Segment as={Link} onClick={toggleIt} content={"Hiiii"}/>*/}

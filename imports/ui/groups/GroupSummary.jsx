@@ -17,7 +17,10 @@ export const GroupSummary = ({ group }) => {
 
   return (
     <List.Item>
-      <List.Content as={Segment}>
+      <List.Content as={Segment}
+                    style={{
+        backgroundColor: "#c4c4c4",
+      }}>
         <List.Header as={'h4'} content={group && group.name} />
         <List.Description
           content={users && "Members: " + userList.join(", ")}

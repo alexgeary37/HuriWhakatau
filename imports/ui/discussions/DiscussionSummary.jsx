@@ -21,12 +21,12 @@ export const DiscussionSummary = ({ discussion, participantRole }) => {
     <List.Item as={Link} to={`${linkPath}/${discussion._id}`}>
       <List.Content
         style={{
-          backgroundColor: discussion.status === "active" ? "#FFF" : "#d3d3d3",
+          backgroundColor: discussion.status === "active" ? "#c4c4c4" : "grey",
         }}
         as={Segment}
       >
-        <List.Header content={scenario && scenario.title} />
-        <List.Description content={scenario && scenario.description} />
+        <List.Header content={scenario && scenario.title}/>
+        <List.Description content={scenario && scenario.description}/>
       </List.Content>
     </List.Item>
   );

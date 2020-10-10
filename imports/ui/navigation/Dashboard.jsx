@@ -30,13 +30,13 @@ export const Dashboard = () => {
   });
 
   return (
-    <div>
+    <div style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
       <NavBar />
       <span style={{height:"5em"}} />
-      <Container style={{overflow: "auto", height: "90vh"}}>
-        <Segment attached="top" clearing>
+      <Container inverted style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
+        <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
-            <Header.Content as={Container} fluid>
+            <Header.Content as={Container} fluid >
               <Button
                 floated="right"
                 circular
@@ -48,7 +48,7 @@ export const Dashboard = () => {
               Dashboard
             </Header.Content>
           </Header>
-          <Message
+          <Message style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}
             size="huge"
             info
             floating
@@ -89,9 +89,9 @@ export const Dashboard = () => {
           </Message>
         </Segment>
 
-        <Segment attached="bottom">
+        <Segment attached="bottom" inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header content="Kōrerorero" />
-          <Segment attached="top" clearing>
+          <Segment attached="top" clearing style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
             <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
               {discussions &&
                 discussions.map((discussion) => (

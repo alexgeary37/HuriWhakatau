@@ -182,19 +182,19 @@ export const UserSettings = () => {
     }
 
     return (
-        <div>
+        <div inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
             <NavBar/>
-            <Container>
-                <Segment attached="top" clearing>
+            <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                     <Header size="huge">
-                        <Header.Content as={Container} fluid>
+                        <Header.Content as={Container} fluid >
                             My Account - {user && user.username}
                         </Header.Content>
                     </Header>
                 </Segment>
                 <Grid columns={2}>
                     <GridColumn width={9}>
-                        <Card>
+                        <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                             <Card.Content header="Account Details"/>
                             <CardContent>
                                 <Form>
@@ -399,8 +399,8 @@ export const UserSettings = () => {
                                     {/*</Input>*/}
                                 </Form>
                             </CardContent>
-                        </Card>
-                        <Card>
+                        </Segment>
+                        <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                             <Card.Content header="Profile Picture"/>
                             <CardContent>
                                 {/*    user pic shit*/}
@@ -414,11 +414,11 @@ export const UserSettings = () => {
                                 {/*        rotate={0}*/}
                                 {/*    />*/}
                             </CardContent>
-                        </Card>
+                        </Segment>
                     </GridColumn>
                     <GridColumn width={7}>
                         {isIndigenous &&
-                        <Card as={Segment} fluid>
+                        <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                             <Card.Content header="Pepeha"/>
                             <CardContent>
                                 <Form>
@@ -585,7 +585,7 @@ export const UserSettings = () => {
                                     {/*}*/}
                                 </Form>
                             </CardContent>
-                        </Card>
+                        </Segment>
                         }
                     </GridColumn>
                 </Grid>
