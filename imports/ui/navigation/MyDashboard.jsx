@@ -112,6 +112,8 @@ export const MyDashboard = () => {
         experiments,
         friends,
         groupMembers,
+        anyFriendOnline,
+        anyGroupMemberOnline,
     } = useTracker(() => {
         //subscribe to roles for user permissions check, should this be ^^ up there?
         // let fetchedDiscussionTemplates = null;
@@ -147,7 +149,7 @@ export const MyDashboard = () => {
             }
         }).fetch();
 
-        //once user collection subscription ready find user and get friends
+        //once user collection subscription ready find user and get friends and users that the user is in groups with
         if(userSub.ready()) {
             currentUser = Meteor.users.findOne({_id: userId});
             if(currentUser.friends) {
@@ -157,16 +159,19 @@ export const MyDashboard = () => {
                 })
             }
 
+            //add all member ids for each group the user is part of to a total, filter out the user themselves
             fetchedGroups.forEach((group) => {
-                fetchedGroupMemberIds.push(...group.members);
+                fetchedGroupMemberIds.push(...group.members.filter(id => id !== userId));
             })
 
+            // remove duplicate values
+            fetchedGroupMemberIds = new Set(fetchedGroupMemberIds);
+
+            // find the users and add to array
             fetchedGroupMemberIds.forEach((memberId) => {
                 fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}));
             })
         }
-
-
 
         return {
             user: currentUser,
@@ -179,6 +184,8 @@ export const MyDashboard = () => {
             experiments: fetchedExperiments,
             friends: fetchedFriends,
             groupMembers: fetchedGroupMembers,
+            anyFriendOnline: fetchedFriends.some(friend => friend.online === true),
+            anyGroupMemberOnline: fetchedGroupMembers.some(member => member.online === true),
         };
     });
 
@@ -203,8 +210,12 @@ export const MyDashboard = () => {
                     onClick={handleShowSidebar}
                 >
                     {/*my friends*/}
-                    <Menu.Item>
+                    <Menu.Item title={anyFriendOnline ? 'there are friends online' : 'no friends online'}>
                         <Icon size={'big'} name='users' />
+                        {anyFriendOnline &&
+                        <Rating icon='star' defaultRating={1} maxRating={1} disabled />
+                        }
+                        <br/>
                         Friends
                     </Menu.Item>
                     <List style={{height: "15em"}}>
@@ -216,8 +227,12 @@ export const MyDashboard = () => {
                     ))}
                     </List>
                     {/*my group members, update to have a group member specific user set*/}
-                    <Menu.Item>
+                    <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>
                         <Icon size={'big'} name='users' />
+                        {anyGroupMemberOnline &&
+                        <Rating icon='star' defaultRating={1} maxRating={1} disabled />
+                        }
+                        <br/>
                         Group Members
                     </Menu.Item>
                     <List style={{height: "15em"}}>
