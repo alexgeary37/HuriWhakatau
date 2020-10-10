@@ -6,13 +6,15 @@ import {
   Dropdown,
   MenuItem,
   MenuMenu,
+  Button,
 } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {useTracker} from "meteor/react-meteor-data";
 import { LoginForm } from "/imports/ui/users/LoginForm";
 
 export const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
+  let history = useHistory();
   const {user} = useTracker(() => {
     Meteor.subscribe("users");
     return {
@@ -26,6 +28,10 @@ export const NavBar = () => {
   const logUserIn = () => {
     setShowLogin(true);
   };
+
+  const handleSignUp = () => {
+    history.push("/AddUser");
+  }
 
   //todo, remove the links to Groups, Scenarios and Scenario sets when we're sure they aren't needed.
   return (
@@ -65,6 +71,17 @@ export const NavBar = () => {
           {/*todo put discussion title / description here when I figure it out */}
           </Menu.Item>
           <MenuMenu position="right">
+            {!user &&
+            <MenuItem>
+            <Button
+                onClick={() => {
+                  handleSignUp();
+                }}
+                content="Sign Up"
+                negative
+            />
+            </MenuItem>
+            }
             {user ?
               <MenuItem as={Link} to="/" name="logout" onClick={logUserOut}>
                 Logout {user.username}
@@ -72,9 +89,11 @@ export const NavBar = () => {
                 <Icon name={"user"} size={"large"}/>
               </MenuItem>
               :
-                <MenuItem as={Link} to="/" name="login" onClick={logUserIn}>
+                <div>
+                  <MenuItem as={Link} to="/" name="login" onClick={logUserIn}>
                   Login
                 </MenuItem>
+                  </div>
             }
           </MenuMenu>
         </Container>

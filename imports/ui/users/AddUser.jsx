@@ -9,6 +9,7 @@ export const AddUser = () => {
     const [password, setPassword] = useState("");
     const [userAnon, setUserAnon] = useState(false);
     const [errUsername, setErrUsername] = useState("");
+    const [errEmail, setErrEmail] = useState("");
     const [userRolesList, setUserRolesList] = useState(["PARTICIPANT_I"]);
     const userRoles = [
         'ADMIN',
@@ -18,15 +19,21 @@ export const AddUser = () => {
         'RESEARCHER'];
 
     const handleSubmit = () => {
-        setErrUsername("");
-        Meteor.call("security.addUser", userName, password, email, userAnon, userRolesList, (error, result) => {
-            if (error) {
-                setErrUsername(error.reason);
-                return;
-            } else {
-                history.back();
-                setErrUsername("");
-            }});
+        setErrEmail("");
+        if(email.indexOf("@") === -1){
+            setErrEmail("Please enter a valid email address.")
+        } else {
+            setErrUsername("");
+            Meteor.call("security.addUser", userName, password, email, userAnon, userRolesList, (error, result) => {
+                if (error) {
+                    setErrUsername(error.reason + " ");
+                    return;
+                } else {
+                    history.back();
+                    setErrUsername("");
+                }
+            });
+        }
     }
 
     return (
@@ -51,7 +58,7 @@ export const AddUser = () => {
                     />
                     {errUsername ? (
                         <div style={{ height: "10px", color: "red" }}>{errUsername}
-                         Please try again or choose to have one generated for you. This can be changed later</div>
+                          Please try again or choose to have one generated for you. This can be changed later.</div>
                     ) : (
                         <div style={{ height: "10px" }} />
                     )}
@@ -77,6 +84,12 @@ export const AddUser = () => {
                         value={email}
                         onInput={({target}) => setEmail(target.value)}
                     />
+                    {errEmail ? (
+                        <div style={{ height: "10px", color: "red" }}>{errEmail}</div>
+                    ) : (
+                        <div style={{ height: "10px" }} />
+                    )}
+                    <br/>
                     <Form.Button
                         content="Submit"
                         negative
