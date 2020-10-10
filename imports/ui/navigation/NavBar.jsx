@@ -42,21 +42,21 @@ export const NavBar = () => {
           </Menu.Item>
           <Dropdown item text="Tirotiro/Browse">
             <Dropdown.Menu>
-              <Dropdown.Item
-                content="Groups (redundant)"
-                as={Link}
-                to="/groups"
-              />
-              <Dropdown.Item
-                content="Scenarios (redundant)"
-                as={Link}
-                to="/scenarios"
-              />
-              <Dropdown.Item
-                content="Scenario Sets (redundant)"
-                as={Link}
-                to="/scenarioSets"
-              />
+              {/*<Dropdown.Item*/}
+              {/*  content="Groups (redundant)"*/}
+              {/*  as={Link}*/}
+              {/*  to="/groups"*/}
+              {/*/>*/}
+              {/*<Dropdown.Item*/}
+              {/*  content="Scenarios (redundant)"*/}
+              {/*  as={Link}*/}
+              {/*  to="/scenarios"*/}
+              {/*/>*/}
+              {/*<Dropdown.Item*/}
+              {/*  content="Scenario Sets (redundant)"*/}
+              {/*  as={Link}*/}
+              {/*  to="/scenarioSets"*/}
+              {/*/>*/}
               <Dropdown.Item content="My Dash" as={Link} to="/mydashboard" />
               <Dropdown.Item content="User settings" as={Link} to="/UserSettings" />
             </Dropdown.Menu>
