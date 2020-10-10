@@ -194,11 +194,11 @@ export const MyDashboard = () => {
     }
 
     return (
-        <div style={{backgroundColor: 'rgb(236, 56, 56)'}}>
+        <div>
             <NavBar/>
             <span style={{height: "20em"}}/>
             {/*start sidebar*/}
-            <Sidebar.Pushable as={Segment}>
+            <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                 <Sidebar
                     as={Segment}
                     animation='overlay'
@@ -227,7 +227,7 @@ export const MyDashboard = () => {
                     {showSidebar && friends && friends.map((friend) => (
                         <Menu.Item key={friend._id} title={friend.online ? 'online' : 'offline'} >
                             {friend.username}
-                            <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled />
+                            <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled/>
                         </Menu.Item>
                     ))}
                     </List>
@@ -249,13 +249,13 @@ export const MyDashboard = () => {
                         ))}
                     </List>
                 </Sidebar>
-
-                <Sidebar.Pusher>
                 {/*end sidebar*/}
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+
             <Container>
-                <Segment attached="top" clearing>
-                    <Header size="huge">
-                        <Header.Content as={Container} fluid>
+                <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                    <Header size="huge" >
+                        <Header.Content as={Container} fluid >
                             My Dashboard {isAdmin && <span>- Admin</span>}
                             {isAdmin &&
                             <Button
@@ -265,7 +265,7 @@ export const MyDashboard = () => {
                                     handleToggleGroup();
                                 }}
                                 content="Open Experiment Wizard"
-                                color="green"
+                                negative
                             />}
                         </Header.Content>
                     </Header>
@@ -274,12 +274,12 @@ export const MyDashboard = () => {
                 <Grid doubling style={{overflow: "auto", height: "87vh"}}>
                     <GridRow columns={2}>
                         <GridColumn width={8}>
-                            <Segment fluid style={{height: "21em"}}>
-                                <Header as={'h3'}>My Discussions <Button
+                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Header as={'h3'} >My Discussions <Button
                                     floated={"right"}
                                     onClick={handleToggleDiscussion}
                                     content="New Discussion"
-                                    positive
+                                    negative
                                     compact
                                 />
                                 </Header>
@@ -301,8 +301,8 @@ export const MyDashboard = () => {
                             </Segment>
                         </GridColumn>
                         <GridColumn width={8}>
-                            <Segment fluid style={{height: "21em"}}>
-                                <Header as={'h3'}>All Finished Discussions</Header>
+                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Header as={'h3'} >All Finished Discussions</Header>
                                 <ListItem style={{overflow: "auto", height: "16em"}}
                                           description={allFinishedDiscussions &&
                                           allFinishedDiscussions.map((discussion) => (
@@ -319,8 +319,8 @@ export const MyDashboard = () => {
                     </GridRow>
                     <GridRow columns={3}>
                         <GridColumn width={5}>
-                            <Segment fluid style={{height: "21em"}}>
-                                <Header as={'h3'}>My Groups</Header>
+                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Header as={'h3'} >My Groups</Header>
                                 <ListItem style={{overflow: "auto", height: "13em"}}
                                           description={groups &&
                                           groups.map((group) => (
@@ -335,7 +335,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleGroup}
                                         content="Create New Group"
-                                        positive
+                                        negative
                                     />}
                                 </Card.Content>
                             </Segment>
@@ -343,8 +343,8 @@ export const MyDashboard = () => {
                         {isAdmin &&
                         <>
                             <GridColumn width={6}>
-                                <Segment fluid style={{height: "21em"}}>
-                                    <Header as={'h3'}>My Discussion Templates</Header>
+                                <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                    <Header as={'h3'} >My Discussion Templates</Header>
                                     <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={discussionTemplates &&
                                               discussionTemplates.map((discussionTemplate) => (
@@ -360,14 +360,14 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleTemplate}
                                             content="Create New Template"
-                                            positive
+                                            negative
                                         />
                                     </Card.Content>
                                 </Segment>
                             </GridColumn>
                             <GridColumn width={5}>
-                                <Segment fluid style={{height: "21em"}}>
-                                    <Header as={'h3'}>My scenarios</Header>
+                                <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                    <Header as={'h3'} >My scenarios</Header>
                                     <ListItem style={{overflow: "auto", height: "13em"}}
                                               description={scenarios &&
                                               scenarios.map((scenario) => (
@@ -381,7 +381,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleScenario}
                                             content="Create New"
-                                            positive
+                                            negative
                                         />
                                     </Card.Content>
                                 </Segment>
@@ -393,7 +393,7 @@ export const MyDashboard = () => {
                     <GridRow columns={3}>
 
                         <GridColumn width={5}>
-                            <Segment style={{height: "21em"}}>
+                            <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Header as={'h3'}>My Scenario Sets</Header>
                                 <ListItem style={{overflow: "auto", height: "13em"}}
                                           description={scenarioSets &&
@@ -408,13 +408,13 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleScenarioSet}
                                         content="Create New Set"
-                                        positive
+                                        negative
                                     />
                                 </Card.Content>
                             </Segment>
                         </GridColumn>
                         <GridColumn width={6}>
-                            <Segment style={{height: "21em"}}>
+                            <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Header as={'h3'}>My Experiments</Header>
                                 <ListItem style={{overflow: "auto", height: "13em"}}
                                           description={experiments &&
@@ -429,20 +429,20 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleExperimentCreation}
                                         content="Create New Experiment"
-                                        positive
+                                        negative
                                     />
                                 </Card.Content>
                             </Segment>
                         </GridColumn>
                         <GridColumn width={5}>
-                            <Segment style={{height: "21em"}}>
+                            <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Header as={'h3'}>Add Users to roles</Header>
                                 <Button
                                     fluid
                                     content="Assign Roles"
                                     as={Link}
                                     to="/assignroles"
-                                    positive
+                                    negative
                                 />
                                 <br/>
                                 <Button
@@ -450,7 +450,7 @@ export const MyDashboard = () => {
                                     content="Add user"
                                     as={Link}
                                     to="/AddUser"
-                                    positive
+                                    negative
                                 />
                             </Segment>
                         </GridColumn>

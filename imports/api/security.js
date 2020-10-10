@@ -39,9 +39,10 @@ Meteor.methods({
     },
 
     "security.addUser"(userName, password, email, userAnon, roles){
-        if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
-            throw new Meteor.Error('not-authorized');
-        } else {
+      //removed user role check so that non-logged in user can create invite
+        // if (!Roles.userIsInRole(Meteor.userId(), ["ADMIN", "RESEARCHER"])) {
+        //     throw new Meteor.Error('not-authorized');
+        // } else {
             // start of taking a list of only emails and generating
             // usernames and accounts, then sending invite emails
             let finalUserName = '';
@@ -63,7 +64,7 @@ Meteor.methods({
             });
             Accounts.sendEnrollmentEmail(userId);
             Roles.addUsersToRoles(userId, roles);
-        };
+        // };
     },
 
     "security.updatePepeha"(pepeha, userId){

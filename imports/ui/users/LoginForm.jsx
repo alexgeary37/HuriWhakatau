@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {Modal, Button, Input, Form, Divider} from "semantic-ui-react";
 
 export const LoginForm = () => {
@@ -7,6 +8,7 @@ export const LoginForm = () => {
   const [open, setOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");
+  let history = useHistory();
 
   const submit = (e) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ export const LoginForm = () => {
         setOpen(false);
       }
     });
+    // history.push("/mydashboard");
   };
 
   console.log(err);

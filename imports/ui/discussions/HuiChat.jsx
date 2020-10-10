@@ -267,7 +267,7 @@ export const HuiChat = () => {
     Meteor.call("discussions.addProposer", discussionId);
 
   return (
-    <Container style={{ width: "110vh" }}>
+    <Container  inverted style={{backgroundColor: 'rgb(10, 10, 10)', width: "110vh" }}>
       <NavBar />
       {/*hacky way to move content out from under menu*/}
       <br />
