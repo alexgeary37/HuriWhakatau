@@ -30,7 +30,11 @@ export const NavBar = () => {
   //todo, remove the links to Groups, Scenarios and Scenario sets when we're sure they aren't needed.
   return (
     <div className="navbar">
-      <Menu fixed="top" inverted>
+      <Menu fixed="top" inverted
+      style={{backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedHorizontal.png"})`,
+        backgroundSize: '100px',
+        backgroundRepeat: 'round'}}
+      >
         <Container className="content-width">
           <Menu.Item as={Link} to="/" header>
             <Icon size="big" name="balance scale" />
@@ -38,21 +42,21 @@ export const NavBar = () => {
           </Menu.Item>
           <Dropdown item text="Tirotiro/Browse">
             <Dropdown.Menu>
-              <Dropdown.Item
-                content="Groups (redundant)"
-                as={Link}
-                to="/groups"
-              />
-              <Dropdown.Item
-                content="Scenarios (redundant)"
-                as={Link}
-                to="/scenarios"
-              />
-              <Dropdown.Item
-                content="Scenario Sets (redundant)"
-                as={Link}
-                to="/scenarioSets"
-              />
+              {/*<Dropdown.Item*/}
+              {/*  content="Groups (redundant)"*/}
+              {/*  as={Link}*/}
+              {/*  to="/groups"*/}
+              {/*/>*/}
+              {/*<Dropdown.Item*/}
+              {/*  content="Scenarios (redundant)"*/}
+              {/*  as={Link}*/}
+              {/*  to="/scenarios"*/}
+              {/*/>*/}
+              {/*<Dropdown.Item*/}
+              {/*  content="Scenario Sets (redundant)"*/}
+              {/*  as={Link}*/}
+              {/*  to="/scenarioSets"*/}
+              {/*/>*/}
               <Dropdown.Item content="My Dash" as={Link} to="/mydashboard" />
               <Dropdown.Item content="User settings" as={Link} to="/UserSettings" />
             </Dropdown.Menu>
