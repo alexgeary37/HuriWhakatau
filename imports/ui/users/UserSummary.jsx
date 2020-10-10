@@ -39,7 +39,7 @@ export const UserSummary = ({
                 disabled={userHasVoted}
                 positive
                 value={member._id}
-                content={"vote"}
+                content={"vote as leader"}
                 onClick={({ target }) => {
                   submitLeaderVote(target.value);
                 }}
