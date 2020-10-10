@@ -194,7 +194,7 @@ export const MyDashboard = () => {
     }
 
     return (
-        <div>
+        <div style={{backgroundColor: 'rgb(236, 56, 56)'}}>
             <NavBar/>
             <span style={{height: "20em"}}/>
             {/*start sidebar*/}
@@ -208,6 +208,11 @@ export const MyDashboard = () => {
                     visible
                     width={showSidebar ? "thin" : "very thin"}
                     onClick={handleShowSidebar}
+                    style={{
+                        backgroundColor: 'rgb(0, 0, 0)',
+                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                        backgroundSize: '60px',
+                        backgroundRepeat: 'repeat-y'}}
                 >
                     {/*my friends*/}
                     <Menu.Item title={anyFriendOnline ? 'there are friends online' : 'no friends online'}>
@@ -248,7 +253,6 @@ export const MyDashboard = () => {
                 <Sidebar.Pusher>
                 {/*end sidebar*/}
             <Container>
-
                 <Segment attached="top" clearing>
                     <Header size="huge">
                         <Header.Content as={Container} fluid>
