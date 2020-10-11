@@ -8,6 +8,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
     const [templateName, setTemplateName] = useState("");
     const [canEdit, setCanEdit] = useState(true);
     const [isThreaded, setIsThreaded] = useState(false);
+    const [isHui, setIsHui] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [canAddEmojis, setCanAddEmojis] = useState(false);
     const [timeLimit, setTimeLimit] = useState(0);
@@ -21,7 +22,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
         } else {
             setTemplateName("");
             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
-                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit);
+                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit, isHui);
             toggleIt();
         }
     }
@@ -74,6 +75,10 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                 <br/>
                 <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'
                           onClick={(e, data) => setCanAddEmojis(data.checked)}/>
+                <br/>
+                <br/>
+                <Checkbox disabled readOnly checked={isHui} label='Discussions use the Hui format'
+                               onClick={(e, data) => setIsHui(data.checked)}/>
                 <br/>
                 <br/>
                 <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'

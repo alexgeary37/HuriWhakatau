@@ -7,6 +7,7 @@ export const AddUser = () => {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [userAnon, setUserAnon] = useState(false);
     const [errUsername, setErrUsername] = useState("");
     const [errEmail, setErrEmail] = useState("");
@@ -98,8 +99,10 @@ export const AddUser = () => {
                             // userName !== "" || userAnon &&
                             // // password !== "" &&
                             handleSubmit();
+                            setIsLoading(true)
                         }
                         }
+                        loading={isLoading && !errUsername && !errEmail}
                     />
                 </Form>
             </Container>
