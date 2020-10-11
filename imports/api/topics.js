@@ -4,7 +4,7 @@ import { check } from "meteor/check";
 export const Topics = new Mongo.Collection("topics");
 
 Meteor.methods({
-  // Insert a totpic into the totpic collection in the db.
+  // Insert a topic into the topic collection in the db.
   // title: the title of the topic
   // description: topic description
   // categoryId: the _id of the category object
