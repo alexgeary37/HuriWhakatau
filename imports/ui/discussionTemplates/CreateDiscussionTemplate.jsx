@@ -77,7 +77,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                           onClick={(e, data) => setCanAddEmojis(data.checked)}/>
                 <br/>
                 <br/>
-                <Checkbox disabled readOnly checked={isHui} label='Discussions use the Hui format'
+                <Checkbox checked={isHui} label='Discussions use the Hui format'
                                onClick={(e, data) => setIsHui(data.checked)}/>
                 <br/>
                 <br/>

@@ -4,8 +4,8 @@ import { check } from "meteor/check";
 export const Discussions = new Mongo.Collection("discussions");
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
-  // Called from Dashboardjsx
-  "discussions.insert"(scenarioId, groupId, timeLimit) {
+  // Called from experiments.js
+  "discussions.insert"(scenarioId, groupId, timeLimit, isHui) {
     check(scenarioId, String);
     check(groupId, String);
     check(timeLimit, Number);
@@ -25,6 +25,7 @@ Meteor.methods({
       timeLimit: timeLimit,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: false,
+      isHui: isHui,
     });
 
     return discussionId;
@@ -52,6 +53,7 @@ Meteor.methods({
       timeLimit: timeLimit,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: true,
+      isHui: true,
     });
 
     return discussionId;
@@ -122,6 +124,7 @@ if (Meteor.isServer) {
           maxCommentLength: 1,
           deadline: 1,
           isIntroduction: 1,
+          isHui: 1,
           nextDiscussion: 1,
         },
       }
