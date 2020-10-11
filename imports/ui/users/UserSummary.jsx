@@ -80,6 +80,7 @@ export const UserSummary = ({
                         </div>
                     )}
                     {discussionStatus !== "active" &&
+                    Meteor.userId() === member._id &&
                     nextDiscussionId && (
                         <div style={{textAlign: "center"}}>
                             <Button
