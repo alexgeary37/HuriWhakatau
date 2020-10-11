@@ -33,7 +33,7 @@ export const Dashboard = () => {
     <div style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
       <NavBar />
       <span style={{height:"5em"}} />
-      <Container inverted style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
+      <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
             <Header.Content as={Container} fluid >
@@ -45,7 +45,7 @@ export const Dashboard = () => {
                 icon="help"
                 onClick={() => setShowInfo(!showInfo)}
               />
-              Dashboard
+              Welcome to Huri Whakatau
             </Header.Content>
           </Header>
           <Message style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}
