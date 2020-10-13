@@ -566,6 +566,7 @@ export const UserSettings = () => {
                                     </Input>
                                     <br/>
                                     <br/>
+                                    get your personalised Pepeha: https://pepeha.nz/
                                     {/*{!changeUserPepeha ?*/}
                                     {/*    <Button positive*/}
                                     {/*             fluid*/}

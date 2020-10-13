@@ -18,8 +18,8 @@ import "/imports/api/users"
 
 Meteor.startup(() => {
     process.env.MAIL_URL =
-        "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
-    // "smtps://huriwhakatau%40gmail.com:huriwhakataujuryroom@smtp.gmail.com:465/";
+        // "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
+    "smtps://huriwhakatau%40gmail.com:huriwhakataujuryroom@smtp.gmail.com:465/";
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
     // console.log("email set");
 

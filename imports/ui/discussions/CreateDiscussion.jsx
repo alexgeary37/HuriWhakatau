@@ -12,6 +12,7 @@ export const CreateDiscussion = ({toggleModal}) => {
     const [topicId, setTopicId] = useState("wyXdeAoBGGKXPaEh5");
     const [groupId, setGroupId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
+    const [isHui, setIsHui] = useState(false);
     const [errTitle, setErrTitle] = useState("");
     const [createNewGroup, setCreateNewGroup] = useState(false);
     const [groupName, setGroupName] = useState("");
@@ -33,7 +34,7 @@ export const CreateDiscussion = ({toggleModal}) => {
         if(discussionTitle.length !== 0 && (groupName.length !== 0 || groupId.length !== 0)){
             Meteor.call("scenarios.create", discussionTitle, description, topicId, discussionTemplate._id,
                 (error, result) => {
-                    Meteor.call("discussions.insert", result, groupId, timeLimit);
+                    Meteor.call("discussions.insert", result, groupId, timeLimit, isHui);
                 })
             toggleIt();
         }
@@ -152,7 +153,10 @@ export const CreateDiscussion = ({toggleModal}) => {
                 </Input>
                 <br/>
                 <br/>
-
+                <Checkbox checked={isHui} label='Discussions use the Hui format'
+                          onClick={(e, data) => setIsHui(data.checked)}/>
+                <br/>
+                <br/>
                 <Modal.Actions>
                     <Button
                         content="Save"

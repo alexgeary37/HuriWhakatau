@@ -15,7 +15,7 @@ export const DiscussionSummary = ({ discussion, participantRole }) => {
   });
   // would like to set the path based on user role, but check is completed after
   // discussion summaries are loaded. need a call back in mydash or something
-  let linkPath = isIndigenous ? "/huichat" : "/discussion";
+  let linkPath = discussion.isHui ? "/huichat" : "/discussion";
 
   return (
     <List.Item as={Link} to={`${linkPath}/${discussion._id}`}>

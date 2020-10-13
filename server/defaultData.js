@@ -18,19 +18,20 @@ import {DiscussionTemplates} from "../imports/api/discussionTemplate"
 // set up checks that each item doesn’t exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
 //create categories if the basic set doesn't exist
-    let topicId;
+    let categoryId;
     if (Categories.find().count() === 0) {
-        Categories.insert({name: "Politics"});
-        Categories.insert({name: "Religion"});
-        Categories.insert({name: "Philosophy"});
-        Categories.insert({name: "Sport"});
-        Categories.insert({name: "Science"});
-        Categories.insert({name: "Other"});
-        Categories.insert({name: "Culture"});
-        Categories.insert({name: "Maori Culture"});
-        Categories.insert({name: "Maori Affairs"});
+        Categories.insert({title: "Politics"});
+        Categories.insert({title: "Religion"});
+        Categories.insert({title: "Philosophy"});
+        Categories.insert({title: "Sport"});
+        Categories.insert({title: "Science"});
+        Categories.insert({title: "Other"});
+        Categories.insert({title: "Te reo"});
+        Categories.insert({title: "Culture"});
+        Categories.insert({title: "Maori Culture"});
+        Categories.insert({title: "Maori Affairs"});
     } else {
-        topicId = Categories.findOne({name: "Other"});
+        categoryId = Categories.findOne({title: "Other"});
     }
 
 // Create accounts
@@ -130,7 +131,7 @@ if (Meteor.isServer) {
         scenarios.push(Scenarios.insert({
             title: "Default - Introduction",
             description: "A discussion for group members to get to know each other prior to the scheduled topic driven discussions",
-            topicId: topicId,
+            categoryId: topicId,
             discussionTemplateId: templateId1,
             createdAt: new Date(),
             createdBy: "ADMIN",
@@ -139,7 +140,7 @@ if (Meteor.isServer) {
         scenarios.push(Scenarios.insert({
             title: "A title that sets up the discussion",
             description: "A deeper description of the topic",
-            topicId: topicId,
+            categoryId: categoryId,
             discussionTemplateId: templateId2,
             createdAt: new Date(),
             createdBy: "ADMIN",

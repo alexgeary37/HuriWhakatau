@@ -4,6 +4,7 @@ import {Router, Route, Switch} from "react-router";
 import {BrowserRouter, useHistory} from "react-router-dom";
 import history from "history";
 import {AddUser} from "/imports/ui/users/AddUser";
+import {About} from "./About";
 import {HuiChat} from "/imports/ui/discussions/HuiChat"
 import {Dashboard} from "./Dashboard";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
@@ -36,14 +37,16 @@ export const App = () => {
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={Dashboard}/>
-                    <Route exact path="/mydashboard" component={MyDashboard}/>
+                    <Route exact path="/about" component={About}/>
+                    <Route exact path="/AddUser" component={AddUser}/>
+                    <Route exact path="/assignroles" component={AssignRoles}/>
+                    <Route path="/discussion/:discussionId" component={Discussion}/>
                     <Route exact path="/groups" component={BrowseGroups}/>
                     <Route exact path="/groups/create" component={CreateGroup}/>
+                    <Route exact path="/mydashboard" component={MyDashboard}/>
                     <Route exact path="/scenarios" component={BrowseScenarios}/>
                     <Route exact path="/scenarios/create" component={CreateScenario}/>
                     <Route exact path="/scenarioSets" component={BrowseScenarioSets}/>
-                    <Route exact path="/assignroles" component={AssignRoles}/>
-                    <Route exact path="/AddUser" component={AddUser}/>
                     <Route exact path="/UserSettings" component={UserSettings}/>
                     <Route exact path="/huichat/:discussionId" component={HuiChat}/>
                     <Route
@@ -61,8 +64,7 @@ export const App = () => {
                         path="/experiments/create"
                         component={CreateExperiment}
                     />
-                    <Route path="/discussion/:discussionId" component={Discussion}/>
-                    <Route path="/korerorero/:discussionId" component={Discussion}/>
+                    <Route path="/korerorero/:discussionId" component={Discussion}/> {/* probably not needed double up of the huichat path*/}
                     <Route
                     exact
                     path="/enroll-account/:token"

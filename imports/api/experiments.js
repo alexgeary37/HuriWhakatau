@@ -67,7 +67,8 @@ Meteor.methods({
         "discussions.insert",
         scenarios[i]._id,
         groupId,
-        discussionTemplate.timeLimit
+        discussionTemplate.timeLimit,
+        discussionTemplate.isHui,
       );
       console.log("adding discussion id to exp", discussionId);
       Experiments.update(experimentId, {

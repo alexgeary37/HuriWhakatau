@@ -16,7 +16,8 @@ Meteor.methods({
     showProfileInfo,
     canAddEmojis,
     timeLimit,
-    commentCharacterLimit
+    commentCharacterLimit,
+    isHui
   ) {
     check(name, String);
     //addcheck for user admin/researcher role
@@ -31,6 +32,7 @@ Meteor.methods({
       canAddEmojis: canAddEmojis,
       timeLimit: timeLimit,
       commentCharacterLimit: commentCharacterLimit,
+      isHui: isHui,
       createdAt: new Date(),
       createdBy: Meteor.userId(),
     });
@@ -64,6 +66,7 @@ if (Meteor.isServer) {
           canAddEmojis: 1,
           timeLimit: 1,
           commentCharacterLimit: 1,
+          isHui: 1,
           createdAt: 1,
           createdBy: 1,
         },
