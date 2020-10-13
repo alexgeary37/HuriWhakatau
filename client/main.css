@@ -1,5 +1,7 @@
 html {
-  background-color: black;
+  /*background-color: black;*/
+  background-color: rgb(10, 10, 10);
+
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -9,7 +11,7 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: rgb(10, 10, 10);
-  overflow: hidden;
+  /*overflow: hidden;*/
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -89,6 +91,10 @@ list content
   backgroundColor: "#c4c4c4";
 }
 
-/*.description {*/
-/*  backgroundColor: "#c4c4c4";*/
+/********************************************************
+Social Media Icons
+*********************************************************/
+
+/*i.icon.twitter:after {*/
+/*  content: "\f494";*/
 /*}*/

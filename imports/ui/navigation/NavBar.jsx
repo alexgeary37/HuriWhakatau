@@ -6,7 +6,7 @@ import {
   Dropdown,
   MenuItem,
   MenuMenu,
-  Button,
+  Button, HeaderContent, Header,
 } from "semantic-ui-react";
 import { Link, useHistory } from "react-router-dom";
 import {useTracker} from "meteor/react-meteor-data";
@@ -41,12 +41,12 @@ export const NavBar = () => {
         backgroundSize: '200px',
         backgroundRepeat: 'round'}}
       >
-        <Container className="content-width">
-          <Menu.Item as={Link} to="/" header>
-            <Icon size="big" name="balance scale" />
-            Huri Whakatau
+        <Container className="content-width"><Menu.Item as={Link} to="/" ><Icon size="big" name="balance scale" />
+        </Menu.Item>
+          <Menu.Item as={Link} to="/" >
+           <Header inverted> Huri Whakatau</Header>
           </Menu.Item>
-          <Dropdown item text="Tirotiro/Browse">
+          <Dropdown item text="Tirotiro/Browse" as={Header}>
             <Dropdown.Menu>
               <Dropdown.Item content="My Dash" as={Link} to="/mydashboard" />
               <Dropdown.Item content="User settings" as={Link} to="/UserSettings" />
@@ -74,12 +74,13 @@ export const NavBar = () => {
                 <Icon name={"user"} size={"large"}/>
               </MenuItem>
               :
-                <div>
                   <MenuItem as={Link} to="/" name="login" onClick={logUserIn}>
-                  Login
+                  <Header inverted>Login</Header>
                 </MenuItem>
-                  </div>
             }
+            <MenuItem as={Link} to="/about" name="about">
+              <Header inverted>About</Header>
+            </MenuItem>
           </MenuMenu>
         </Container>
       </Menu>
