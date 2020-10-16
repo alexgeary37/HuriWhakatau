@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {Modal, Button, Input, Form, Divider} from "semantic-ui-react";
 
-export const LoginForm = () => {
+export const LoginForm = ({toggleModal}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(true);
@@ -17,11 +17,17 @@ export const LoginForm = () => {
       if (error) {
         setErr(error.message);
       } else {
-        setOpen(false);
+        // setOpen(false);
+        toggleIt();
       }
     });
     // history.push("/mydashboard");
   };
+
+  const toggleIt = (e) => {
+    setOpen(false);
+    toggleModal();
+  }
 
   console.log(err);
   return (

@@ -9,6 +9,7 @@ import {
     Icon,
     Divider, Image,
 } from "semantic-ui-react";
+import { Random } from "meteor/random";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Link} from "react-router-dom";
 
@@ -79,8 +80,7 @@ export const About = () => {
                         <br/>
                         <br/>
                         <br/>
-                        {/*<Image src='/EarlyPeterCapaldi.jpg' size='tiny' />*/}
-                        <Image src='/Tony_Smith.jpg' size='tiny' />
+                        <Image src={Random.choice(['/EarlyPeterCapaldi.jpg', '/Tony_Smith.jpg'])} size='tiny'/>
                         <Header content={'Tony Smith: Associate Investigator'}/>
                         Tony received his undergraduate and graduate degrees in Computer Science from the University of
                         Calgary, and earned his PhD at the University of Waikato. A general theme of his research is
@@ -105,14 +105,13 @@ export const About = () => {
                         <br/>
                         <br/>
                         <br/>
-                        {/*<Image src='/aarondant.jpg' size='tiny' />*/}
-                        <Image src='/aarondant_real.jpg' size='tiny' />
+                        <Image src={Random.choice(['/aarondant_real.jpg', '/aarondant.jpg'])} size='tiny' />
                         <Header content={'Aaron Dant: Key Researcher'}/>
                         Aaron is Chief Data Scientist at ASRC Federal (yes all those capitals) and is responsible for
                         research and development using a variety of techniques including natural language processing, supervised
-                        and unsupervised learning.. Aaron has over 20 years of experience building enterprise scale
+                        and unsupervised learning. Aaron has over 20 years of experience building enterprise scale
                         applications, including 10+ years developing cloud scale analytic systems for federal customers.
-                        In 2018 Aaron was one of <a
+                        In 2018 Aaron was one of  <a
                         href={"https://washingtonexec.com/2018/11/top-ai-execs-to-watch-aaron-dant-asrc-federal/#.X4PzAGj7Ryw"}
                                                     target={"_blank"}> Washington Exec's Top AI Execs to watch</a>.
                         (I for one am glad he ditched that wig).

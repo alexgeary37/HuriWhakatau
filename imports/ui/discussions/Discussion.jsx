@@ -152,15 +152,6 @@ export const Discussion = () => {
       nextDiscussionId: nextDiscussionId,
     };
   });
-  // setMutableDiscussionDeadline(discussionDeadline);
-  // console.log(
-  //   "time limit: ",
-  //   discussionTimeLimit,
-  //   "\ndiscussion deadline: ",
-  //   discussionDeadline,
-  //   "timed: ",
-  //   timedDiscussion
-  // );
 
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
@@ -193,7 +184,7 @@ export const Discussion = () => {
     }
   }
 
-  // //set reference for end of discussion and scroll to that point on page load
+  //set reference for end of discussion and scroll to that point on page load
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
@@ -238,12 +229,16 @@ export const Discussion = () => {
           <Grid.Row>
             <GridColumn width={3} style={{ height: "90vh" }}>
               <Header
-                content={(scenario && scenario.title) || (topic && topic.title)}
+                  inverted
+                  content={(scenario && scenario.title) || (topic && topic.title)}
                 size="medium"
               />
+              {/* replace the topic with scenario only once old data is cleared out */}
+              <Header as={'h5'} inverted
+                      content=
               {(scenario && scenario.description) ||
-                (topic && topic.description)}
-              {timedDiscussion && <Timer time={timeLeft} />}
+                (topic && topic.description)}/>
+              {timedDiscussion && <Timer style={{ position: "absolute", bottom: "0px", width: "95%" }} time={timeLeft} />}
             </GridColumn>
             <GridColumn width={10}>
               <div
@@ -271,7 +266,7 @@ export const Discussion = () => {
               </div>
             </GridColumn>
             <GridColumn width={3}>
-              <Header content="Verdicts" size="medium" />
+              <Header inverted content="Verdicts" size="medium" />
               <List style={{ overflow: "auto", maxHeight: "50em" }}>
                 {verdicts &&
                   verdicts.map((verdict) => (
