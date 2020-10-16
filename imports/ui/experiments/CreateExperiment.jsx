@@ -150,6 +150,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                     )}
                     <Checkbox checked={hasIntroduction} label='Create an Introduction Lounge' onClick={(e, data) => setHasIntroduction(data.checked)}/>
                     <br/>
+                    <br/>
                     <Button
                         content="Save & Close"
                         onClick={(e) => {
