@@ -21,19 +21,15 @@ export const NavBar = () => {
             user: Meteor.users.findOne({_id: Meteor.userId()}),
         };
     });
-
     const logUserOut = () => {
         Accounts.logout();
     };
     const toggleModal = () => {
         setShowLogin(!showLogin);
     };
-
     const handleSignUp = () => {
         history.push("/AddUser");
     }
-
-    //todo, remove the links to Groups, Scenarios and Scenario sets when we're sure they aren't needed.
     return (
         <div className="navbar">
             <Menu fixed="top" inverted
