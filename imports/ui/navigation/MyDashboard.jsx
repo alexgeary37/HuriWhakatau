@@ -278,7 +278,8 @@ export const MyDashboard = () => {
                             <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                      title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                             >
-                                <Header as={'h3'} >My Discussions <Button
+                                <Header as={'h3'} >My Discussions
+                                    <Button
                                     floated={"right"}
                                     onClick={handleToggleDiscussion}
                                     content="New Discussion"
@@ -339,6 +340,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleGroup}
                                         content="Create New Group"
+                                        basic
                                         negative
                                     />}
                                 </Card.Content>
@@ -364,6 +366,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleTemplate}
                                             content="Create New Template"
+                                            basic
                                             negative
                                         />
                                     </Card.Content>
@@ -385,6 +388,7 @@ export const MyDashboard = () => {
                                             fluid
                                             onClick={handleToggleScenario}
                                             content="Create New"
+                                            basic
                                             negative
                                         />
                                     </Card.Content>
@@ -412,6 +416,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleScenarioSet}
                                         content="Create New Set"
+                                        basic
                                         negative
                                     />
                                 </Card.Content>
@@ -433,6 +438,7 @@ export const MyDashboard = () => {
                                         fluid
                                         onClick={handleToggleExperimentCreation}
                                         content="Create New Experiment"
+                                        basic
                                         negative
                                     />
                                 </Card.Content>
@@ -446,6 +452,7 @@ export const MyDashboard = () => {
                                     content="Assign Roles"
                                     as={Link}
                                     to="/assignroles"
+                                    basic
                                     negative
                                 />
                                 <br/>
@@ -454,6 +461,7 @@ export const MyDashboard = () => {
                                     content="Add user"
                                     as={Link}
                                     to="/AddUser"
+                                    basic
                                     negative
                                 />
                             </Segment>

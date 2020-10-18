@@ -18,7 +18,7 @@ export const LoginForm = ({toggleModal}) => {
         setErr(error.message);
       } else {
         // setOpen(false);
-        toggleIt();
+        toggleIt(e);
       }
     });
     // history.push("/mydashboard");
@@ -50,6 +50,7 @@ export const LoginForm = ({toggleModal}) => {
             name="username"
             required
             fluid
+            focus
             onChange={(e) => setUsername(e.currentTarget.value)}
           />
           <br />

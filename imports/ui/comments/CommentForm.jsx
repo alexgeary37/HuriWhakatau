@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import RichTextEditor from "react-rte";
-import { Button, Form, Segment } from "semantic-ui-react";
+import {Button, Form, Segment} from "semantic-ui-react";
 
 export const CommentForm = ({discussionId}) => {
     const [keyStrokes, setKeyStrokes] = useState([]);
@@ -24,22 +24,87 @@ export const CommentForm = ({discussionId}) => {
             t: Date.now(),
         };
         setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
+        console.table(stroke);
     };
+
+    // start of function to add macrons to letters if alt or alt + shift is pressed. Things crash pretty
+    // quick if you try to use it though, suspect to do with the range.collapse(false) had issues with that before
+    const macronise = (e) => {
+        let sel, range;
+        if (e.altKey  && ["a", "e", "i","o","u","A","E","I","O","U"].includes(e.key)) {
+            e.preventDefault();
+            if (window.getSelection) {
+                sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    console.log("range count: ", sel.rangeCount);
+                    range = sel.getRangeAt(0);
+
+                    let textNode = sel.focusNode;
+                    let newOffset = sel.focusOffset + 1;
+                    switch (e.key) {
+                        case 'a': /* e.preventDefault(); */
+                            range.insertNode(document.createTextNode("ā"));
+                            break;
+                        case 'A': e.preventDefault()
+                            range.insertNode(document.createTextNode("Ā"));
+                            break;
+                        case 'e':
+                            range.insertNode(document.createTextNode("ē"));
+                            break;
+                        case 'E':
+                            range.insertNode(document.createTextNode("Ē"));
+                            break;
+                        case 'i':
+                            range.insertNode(document.createTextNode("ī"));
+                            break;
+                        case 'I':
+                            range.insertNode(document.createTextNode("Ī"));
+                            break;
+                        case 'o':
+                            range.insertNode(document.createTextNode("ō"));
+                            break;
+                        case 'O':
+                            range.insertNode(document.createTextNode("Ō"));
+                            break;
+                        case 'u':
+                            range.insertNode(document.createTextNode("ū"));
+                            break;
+                        case 'U':
+                            range.insertNode(document.createTextNode("Ū"));
+                            break;
+                        default:
+                            break;
+                    }
+                    // sel.collapse(textNode, textNode.length+newOffset);
+                    range.collapse(false);
+                }
+            }
+        }
+    };
+
 
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
-    useEffect (()=>{
+    useEffect(() => {
         const editorContent = document.getElementsByClassName("public-DraftEditor-content")[0];
-        editorContent.addEventListener('paste', (event) => { pasted(event) });
-        editorContent.addEventListener('keypress', (event) => { keystroke(event) });
-        },[]);
+        editorContent.addEventListener('paste', (event) => {
+            pasted(event)
+        });
+        editorContent.addEventListener('keypress', (event) => {
+            keystroke(event)
+        });
+        //adds macrons to vowels
+        editorContent.addEventListener('keydown', (event) => {
+            macronise(event)
+        });
+    }, []);
 
     const handleChange = (value) => {
         setEditorValue(value);
     };
 
     const handleSubmit = () => {
-        // if (typeof (editorValue.editorValue) == "undefined") { //this doesn't work
+        // if (typeof (editorValue.editorValue) == "undefined") { /this intended to prevent empty comments but doesn't work
         //     return;
         // } // If text is empty, don't submit anything.
         Meteor.call(
@@ -82,9 +147,9 @@ export const CommentForm = ({discussionId}) => {
                 required
             />
 
-      <Button attached={"bottom"} fluid positive onClick={handleSubmit}>
-        Add Comment
-      </Button>
-    </Form>
-  );
+            <Button attached={"bottom"} fluid positive onClick={handleSubmit}>
+                Add Comment
+            </Button>
+        </Form>
+    );
 };
