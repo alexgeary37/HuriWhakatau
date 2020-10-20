@@ -255,6 +255,7 @@ export const MyDashboard = () => {
                 <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}}>
 
             <Container>
+                <span style={{height:"22em"}} />
                 <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                     <Header size="huge" >
                         <Header.Content as={Container} fluid >

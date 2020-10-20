@@ -15,7 +15,7 @@ import { NavBar } from "/imports/ui/navigation/NavBar";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 
 export const Dashboard = () => {
-  const [showInfo, setShowInfo] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   const { user, discussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
@@ -32,7 +32,7 @@ export const Dashboard = () => {
   return (
     <div>
       <NavBar />
-      <span style={{height:"5em"}} />
+      {/*<span style={{height:"20em"}} />*/}
       <Sidebar
           as={Segment}
           animation='overlay'
@@ -48,6 +48,7 @@ export const Dashboard = () => {
             backgroundRepeat: 'repeat-y'}}
       ></Sidebar>
       <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
+        <span style={{height:"20em"}} />
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
             <Header.Content as={Container} fluid >

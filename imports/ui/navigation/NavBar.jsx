@@ -48,10 +48,10 @@ export const NavBar = () => {
                     <Dropdown item text="Tirotiro/Browse" as={Menu.Item} style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>
                         <Dropdown.Menu>
                             <Dropdown.Item as={Link}  to="/mydashboard">
-                                <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>My Dash</h2>
+                                <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'20px'}}>My Dash</h2>
                             </Dropdown.Item>
                             <Dropdown.Item as={Link} to="/UserSettings">
-                                <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>User settings</h2>
+                                <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'20px'}}>User settings</h2>
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

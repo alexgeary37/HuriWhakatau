@@ -200,6 +200,7 @@ export const UserSettings = () => {
                     backgroundRepeat: 'repeat-y'}}
             ></Sidebar>
             <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                <span style={{height:"22em"}} />
                 <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                     <span style={{height: "400em"}}/>
                     <Header size="huge">

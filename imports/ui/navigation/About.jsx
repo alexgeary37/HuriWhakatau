@@ -18,7 +18,6 @@ export const About = () => {
     return (
         <div /*style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}*/>
             <NavBar/>
-            <span style={{height: "5em"}}/>
             <Sidebar
                 as={Segment}
                 animation='overlay'
@@ -33,10 +32,11 @@ export const About = () => {
                     backgroundSize: '60px',
                     backgroundRepeat: 'repeat-y'}}
             ></Sidebar>
-            <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
-                <Segment attached="bottom" inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+            <Container inverted={'true'} /*style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}*/>
+                <Segment attached="bottom" inverted /*style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}*/>
+                    <span style={{height:"32em"}}/>
                     <Header as={'h1'} content="About Huri Whakatau"/>
-                    <Segment inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                    <Segment inverted /*style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}*/>
                         Huri Whakatau is an online discussion platform we have been developing over the last two years
                         in collaboration with Māori and Iñupiat researchers, engineers and participants. Our platform will
                         provide a cloud solution to organizations, communities and researchers for assisting small
