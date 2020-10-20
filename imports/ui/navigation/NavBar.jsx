@@ -43,15 +43,15 @@ export const NavBar = () => {
                 <Container className="content-width"><Menu.Item as={Link} to="/"><Icon size="big" name="balance scale"/>
                 </Menu.Item>
                     <Menu.Item as={Link} to="/">
-                        <Header as={'h2'} inverted content={'Huri Whakatau'}/>
+                        <Header as={'h2'} inverted content={'Huri Whakatau'} style={{fontFamily:'Tamaiti'}}/>
                     </Menu.Item>
-                    <Dropdown item text="Tirotiro/Browse" as={'h2'}>
+                    <Dropdown item text="Tirotiro/Browse" as={Menu.Item} style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>
                         <Dropdown.Menu>
                             <Dropdown.Item as={Link}  to="/mydashboard">
-                                <h2>My Dash</h2>
+                                <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>My Dash</h2>
                             </Dropdown.Item>
                             <Dropdown.Item as={Link} to="/UserSettings">
-                                <h2>User settings</h2>
+                                <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>User settings</h2>
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
@@ -67,22 +67,23 @@ export const NavBar = () => {
                                 }}
                                 content="Sign Up"
                                 negative
+                                style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}
                             />
                         </MenuItem>
                         }
                         {user ?
-                            <MenuItem as={Link} as={'h2'} to="/" name="logout" onClick={logUserOut}>
+                            <MenuItem as={Link} as={'h2'} to="/" name="logout" onClick={logUserOut} style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>
                                 Logout {user.username}
                                 {/*todo replace icon with profile pic when that is ready*/}
-                                <Icon name={"user"} size={"large"}/>
+                                <Icon name={"user"} size={"small"}/>
                             </MenuItem>
                             :
                             <MenuItem as={Link} to="/" name="login" onClick={toggleModal}>
-                                <Header as={'h2'} inverted>Login</Header>
+                                <Header as={'h2'} inverted style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>Login</Header>
                             </MenuItem>
                         }
-                        <MenuItem as={Link} to="/about" name="about">
-                            <Header as={'h2'} inverted>About</Header>
+                        <MenuItem as={Link} to="/about" name="about" >
+                            <Header as={'h2'} inverted style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>About</Header>
                         </MenuItem>
                     </MenuMenu>
                 </Container>

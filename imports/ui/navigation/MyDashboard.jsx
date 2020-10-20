@@ -197,7 +197,7 @@ export const MyDashboard = () => {
     return (
         <div>
             {/*<NavBar/>*/}
-            {/*<span style={{height: "20em"}}/>*/}
+            {/*<span style={{height: "60em"}}/>*/}
             {/*start sidebar*/}
             <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
                 <NavBar/>
