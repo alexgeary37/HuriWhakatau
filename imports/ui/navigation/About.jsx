@@ -7,7 +7,7 @@ import {
     Message,
     List,
     Icon,
-    Divider, Image,
+    Divider, Image, Sidebar,
 } from "semantic-ui-react";
 import { Random } from "meteor/random";
 import {NavBar} from "/imports/ui/navigation/NavBar";
@@ -16,9 +16,23 @@ import {Link} from "react-router-dom";
 export const About = () => {
 
     return (
-        <div style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+        <div /*style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}*/>
             <NavBar/>
             <span style={{height: "5em"}}/>
+            <Sidebar
+                as={Segment}
+                animation='overlay'
+                icon='labeled'
+                inverted
+                vertical
+                visible
+                width={"very thin"}
+                style={{
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                    backgroundSize: '60px',
+                    backgroundRepeat: 'repeat-y'}}
+            ></Sidebar>
             <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
                 <Segment attached="bottom" inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                     <Header as={'h1'} content="About Huri Whakatau"/>
@@ -285,6 +299,21 @@ export const About = () => {
                     </Segment>
                 </Segment>
             </Container>
+            <Sidebar
+                as={Segment}
+                animation='overlay'
+                icon='labeled'
+                direction={'right'}
+                inverted
+                vertical
+                visible
+                width={"very thin"}
+                style={{
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                    backgroundSize: '60px',
+                    backgroundRepeat: 'repeat-y'}}
+            ></Sidebar>
         </div>
     );
 };

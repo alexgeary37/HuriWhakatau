@@ -8,7 +8,7 @@ import {
   Message,
   List,
   Icon,
-  Divider,
+  Divider, Sidebar,
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
 import { NavBar } from "/imports/ui/navigation/NavBar";
@@ -30,9 +30,23 @@ export const Dashboard = () => {
   });
 
   return (
-    <div style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+    <div>
       <NavBar />
       <span style={{height:"5em"}} />
+      <Sidebar
+          as={Segment}
+          animation='overlay'
+          icon='labeled'
+          inverted
+          vertical
+          visible
+          width={"very thin"}
+          style={{
+            backgroundColor: 'rgb(0, 0, 0)',
+            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+            backgroundSize: '60px',
+            backgroundRepeat: 'repeat-y'}}
+      ></Sidebar>
       <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
@@ -104,6 +118,21 @@ export const Dashboard = () => {
           </Segment>
         </Segment>
       </Container>
+      <Sidebar
+          as={Segment}
+          animation='overlay'
+          icon='labeled'
+          direction={'right'}
+          inverted
+          vertical
+          visible
+          width={"very thin"}
+          style={{
+            backgroundColor: 'rgb(0, 0, 0)',
+            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+            backgroundSize: '60px',
+            backgroundRepeat: 'repeat-y'}}
+      ></Sidebar>
     </div>
   );
 };

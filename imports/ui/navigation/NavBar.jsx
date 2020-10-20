@@ -34,20 +34,25 @@ export const NavBar = () => {
         <div className="navbar">
             <Menu fixed="top" inverted
                   style={{
-                      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedHorizontalMirrored.png"})`,
-                      backgroundSize: '200px',
-                      backgroundRepeat: 'round'
+                      backgroundColor: 'black'
+                  //     backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedHorizontalMirrored.png"})`,
+                  //     backgroundSize: '200px',
+                  //     backgroundRepeat: 'round'
                   }}
             >
                 <Container className="content-width"><Menu.Item as={Link} to="/"><Icon size="big" name="balance scale"/>
                 </Menu.Item>
                     <Menu.Item as={Link} to="/">
-                        <Header inverted> Huri Whakatau</Header>
+                        <Header as={'h2'} inverted content={'Huri Whakatau'}/>
                     </Menu.Item>
-                    <Dropdown item text="Tirotiro/Browse" as={Header}>
+                    <Dropdown item text="Tirotiro/Browse" as={'h2'}>
                         <Dropdown.Menu>
-                            <Dropdown.Item content="My Dash" as={Link} to="/mydashboard"/>
-                            <Dropdown.Item content="User settings" as={Link} to="/UserSettings"/>
+                            <Dropdown.Item as={Link}  to="/mydashboard">
+                                <h2>My Dash</h2>
+                            </Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/UserSettings">
+                                <h2>User settings</h2>
+                            </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <Menu.Item>
@@ -56,7 +61,7 @@ export const NavBar = () => {
                     <MenuMenu position="right">
                         {!user &&
                         <MenuItem>
-                            <Button
+                            <Button as={'h2'}
                                 onClick={() => {
                                     handleSignUp();
                                 }}
@@ -66,18 +71,18 @@ export const NavBar = () => {
                         </MenuItem>
                         }
                         {user ?
-                            <MenuItem as={Link} to="/" name="logout" onClick={logUserOut}>
+                            <MenuItem as={Link} as={'h2'} to="/" name="logout" onClick={logUserOut}>
                                 Logout {user.username}
                                 {/*todo replace icon with profile pic when that is ready*/}
                                 <Icon name={"user"} size={"large"}/>
                             </MenuItem>
                             :
                             <MenuItem as={Link} to="/" name="login" onClick={toggleModal}>
-                                <Header inverted>Login</Header>
+                                <Header as={'h2'} inverted>Login</Header>
                             </MenuItem>
                         }
                         <MenuItem as={Link} to="/about" name="about">
-                            <Header inverted>About</Header>
+                            <Header as={'h2'} inverted>About</Header>
                         </MenuItem>
                     </MenuMenu>
                 </Container>

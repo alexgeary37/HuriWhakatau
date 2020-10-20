@@ -13,7 +13,7 @@ import {
     Icon,
     Form,
     Grid,
-    GridColumn, CardContent, Dropdown, Divider
+    GridColumn, CardContent, Dropdown, Divider, Sidebar
 } from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Mountains} from "/imports/api/mountains";
@@ -184,8 +184,24 @@ export const UserSettings = () => {
     return (
         <div inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
             <NavBar/>
+            <Sidebar
+                as={Segment}
+                animation='overlay'
+                icon='labeled'
+                inverted
+                vertical
+                direction={'left'}
+                visible
+                width={"very thin"}
+                style={{
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                    backgroundSize: '60px',
+                    backgroundRepeat: 'repeat-y'}}
+            ></Sidebar>
             <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                 <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                    <span style={{height: "400em"}}/>
                     <Header size="huge">
                         <Header.Content as={Container} fluid >
                             My Account - {user && user.username}
@@ -591,6 +607,21 @@ export const UserSettings = () => {
                     </GridColumn>
                 </Grid>
             </Container>
+            <Sidebar
+                as={Segment}
+                animation='overlay'
+                icon='labeled'
+                inverted
+                vertical
+                direction={'right'}
+                visible
+                width={"very thin"}
+                style={{
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                    backgroundSize: '60px',
+                    backgroundRepeat: 'repeat-y'}}
+            ></Sidebar>
         </div>
     );
 }
