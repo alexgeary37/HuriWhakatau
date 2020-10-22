@@ -7,16 +7,21 @@ import "/imports/api/scenarioSets";
 import "/imports/api/discussionTemplate";
 import {Roles} from "meteor/alanning:roles";
 import {Meteor} from "meteor/meteor";
-import {Groups} from "/imports/api/groups";
-import {Scenarios} from "/imports/api/scenarios";
+import {Groups} from "../imports/api/groups";
+import {Topics} from "../imports/api/topics";
+import {Scenarios} from "../imports/api/scenarios";
 import {Categories} from "../imports/api/categories";
-import {ScenarioSets} from "/imports/api/scenarioSets";
+import {ScenarioSets} from "../imports/api/scenarioSets";
 import {DiscussionTemplates} from "../imports/api/discussionTemplate"
 
 // const Mountains = new Mongo.Collection("mountains");
 
 // set up checks that each item doesn’t exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
+    //create topics if not exist
+    if(Topics.find().count() === 0){
+        //add some default discussion topics here, like Tamahau's ones
+    }
 //create categories if the basic set doesn't exist
     let categoryId;
     if (Categories.find().count() === 0) {
@@ -68,10 +73,22 @@ if (Meteor.isServer) {
     } else {
         defaultUsers.push(Accounts.findUserByUsername("Daisy")._id);
     }
+    if (!Accounts.findUserByUsername("Alex")) {
+        defaultUser = Accounts.createUser({
+            username: "Alex",
+            password: "password1",
+        });
+        defaultUsers.push(defaultUser);
+    } else {
+        let username = Accounts.findUserByUsername("Alex")
+        defaultUsers.push(username._id);
+    }
 
-
+    console.log("undefined group: ", !Groups.findOne({name: "Starter group"})._id);
 //Create group for default users
-    if (!Groups.find({name: "Starter group"})) {
+    if (!Groups.findOne({name: "Starter group"})._id) {
+        console.log("group method");
+        console.log(defaultUsers);
         Groups.insert({
             name: "Starter group",
             members: defaultUsers,
@@ -80,9 +97,9 @@ if (Meteor.isServer) {
         })
     }
 
-
+console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"})._id);
 // Set up discussion Templates:
-    if (!DiscussionTemplates.find({name: "Default -Timed"})) {
+    if (!DiscussionTemplates.findOne({name: "Default -Timed"})._id) {
         const templateId1 = DiscussionTemplates.insert({
             name: "Default -Timed",
             usersAreAnonymous: false,
@@ -131,7 +148,7 @@ if (Meteor.isServer) {
         scenarios.push(Scenarios.insert({
             title: "Default - Introduction",
             description: "A discussion for group members to get to know each other prior to the scheduled topic driven discussions",
-            categoryId: topicId,
+            categoryId: categoryId,
             discussionTemplateId: templateId1,
             createdAt: new Date(),
             createdBy: "ADMIN",
@@ -155,15 +172,15 @@ if (Meteor.isServer) {
             createdAt: new Date(),
             createdBy: "ADMIN",
         });
-    }
+        console.log(scenarios);
 
+    }
 //set up roles if they don't exist
     let createdRoles = Roles.getAllRoles();
     let roleList = [];
     createdRoles.forEach((role) => {
         roleList.push(role._id);
     });
-    // console.log(roleList);
 //set up roles
     const userRoles = [
         "CREATE_GROUPS",
@@ -190,6 +207,8 @@ if (Meteor.isServer) {
         }
     });
 
+    Roles.addUsersToRoles([Accounts.findUserByUsername("Daisy")._id,
+        Accounts.findUserByUsername("Mary")._id], ["ADMIN"]);
     // let newMountains = [];
     //
     // newMountains.forEach((mountain) => {

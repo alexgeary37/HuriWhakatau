@@ -72,7 +72,7 @@ export const NavBar = () => {
                         </MenuItem>
                         }
                         {user ?
-                            <MenuItem as={Link} as={'h2'} to="/" name="logout" onClick={logUserOut} style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>
+                            <MenuItem as={Link} to="/" name="logout" onClick={logUserOut} style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>
                                 Logout {user.username}
                                 {/*todo replace icon with profile pic when that is ready*/}
                                 <Icon name={"user"} size={"small"}/>
