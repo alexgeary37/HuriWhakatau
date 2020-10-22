@@ -8,14 +8,14 @@ import {
   Message,
   List,
   Icon,
-  Divider,
+  Divider, Sidebar,
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 
 export const Dashboard = () => {
-  const [showInfo, setShowInfo] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   const { user, discussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
@@ -30,10 +30,25 @@ export const Dashboard = () => {
   });
 
   return (
-    <div style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+    <div>
       <NavBar />
-      <span style={{height:"5em"}} />
+      {/*<span style={{height:"20em"}} />*/}
+      <Sidebar
+          as={Segment}
+          animation='overlay'
+          icon='labeled'
+          inverted
+          vertical
+          visible
+          width={"very thin"}
+          style={{
+            backgroundColor: 'rgb(0, 0, 0)',
+            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+            backgroundSize: '60px',
+            backgroundRepeat: 'repeat-y'}}
+      ></Sidebar>
       <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
+        <span style={{height:"20em"}} />
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
             <Header.Content as={Container} fluid >
@@ -104,6 +119,21 @@ export const Dashboard = () => {
           </Segment>
         </Segment>
       </Container>
+      <Sidebar
+          as={Segment}
+          animation='overlay'
+          icon='labeled'
+          direction={'right'}
+          inverted
+          vertical
+          visible
+          width={"very thin"}
+          style={{
+            backgroundColor: 'rgb(0, 0, 0)',
+            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+            backgroundSize: '60px',
+            backgroundRepeat: 'repeat-y'}}
+      ></Sidebar>
     </div>
   );
 };

@@ -196,10 +196,11 @@ export const MyDashboard = () => {
 
     return (
         <div>
-            <NavBar/>
-            <span style={{height: "20em"}}/>
+            {/*<NavBar/>*/}
+            {/*<span style={{height: "60em"}}/>*/}
             {/*start sidebar*/}
-            <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+            <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+                <NavBar/>
                 <Sidebar
                     as={Segment}
                     animation='overlay'
@@ -254,6 +255,7 @@ export const MyDashboard = () => {
                 <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}}>
 
             <Container>
+                <span style={{height:"22em"}} />
                 <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                     <Header size="huge" >
                         <Header.Content as={Container} fluid >
@@ -519,6 +521,21 @@ export const MyDashboard = () => {
             </Container>
             </Sidebar.Pusher>
             </Sidebar.Pushable>
+            <Sidebar
+                as={Segment}
+                animation='overlay'
+                icon='labeled'
+                inverted
+                vertical
+                direction={'right'}
+                visible
+                width={"very thin"}
+                style={{
+                    backgroundColor: 'rgb(0, 0, 0)',
+                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                    backgroundSize: '60px',
+                    backgroundRepeat: 'repeat-y'}}
+            ></Sidebar>
         </div>
     );
 };
