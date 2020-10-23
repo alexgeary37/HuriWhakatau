@@ -12,7 +12,7 @@ Meteor.methods({
     //addcheck for user admin/researcher role
 
     Categories.insert({
-      name: name,
+      title: name,
       createdBy: this.userId, // _id of user
     });
   },

@@ -61,6 +61,22 @@ Meteor.methods({
             const userId = Accounts.createUser({
                 username: finalUserName,
                 email:email,
+                pepeha: {
+                    mountain:"",
+                    river:"",
+                    waka:"",
+                    iwi:"",
+                    role:"",
+                },
+                userDetails:{
+                    firstName:"",
+                    lastName:"",
+                    ethnicity:"",
+                    location:"",
+                    gender:"",
+                    dob:"",
+                    religion:"",
+                },
             });
             Accounts.sendEnrollmentEmail(userId);
             Roles.addUsersToRoles(userId, roles);

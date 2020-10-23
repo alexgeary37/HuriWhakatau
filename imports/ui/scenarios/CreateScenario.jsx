@@ -2,19 +2,16 @@ import React, {useState} from "react";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
-import {Topics} from "/imports/api/topics";
 import {Categories} from "../../api/categories";
 
 export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [topicId, setTopicId] = useState("wyXdeAoBGGKXPaEh5");
-    const [categoryId, setCategoryId] = useState("NYXkv9KtqEhogjEHQ");
+    const [categoryId, setCategoryId] = useState("5vQX4vhq3nbTWZ6Qe"); //make dynamically get the "other" category
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
     const [errScenarioTitle, setErrScenarioTitle] = useState("");
     const [errScenarioDesc, setErrScenarioDesc] = useState("");
-    const [errTopic, setErrTopic] = useState("");
     const [errCategory, setErrCategory] = useState("");
     const [errDiscussionTemplateId, setErrDiscussionTemplateId] = useState("");
 
@@ -68,17 +65,16 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         }
     }
 
-    const {topics,
+    const {
         discussionTemplates,
         categories
         } = useTracker(() => {
-        Meteor.subscribe("topics");
         Meteor.subscribe("categories");
         Meteor.subscribe("discussionTemplates");
 
+
         //todo filter by user
         return {
-            topics: Topics.find().fetch(),
             categories: Categories.find().fetch(),
             discussionTemplates: DiscussionTemplates.find().fetch(),
         };
@@ -118,7 +114,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                     ) : (
                         <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
                     )}
-                    {/*show topics and discussion templates, get ids for db*/}
+                    {/*show catergories and discussion templates, get ids for db*/}
                     <Form.Dropdown
                         label="Category"
                         loading={categories.length === 0}
@@ -129,7 +125,6 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                             categories.map((category) => ({
                                 key: category._id,
                                 text: category.title,
-                                // description: topic.description,
                                 value: category._id,
                             }))
                         }
@@ -137,8 +132,8 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         value={categoryId}
                         onChange={(e, {value}) => setCategoryId(value)}
                     />
-                    {errTopic ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errTopic}</div>
+                    {errCategory ? (
+                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errCategory}</div>
                     ) : (
                         <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
                     )}
