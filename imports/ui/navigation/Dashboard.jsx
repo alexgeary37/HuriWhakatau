@@ -33,6 +33,7 @@ export const Dashboard = () => {
     <div>
       <NavBar />
       {/*<span style={{height:"20em"}} />*/}
+      <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
       <Sidebar
           as={Segment}
           animation='overlay'
@@ -42,13 +43,28 @@ export const Dashboard = () => {
           visible
           width={"very thin"}
           style={{
-            backgroundColor: 'rgb(0, 0, 0)',
+            backgroundColor: 'rgb(30, 30, 30)',
+            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+            backgroundSize: '60px',
+            backgroundRepeat: 'repeat-y'}}
+      ></Sidebar>
+      <Sidebar
+          as={Segment}
+          animation='overlay'
+          icon='labeled'
+          inverted
+          vertical
+          direction={'right'}
+          visible
+          width={"very thin"}
+          style={{
+            backgroundColor: 'rgb(30, 30, 30)',
             backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
             backgroundSize: '60px',
             backgroundRepeat: 'repeat-y'}}
       ></Sidebar>
       <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
-        <span style={{height:"20em"}} />
+        <span style={{height:"30em"}} />
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
             <Header.Content as={Container} fluid >
@@ -119,21 +135,7 @@ export const Dashboard = () => {
           </Segment>
         </Segment>
       </Container>
-      <Sidebar
-          as={Segment}
-          animation='overlay'
-          icon='labeled'
-          direction={'right'}
-          inverted
-          vertical
-          visible
-          width={"very thin"}
-          style={{
-            backgroundColor: 'rgb(0, 0, 0)',
-            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-            backgroundSize: '60px',
-            backgroundRepeat: 'repeat-y'}}
-      ></Sidebar>
+      </Sidebar.Pushable>
     </div>
   );
 };

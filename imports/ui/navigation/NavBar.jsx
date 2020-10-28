@@ -34,13 +34,13 @@ export const NavBar = () => {
         <div className="navbar">
             <Menu fixed="top" inverted
                   style={{
-                      backgroundColor: 'black'
-                  //     backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedHorizontalMirrored.png"})`,
-                  //     backgroundSize: '200px',
-                  //     backgroundRepeat: 'round'
+                      backgroundColor: 'black',
+                      backgroundImage: `url(${"/fren_gradient_extended_4.png"})`,
+                      // backgroundSize: '200px',
+                      backgroundRepeat: 'round'
                   }}
             >
-                <Container className="content-width"><Menu.Item as={Link} to="/"><Icon size="big" name="balance scale"/>
+                <Container className="content-width"><Menu.Item as={Link} to="/">{/*<Icon size="big" name="balance scale"/>*/}
                 </Menu.Item>
                     <Menu.Item as={Link} to="/">
                         <Header as={'h2'} inverted content={'Huri Whakatau'} style={{fontFamily:'Tamaiti'}}/>

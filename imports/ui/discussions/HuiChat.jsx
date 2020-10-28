@@ -271,13 +271,44 @@ export const HuiChat = () => {
         Meteor.call("discussions.addProposer", discussionId);
 
     return (
-        <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)', width: "110vh"}}>
+        <div inverted style={{backgroundColor: 'rgb(30, 30, 30)', width: "110vh"}}>
             <NavBar/>
             {/*hacky way to move content out from under menu*/}
-            <br/>
-            <br/>
-            <br/>
+            {/*<br/>*/}
+            {/*<br/>*/}
+            {/*<br/>*/}
+            <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+                <Sidebar
+                    as={Segment}
+                    animation='overlay'
+                    icon='labeled'
+                    inverted
+                    vertical
+                    visible
+                    width={"very thin"}
+                    style={{
+                        backgroundColor: 'rgb(30, 30, 30)',
+                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                        backgroundSize: '60px',
+                        backgroundRepeat: 'repeat-y'}}
+                ></Sidebar>
+                <Sidebar
+                    as={Segment}
+                    animation='overlay'
+                    icon='labeled'
+                    inverted
+                    vertical
+                    direction={'right'}
+                    visible
+                    width={"very thin"}
+                    style={{
+                        backgroundColor: 'rgb(30, 30, 30)',
+                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                        backgroundSize: '60px',
+                        backgroundRepeat: 'repeat-y'}}
+                ></Sidebar>
             <Container style={{width: "110vh"}}>
+                <span style={{height:"22em"}} />
                 <Grid columns={2} style={{width: "110vh"}}>
                     <GridColumn width={10} attached="left">
                         <Comment.Group style={{overflow: "auto", height: "75vh"}}>
@@ -382,6 +413,7 @@ export const HuiChat = () => {
                     {/*</Grid.Row>*/}
                 </Grid>
             </Container>
-        </Container>
+            </Sidebar.Pushable>
+        </div>
     );
 };
