@@ -8,7 +8,7 @@ import {
   Grid,
   GridColumn,
   List,
-  Segment,
+  Segment, Sidebar,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -218,13 +218,43 @@ export const Discussion = () => {
   };
 
   return (
-    <Container>
+    <div>
       <NavBar />
       {/*hacky way to move content out from under menu*/}
+      {/*<br />*/}
+      {/*<br />*/}
       <br />
-      <br />
-      <br />
-      <Container attached="bottom" style={{ width: "110vh" }}>
+      <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+        <Sidebar
+            as={Segment}
+            animation='overlay'
+            icon='labeled'
+            inverted
+            vertical
+            visible
+            width={"very thin"}
+            style={{
+              backgroundColor: 'rgb(30, 30, 30)',
+              backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+              backgroundSize: '60px',
+              backgroundRepeat: 'repeat-y'}}
+        ></Sidebar>
+        <Sidebar
+            as={Segment}
+            animation='overlay'
+            icon='labeled'
+            inverted
+            vertical
+            direction={'right'}
+            visible
+            width={"very thin"}
+            style={{
+              backgroundColor: 'rgb(30, 30, 30)',
+              backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+              backgroundSize: '60px',
+              backgroundRepeat: 'repeat-y'}}
+        ></Sidebar>
+        <Container attached="bottom" style={{ width: "110vh" }}>
         <Grid columns={3}>
           <Grid.Row>
             <GridColumn width={3} style={{ height: "90vh" }}>
@@ -317,6 +347,7 @@ export const Discussion = () => {
           </Grid.Row>
         </Grid>
       </Container>
-    </Container>
+      </Sidebar.Pushable>
+    </div>
   );
 };

@@ -21,7 +21,7 @@ body {
   font-size: 14px;
   width: 100vw;
   height: 100vh;
-  background-color: rgb(40, 40, 40);
+  background-color: rgb(30, 30, 30);
   /*overflow: hidden;*/
   scrollbar-width: none;
   -ms-overflow-style: none;

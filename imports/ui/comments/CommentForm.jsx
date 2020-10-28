@@ -38,8 +38,8 @@ export const CommentForm = ({discussionId}) => {
                 if (sel.getRangeAt && sel.rangeCount) {
                     console.log("range count: ", sel.rangeCount);
                     range = sel.getRangeAt(0);
-
-                    let textNode = sel.focusNode;
+                    console.log(sel);
+                    range.setStart(sel.focusNode, sel.focusOffset);
                     let newOffset = sel.focusOffset + 1;
                     switch (e.key) {
                         case 'a': /* e.preventDefault(); */
@@ -77,6 +77,10 @@ export const CommentForm = ({discussionId}) => {
                     }
                     // sel.collapse(textNode, textNode.length+newOffset);
                     range.collapse(false);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                    //todo, fix this. always jumps back to second position in the text on
+                    // first try and then enters character
                 }
             }
         }

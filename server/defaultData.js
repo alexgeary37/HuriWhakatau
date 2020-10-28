@@ -148,7 +148,7 @@ if (Meteor.isServer) {
         defaultUsers.push(username._id);
     }
 
-    console.log("undefined group: ", !Groups.findOne({name: "Starter group"})._id);
+    //console.log("undefined group: ", !Groups.findOne({name: "Starter group"})._id);
 //Create group for default users
     if (!Groups.findOne({name: "Starter group"})._id) {
         console.log("group method");
