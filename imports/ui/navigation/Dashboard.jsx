@@ -11,13 +11,13 @@ import {
   Divider, Sidebar,
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
-import { Sidebars } from "./Sidebars";
 import { NavBar } from "/imports/ui/navigation/NavBar";
+import { Sidebars } from "./Sidebars";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 
 export const Dashboard = () => {
 
-  const { discussions } = useTracker(() => {
+  const { discussions, publicDiscussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
 
     return {
@@ -26,6 +26,10 @@ export const Dashboard = () => {
         { status: { $ne: "active" } },
         { sort: { createdAt: -1 } }
       ).fetch(),
+      publicDiscussions: Discussions.find(
+          { $and: [{status: "active"}, {isPublic: {$eq:true}}] },
+          { sort: { createdAt: -1 } }
+      ).fetch(),
     };
   });
 
@@ -33,9 +37,9 @@ export const Dashboard = () => {
     <div>
       <NavBar />
       {/*<span style={{height:"20em"}} />*/}
-      <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+      <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(25,50,26)'}}>
         <Sidebars />
-      <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
+      <Container inverted={'true'} style={{overflow: "auto", height: "100vh", backgroundColor: 'rgb(10, 10, 10)'}}>
         <span style={{height:"30em"}} />
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
@@ -49,15 +53,28 @@ export const Dashboard = () => {
 
         <Segment attached="bottom" inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header content="Kōrerorero" />
-          <Segment attached="top" clearing style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+          <Segment inverted attached="top" style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+            <Header as={'h3'} content={"Public kōrerorero"} />
             <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
-              {discussions &&
-                discussions.map((discussion) => (
+              {publicDiscussions &&
+              publicDiscussions.map((discussion) => (
                   <DiscussionSummary
                     key={discussion._id}
                     discussion={discussion}
                   />
                 ))}
+            </List>
+          </Segment>
+          <Segment inverted attached="top" style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+            <Header as={'h3'} content={"Finished kōrerorero"} />
+            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
+              {discussions &&
+              discussions.map((discussion) => (
+                  <DiscussionSummary
+                      key={discussion._id}
+                      discussion={discussion}
+                  />
+              ))}
             </List>
           </Segment>
         </Segment>

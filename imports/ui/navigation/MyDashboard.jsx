@@ -22,19 +22,18 @@ import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
+import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateExperiment} from "../experiments/CreateExperiment";
 import {DiscussionSummary} from "/imports/ui/discussions/DiscussionSummary";
 import {ExperimentSummary} from "/imports/ui/experiments/ExperimentSummary";
 import {CreateScenarioSet} from "../scenarioSets/CreateScenarioSet";
 import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
-import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 
 
 export const MyDashboard = () => {
-    const [showInfo, setShowInfo] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
@@ -152,9 +151,9 @@ export const MyDashboard = () => {
 
         //once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
-        if(userSub.ready() && userId) {
+        if (userSub.ready() && userId) {
             currentUser = Meteor.users.findOne({_id: userId});
-            if(currentUser.friends) {
+            if (currentUser.friends) {
                 fetchedFriendIds = currentUser.friends;
                 fetchedFriendIds.forEach((friendId) => {
                     fetchedFriends.push(Meteor.users.findOne({_id: friendId}));
@@ -197,11 +196,8 @@ export const MyDashboard = () => {
 
     return (
         <div>
-            {/*<NavBar/>*/}
-            {/*<span style={{height: "60em"}}/>*/}
-            {/*start sidebar*/}
             <NavBar/>
-            <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+            <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
                 {/* right sidebar */}
                 <Sidebar
                     as={Segment}
@@ -216,39 +212,40 @@ export const MyDashboard = () => {
                         backgroundColor: 'rgb(30, 30, 30)',
                         backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
                         backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'}}
+                        backgroundRepeat: 'repeat-y'
+                    }}
                 >
                     {/*my friends*/}
                     <Menu.Item title={anyFriendOnline ? 'there are friends online' : 'no friends online'}>
-                        <Icon size={'big'} name='users' />
+                        <Icon size={'big'} name='users'/>
                         {anyFriendOnline &&
-                        <Rating icon='star' defaultRating={1} maxRating={1} disabled />
+                        <Rating icon='star' defaultRating={1} maxRating={1} disabled/>
                         }
                         <br/>
                         Friends
                     </Menu.Item>
                     <List style={{height: "15em"}}>
-                    {showSidebar && friends && friends.map((friend) => (
-                        <Menu.Item key={friend._id} title={friend.online ? 'online' : 'offline'} >
-                            {friend.username}
-                            <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled/>
-                        </Menu.Item>
-                    ))}
+                        {showSidebar && friends && friends.map((friend) => (
+                            <Menu.Item key={friend._id} title={friend.online ? 'online' : 'offline'}>
+                                {friend.username}
+                                <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled/>
+                            </Menu.Item>
+                        ))}
                     </List>
                     {/*my group members, update to have a group member specific user set*/}
                     <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>
-                        <Icon size={'big'} name='users' />
+                        <Icon size={'big'} name='users'/>
                         {anyGroupMemberOnline &&
-                        <Rating icon='star' defaultRating={1} maxRating={1} disabled />
+                        <Rating icon='star' defaultRating={1} maxRating={1} disabled/>
                         }
                         <br/>
                         Group Members
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && groupMembers && groupMembers.map((groupMember) => (
-                            <Menu.Item key={groupMember._id} title={groupMember.online ? 'online' : 'offline'} >
+                            <Menu.Item key={groupMember._id} title={groupMember.online ? 'online' : 'offline'}>
                                 {groupMember.username}
-                                <Rating icon='star' defaultRating={groupMember.online ? 1 : 0} maxRating={1} disabled />
+                                <Rating icon='star' defaultRating={groupMember.online ? 1 : 0} maxRating={1} disabled/>
                             </Menu.Item>
                         ))}
                     </List>
@@ -267,277 +264,287 @@ export const MyDashboard = () => {
                         backgroundColor: 'rgb(30, 30, 30)',
                         backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
                         backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'}}
-                ></Sidebar>
+                        backgroundRepeat: 'repeat-y'
+                    }}
+                />
                 {/*end sidebar*/}
                 <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}}>
 
-            <Container>
-                <span style={{height:"22em"}} />
-                <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-                    <Header size="huge" >
-                        <Header.Content as={Container} >
-                            My Dashboard {isAdmin && <span>- Admin</span>}
-                            {isAdmin &&
-                            <Button
-                                floated="right"
-                                onClick={() => {
-                                    handleToggleWizard();
-                                    handleToggleGroup();
-                                }}
-                                content="Open Experiment Wizard"
-                                negative
-                            />}
-                        </Header.Content>
-                    </Header>
-                </Segment>
-
-                <Grid doubling style={{overflow: "auto", height: "87vh"}}>
-                    <GridRow columns={2}>
-                        <GridColumn width={8}>
-                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}
-                                     title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
-                            >
-                                <Header as={'h3'} >My Discussions
-                                    <Button
-                                    floated={"right"}
-                                    onClick={handleToggleDiscussion}
-                                    content="New Discussion"
-                                    disabled={!user}
-                                    negative
-                                    compact
-                                />
-                                </Header>
-
-                                {/* attempting to only load this when user
-                                role is known and render with correct link path*/}
-                                {(isIndigenous !== null) &&
-                                <ListItem style={{overflow: "auto", height: "16em"}}
-                                          description={myDiscussions &&
-                                          myDiscussions.map((discussion) => (
-                                              <DiscussionSummary
-                                                  key={discussion._id}
-                                                  discussion={discussion}
-                                                  participantRole={isIndigenous}
-                                              />
-                                          ))}/>}
-                                <Card.Content extra>
-                                </Card.Content>
-                            </Segment>
-                        </GridColumn>
-                        <GridColumn width={8}>
-                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Header as={'h3'} >All Finished Discussions</Header>
-                                <ListItem style={{overflow: "auto", height: "16em"}}
-                                          description={allFinishedDiscussions &&
-                                          allFinishedDiscussions.map((discussion) => (
-                                              <DiscussionSummary
-                                                  key={discussion._id}
-                                                  discussion={discussion}
-                                                  participantRole={true}
-                                              />
-                                          ))}/>
-                                <Card.Content extra>
-                                </Card.Content>
-                            </Segment>
-                        </GridColumn>
-                    </GridRow>
-                    <GridRow columns={3}>
-                        <GridColumn width={5}>
-                            <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Header as={'h3'} >My Groups</Header>
-                                <ListItem style={{overflow: "auto", height: "13em"}}
-                                          description={groups &&
-                                          groups.map((group) => (
-                                              <GroupSummary
-                                                  key={group._id}
-                                                  group={group}
-                                              />
-                                          ))}/>
-                                <Card.Content extra style={{margin: "1em"}}>
+                    <Container>
+                        <span style={{height: "22em"}}/>
+                        <Segment attached="top" clearing inverted
+                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                            <Header size="huge">
+                                <Header.Content as={Container}>
+                                    My Dashboard {isAdmin && <span>- Admin</span>}
                                     {isAdmin &&
                                     <Button
-                                        fluid
-                                        onClick={handleToggleGroup}
-                                        content="Create New Group"
-                                        basic
+                                        floated="right"
+                                        onClick={() => {
+                                            handleToggleWizard();
+                                            handleToggleGroup();
+                                        }}
+                                        content="Open Experiment Wizard"
                                         negative
                                     />}
-                                </Card.Content>
-                            </Segment>
-                        </GridColumn>
-                        {isAdmin &&
-                        <>
-                            <GridColumn width={6}>
-                                <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                    <Header as={'h3'} >My Discussion Templates</Header>
-                                    <ListItem style={{overflow: "auto", height: "13em"}}
-                                              description={discussionTemplates &&
-                                              discussionTemplates.map((discussionTemplate) => (
-                                                  <DiscussionTemplateSummary
-                                                      key={discussionTemplate._id}
-                                                      template={discussionTemplate}
-                                                      toggleModal={handleToggleTemplateDisplay}
-                                                  />
-                                              ))}
-                                    />
-                                    <Card.Content extra style={{margin: "1em"}}>
+                                </Header.Content>
+                            </Header>
+                        </Segment>
+
+                        <Grid doubling style={{overflow: "auto", height: "87vh"}}>
+                            <GridRow columns={2}>
+                                <GridColumn width={8}>
+                                    <Segment fluid style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}
+                                             title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
+                                    >
+                                        <Header as={'h3'}>My Discussions
+                                            <Button
+                                                floated={"right"}
+                                                onClick={handleToggleDiscussion}
+                                                content="New Discussion"
+                                                disabled={!user}
+                                                negative
+                                                compact
+                                            />
+                                        </Header>
+
+                                        {/* attempting to only load this when user
+                                role is known and render with correct link path*/}
+                                        {(isIndigenous !== null) &&
+                                        <ListItem style={{overflow: "auto", height: "16em"}}
+                                                  description={myDiscussions &&
+                                                  myDiscussions.map((discussion) => (
+                                                      <DiscussionSummary
+                                                          key={discussion._id}
+                                                          discussion={discussion}
+                                                          participantRole={isIndigenous}
+                                                      />
+                                                  ))}/>}
+                                        <Card.Content extra>
+                                        </Card.Content>
+                                    </Segment>
+                                </GridColumn>
+                                <GridColumn width={8}>
+                                    <Segment fluid style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <Header as={'h3'}>All Finished Discussions</Header>
+                                        <ListItem style={{overflow: "auto", height: "16em"}}
+                                                  description={allFinishedDiscussions &&
+                                                  allFinishedDiscussions.map((discussion) => (
+                                                      <DiscussionSummary
+                                                          key={discussion._id}
+                                                          discussion={discussion}
+                                                          participantRole={true}
+                                                      />
+                                                  ))}/>
+                                        <Card.Content extra>
+                                        </Card.Content>
+                                    </Segment>
+                                </GridColumn>
+                            </GridRow>
+                            <GridRow columns={3}>
+                                <GridColumn width={5}>
+                                    <Segment fluid style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <Header as={'h3'}>My Groups</Header>
+                                        <ListItem style={{overflow: "auto", height: "13em"}}
+                                                  description={groups &&
+                                                  groups.map((group) => (
+                                                      <GroupSummary
+                                                          key={group._id}
+                                                          group={group}
+                                                      />
+                                                  ))}/>
+                                        <Card.Content extra style={{margin: "1em"}}>
+                                            {isAdmin &&
+                                            <Button
+                                                fluid
+                                                onClick={handleToggleGroup}
+                                                content="Create New Group"
+                                                basic
+                                                negative
+                                            />}
+                                        </Card.Content>
+                                    </Segment>
+                                </GridColumn>
+                                {isAdmin &&
+                                <>
+                                    <GridColumn width={6}>
+                                        <Segment fluid style={{height: "21em"}} inverted
+                                                 style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                            <Header as={'h3'}>My Discussion Templates</Header>
+                                            <ListItem style={{overflow: "auto", height: "13em"}}
+                                                      description={discussionTemplates &&
+                                                      discussionTemplates.map((discussionTemplate) => (
+                                                          <DiscussionTemplateSummary
+                                                              key={discussionTemplate._id}
+                                                              template={discussionTemplate}
+                                                              toggleModal={handleToggleTemplateDisplay}
+                                                          />
+                                                      ))}
+                                            />
+                                            <Card.Content extra style={{margin: "1em"}}>
+                                                <Button
+                                                    fluid
+                                                    onClick={handleToggleTemplate}
+                                                    content="Create New Template"
+                                                    basic
+                                                    negative
+                                                />
+                                            </Card.Content>
+                                        </Segment>
+                                    </GridColumn>
+                                    <GridColumn width={5}>
+                                        <Segment fluid style={{height: "21em"}} inverted
+                                                 style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                            <Header as={'h3'}>My scenarios</Header>
+                                            <ListItem style={{overflow: "auto", height: "13em"}}
+                                                      description={scenarios &&
+                                                      scenarios.map((scenario) => (
+                                                          <ScenarioSummary
+                                                              key={scenario._id}
+                                                              scenario={scenario}
+                                                          />
+                                                      ))}/>
+                                            <Card.Content extra style={{margin: "1em"}}>
+                                                <Button
+                                                    fluid
+                                                    onClick={handleToggleScenario}
+                                                    content="Create New"
+                                                    basic
+                                                    negative
+                                                />
+                                            </Card.Content>
+                                        </Segment>
+                                    </GridColumn>
+                                </>
+                                }
+                            </GridRow>
+                            {isAdmin &&
+                            <GridRow columns={3}>
+
+                                <GridColumn width={5}>
+                                    <Segment style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <Header as={'h3'}>My Scenario Sets</Header>
+                                        <ListItem style={{overflow: "auto", height: "13em"}}
+                                                  description={scenarioSets &&
+                                                  scenarioSets.map((scenarioSet) => (
+                                                      <ScenarioSetSummary
+                                                          key={scenarioSet._id}
+                                                          scenarioSet={scenarioSet}
+                                                      />
+                                                  ))}/>
+                                        <Card.Content extra style={{margin: "1em"}}>
+                                            <Button
+                                                fluid
+                                                onClick={handleToggleScenarioSet}
+                                                content="Create New Set"
+                                                basic
+                                                negative
+                                            />
+                                        </Card.Content>
+                                    </Segment>
+                                </GridColumn>
+                                <GridColumn width={6}>
+                                    <Segment style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <Header as={'h3'}>My Experiments</Header>
+                                        <ListItem style={{overflow: "auto", height: "13em"}}
+                                                  description={experiments &&
+                                                  experiments.map((experiment) => (
+                                                      <ExperimentSummary
+                                                          key={experiment._id}
+                                                          experiment={experiment}
+                                                      />
+                                                  ))}/>
+                                        <Card.Content extra style={{margin: "1em"}}>
+                                            <Button
+                                                fluid
+                                                onClick={handleToggleExperimentCreation}
+                                                content="Create New Experiment"
+                                                basic
+                                                negative
+                                            />
+                                        </Card.Content>
+                                    </Segment>
+                                </GridColumn>
+                                <GridColumn width={5}>
+                                    <Segment style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <Header as={'h3'}>Add Users to roles</Header>
                                         <Button
                                             fluid
-                                            onClick={handleToggleTemplate}
-                                            content="Create New Template"
+                                            content="Assign Roles"
+                                            as={Link}
+                                            to="/assignroles"
                                             basic
                                             negative
                                         />
-                                    </Card.Content>
-                                </Segment>
-                            </GridColumn>
-                            <GridColumn width={5}>
-                                <Segment fluid style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                    <Header as={'h3'} >My scenarios</Header>
-                                    <ListItem style={{overflow: "auto", height: "13em"}}
-                                              description={scenarios &&
-                                              scenarios.map((scenario) => (
-                                                  <ScenarioSummary
-                                                      key={scenario._id}
-                                                      scenario={scenario}
-                                                  />
-                                              ))}/>
-                                    <Card.Content extra style={{margin: "1em"}}>
+                                        <br/>
                                         <Button
                                             fluid
-                                            onClick={handleToggleScenario}
-                                            content="Create New"
+                                            content="Add user"
+                                            as={Link}
+                                            to="/AddUser"
                                             basic
                                             negative
                                         />
-                                    </Card.Content>
-                                </Segment>
-                            </GridColumn>
-                        </>
+                                    </Segment>
+                                </GridColumn>
+                            </GridRow>
+                            }
+                        </Grid>
+                        {/*    Modals    */}
+                        {isOpenGroupCreation &&
+                        <CreateGroup toggleModal={handleToggleGroup}
+                                     isWizard={isOpenWizard}
+                                     toggleNextModal={handleToggleScenario}
+                                     toggleIsWizard={handleToggleWizard}/>}
+
+                        {isOpenScenarioCreation &&
+                        <CreateScenario
+                            toggleModal={handleToggleScenario}
+                            isWizard={isOpenWizard}
+                            toggleNextModal={handleToggleScenarioSet}
+                            toggleIsWizard={handleToggleWizard}/>
                         }
-                    </GridRow>
-                    {isAdmin &&
-                    <GridRow columns={3}>
+                        {isOpenScenarioSetCreation &&
+                        <CreateScenarioSet
+                            toggleModal={handleToggleScenarioSet}
+                            isWizard={isOpenWizard}
+                            toggleNextModal={handleToggleExperimentCreation}
+                            toggleIsWizard={handleToggleWizard}/>
+                        }
+                        {isOpenTemplateCreation &&
+                        <CreateDiscussionTemplate
+                            toggleModal={handleToggleTemplate}
+                            isWizard={isOpenWizard}
+                            toggleNextModal={handleToggleExperimentCreation}
+                            toggleIsWizard={handleToggleWizard}/>
+                        }
+                        {isOpenExperimentCreation &&
+                        <CreateExperiment
+                            toggleModal={handleToggleExperimentCreation}
+                            isWizard={isOpenWizard}
+                            // toggleNextModal={handleToggleScenarioSet}
+                            toggleIsWizard={handleToggleWizard}/>
+                        }
+                        {isOpenDiscussionCreation &&
+                        <CreateDiscussion
+                            toggleModal={handleToggleDiscussion}
+                        />
+                        }
+                        {/* Item display modals */}
+                        {isOpenTemplateDisplay &&
+                        <DisplayDiscussionTemplate
+                            toggleModal={handleToggleTemplateDisplay}
+                            template={template}/>
+                        }
 
-                        <GridColumn width={5}>
-                            <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Header as={'h3'}>My Scenario Sets</Header>
-                                <ListItem style={{overflow: "auto", height: "13em"}}
-                                          description={scenarioSets &&
-                                          scenarioSets.map((scenarioSet) => (
-                                              <ScenarioSetSummary
-                                                  key={scenarioSet._id}
-                                                  scenarioSet={scenarioSet}
-                                              />
-                                          ))}/>
-                                <Card.Content extra style={{margin: "1em"}}>
-                                    <Button
-                                        fluid
-                                        onClick={handleToggleScenarioSet}
-                                        content="Create New Set"
-                                        basic
-                                        negative
-                                    />
-                                </Card.Content>
-                            </Segment>
-                        </GridColumn>
-                        <GridColumn width={6}>
-                            <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Header as={'h3'}>My Experiments</Header>
-                                <ListItem style={{overflow: "auto", height: "13em"}}
-                                          description={experiments &&
-                                          experiments.map((experiment) => (
-                                              <ExperimentSummary
-                                                  key={experiment._id}
-                                                  experiment={experiment}
-                                              />
-                                          ))}/>
-                                <Card.Content extra style={{margin: "1em"}}>
-                                    <Button
-                                        fluid
-                                        onClick={handleToggleExperimentCreation}
-                                        content="Create New Experiment"
-                                        basic
-                                        negative
-                                    />
-                                </Card.Content>
-                            </Segment>
-                        </GridColumn>
-                        <GridColumn width={5}>
-                            <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Header as={'h3'}>Add Users to roles</Header>
-                                <Button
-                                    fluid
-                                    content="Assign Roles"
-                                    as={Link}
-                                    to="/assignroles"
-                                    basic
-                                    negative
-                                />
-                                <br/>
-                                <Button
-                                    fluid
-                                    content="Add user"
-                                    as={Link}
-                                    to="/AddUser"
-                                    basic
-                                    negative
-                                />
-                            </Segment>
-                        </GridColumn>
-                    </GridRow>
-                    }
-                </Grid>
-                {/*    Modals    */}
-                {isOpenGroupCreation &&
-                <CreateGroup toggleModal={handleToggleGroup}
-                             isWizard={isOpenWizard}
-                             toggleNextModal={handleToggleScenario}
-                             toggleIsWizard={handleToggleWizard}/>}
-
-                {isOpenScenarioCreation &&
-                <CreateScenario
-                    toggleModal={handleToggleScenario}
-                    isWizard={isOpenWizard}
-                    toggleNextModal={handleToggleScenarioSet}
-                    toggleIsWizard={handleToggleWizard}/>
-                }
-                {isOpenScenarioSetCreation &&
-                <CreateScenarioSet
-                    toggleModal={handleToggleScenarioSet}
-                    isWizard={isOpenWizard}
-                    toggleNextModal={handleToggleExperimentCreation}
-                    toggleIsWizard={handleToggleWizard}/>
-                }
-                {isOpenTemplateCreation &&
-                <CreateDiscussionTemplate
-                    toggleModal={handleToggleTemplate}
-                    isWizard={isOpenWizard}
-                    toggleNextModal={handleToggleExperimentCreation}
-                    toggleIsWizard={handleToggleWizard}/>
-                }
-                {isOpenExperimentCreation &&
-                <CreateExperiment
-                    toggleModal={handleToggleExperimentCreation}
-                    isWizard={isOpenWizard}
-                    // toggleNextModal={handleToggleScenarioSet}
-                    toggleIsWizard={handleToggleWizard}/>
-                }
-                {isOpenDiscussionCreation &&
-                <CreateDiscussion
-                    toggleModal={handleToggleDiscussion}
-                    />
-                }
-                {/* Item display modals */}
-                {isOpenTemplateDisplay &&
-                <DisplayDiscussionTemplate
-                    toggleModal={handleToggleTemplateDisplay}
-                    template={template}/>
-                }
-
-            </Container>
-            </Sidebar.Pusher>
+                    </Container>
+                </Sidebar.Pusher>
             </Sidebar.Pushable>
 
         </div>
