@@ -271,43 +271,45 @@ export const HuiChat = () => {
         Meteor.call("discussions.addProposer", discussionId);
 
     return (
-        <div inverted style={{backgroundColor: 'rgb(30, 30, 30)', width: "110vh"}}>
+        <div inverted style={{backgroundColor: 'rgb(30, 30, 30)'}}>
             <NavBar/>
             {/*hacky way to move content out from under menu*/}
             {/*<br/>*/}
             {/*<br/>*/}
             {/*<br/>*/}
-            <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+            <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebar
-                    as={Segment}
-                    animation='overlay'
-                    icon='labeled'
-                    inverted
-                    vertical
-                    visible
-                    width={"very thin"}
-                    style={{
-                        backgroundColor: 'rgb(30, 30, 30)',
-                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-                        backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'}}
-                ></Sidebar>
+    as={Segment}
+    animation='overlay'
+    icon='labeled'
+    inverted
+    vertical
+    visible
+    width={"very thin"}
+    style={{
+        backgroundColor: 'rgb(30, 30, 30)',
+        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+        backgroundSize: '60px',
+        backgroundRepeat: 'repeat-y'
+    }}
+    />
                 <Sidebar
-                    as={Segment}
-                    animation='overlay'
-                    icon='labeled'
-                    inverted
-                    vertical
-                    direction={'right'}
-                    visible
-                    width={"very thin"}
-                    style={{
-                        backgroundColor: 'rgb(30, 30, 30)',
-                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-                        backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'}}
-                ></Sidebar>
-            <Container style={{width: "110vh"}}>
+    as={Segment}
+    animation='overlay'
+    icon='labeled'
+    inverted
+    vertical
+    direction={'right'}
+    visible
+    width={"very thin"}
+    style={{
+        backgroundColor: 'rgb(30, 30, 30)',
+        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+        backgroundSize: '60px',
+        backgroundRepeat: 'repeat-y'
+    }}
+    />
+            <Container /*style={{width: "110vh"}}*/>
                 <span style={{height:"22em"}} />
                 <Grid columns={2} style={{width: "110vh"}}>
                     <GridColumn width={10} attached="left">
