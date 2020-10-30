@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
     Button,
     Container,
@@ -10,7 +10,8 @@ import {
     Divider, Image, Sidebar, Tab,
 } from "semantic-ui-react";
 import { Random } from "meteor/random";
-import {NavBar} from "/imports/ui/navigation/NavBar";
+import { NavBar } from "/imports/ui/navigation/NavBar";
+import { Sidebars } from "/imports/ui/navigation/Sidebars";
 import {Link} from "react-router-dom";
 
 export const About = () => {
@@ -321,37 +322,7 @@ export const About = () => {
         <div>
             <NavBar/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Sidebar
-                    as={Segment}
-                    animation='overlay'
-                    icon='labeled'
-                    inverted
-                    vertical
-                    visible
-                    width={"very thin"}
-                    style={{
-                        backgroundColor: 'rgb(30, 30, 30)',
-                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-                        backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'
-                    }}
-                />
-                <Sidebar
-                    as={Segment}
-                    animation='overlay'
-                    icon='labeled'
-                    inverted
-                    vertical
-                    direction={'right'}
-                    visible
-                    width={"very thin"}
-                    style={{
-                        backgroundColor: 'rgb(30, 30, 30)',
-                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-                        backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'
-                    }}
-                />
+                <Sidebars />
             <Container inverted={'true'} /*style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}*/>
                 <Segment attached="bottom" inverted /*style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}*/>
                     <span style={{height:"32em"}}/>

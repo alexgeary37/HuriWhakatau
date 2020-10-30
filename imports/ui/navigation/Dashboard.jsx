@@ -11,6 +11,7 @@ import {
   Divider, Sidebar,
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
+import { Sidebars } from "./Sidebars";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 
@@ -33,37 +34,7 @@ export const Dashboard = () => {
       <NavBar />
       {/*<span style={{height:"20em"}} />*/}
       <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-      <Sidebar
-    as={Segment}
-    animation='overlay'
-    icon='labeled'
-    inverted
-    vertical
-    visible
-    width={"very thin"}
-    style={{
-      backgroundColor: 'rgb(30, 30, 30)',
-      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-      backgroundSize: '60px',
-      backgroundRepeat: 'repeat-y'
-    }}
-    />
-      <Sidebar
-    as={Segment}
-    animation='overlay'
-    icon='labeled'
-    inverted
-    vertical
-    direction={'right'}
-    visible
-    width={"very thin"}
-    style={{
-      backgroundColor: 'rgb(30, 30, 30)',
-      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-      backgroundSize: '60px',
-      backgroundRepeat: 'repeat-y'
-    }}
-    />
+        <Sidebars />
       <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
         <span style={{height:"30em"}} />
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>

@@ -10,6 +10,13 @@ import {
     GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating
 } from "semantic-ui-react";
 import '/imports/api/security'
+import {Link} from "react-router-dom";
+import {Groups} from "/imports/api/groups";
+import {Scenarios} from "/imports/api/scenarios";
+import {Experiments} from "/imports/api/experiments";
+import {Discussions} from "/imports/api/discussions";
+import {ScenarioSets} from "/imports/api/scenarioSets";
+import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {NavBar} from "./NavBar";
 import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
@@ -24,13 +31,7 @@ import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
-import {Link} from "react-router-dom";
-import {Groups} from "/imports/api/groups";
-import {Scenarios} from "/imports/api/scenarios";
-import {Experiments} from "/imports/api/experiments";
-import {Discussions} from "/imports/api/discussions";
-import {ScenarioSets} from "/imports/api/scenarioSets";
-import {DiscussionTemplates} from "/imports/api/discussionTemplate";
+
 
 export const MyDashboard = () => {
     const [showInfo, setShowInfo] = useState(true);
