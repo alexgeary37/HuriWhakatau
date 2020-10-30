@@ -224,36 +224,38 @@ export const Discussion = () => {
       {/*<br />*/}
       {/*<br />*/}
       <br />
-      <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+      <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
         <Sidebar
-            as={Segment}
-            animation='overlay'
-            icon='labeled'
-            inverted
-            vertical
-            visible
-            width={"very thin"}
-            style={{
-              backgroundColor: 'rgb(30, 30, 30)',
-              backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-              backgroundSize: '60px',
-              backgroundRepeat: 'repeat-y'}}
-        ></Sidebar>
+    as={Segment}
+    animation='overlay'
+    icon='labeled'
+    inverted
+    vertical
+    visible
+    width={"very thin"}
+    style={{
+      backgroundColor: 'rgb(30, 30, 30)',
+      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+      backgroundSize: '60px',
+      backgroundRepeat: 'repeat-y'
+    }}
+    />
         <Sidebar
-            as={Segment}
-            animation='overlay'
-            icon='labeled'
-            inverted
-            vertical
-            direction={'right'}
-            visible
-            width={"very thin"}
-            style={{
-              backgroundColor: 'rgb(30, 30, 30)',
-              backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-              backgroundSize: '60px',
-              backgroundRepeat: 'repeat-y'}}
-        ></Sidebar>
+    as={Segment}
+    animation='overlay'
+    icon='labeled'
+    inverted
+    vertical
+    direction={'right'}
+    visible
+    width={"very thin"}
+    style={{
+      backgroundColor: 'rgb(30, 30, 30)',
+      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+      backgroundSize: '60px',
+      backgroundRepeat: 'repeat-y'
+    }}
+    />
         <Container attached="bottom" style={{ width: "110vh" }}>
         <Grid columns={3}>
           <Grid.Row>

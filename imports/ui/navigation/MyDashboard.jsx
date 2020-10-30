@@ -200,7 +200,7 @@ export const MyDashboard = () => {
             {/*<span style={{height: "60em"}}/>*/}
             {/*start sidebar*/}
             <NavBar/>
-            <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+            <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 {/* right sidebar */}
                 <Sidebar
                     as={Segment}

@@ -37,7 +37,7 @@ export const NavBar = () => {
                       backgroundColor: 'black',
                       backgroundImage: `url(${"/fren_gradient_extended_4.png"})`,
                       // backgroundSize: '200px',
-                      backgroundRepeat: 'round'
+                      backgroundRepeat: 'round',
                   }}
             >
                 <Container className="content-width"><Menu.Item as={Link} to="/">{/*<Icon size="big" name="balance scale"/>*/}

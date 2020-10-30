@@ -15,9 +15,8 @@ import { NavBar } from "/imports/ui/navigation/NavBar";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 
 export const Dashboard = () => {
-  const [showInfo, setShowInfo] = useState(false);
 
-  const { user, discussions } = useTracker(() => {
+  const { discussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
 
     return {
@@ -33,91 +32,48 @@ export const Dashboard = () => {
     <div>
       <NavBar />
       {/*<span style={{height:"20em"}} />*/}
-      <Sidebar.Pushable as={Segment} style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+      <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
       <Sidebar
-          as={Segment}
-          animation='overlay'
-          icon='labeled'
-          inverted
-          vertical
-          visible
-          width={"very thin"}
-          style={{
-            backgroundColor: 'rgb(30, 30, 30)',
-            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-            backgroundSize: '60px',
-            backgroundRepeat: 'repeat-y'}}
-      ></Sidebar>
+    as={Segment}
+    animation='overlay'
+    icon='labeled'
+    inverted
+    vertical
+    visible
+    width={"very thin"}
+    style={{
+      backgroundColor: 'rgb(30, 30, 30)',
+      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+      backgroundSize: '60px',
+      backgroundRepeat: 'repeat-y'
+    }}
+    />
       <Sidebar
-          as={Segment}
-          animation='overlay'
-          icon='labeled'
-          inverted
-          vertical
-          direction={'right'}
-          visible
-          width={"very thin"}
-          style={{
-            backgroundColor: 'rgb(30, 30, 30)',
-            backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-            backgroundSize: '60px',
-            backgroundRepeat: 'repeat-y'}}
-      ></Sidebar>
+    as={Segment}
+    animation='overlay'
+    icon='labeled'
+    inverted
+    vertical
+    direction={'right'}
+    visible
+    width={"very thin"}
+    style={{
+      backgroundColor: 'rgb(30, 30, 30)',
+      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+      backgroundSize: '60px',
+      backgroundRepeat: 'repeat-y'
+    }}
+    />
       <Container inverted={'true'} style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}>
         <span style={{height:"30em"}} />
         <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
           <Header size="huge">
             <Header.Content as={Container} fluid >
-              <Button
-                floated="right"
-                circular
-                color="blue"
-                size="large"
-                icon="help"
-                onClick={() => setShowInfo(!showInfo)}
-              />
+
               Welcome to Huri Whakatau
             </Header.Content>
           </Header>
-          <Message style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}
-            size="huge"
-            info
-            floating
-            hidden={!showInfo}
-            onDismiss={() => setShowInfo(false)}
-          >
-            {/* ########################################################################
-            Display everything in the blueish box */}
-            <Message.Header>
-              <Icon name="help circle" size="big" /> About Huri Whakatau
-            </Message.Header>
-            <Divider horizontal hidden />
-            <Message.Content>
-              Huri Whakatau is a digital environment designed to host discussions
-              with a focus on reaching a consensus.
-            </Message.Content>
-            <Message.Content>
-              You will participate in a sequence of discussions, and must reach
-              a consensus as a group before proceeding to the next discussion
-              topic.
-            </Message.Content>
-            <Message.List>
-              <Message.Item>
-                Participate in discussions by posting comments.
-              </Message.Item>
-              <Message.Item>Verdict</Message.Item>
-              <Message.Item>
-                When a verdict is proposed, indicate whether you affirm or
-                reject the verdict. If everyone agrees, the discussion is
-                closed.
-              </Message.Item>
-              <Message.Item>
-                If the group is unable to reach a consensus within the
-                discussion's time limit, a 'hung jury' will be declared.
-              </Message.Item>
-            </Message.List>
-            <Divider horizontal hidden />
-          </Message>
+
         </Segment>
 
         <Segment attached="bottom" inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
