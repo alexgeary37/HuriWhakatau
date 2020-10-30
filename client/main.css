@@ -26,7 +26,6 @@ body {
   font-size: 14px;
   width: 100vw;
   height: 100vh;
-  background-color: rgb(30, 30, 30);
   /*overflow: hidden;*/
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -36,9 +35,9 @@ body {
   background-image: url("/huri_background.png");
 }
 
-/*h1 h2 h3 h4 h5 h6 {*/
-/*  font-family:inherit;*/
-/*}*/
+* :before :after {
+  font-family: inherit;
+}
 
 body ::-webkit-scrollbar {
   width: 0; /* Remove scrollbar space, there's got to be a better place to put this - DC */

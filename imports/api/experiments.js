@@ -69,6 +69,7 @@ Meteor.methods({
         groupId,
         discussionTemplate.timeLimit,
         discussionTemplate.isHui,
+        discussionTemplate.isPublic,
       );
       console.log("adding discussion id to exp", discussionId);
       Experiments.update(experimentId, {

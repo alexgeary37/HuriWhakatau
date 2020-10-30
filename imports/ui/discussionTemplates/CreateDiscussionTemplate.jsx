@@ -9,6 +9,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
     const [canEdit, setCanEdit] = useState(true);
     const [isThreaded, setIsThreaded] = useState(false);
     const [isHui, setIsHui] = useState(false);
+    const [isPublic, setIsPublic] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [canAddEmojis, setCanAddEmojis] = useState(false);
     const [timeLimit, setTimeLimit] = useState(0);
@@ -22,7 +23,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
         } else {
             setTemplateName("");
             Meteor.call("discussionTemplates.create", templateName, anonymous, typing, canEdit,
-                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit, isHui);
+                isThreaded, showProfile, canAddEmojis, timeLimit, charLimit, isHui, isPublic);
             toggleIt();
         }
     }
@@ -81,7 +82,10 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                                onClick={(e, data) => setIsHui(data.checked)}/>
                 <br/>
                 <br/>
-                <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
+                <Checkbox checked={isPublic} label='Discussions open to the public'
+                          onClick={(e, data) => setIsPublic(data.checked)}/>
+                <br/>
+                <br/><Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
                        value={timeLimit}
                        onInput={({target}) => setTimeLimit(target.value)}>
                     <Label>Discussions have time limit</Label>

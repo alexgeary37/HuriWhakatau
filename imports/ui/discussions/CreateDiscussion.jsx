@@ -34,7 +34,7 @@ export const CreateDiscussion = ({toggleModal}) => {
         if(discussionTitle.length !== 0 && (groupName.length !== 0 || groupId.length !== 0)){
             Meteor.call("scenarios.create", discussionTitle, description, topicId, discussionTemplate._id,
                 (error, result) => {
-                    Meteor.call("discussions.insert", result, groupId, timeLimit, isHui);
+                    Meteor.call("discussions.insert", result, groupId, timeLimit, isHui, true);
                 })
             toggleIt();
         }

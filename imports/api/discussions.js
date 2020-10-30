@@ -5,10 +5,12 @@ export const Discussions = new Mongo.Collection("discussions");
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from experiments.js
-  "discussions.insert"(scenarioId, groupId, timeLimit, isHui) {
+  "discussions.insert"(scenarioId, groupId, timeLimit, isHui, isPublic) {
     check(scenarioId, String);
     check(groupId, String);
     check(timeLimit, Number);
+    check(isHui, Boolean);
+    check(isPublic, Boolean);
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
@@ -26,6 +28,7 @@ Meteor.methods({
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: false,
       isHui: isHui,
+      isPublic: isPublic,
     });
 
     return discussionId;
@@ -54,6 +57,7 @@ Meteor.methods({
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       isIntroduction: true,
       isHui: true,
+      isPublic: false,
     });
 
     return discussionId;
@@ -126,6 +130,7 @@ if (Meteor.isServer) {
           isIntroduction: 1,
           isHui: 1,
           nextDiscussion: 1,
+          isPublic: 1,
         },
       }
     );
@@ -147,6 +152,7 @@ if (Meteor.isServer) {
           deadline: 1,
           isIntroduction: 1,
           nextDiscussion: 1,
+          isPublic: 1,
         },
       }
     );
