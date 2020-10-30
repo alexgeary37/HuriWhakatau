@@ -24,6 +24,7 @@ import { DiscussionTemplates } from "/imports/api/discussionTemplate";
 import { Timer } from "./Timer";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { Verdict } from "/imports/ui/verdicts/Verdict";
+import { Sidebars } from "/imports/ui/navigation/Sidebars";
 import { UserComment } from "/imports/ui/comments/UserComment";
 import { CommentForm } from "/imports/ui/comments/CommentForm";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
@@ -225,37 +226,7 @@ export const Discussion = () => {
       {/*<br />*/}
       <br />
       <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-        <Sidebar
-    as={Segment}
-    animation='overlay'
-    icon='labeled'
-    inverted
-    vertical
-    visible
-    width={"very thin"}
-    style={{
-      backgroundColor: 'rgb(30, 30, 30)',
-      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-      backgroundSize: '60px',
-      backgroundRepeat: 'repeat-y'
-    }}
-    />
-        <Sidebar
-    as={Segment}
-    animation='overlay'
-    icon='labeled'
-    inverted
-    vertical
-    direction={'right'}
-    visible
-    width={"very thin"}
-    style={{
-      backgroundColor: 'rgb(30, 30, 30)',
-      backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-      backgroundSize: '60px',
-      backgroundRepeat: 'repeat-y'
-    }}
-    />
+        <Sidebars />
         <Container attached="bottom" style={{ width: "110vh" }}>
         <Grid columns={3}>
           <Grid.Row>

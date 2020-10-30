@@ -19,20 +19,21 @@ import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
 import {useTracker} from "meteor/react-meteor-data";
 import {Link, useHistory, useParams} from "react-router-dom";
-import {Discussions} from "/imports/api/discussions";
-import {Comments} from "/imports/api/comments";
-import {Verdicts} from "/imports/api/verdicts";
-import {NavBar} from "/imports/ui/navigation/NavBar";
-import {UserComment} from "/imports/ui/comments/UserComment";
-import {Timer} from "./Timer";
-import {CommentForm} from "/imports/ui/comments/CommentForm";
-import {Verdict} from "/imports/ui/verdicts/Verdict";
-import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
-import {Scenarios} from "/imports/api/scenarios";
 import {Groups} from "/imports/api/groups";
 import {Topics} from "/imports/api/topics";
+import {Comments} from "/imports/api/comments";
+import {Verdicts} from "/imports/api/verdicts";
+import {Scenarios} from "/imports/api/scenarios";
+import {Discussions} from "/imports/api/discussions";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
-import {UserSummary} from "../users/UserSummary";
+import {Timer} from "./Timer";
+import {NavBar} from "/imports/ui/navigation/NavBar";
+import {Verdict} from "/imports/ui/verdicts/Verdict";
+import {Sidebars} from "/imports/ui/navigation/Sidebars";
+import {CommentForm} from "/imports/ui/comments/CommentForm";
+import {UserComment} from "/imports/ui/comments/UserComment";
+import {UserSummary} from "/imports/ui/users/UserSummary";
+import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
 
 //adaption of the Discussion.jsx to bring it in line with Tamahau's designs
 export const HuiChat = () => {
@@ -278,37 +279,7 @@ export const HuiChat = () => {
             {/*<br/>*/}
             {/*<br/>*/}
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Sidebar
-    as={Segment}
-    animation='overlay'
-    icon='labeled'
-    inverted
-    vertical
-    visible
-    width={"very thin"}
-    style={{
-        backgroundColor: 'rgb(30, 30, 30)',
-        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-        backgroundSize: '60px',
-        backgroundRepeat: 'repeat-y'
-    }}
-    />
-                <Sidebar
-    as={Segment}
-    animation='overlay'
-    icon='labeled'
-    inverted
-    vertical
-    direction={'right'}
-    visible
-    width={"very thin"}
-    style={{
-        backgroundColor: 'rgb(30, 30, 30)',
-        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-        backgroundSize: '60px',
-        backgroundRepeat: 'repeat-y'
-    }}
-    />
+                <Sidebars />
             <Container /*style={{width: "110vh"}}*/>
                 <span style={{height:"22em"}} />
                 <Grid columns={2} style={{width: "110vh"}}>
