@@ -95,6 +95,7 @@ export const Discussion = () => {
     discussionDeadline,
     discussionTimeLimit,
     nextDiscussionId,
+    discussionIsPublic,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
     const scenarioSub = Meteor.subscribe("scenarios");
@@ -114,6 +115,7 @@ export const Discussion = () => {
     let discussionTopic;
     let discussionTemplate;
     let nextDiscussionId;
+    let publicDiscussion;
     if (
       discussionSub.ready() &&
       scenarioSub.ready() &&
@@ -133,6 +135,7 @@ export const Discussion = () => {
         ? discussionTemplate.timeLimit
         : 0;
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
+      publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
       nextDiscussionId = discussion.nextDiscussion
           ? discussion.nextDiscussion
@@ -150,9 +153,22 @@ export const Discussion = () => {
       discussionTemplate: discussionTemplate,
       discussionTimeLimit: discussionTimeLimit,
       discussionDeadline: discussionDeadline,
+      discussionIsPublic: publicDiscussion,
       nextDiscussionId: nextDiscussionId,
     };
   });
+
+  //check if user is in the discussion group
+  const checkGroupMembership = () => {
+    if (group && group.members.includes(Meteor.userId())) {
+      setUserInGroup(true);
+      console.log("user in group");
+    } else {
+      console.log("user not in group");
+    }
+    console.log(group)
+  }
+  useEffect(checkGroupMembership, [group]);
 
   //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
@@ -264,7 +280,13 @@ export const Discussion = () => {
                   <div ref={commentsEndRef} />
                 </Comment.Group>
                 {discussionStatus === "active" && (
-                  <CommentForm discussionId={discussionId} />
+                  <CommentForm
+                      discussionId={discussionId}
+                      displayForm={discussionIsPublic || userInGroup}
+                      isDiscussionPublic={discussionIsPublic}
+                      isUserAGroupMember={userInGroup}
+                      groupId={group._id}
+                  />
                 )}
               </div>
             </GridColumn>

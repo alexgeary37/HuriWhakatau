@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import RichTextEditor from "react-rte";
 import {Button, Form, Segment} from "semantic-ui-react";
 
-export const CommentForm = ({discussionId}) => {
+export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUserAGroupMember, groupId}) => {
     const [keyStrokes, setKeyStrokes] = useState([]);
     const [pastedItems, setPastedItems] = useState([]);
     const [editorValue, setEditorValue] = useState(
@@ -24,14 +24,13 @@ export const CommentForm = ({discussionId}) => {
             t: Date.now(),
         };
         setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
-        console.table(stroke);
     };
 
     // start of function to add macrons to letters if alt or alt + shift is pressed. Things crash pretty
     // quick if you try to use it though, suspect to do with the range.collapse(false) had issues with that before
     const macronise = (e) => {
         let sel, range;
-        if (e.altKey  && ["a", "e", "i","o","u","A","E","I","O","U"].includes(e.key)) {
+        if (e.altKey && ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"].includes(e.key)) {
             e.preventDefault();
             if (window.getSelection) {
                 sel = window.getSelection();
@@ -45,7 +44,8 @@ export const CommentForm = ({discussionId}) => {
                         case 'a': /* e.preventDefault(); */
                             range.insertNode(document.createTextNode("ā"));
                             break;
-                        case 'A': e.preventDefault()
+                        case 'A':
+                            e.preventDefault()
                             range.insertNode(document.createTextNode("Ā"));
                             break;
                         case 'e':
@@ -111,6 +111,14 @@ export const CommentForm = ({discussionId}) => {
         // if (typeof (editorValue.editorValue) == "undefined") { /this intended to prevent empty comments but doesn't work
         //     return;
         // } // If text is empty, don't submit anything.
+
+        //todo need to replace this with an authenticated route for group members? how would that work?
+        if (!isDiscussionPublic && !isUserAGroupMember){
+            return;
+        } else if (isDiscussionPublic && !isUserAGroupMember){
+            Meteor.call("groups.updateMembers", groupId, Meteor.userId());
+        }
+
         Meteor.call(
             "comments.insert",
             editorValue.toString("markdown"),
@@ -139,21 +147,26 @@ export const CommentForm = ({discussionId}) => {
     };
 
     return (
-        <Form>
-            <RichTextEditor
-                value={editorValue}
-                onChange={handleChange}
-                toolbarConfig={toolbarConfig}
-                type="string"
-                style={{minHeight: 100}}
-                autoFocus
-                multiline
-                required
-            />
 
-            <Button attached={"bottom"} fluid positive onClick={handleSubmit}>
-                Add Comment
-            </Button>
+        <Form>
+            {displayForm &&
+            <div>
+                <RichTextEditor
+                    value={editorValue}
+                    onChange={handleChange}
+                    toolbarConfig={toolbarConfig}
+                    type="string"
+                    style={{minHeight: 100}}
+                    autoFocus
+                    multiline
+                    required
+                />
+
+                <Button attached={"bottom"} fluid positive onClick={handleSubmit}>
+                    Add Comment
+                </Button>
+            </div>
+            }
         </Form>
     );
 };
