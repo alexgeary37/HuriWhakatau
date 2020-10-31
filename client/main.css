@@ -36,8 +36,8 @@ body {
   /*background-image: url("/huri_background.png");*/
 }
 
-* {
-  font-family: Tamaiti, serif;
+.segment, .container, .header {
+  font-family: Tamaiti, serif !important;
 }
 
 body ::-webkit-scrollbar {

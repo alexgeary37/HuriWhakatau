@@ -21,23 +21,31 @@ export const CreateDiscussion = ({toggleModal}) => {
     const submitDiscussion = () => {
         if (groupName.length === 0 && createNewGroup) {
             setErrGroupName("Groups must have a name");
-        } else {
-            setErrGroupName("");
         }
 
         if (discussionTitle.length === 0) {
             setErrTitle("Discussions must have a title");
-        } else {
-            setDiscussionTitle("");
         }
+
         //add in the isOpen flag
-        if(discussionTitle.length !== 0 && (groupName.length !== 0 || groupId.length !== 0)){
-            Meteor.call("scenarios.create", discussionTitle, description, topicId, discussionTemplate._id,
-                (error, result) => {
-                    Meteor.call("discussions.insert", result, groupId, timeLimit, isHui, true);
-                })
+        if (discussionTitle.length !== 0 && (groupName.length !== 0 || groupId.length !== 0)) {
+            let newGroupId;
+            if (groupId.length === 0 && groupName.length !== 0) {
+                Meteor.call("groups.create", groupName, [Meteor.userId()], (err, result) => {
+                    insertDiscussion(result);
+                });
+            } else {
+                insertDiscussion(newGroupId);
+            }
             toggleIt();
         }
+    }
+
+    const insertDiscussion = (newGroupId) => {
+        Meteor.call("scenarios.create", discussionTitle, description, topicId, discussionTemplate._id,
+            (error, result) => {
+                Meteor.call("discussions.insert", result, groupId.length !== 0 ? groupId : newGroupId, timeLimit, isHui, true);
+            })
     }
 
     const toggleIt = () => {
@@ -68,109 +76,110 @@ export const CreateDiscussion = ({toggleModal}) => {
         >
             <Modal.Header>Create A Discussion</Modal.Header>
             <Modal.Content>
-            <Form >
-                <Input
-                    label="Discussion Title"
-                    type="text"
-                    placeholder="Discussion Title"
-                    value={discussionTitle}
-                    onInput={({target}) => setDiscussionTitle(target.value)}
-                    autoFocus
-                />
-                {errTitle ? (
-                    <div style={{height: "10px", color: "red", marginBottom:"10px"}}>{errTitle}</div>
-                ) : (
-                    <div style={{height: "10px", marginBottom:"10px"}}/>
-                )}
-                <Input
-                    label="Discussion Description"
-                    type="text"
-                    placeholder="Discussion Description"
-                    value={description}
-                    onInput={({target}) => setDescription(target.value)}
-                />
-                <br/>
-                <br/>
-                <Form.Dropdown
-                    label="Topic"
-                    loading={topics.length === 0}
-                    selection
-                    search
-                    options={
-                        topics &&
-                        topics.map((topic) => ({
-                            key: topic._id,
-                            text: topic.title,
-                            value: topic._id,
-                        }))
-                    }
-                    name="topics"
-                    value={topicId}
-                    onChange={(e, {value}) => setTopicId(value)}
-                />
-                <br/>
-                <Form.Dropdown
-                    label={"Group"}
-                    loading={groups.length === 0}
-                    selection
-                    search
-                    options={
-                        groups &&
-                        groups.map((group) => ({
-                            key: group._id,
-                            text: group.name,
-                            value: group._id,
-                        }))
-                    }
-                    name="groups"
-                    value={groupId}
-                    onChange={(e, {value}) => setGroupId(value)}
+                <Form>
+                    <Input
+                        label="Discussion Title"
+                        type="text"
+                        placeholder="Discussion Title"
+                        value={discussionTitle}
+                        onInput={({target}) => setDiscussionTitle(target.value)}
+                        autoFocus
                     />
-                <Checkbox disabled readOnly checked={createNewGroup} label='Create new group?'
-                          onClick={(e, data) => setCreateNewGroup(data.checked)}/>
-                <br/>
-                <br/>
-                {createNewGroup && <div><Input
-                    label="Group name"
-                    type="text"
-                    placeholder="Group Name"
-                    value={groupName}
-                    onInput={({target}) => setGroupName(target.value)}
-                    autoFocus={createNewGroup}
-                    disabled readOnly
-                />
-                {errGroupName ? (
-                    <div style={{height: "10px", color: "red", marginBottom:"10px"}}>{errGroupName}</div>
+                    {errTitle ? (
+                        <div style={{height: "10px", color: "red", marginBottom: "10px"}}>{errTitle}</div>
                     ) : (
-                    <div style={{height: "10px", marginBottom:"10px"}}/>
-                    )}</div>}
-                <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
-                       value={timeLimit}
-                       onInput={({target}) => setTimeLimit(target.value)}>
-                    <Label>Discussion has a time limit</Label>
-                    <input/>
-                    <Label>mins</Label>
-                </Input>
-                <br/>
-                <br/>
-                <Checkbox checked={isHui} label='Discussions use the Hui format'
-                          onClick={(e, data) => setIsHui(data.checked)}/>
-                <br/>
-                <br/>
-                <Modal.Actions>
-                    <Button
-                        content="Save"
-                        onClick={() => {
-                            submitDiscussion();
-                            }
-                        }
-                        positive
+                        <div style={{height: "10px", marginBottom: "10px"}}/>
+                    )}
+                    <Input
+                        label="Discussion Description"
+                        type="text"
+                        placeholder="Discussion Description"
+                        value={description}
+                        onInput={({target}) => setDescription(target.value)}
                     />
-                    <Button color='black' onClick={toggleIt}>
-                        Cancel
-                    </Button>
-                </Modal.Actions>
-            </Form>
+                    <br/>
+                    <br/>
+                    <Form.Dropdown
+                        label="Topic"
+                        loading={topics.length === 0}
+                        selection
+                        search
+                        options={
+                            topics &&
+                            topics.map((topic) => ({
+                                key: topic._id,
+                                text: topic.title,
+                                value: topic._id,
+                            }))
+                        }
+                        name="topics"
+                        value={topicId}
+                        onChange={(e, {value}) => setTopicId(value)}
+                    />
+                    <br/>
+                    <Form.Dropdown
+                        label={"Group"}
+                        loading={groups.length === 0}
+                        selection
+                        search
+                        options={
+                            groups &&
+                            groups.map((group) => ({
+                                key: group._id,
+                                text: group.name,
+                                value: group._id,
+                            }))
+                        }
+                        name="groups"
+                        value={groupId}
+                        onChange={(e, {value}) => setGroupId(value)}
+                    />
+                    <Checkbox disabled readOnly checked={createNewGroup} label='Create new group?'
+                              onClick={(e, data) => setCreateNewGroup(data.checked)}/>
+                    <br/>
+                    <br/>
+                    {createNewGroup && <div><Input
+                        label="Group name"
+                        type="text"
+                        placeholder="Group Name"
+                        value={groupName}
+                        onInput={({target}) => setGroupName(target.value)}
+                        autoFocus={createNewGroup}
+                        disabled={!createNewGroup}
+                        readOnly={!createNewGroup}
+                    />
+                        {errGroupName ? (
+                            <div style={{height: "10px", color: "red", marginBottom: "10px"}}>{errGroupName}</div>
+                        ) : (
+                            <div style={{height: "10px", marginBottom: "10px"}}/>
+                        )}</div>}
+                    <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
+                           value={timeLimit}
+                           onInput={({target}) => setTimeLimit(target.value)}>
+                        <Label>Discussion has a time limit</Label>
+                        <input/>
+                        <Label>mins</Label>
+                    </Input>
+                    <br/>
+                    <br/>
+                    <Checkbox checked={isHui} label='Discussions use the Hui format'
+                              onClick={(e, data) => setIsHui(data.checked)}/>
+                    <br/>
+                    <br/>
+                    <Modal.Actions>
+                        <Button
+                            content="Save"
+                            onClick={() => {
+                                submitDiscussion();
+                            }
+                            }
+                            positive
+                        />
+                        <Button color='black' onClick={toggleIt}>
+                            Cancel
+                        </Button>
+                    </Modal.Actions>
+                </Form>
             </Modal.Content>
         </Modal>
     );
