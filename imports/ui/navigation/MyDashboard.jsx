@@ -7,7 +7,7 @@ import {
     Segment,
     Header,
     Grid,
-    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating
+    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input
 } from "semantic-ui-react";
 import '/imports/api/security'
 import {Link} from "react-router-dom";
@@ -46,6 +46,7 @@ export const MyDashboard = () => {
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
     const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
     const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -194,6 +195,30 @@ export const MyDashboard = () => {
         setShowSidebar(!showSidebar);
     }
 
+    const submitFriendSearch = () => {
+        console.log("clicked search");
+        Meteor.call("users.findFriend", searchTerm);
+    }
+
+    const searchFriendsComponent = () => {
+        return (
+            <div>
+                <form onClick={(e) => e.stopPropagation()}>
+                    <Input
+
+                        type="text"
+                        placeholder="search friends"
+                        name="searchFriends"
+                        fluid
+                        focus
+                        onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
+                    <Button content={"Search"} onClick={submitFriendSearch}/>
+                </form>
+            </div>
+        );
+    }
+
     return (
         <div>
             <NavBar/>
@@ -232,6 +257,8 @@ export const MyDashboard = () => {
                             </Menu.Item>
                         ))}
                     </List>
+                    {showSidebar && searchFriendsComponent()
+                    }
                     {/*my group members, update to have a group member specific user set*/}
                     <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>
                         <Icon size={'big'} name='users'/>
@@ -345,8 +372,7 @@ export const MyDashboard = () => {
                             </GridRow>
                             <GridRow columns={3}>
                                 <GridColumn width={5}>
-                                    <Segment fluid style={{height: "21em"}} inverted
-                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                    <Segment fluid style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
                                         <Header as={'h3'}>My Groups</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={groups &&

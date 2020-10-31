@@ -39,9 +39,9 @@ export const Dashboard = () => {
       {/*<span style={{height:"20em"}} />*/}
       <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(25,50,26)'}}>
         <Sidebars />
-      <Container inverted={'true'} style={{overflow: "auto", height: "100vh", backgroundColor: 'rgb(10, 10, 10)'}}>
+      <Container inverted={'true'} style={{overflow: "auto", height: "100vh"}}>
         <span style={{height:"30em"}} />
-        <Segment attached="top" clearing  inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+        <Segment attached="top" clearing  inverted style={{border: 'none'}}>
           <Header size="huge">
             <Header.Content as={Container} fluid >
 

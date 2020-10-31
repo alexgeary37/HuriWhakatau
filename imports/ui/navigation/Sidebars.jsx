@@ -7,7 +7,7 @@ export const Sidebars = () => {
         <div>
             <Sidebar
                 as={Segment}
-                animation='overlay'
+                animation='push'
                 icon='labeled'
                 inverted
                 vertical
@@ -22,7 +22,7 @@ export const Sidebars = () => {
             />
             <Sidebar
                 as={Segment}
-                animation='overlay'
+                animation='push'
                 icon='labeled'
                 inverted
                 vertical

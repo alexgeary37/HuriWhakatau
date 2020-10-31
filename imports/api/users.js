@@ -48,6 +48,19 @@ Meteor.methods({
         });
         return true;
     },
+
+    //return array of users whose username or email matches the search term
+    "users.findFriend"(searchTerm){
+        check(searchTerm, String);
+
+        const friends = Meteor.users.find(
+        { $or: [{username: searchTerm}, {"emails.address": searchTerm}] }, {fields: { username: 1}},
+        { sort: { username: 1 } }
+            ).fetch();
+
+        console.log("found friends:", friends);
+        return friends;
+    },
 });
 
 if (Meteor.isServer) {
