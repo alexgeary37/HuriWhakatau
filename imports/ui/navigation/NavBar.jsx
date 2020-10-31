@@ -40,8 +40,8 @@ export const NavBar = () => {
                       backgroundRepeat: 'round',
                   }}
             >
-                <Container className="content-width"><Menu.Item as={Link} to="/">{/*<Icon size="big" name="balance scale"/>*/}
-                </Menu.Item>
+                <Container className="content-width">
+                    <Menu.Item as={Link} to="/" />{/*<Icon size="big" name="balance scale"/>*/}
                     <Menu.Item as={Link} to="/">
                         <Header as={'h2'} inverted content={'Huri Whakatau'} style={{fontFamily:'Tamaiti'}}/>
                     </Menu.Item>

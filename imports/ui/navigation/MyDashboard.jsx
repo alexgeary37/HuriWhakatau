@@ -202,10 +202,8 @@ export const MyDashboard = () => {
 
     const searchFriendsComponent = () => {
         return (
-            <div>
-                <form onClick={(e) => e.stopPropagation()}>
+            <div onClick={(e) => e.stopPropagation()}>
                     <Input
-
                         type="text"
                         placeholder="search friends"
                         name="searchFriends"
@@ -214,7 +212,6 @@ export const MyDashboard = () => {
                         onChange={(e) => setSearchTerm(e.currentTarget.value)}
                     />
                     <Button content={"Search"} onClick={submitFriendSearch}/>
-                </form>
             </div>
         );
     }
@@ -321,7 +318,7 @@ export const MyDashboard = () => {
                         <Grid doubling style={{overflow: "auto", height: "87vh"}}>
                             <GridRow columns={2}>
                                 <GridColumn width={8}>
-                                    <Segment fluid style={{height: "21em"}} inverted
+                                    <Segment  style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
@@ -353,7 +350,7 @@ export const MyDashboard = () => {
                                     </Segment>
                                 </GridColumn>
                                 <GridColumn width={8}>
-                                    <Segment fluid style={{height: "21em"}} inverted
+                                    <Segment  style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                         <Header as={'h3'}>All Finished Discussions</Header>
                                         <ListItem style={{overflow: "auto", height: "16em"}}
@@ -372,7 +369,7 @@ export const MyDashboard = () => {
                             </GridRow>
                             <GridRow columns={3}>
                                 <GridColumn width={5}>
-                                    <Segment fluid style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
+                                    <Segment  style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
                                         <Header as={'h3'}>My Groups</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={groups &&
@@ -397,7 +394,7 @@ export const MyDashboard = () => {
                                 {isAdmin &&
                                 <>
                                     <GridColumn width={6}>
-                                        <Segment fluid style={{height: "21em"}} inverted
+                                        <Segment  style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                             <Header as={'h3'}>My Discussion Templates</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
@@ -422,7 +419,7 @@ export const MyDashboard = () => {
                                         </Segment>
                                     </GridColumn>
                                     <GridColumn width={5}>
-                                        <Segment fluid style={{height: "21em"}} inverted
+                                        <Segment style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                             <Header as={'h3'}>My scenarios</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
