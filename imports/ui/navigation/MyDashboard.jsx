@@ -51,6 +51,7 @@ export const MyDashboard = () => {
     const [foundFriendsList, setFoundFriendsList] = useState([]);
     const [haveFoundFriends, setHaveFoundFriends] = useState(true);
     const [friendEmail, setFriendEmail] = useState("");
+    const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -202,6 +203,7 @@ export const MyDashboard = () => {
     const submitFriendSearch = () => {
         console.log("clicked search");
         setIsSearching(true);
+        setHaveFoundFriends(true);
         Meteor.call("users.findFriend", searchTerm, (err,response) =>{
             console.log("returned friends: ", response);
             setFoundFriendsList(response);
@@ -215,6 +217,11 @@ export const MyDashboard = () => {
 
     const inviteFriend = () => {
         console.log("clicked invite");
+        Meteor.call("users.inviteFriend", friendEmail, (err, response) => {
+            if(err){
+                setFriendInviteError(err);
+            }
+        });
         setFriendEmail("");
     }
 
@@ -230,7 +237,7 @@ export const MyDashboard = () => {
                         focus
                         onChange={(e) => setSearchTerm(e.currentTarget.value)}
                     />
-                    <Button onClick={submitFriendSearch} icon labelPosition='right'>
+                    <Button fluid onClick={submitFriendSearch} icon labelPosition='right'>
                         Search
                         <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
                     </Button>
@@ -251,7 +258,7 @@ export const MyDashboard = () => {
                     focus
                     onChange={(e) => setFriendEmail(e.currentTarget.value)}
                 />
-                <Button onClick={inviteFriend} icon labelPosition='right'>
+                <Button fluid onClick={inviteFriend} icon labelPosition='right'>
                     Invite
                     <Icon name={'envelope'}/>
                 </Button>
@@ -271,7 +278,7 @@ export const MyDashboard = () => {
                     inverted
                     vertical
                     visible
-                    width={showSidebar ? "thin" : "very thin"}
+                    width={showSidebar ? "wide" : "very thin"}
                     onClick={handleShowSidebar}
                     style={{
                         backgroundColor: 'rgb(30, 30, 30)',
@@ -306,7 +313,7 @@ export const MyDashboard = () => {
                             </Button>
                         </Menu.Item>
                         ))}</div>}
-                    {!haveFoundFriends && inviteFriendsComponent()}
+                    {showSidebar && !haveFoundFriends && inviteFriendsComponent()}
                     {showSidebar && searchFriendsComponent()}
                     {/*my group members, update to have a group member specific user set*/}
                     <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>

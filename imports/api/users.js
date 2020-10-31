@@ -1,4 +1,6 @@
 import {check} from "meteor/check";
+import {Random} from "meteor/random";
+import {Usernames} from "./usernames";
 
 
 Meteor.methods({
@@ -61,6 +63,39 @@ Meteor.methods({
         console.log("found friends:", friends);
         return friends;
     },
+
+    "users.inviteFriend"(email){
+        check(email, String);
+        let finalUserName = '';
+        do {
+            finalUserName = Random.choice(Usernames);
+                // Generate new names until one that does not exist is found
+            } while (Meteor.users.findOne({username: finalUserName}));
+            console.log(finalUserName);
+
+        const userId = Accounts.createUser({
+            username: finalUserName,
+            email:email,
+            pepeha: {
+                mountain:"",
+                river:"",
+                waka:"",
+                iwi:"",
+                role:"",
+            },
+            userDetails:{
+                firstName:"",
+                lastName:"",
+                ethnicity:"",
+                location:"",
+                gender:"",
+                dob:"",
+                religion:"",
+            },
+        });
+        Accounts.sendEnrollmentEmail(userId);
+        return true;
+    }
 });
 
 if (Meteor.isServer) {
