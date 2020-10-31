@@ -7,22 +7,36 @@ Meteor.methods({
   // Insert a Group into the groups collection in the db.
   // members: _ids of the users in this group
   // Called from CreateGroup.jsx
-  "groups.create"(name, members) {
-    check(name, String);
-    check(members, Array);
+  "groups.updateMembers"(groupId, memberId) {
+    check(groupId, String);
+    check(memberId, String);
 
-    // I believe this means it's checking that the user is the client currently calling this method.
-    if (!this.userId) {
-      throw new Meteor.Error("Not authorized.");
-    }
-
-    Groups.insert({
-      name: name,
-      members: members,
-      createdAt: new Date(),
-      createdBy: this.userId,
+    Groups.update({_id: groupId},
+        {
+            $push: {
+            members: memberId,
+            }
     });
+    return true;
   },
+
+    "groups.create"(name, members) {
+        check(name, String);
+        check(members, Array);
+
+        // I believe this means it's checking that the user is the client currently calling this method.
+        if (!this.userId) {
+            throw new Meteor.Error("Not authorized.");
+        }
+
+        const groupId = Groups.insert({
+            name: name,
+            members: members,
+            createdAt: new Date(),
+            createdBy: this.userId,
+        });
+        return groupId;
+    },
 
   "groups.voteLeader"(groupId, userId) {
     Groups.update(

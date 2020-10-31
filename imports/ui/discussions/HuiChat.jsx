@@ -110,6 +110,7 @@ export const HuiChat = () => {
         groupLeader,
         nextDiscussion,
         isIntroduction,
+        discussionIsPublic,
     } = useTracker(() => {
         const discussionSub = Meteor.subscribe("discussions", discussionId);
         const scenarioSub = Meteor.subscribe("scenarios");
@@ -133,6 +134,7 @@ export const HuiChat = () => {
         let theGroupLeader;
         let nextDiscussionId;
         let discussionIsIntroduction;
+        let publicDiscussion;
         if (
             discussionSub.ready() &&
             scenarioSub.ready() &&
@@ -153,6 +155,7 @@ export const HuiChat = () => {
                 ? discussionTemplate.timeLimit
                 : 0;
             discussionDeadline = discussion.deadline ? discussion.deadline : null;
+            publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
             discussionTopic = Topics.findOne({_id: discussionScenario.topicId});
             nextDiscussionId = discussion.nextDiscussion
                 ? discussion.nextDiscussion
@@ -183,6 +186,7 @@ export const HuiChat = () => {
             groupMembers: groupMembers,
             groupLeader: theGroupLeader,
             nextDiscussion: nextDiscussionId,
+            discussionIsPublic: publicDiscussion,
             isIntroduction: discussionIsIntroduction,
         };
     });
@@ -200,6 +204,18 @@ export const HuiChat = () => {
         "next discussion: ",
         nextDiscussion
     );
+
+    //check if user is in the discussion group
+    const checkGroupMembership = () => {
+        if (group && group.members.includes(Meteor.userId())) {
+            setUserInGroup(true);
+            console.log("user in group");
+        } else {
+            console.log("user not in group");
+        }
+        console.log(group)
+    }
+    useEffect(checkGroupMembership, [group]);
 
     //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
     // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
@@ -301,8 +317,13 @@ export const HuiChat = () => {
                             <div ref={commentsEndRef}/>
                         </Comment.Group>
                         {discussionStatus === "active" && (
-                            <CommentForm discussionId={discussionId}/>
-                        )}
+                            <CommentForm
+                                discussionId={discussionId}
+                                displayForm={discussionIsPublic || userInGroup}
+                                isDiscussionPublic={discussionIsPublic}
+                                isUserAGroupMember={userInGroup}
+                                groupId={group._id}
+                            />                        )}
                     </GridColumn>
                     <GridColumn width={4}>
                         <div style={{height: "87vh"}}>
