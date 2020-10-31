@@ -17,6 +17,7 @@ import {
 } from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Mountains} from "/imports/api/mountains";
+import {Sidebars} from "../navigation/Sidebars";
 
 export const UserSettings = () => {
     const {user, mountains} = useTracker(() => {
@@ -39,19 +40,22 @@ export const UserSettings = () => {
     const [userMountain, setUserMountain] = useState("");
     const [changeUserPepeha, setChangeUserPepeha] = useState(false);
     const [pepehaObject, setPepehaObject] =
-        useState({mountain:"",
-                            river:"",
-                            waka:"",
-                            iwi:"",
-                            role:""});
+        useState({
+            mountain: "",
+            river: "",
+            waka: "",
+            iwi: "",
+            role: ""
+        });
     const [userDetailsObject, setUserDetailsObject] =
-        useState({firstName: "",
-                            lastName: "",
-                            dob: "",
-                            ethnicity: "",
-                            gender: "",
-                            religion: "",
-                            location: "",
+        useState({
+            firstName: "",
+            lastName: "",
+            dob: "",
+            ethnicity: "",
+            gender: "",
+            religion: "",
+            location: "",
         });
     const [userRiver, setUserRiver] = useState("");
     const [userRole, setUserRole] = useState("");
@@ -72,7 +76,7 @@ export const UserSettings = () => {
             console.log("Adding info to states");
             setUsername(user.username);
 
-            if(user.userDetails){
+            if (user.userDetails) {
                 setUserFirstName(user.userDetails.firstName);
                 setUserLastName(user.userDetails.lastName);
                 setUserGender(user.userDetails.gender);
@@ -87,8 +91,8 @@ export const UserSettings = () => {
                 setUserWaka(user.pepeha.waka);
                 setUserIwi(user.pepeha.iwi);
                 setUserRole(user.pepeha.role);
+            }
         }
-    }
         // console.log(pepehaObject);
     }, [user]);
 
@@ -131,14 +135,18 @@ export const UserSettings = () => {
 
 
     const updateUserDetails = () => {
-        setUserDetailsObject({firstName: userFirstName,
+        setUserDetailsObject({
+            firstName: userFirstName,
             lastName: userLastName, dob: userDoB, gender: userGender,
-            religion: userReligion, ethnicity: userEthnicity, location: userLocation})
+            religion: userReligion, ethnicity: userEthnicity, location: userLocation
+        })
     }
 
     const updatePepeha = () => {
-        setPepehaObject({mountain: userMountain, river: userRiver,
-            waka: userWaka, iwi: userIwi, role: userRole})
+        setPepehaObject({
+            mountain: userMountain, river: userRiver,
+            waka: userWaka, iwi: userIwi, role: userRole
+        })
     }
 
     const updateUsername = () => {
@@ -166,7 +174,7 @@ export const UserSettings = () => {
     }
 
     const handleUpdateUserDetails = () => {
-        if (changeUserDetails){
+        if (changeUserDetails) {
             updateUserDetails();
             console.log("details managed");
         }
@@ -174,7 +182,7 @@ export const UserSettings = () => {
     }
 
     const handleUpdatePepeha = () => {
-        if (changeUserPepeha){
+        if (changeUserPepeha) {
             updatePepeha();
             console.log("mischief managed");
         }
@@ -184,445 +192,457 @@ export const UserSettings = () => {
     return (
         <div inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
             <NavBar/>
-            <Sidebar
-                as={Segment}
-                animation='overlay'
-                icon='labeled'
-                inverted
-                vertical
-                direction={'left'}
-                visible
-                width={"very thin"}
-                style={{
-                    backgroundColor: 'rgb(0, 0, 0)',
-                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-                    backgroundSize: '60px',
-                    backgroundRepeat: 'repeat-y'}}
-            ></Sidebar>
-            <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                <span style={{height:"22em"}} />
-                <Segment attached="top" clearing inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-                    <span style={{height: "400em"}}/>
-                    <Header size="huge">
-                        <Header.Content as={Container} fluid >
-                            My Account - {user && user.username}
-                        </Header.Content>
-                    </Header>
-                </Segment>
-                <Grid columns={2}>
-                    <GridColumn width={9}>
-                        <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                            <Card.Content header="Account Details"/>
-                            <CardContent>
-                                <Form>
-                                    {/*    change username & stuff   */}
+            <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+                <Sidebars/>
+                <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                    <span style={{height: "22em"}}/>
+                    <Segment attached="top" clearing inverted
+                             style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                        <span style={{height: "400em"}}/>
+                        <Header size="huge">
+                            <Header.Content as={Container} fluid>
+                                My Account - {user && user.username}
+                            </Header.Content>
+                        </Header>
+                    </Segment>
+                    <Grid columns={2}>
+                        <GridColumn width={9}>
+                            <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Card.Content header="Account Details"/>
+                                <CardContent>
+                                    <Form>
+                                        {/*    change username & stuff   */}
 
-                                    <Input labelPosition="left"
-                                           type="text"
-                                           value={user && username}
-                                           readOnly={!changeUsername}
-                                           // size="mini"
-                                           style={{width: "45%"}}
-                                           onChange={({target}) => setUsername(target.value)}>
-                                        <Label style={{width: "55%"}}>Username</Label>
-                                        <input/>
-                                        {!changeUsername ? (
-                                            <Button type="button" size="mini" content="Change" onClick={() => {
-                                                setChangeUsername(true)
-                                            }}/>
-                                        ) : (
-                                            < Button type="button" size="mini" content="Save" onClick={() => {
-                                                setChangeUsername(false);
-                                                updateUsername();
-                                            }}/>
-                                        )}
-                                    </Input>
-                                    <br/>
-                                    <br/>
-                                    {/*    change password stuff   */}
-                                    <Input labelPosition="left"
-                                           placeholder={changeUserPassword ? "Enter New Password" : "Password"}
-                                           type="password"
-                                           value={userOldPassword}
-                                           readOnly={!changeUserPassword}
-                                           size="mini"
-                                           style={{width: "45%"}}
-                                           onChange={({target}) => setUserOldPassword(target.value)}>
-                                        <Label style={{width: "55%"}}>Password</Label>
-                                        <input/>
-                                        {!changeUserPassword &&
-                                        <Button type="button" size="mini" content="Change" onClick={() => {
-                                            setChangeUserPassword(true);
-                                            setUserOldPassword("");
-                                        }}/>
-                                        }
-                                    </Input>
-                                    <br/>
-                                    <br/>
-                                    {changeUserPassword && <div>
-                                        <Form.Input labelPosition="left"
-                                                    placeholder={"Re-enter New Password"}
-                                                    type="password"
-                                                    value={userNewPassword}
-                                                    error={userNewPassword.length < 8}
-                                                    // size="mini"
-                                                    style={{width: "45%"}}
-                                                    onChange={({target}) => setUserNewPassword(target.value)}>
-                                            <Label>New Password</Label>
+                                        <Input labelPosition="left"
+                                               type="text"
+                                               value={user && username}
+                                               readOnly={!changeUsername}
+                                            // size="mini"
+                                               style={{width: "45%"}}
+                                               onChange={({target}) => setUsername(target.value)}>
+                                            <Label style={{width: "55%"}}>Username</Label>
                                             <input/>
-                                            <Form.Button type="button" size="mini" content="Save" onClick={() => {
-                                                // setChangeUserPassword(false);
-
-                                                updateUserPassword();
+                                            {!changeUsername ? (
+                                                <Button type="button" size="mini" content="Change" onClick={() => {
+                                                    setChangeUsername(true)
+                                                }}/>
+                                            ) : (
+                                                < Button type="button" size="mini" content="Save" onClick={() => {
+                                                    setChangeUsername(false);
+                                                    updateUsername();
+                                                }}/>
+                                            )}
+                                        </Input>
+                                        <br/>
+                                        <br/>
+                                        {/*    change password stuff   */}
+                                        <Input labelPosition="left"
+                                               placeholder={changeUserPassword ? "Enter New Password" : "Password"}
+                                               type="password"
+                                               value={userOldPassword}
+                                               readOnly={!changeUserPassword}
+                                               size="mini"
+                                               style={{width: "45%"}}
+                                               onChange={({target}) => setUserOldPassword(target.value)}>
+                                            <Label style={{width: "55%"}}>Password</Label>
+                                            <input/>
+                                            {!changeUserPassword &&
+                                            <Button type="button" size="mini" content="Change" onClick={() => {
+                                                setChangeUserPassword(true);
+                                                setUserOldPassword("");
                                             }}/>
-                                        </Form.Input>
-                                        {err ? (
-                                            <div style={{height: "10px", color: "red"}}>{err}</div>
-                                        ) : (
-                                            <div style={{height: "10px"}}/>
-                                        )}
-                                    </div>
-                                    }
-                                    <Divider/>
-                                    <Card.Content header="User Details"/>
-                                    {/*<br/>*/}
-                                    {/*<Input value={user && name}*/}
-                                    {/*       labelPosition="left"*/}
-                                    {/*       type="text"*/}
-                                    {/*       readOnly={!changeName}*/}
-                                    {/*    // size="mini"*/}
-                                    {/*       style={{width: "45%"}}*/}
-                                    {/*       onChange={({target}) => setName(target.value)}>*/}
-                                    {/*    <Label style={{width: "55%"}}>Name</Label>*/}
-                                    {/*    <input/>*/}
-                                    {/*    {!changeName ? (*/}
-                                    {/*        <Button type="button" size="mini" content="Change" onClick={() => {*/}
-                                    {/*            handleChangeName();*/}
-                                    {/*        }}/>*/}
-                                    {/*    ) : (*/}
-                                    {/*        < Button type="button" size="mini" content="Save" onClick={() => {*/}
-                                    {/*            handleChangeName();*/}
-                                    {/*            // setChangeName(false);*/}
-                                    {/*            // updateName();*/}
-                                    {/*        }}/>*/}
-                                    {/*    )}*/}
-                                    {/*</Input>*/}
-                                    {/*<br/>*/}
-                                    <br/>
-                                    <Input value={user && userFirstName}
-                                           placeholder={"Enter First Name"}
-                                           type="text"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserFirstName(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userLastName}
-                                           placeholder={"Enter Last Name"}
-                                           type="text"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserLastName(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userGender}
-                                           placeholder={"Enter Gender"}
-                                           type="text"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserGender(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userDoB}
-                                           placeholder={"Enter Date of Birth"}
-                                           type="date"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserDoB(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userEthnicity}
-                                           placeholder={"Enter Ethnic Identity"}
-                                           type="text"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserEthnicity(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userReligion}
-                                           placeholder={"Enter Religion"}
-                                           type="text"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserReligion(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userLocation}
-                                           placeholder={"Enter Location"}
-                                           type="text"
-                                           readOnly={!changeUserDetails}
-                                           onChange={({target}) => setUserLocation(target.value)}
-                                           onClick={() => {
-                                               handleUpdateUserDetails()
-                                               settingUserDetailsRef.current = true}}
-                                           onBlur={() => {handleUpdateUserDetails()}}
-                                    />
-                                    <br/>
-                                    <br/>
-                                    {/*<Input value={user && userFirstName}*/}
-                                    {/*       labelPosition="left"*/}
-                                    {/*       type="text"*/}
-                                    {/*       readOnly={!changeName}*/}
-                                    {/*    // size="mini"*/}
-                                    {/*       style={{width: "45%"}}*/}
-                                    {/*       onChange={({target}) => setUserFirstName(target.value)}>*/}
-                                    {/*    <Label style={{width: "55%"}}>First Name</Label>*/}
-                                    {/*    <input/>*/}
-                                    {/*    {!changeName ? (*/}
-                                    {/*        <Button size="mini" content="Change" onClick={() => {*/}
-                                    {/*            handleChangeName();*/}
-                                    {/*        }}/>*/}
-                                    {/*    ) : (*/}
-                                    {/*        < Button size="mini" content="Save" onClick={() => {*/}
-                                    {/*            handleChangeName();*/}
-                                    {/*            // setChangeName(false);*/}
-                                    {/*            // updateName();*/}
-                                    {/*        }}/>*/}
-                                    {/*    )}*/}
-                                    {/*</Input>*/}
-                                </Form>
-                            </CardContent>
-                        </Segment>
-                        <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                            <Card.Content header="Profile Picture"/>
-                            <CardContent>
-                                {/*    user pic shit*/}
-                                {/*    <AvatarEditor*/}
-                                {/*        image="http://example.com/initialimage.jpg"*/}
-                                {/*        width={250}*/}
-                                {/*        height={250}*/}
-                                {/*        border={50}*/}
-                                {/*        color={[255, 255, 255, 0.6]} // RGBA*/}
-                                {/*        scale={1.2}*/}
-                                {/*        rotate={0}*/}
-                                {/*    />*/}
-                            </CardContent>
-                        </Segment>
-                    </GridColumn>
-                    <GridColumn width={7}>
-                        {isIndigenous &&
-                        <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                            <Card.Content header="Pepeha"/>
-                            <CardContent>
-                                <Form>
-                                    <Dropdown
-                                        text={userMountain}
-                                        value={userMountain}
-                                        placeholder={'Select Mountain'}
-                                        name="mountain"
-                                        readOnly={!changeUserPepeha}
-                                        lazyLoad
-                                        // disabled={!changeUserPepeha}
-                                        // loading={mountains.length === 0}
-                                        allowAdditions
-                                        selection
-                                        search
-                                        // fluid
-                                        options={
-                                            mountains &&
-                                            mountains.map((mountain) => ({
-                                                key: mountain._id,
-                                                text: mountain.name,
-                                                value: mountain.name,
-                                            }))
-                                        }
-                                        onChange={(e, {value}) => {setUserMountain(value)}}
-                                        onClick={() => {
-                                            handleUpdatePepeha()
-                                            settingPepehaRef.current = true}}
-                                        onBlur={() => {handleUpdatePepeha()}}
-                                    />
-                                    {/*<Button icon style={{marginLeft: "20px"}}>*/}
-                                    {/*    <Icon className="mountain"/>*/}
-                                    {/*</Button>*/}
-                                        {/*<Label style={{width: "55%"}}>Mountain</Label>*/}
-                                    {/*</Form.Dropdown>*/}
+                                            }
+                                        </Input>
+                                        <br/>
+                                        <br/>
+                                        {changeUserPassword && <div>
+                                            <Form.Input labelPosition="left"
+                                                        placeholder={"Re-enter New Password"}
+                                                        type="password"
+                                                        value={userNewPassword}
+                                                        error={userNewPassword.length < 8}
+                                                // size="mini"
+                                                        style={{width: "45%"}}
+                                                        onChange={({target}) => setUserNewPassword(target.value)}>
+                                                <Label>New Password</Label>
+                                                <input/>
+                                                <Form.Button type="button" size="mini" content="Save" onClick={() => {
+                                                    // setChangeUserPassword(false);
 
-                                    {/*<Input value={user && userMountain}*/}
-                                    {/*       labelPosition="left"*/}
-                                    {/*       type="text"*/}
-                                    {/*       size="mini"*/}
-                                    {/*       style={{width: "45%"}}*/}
-                                    {/*       readOnly={!changeUserPepeha}*/}
-                                    {/*       onChange={({target}) => setUserMountain(target.value)}*/}
-                                    {/*       // onChange={handlePepehaSelect}*/}
-                                    {/*>*/}
-                                    {/*    <Label style={{width: "55%"}}>Mountain</Label>*/}
-                                    {/*    <input/>*/}
+                                                    updateUserPassword();
+                                                }}/>
+                                            </Form.Input>
+                                            {err ? (
+                                                <div style={{height: "10px", color: "red"}}>{err}</div>
+                                            ) : (
+                                                <div style={{height: "10px"}}/>
+                                            )}
+                                        </div>
+                                        }
+                                        <Divider/>
+                                        <Card.Content header="User Details"/>
+                                        {/*<br/>*/}
+                                        {/*<Input value={user && name}*/}
+                                        {/*       labelPosition="left"*/}
+                                        {/*       type="text"*/}
+                                        {/*       readOnly={!changeName}*/}
+                                        {/*    // size="mini"*/}
+                                        {/*       style={{width: "45%"}}*/}
+                                        {/*       onChange={({target}) => setName(target.value)}>*/}
+                                        {/*    <Label style={{width: "55%"}}>Name</Label>*/}
+                                        {/*    <input/>*/}
+                                        {/*    {!changeName ? (*/}
+                                        {/*        <Button type="button" size="mini" content="Change" onClick={() => {*/}
+                                        {/*            handleChangeName();*/}
+                                        {/*        }}/>*/}
+                                        {/*    ) : (*/}
+                                        {/*        < Button type="button" size="mini" content="Save" onClick={() => {*/}
+                                        {/*            handleChangeName();*/}
+                                        {/*            // setChangeName(false);*/}
+                                        {/*            // updateName();*/}
+                                        {/*        }}/>*/}
+                                        {/*    )}*/}
+                                        {/*</Input>*/}
+                                        {/*<br/>*/}
+                                        <br/>
+                                        <Input value={user && userFirstName}
+                                               placeholder={"Enter First Name"}
+                                               type="text"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserFirstName(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userLastName}
+                                               placeholder={"Enter Last Name"}
+                                               type="text"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserLastName(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userGender}
+                                               placeholder={"Enter Gender"}
+                                               type="text"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserGender(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userDoB}
+                                               placeholder={"Enter Date of Birth"}
+                                               type="date"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserDoB(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userEthnicity}
+                                               placeholder={"Enter Ethnic Identity"}
+                                               type="text"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserEthnicity(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userReligion}
+                                               placeholder={"Enter Religion"}
+                                               type="text"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserReligion(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userLocation}
+                                               placeholder={"Enter Location"}
+                                               type="text"
+                                               readOnly={!changeUserDetails}
+                                               onChange={({target}) => setUserLocation(target.value)}
+                                               onClick={() => {
+                                                   handleUpdateUserDetails()
+                                                   settingUserDetailsRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdateUserDetails()
+                                               }}
+                                        />
+                                        <br/>
+                                        <br/>
+                                        {/*<Input value={user && userFirstName}*/}
+                                        {/*       labelPosition="left"*/}
+                                        {/*       type="text"*/}
+                                        {/*       readOnly={!changeName}*/}
+                                        {/*    // size="mini"*/}
+                                        {/*       style={{width: "45%"}}*/}
+                                        {/*       onChange={({target}) => setUserFirstName(target.value)}>*/}
+                                        {/*    <Label style={{width: "55%"}}>First Name</Label>*/}
+                                        {/*    <input/>*/}
+                                        {/*    {!changeName ? (*/}
+                                        {/*        <Button size="mini" content="Change" onClick={() => {*/}
+                                        {/*            handleChangeName();*/}
+                                        {/*        }}/>*/}
+                                        {/*    ) : (*/}
+                                        {/*        < Button size="mini" content="Save" onClick={() => {*/}
+                                        {/*            handleChangeName();*/}
+                                        {/*            // setChangeName(false);*/}
+                                        {/*            // updateName();*/}
+                                        {/*        }}/>*/}
+                                        {/*    )}*/}
+                                        {/*</Input>*/}
+                                    </Form>
+                                </CardContent>
+                            </Segment>
+                            <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Card.Content header="Profile Picture"/>
+                                <CardContent>
+                                    {/*    user pic shit*/}
+                                    {/*    <AvatarEditor*/}
+                                    {/*        image="http://example.com/initialimage.jpg"*/}
+                                    {/*        width={250}*/}
+                                    {/*        height={250}*/}
+                                    {/*        border={50}*/}
+                                    {/*        color={[255, 255, 255, 0.6]} // RGBA*/}
+                                    {/*        scale={1.2}*/}
+                                    {/*        rotate={0}*/}
+                                    {/*    />*/}
+                                </CardContent>
+                            </Segment>
+                        </GridColumn>
+                        <GridColumn width={7}>
+                            {isIndigenous &&
+                            <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Card.Content header="Pepeha"/>
+                                <CardContent>
+                                    <Form>
+                                        <Dropdown
+                                            text={userMountain}
+                                            value={userMountain}
+                                            placeholder={'Select Mountain'}
+                                            name="mountain"
+                                            readOnly={!changeUserPepeha}
+                                            lazyLoad
+                                            // disabled={!changeUserPepeha}
+                                            // loading={mountains.length === 0}
+                                            allowAdditions
+                                            selection
+                                            search
+                                            // fluid
+                                            options={
+                                                mountains &&
+                                                mountains.map((mountain) => ({
+                                                    key: mountain._id,
+                                                    text: mountain.name,
+                                                    value: mountain.name,
+                                                }))
+                                            }
+                                            onChange={(e, {value}) => {
+                                                setUserMountain(value)
+                                            }}
+                                            onClick={() => {
+                                                handleUpdatePepeha()
+                                                settingPepehaRef.current = true
+                                            }}
+                                            onBlur={() => {
+                                                handleUpdatePepeha()
+                                            }}
+                                        />
+                                        {/*<Button icon style={{marginLeft: "20px"}}>*/}
+                                        {/*    <Icon className="mountain"/>*/}
+                                        {/*</Button>*/}
+                                        {/*<Label style={{width: "55%"}}>Mountain</Label>*/}
+                                        {/*</Form.Dropdown>*/}
+
+                                        {/*<Input value={user && userMountain}*/}
+                                        {/*       labelPosition="left"*/}
+                                        {/*       type="text"*/}
+                                        {/*       size="mini"*/}
+                                        {/*       style={{width: "45%"}}*/}
+                                        {/*       readOnly={!changeUserPepeha}*/}
+                                        {/*       onChange={({target}) => setUserMountain(target.value)}*/}
+                                        {/*       // onChange={handlePepehaSelect}*/}
+                                        {/*>*/}
+                                        {/*    <Label style={{width: "55%"}}>Mountain</Label>*/}
+                                        {/*    <input/>*/}
                                         <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="mountain"/>
                                         </Button>
-                                    {/*</Input>*/}
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userRiver}
-                                           placeholder={"Enter River"}
-                                           // labelPosition="left"
-                                           type="text"
-                                           // size="mini"
-                                           // style={{width: "45%"}}
-                                           readOnly={!changeUserPepeha}
-                                           onChange={({target}) => setUserRiver(target.value)}
-                                           onClick={() => {
-                                               handleUpdatePepeha()
-                                               settingPepehaRef.current = true}}
-                                           onBlur={() => {handleUpdatePepeha()}}
-                                           // onChange={handlePepehaSelect}
-                                    >
-                                        {/*<Label style={{width: "55%"}}>River</Label>*/}
-                                        <input/>
-                                        <Button type="button" icon style={{marginLeft: "20px"}}>
-                                            <Icon className="river"/>
-                                        </Button>
-                                    </Input>
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userWaka}
-                                           placeholder={"Enter Waka"}
-                                           // labelPosition="left"
-                                           type="text"
-                                           // size="mini"
-                                           // style={{width: "45%"}}
-                                           readOnly={!changeUserPepeha}
-                                           onChange={({target}) => setUserWaka(target.value)}
-                                           onClick={() => {
-                                               handleUpdatePepeha()
-                                               settingPepehaRef.current = true}}
-                                           onBlur={() => {handleUpdatePepeha()}}
-                                           // onChange={handlePepehaSelect}
-                                        // onChange={() => {settingPepehaRef.current = true;
-                                           //     setUserPepeha([...userPepeha, target.value])}}
-                                    >
-                                        {/*<Label style={{width: "55%"}}>Waka</Label>*/}
-                                        <input/>
-                                        <Button type="button" icon style={{marginLeft: "20px"}}>
-                                            <Icon className="waka"/>
-                                        </Button>
-                                    </Input>
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userIwi}
-                                           // labelPosition="left"
-                                           placeholder={"Enter Iwi"}
-                                           type="text"
-                                           // size="mini"
-                                           // style={{width: "45%"}}
-                                           readOnly={!changeUserPepeha}
-                                           onChange={({target}) => setUserIwi(target.value)}
-                                           // onChange={handlePepehaSelect}
+                                        {/*</Input>*/}
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userRiver}
+                                               placeholder={"Enter River"}
+                                            // labelPosition="left"
+                                               type="text"
+                                            // size="mini"
+                                            // style={{width: "45%"}}
+                                               readOnly={!changeUserPepeha}
+                                               onChange={({target}) => setUserRiver(target.value)}
+                                               onClick={() => {
+                                                   handleUpdatePepeha()
+                                                   settingPepehaRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdatePepeha()
+                                               }}
+                                            // onChange={handlePepehaSelect}
+                                        >
+                                            {/*<Label style={{width: "55%"}}>River</Label>*/}
+                                            <input/>
+                                            <Button type="button" icon style={{marginLeft: "20px"}}>
+                                                <Icon className="river"/>
+                                            </Button>
+                                        </Input>
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userWaka}
+                                               placeholder={"Enter Waka"}
+                                            // labelPosition="left"
+                                               type="text"
+                                            // size="mini"
+                                            // style={{width: "45%"}}
+                                               readOnly={!changeUserPepeha}
+                                               onChange={({target}) => setUserWaka(target.value)}
+                                               onClick={() => {
+                                                   handleUpdatePepeha()
+                                                   settingPepehaRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdatePepeha()
+                                               }}
+                                            // onChange={handlePepehaSelect}
+                                            // onChange={() => {settingPepehaRef.current = true;
+                                            //     setUserPepeha([...userPepeha, target.value])}}
+                                        >
+                                            {/*<Label style={{width: "55%"}}>Waka</Label>*/}
+                                            <input/>
+                                            <Button type="button" icon style={{marginLeft: "20px"}}>
+                                                <Icon className="waka"/>
+                                            </Button>
+                                        </Input>
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userIwi}
+                                            // labelPosition="left"
+                                               placeholder={"Enter Iwi"}
+                                               type="text"
+                                            // size="mini"
+                                            // style={{width: "45%"}}
+                                               readOnly={!changeUserPepeha}
+                                               onChange={({target}) => setUserIwi(target.value)}
+                                            // onChange={handlePepehaSelect}
                                             // onChange={({target}) => {settingPepehaRef.current = true;
-                                           //     setUserPepeha([...userPepeha, target.value])}}
-                                           onClick={() => {
-                                               handleUpdatePepeha()
-                                               settingPepehaRef.current = true}}
-                                           onBlur={() => {handleUpdatePepeha()}}
-                                    >
-                                        {/*<Label style={{width: "55%"}}>Iwi</Label>*/}
-                                        <input/>
-                                        <Button type="button" icon style={{marginLeft: "20px"}}>
-                                            <Icon className="iwi"/>
-                                        </Button>
-                                    </Input>
-                                    <br/>
-                                    <br/>
-                                    <Input value={user && userRole}
-                                           placeholder={"Enter Employment or Role"}
-                                           // labelPosition="left"
-                                           type="text"
-                                           // size="mini"
-                                           // style={{width: "45%"}}
-                                           readOnly={!changeUserPepeha}
-                                           onChange={({target}) => setUserRole(target.value)}
-                                           // onChange={handlePepehaSelect}
+                                            //     setUserPepeha([...userPepeha, target.value])}}
+                                               onClick={() => {
+                                                   handleUpdatePepeha()
+                                                   settingPepehaRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdatePepeha()
+                                               }}
+                                        >
+                                            {/*<Label style={{width: "55%"}}>Iwi</Label>*/}
+                                            <input/>
+                                            <Button type="button" icon style={{marginLeft: "20px"}}>
+                                                <Icon className="iwi"/>
+                                            </Button>
+                                        </Input>
+                                        <br/>
+                                        <br/>
+                                        <Input value={user && userRole}
+                                               placeholder={"Enter Employment or Role"}
+                                            // labelPosition="left"
+                                               type="text"
+                                            // size="mini"
+                                            // style={{width: "45%"}}
+                                               readOnly={!changeUserPepeha}
+                                               onChange={({target}) => setUserRole(target.value)}
+                                            // onChange={handlePepehaSelect}
                                             // onChange={({target}) => {settingPepehaRef.current = true;
-                                           //     setUserPepeha([...userPepeha, target.value])}}
-                                           onClick={() => {
-                                               handleUpdatePepeha()
-                                               settingPepehaRef.current = true}}
-                                           onBlur={() => {handleUpdatePepeha()}}
-                                    >
-                                        {/*<Label style={{width: "55%"}}>Employment / Role</Label>*/}
-                                        <input/>
-                                        <Button type="button" icon style={{marginLeft: "20px"}}>
-                                            <Icon className="role"/>
-                                        </Button>
-                                    </Input>
-                                    <br/>
-                                    <br/>
-                                    get your personalised Pepeha: https://pepeha.nz/
-                                    {/*{!changeUserPepeha ?*/}
-                                    {/*    <Button positive*/}
-                                    {/*             fluid*/}
-                                    {/*             onClick={() => {*/}
-                                    {/*                 handleUpdatePepeha()*/}
-                                    {/*                 settingPepehaRef.current = true}}*/}
-                                    {/*             content={"Update Pepeha"}/>*/}
-                                    {/*    :*/}
-                                    {/*    <Button positive*/}
-                                    {/*            fluid*/}
-                                    {/*            onClick={() => {*/}
-                                    {/*                handleUpdatePepeha();*/}
-                                    {/*                // setChangeUserPepeha(false);*/}
-                                    {/*                // updatePepeha();*/}
-                                    {/*            }}*/}
-                                    {/*            content={"Save Pepeha"}/>*/}
-                                    {/*}*/}
-                                </Form>
-                            </CardContent>
-                        </Segment>
-                        }
-                    </GridColumn>
-                </Grid>
-            </Container>
-            <Sidebar
-                as={Segment}
-                animation='overlay'
-                icon='labeled'
-                inverted
-                vertical
-                direction={'right'}
-                visible
-                width={"very thin"}
-                style={{
-                    backgroundColor: 'rgb(0, 0, 0)',
-                    backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
-                    backgroundSize: '60px',
-                    backgroundRepeat: 'repeat-y'}}
-            ></Sidebar>
+                                            //     setUserPepeha([...userPepeha, target.value])}}
+                                               onClick={() => {
+                                                   handleUpdatePepeha()
+                                                   settingPepehaRef.current = true
+                                               }}
+                                               onBlur={() => {
+                                                   handleUpdatePepeha()
+                                               }}
+                                        >
+                                            {/*<Label style={{width: "55%"}}>Employment / Role</Label>*/}
+                                            <input/>
+                                            <Button type="button" icon style={{marginLeft: "20px"}}>
+                                                <Icon className="role"/>
+                                            </Button>
+                                        </Input>
+                                        <br/>
+                                        <br/>
+                                        get your personalised Pepeha: https://pepeha.nz/
+                                        {/*{!changeUserPepeha ?*/}
+                                        {/*    <Button positive*/}
+                                        {/*             fluid*/}
+                                        {/*             onClick={() => {*/}
+                                        {/*                 handleUpdatePepeha()*/}
+                                        {/*                 settingPepehaRef.current = true}}*/}
+                                        {/*             content={"Update Pepeha"}/>*/}
+                                        {/*    :*/}
+                                        {/*    <Button positive*/}
+                                        {/*            fluid*/}
+                                        {/*            onClick={() => {*/}
+                                        {/*                handleUpdatePepeha();*/}
+                                        {/*                // setChangeUserPepeha(false);*/}
+                                        {/*                // updatePepeha();*/}
+                                        {/*            }}*/}
+                                        {/*            content={"Save Pepeha"}/>*/}
+                                        {/*}*/}
+                                    </Form>
+                                </CardContent>
+                            </Segment>
+                            }
+                        </GridColumn>
+                    </Grid>
+                </Container>
+            </Sidebar.Pushable>
         </div>
     );
 }

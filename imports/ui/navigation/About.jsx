@@ -17,7 +17,7 @@ import {Link} from "react-router-dom";
 export const About = () => {
     const panes =  [
         { menuItem: 'Huri Whakatau', render: () =>
-                <Tab.Pane inverted>
+                <Tab.Pane inverted style={{border: 'none'}}>
                     <p>
                         Huri Whakatau is an online discussion platform we have been developing over the last two years
                         in collaboration with Māori and Iñupiat researchers, engineers and participants. Our platform will
@@ -62,7 +62,7 @@ export const About = () => {
                 </Tab.Pane>
         },
         { menuItem: 'Our People', render: () =>
-                <Tab.Pane inverted>
+                <Tab.Pane inverted style={{overflow: "auto", height: "80vh", border: 'none'}}>
                     <Image src='/PanosProfilePhoto3.jpg' size='tiny' />
                     <Header content={'Panos Patros: PI. The cool kind: Principal Investigator'}/>
                     Panos is a Member of Engineering New Zealand and is interested in various aspects of Software
@@ -323,8 +323,8 @@ export const About = () => {
             <NavBar/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars />
-            <Container inverted={'true'} /*style={{overflow: "auto", height: "90vh", backgroundColor: 'rgb(10, 10, 10)'}}*/>
-                <Segment attached="bottom" inverted /*style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}*/>
+            <Container inverted={'true'}>
+                <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
                     <span style={{height:"32em"}}/>
                     <Header as={'h1'} content="About"/>
                     <Tab menu={{inverted: true}} panes={panes} />

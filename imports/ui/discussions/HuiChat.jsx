@@ -280,7 +280,7 @@ export const HuiChat = () => {
             {/*<br/>*/}
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars />
-            <Container /*style={{width: "110vh"}}*/>
+            <Container>
                 <span style={{height:"22em"}} />
                 <Grid columns={2} style={{width: "110vh"}}>
                     <GridColumn width={10} attached="left">

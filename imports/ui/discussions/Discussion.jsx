@@ -227,7 +227,7 @@ export const Discussion = () => {
       <br />
       <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
         <Sidebars />
-        <Container attached="bottom" style={{ width: "110vh" }}>
+          <Container attached="bottom" style={{ width: "110vh"}}>
         <Grid columns={3}>
           <Grid.Row>
             <GridColumn width={3} style={{ height: "90vh" }}>
@@ -320,7 +320,7 @@ export const Discussion = () => {
           </Grid.Row>
         </Grid>
       </Container>
-      </Sidebar.Pushable>
+    </Sidebar.Pushable>
     </div>
   );
 };

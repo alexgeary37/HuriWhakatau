@@ -7,7 +7,7 @@ import {
     Segment,
     Header,
     Grid,
-    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating
+    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input
 } from "semantic-ui-react";
 import '/imports/api/security'
 import {Link} from "react-router-dom";
@@ -46,6 +46,12 @@ export const MyDashboard = () => {
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
     const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+    const [foundFriendsList, setFoundFriendsList] = useState([]);
+    const [haveFoundFriends, setHaveFoundFriends] = useState(true);
+    const [friendEmail, setFriendEmail] = useState("");
+    const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -194,6 +200,72 @@ export const MyDashboard = () => {
         setShowSidebar(!showSidebar);
     }
 
+    const submitFriendSearch = () => {
+        console.log("clicked search");
+        setIsSearching(true);
+        setHaveFoundFriends(true);
+        Meteor.call("users.findFriend", searchTerm, (err,response) =>{
+            console.log("returned friends: ", response);
+            setFoundFriendsList(response);
+            setIsSearching(false);
+            setSearchTerm("");
+            if(response.length === 0){
+                setHaveFoundFriends(false);
+            }
+        });
+    }
+
+    const inviteFriend = () => {
+        console.log("clicked invite");
+        Meteor.call("users.inviteFriend", friendEmail, (err, response) => {
+            if(err){
+                setFriendInviteError(err);
+            }
+        });
+        setFriendEmail("");
+    }
+
+    const searchFriendsComponent = () => {
+        return (
+            <div onClick={(e) => e.stopPropagation()}>
+                    <Input
+                        style={{marginTop:'10px'}}
+                        type="text"
+                        placeholder="search friends"
+                        name="searchFriends"
+                        fluid
+                        focus
+                        onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
+                    <Button fluid onClick={submitFriendSearch} icon labelPosition='right'>
+                        Search
+                        <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
+                    </Button>
+            </div>
+        );
+    }
+
+    const inviteFriendsComponent = () => {
+        return (
+            <div onClick={(e) => e.stopPropagation()}>
+                <h3>Sorry No friends found, invite one!</h3>
+                <Input
+                    style={{marginTop:'10px'}}
+                    type="text"
+                    placeholder="email address"
+                    name="inviteFriends"
+                    fluid
+                    focus
+                    onChange={(e) => setFriendEmail(e.currentTarget.value)}
+                />
+                <Button fluid onClick={inviteFriend} icon labelPosition='right'>
+                    Invite
+                    <Icon name={'envelope'}/>
+                </Button>
+            </div>
+        );
+    }
+
     return (
         <div>
             <NavBar/>
@@ -206,7 +278,7 @@ export const MyDashboard = () => {
                     inverted
                     vertical
                     visible
-                    width={showSidebar ? "thin" : "very thin"}
+                    width={showSidebar ? "wide" : "very thin"}
                     onClick={handleShowSidebar}
                     style={{
                         backgroundColor: 'rgb(30, 30, 30)',
@@ -232,6 +304,17 @@ export const MyDashboard = () => {
                             </Menu.Item>
                         ))}
                     </List>
+                    {showSidebar && foundFriendsList && <div onClick={(e) => e.stopPropagation()}>
+                        {foundFriendsList.map((potentialFriend) => (
+                        <Menu.Item key={potentialFriend._id}>
+                            <span style={{paddingLeft:'15px',paddingRight:'20px'}}>{potentialFriend.username}</span>
+                            <Button negative size={'mini'} compact={true} attached={'right'}>
+                                ADD
+                            </Button>
+                        </Menu.Item>
+                        ))}</div>}
+                    {showSidebar && !haveFoundFriends && inviteFriendsComponent()}
+                    {showSidebar && searchFriendsComponent()}
                     {/*my group members, update to have a group member specific user set*/}
                     <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>
                         <Icon size={'big'} name='users'/>
@@ -294,7 +377,7 @@ export const MyDashboard = () => {
                         <Grid doubling style={{overflow: "auto", height: "87vh"}}>
                             <GridRow columns={2}>
                                 <GridColumn width={8}>
-                                    <Segment fluid style={{height: "21em"}} inverted
+                                    <Segment  style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
@@ -326,7 +409,7 @@ export const MyDashboard = () => {
                                     </Segment>
                                 </GridColumn>
                                 <GridColumn width={8}>
-                                    <Segment fluid style={{height: "21em"}} inverted
+                                    <Segment  style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                         <Header as={'h3'}>All Finished Discussions</Header>
                                         <ListItem style={{overflow: "auto", height: "16em"}}
@@ -345,8 +428,7 @@ export const MyDashboard = () => {
                             </GridRow>
                             <GridRow columns={3}>
                                 <GridColumn width={5}>
-                                    <Segment fluid style={{height: "21em"}} inverted
-                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                    <Segment  style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
                                         <Header as={'h3'}>My Groups</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={groups &&
@@ -371,7 +453,7 @@ export const MyDashboard = () => {
                                 {isAdmin &&
                                 <>
                                     <GridColumn width={6}>
-                                        <Segment fluid style={{height: "21em"}} inverted
+                                        <Segment  style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                             <Header as={'h3'}>My Discussion Templates</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
@@ -396,7 +478,7 @@ export const MyDashboard = () => {
                                         </Segment>
                                     </GridColumn>
                                     <GridColumn width={5}>
-                                        <Segment fluid style={{height: "21em"}} inverted
+                                        <Segment style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                             <Header as={'h3'}>My scenarios</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
