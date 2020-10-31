@@ -116,7 +116,7 @@ export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUs
         if (!isDiscussionPublic && !isUserAGroupMember){
             return;
         } else if (isDiscussionPublic && !isUserAGroupMember){
-            Meteor.call("groups.updateMembers", groupId, Meteor.userId());
+            Meteor.call("groups.addMember", groupId, Meteor.userId());
         }
 
         Meteor.call(
