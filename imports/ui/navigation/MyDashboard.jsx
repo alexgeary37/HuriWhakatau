@@ -47,6 +47,10 @@ export const MyDashboard = () => {
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
     const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+    const [foundFriendsList, setFoundFriendsList] = useState([]);
+    const [haveFoundFriends, setHaveFoundFriends] = useState(true);
+    const [friendEmail, setFriendEmail] = useState("");
     const [template, setTemplate] = useState(null);
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -197,13 +201,28 @@ export const MyDashboard = () => {
 
     const submitFriendSearch = () => {
         console.log("clicked search");
-        Meteor.call("users.findFriend", searchTerm);
+        setIsSearching(true);
+        Meteor.call("users.findFriend", searchTerm, (err,response) =>{
+            console.log("returned friends: ", response);
+            setFoundFriendsList(response);
+            setIsSearching(false);
+            setSearchTerm("");
+            if(response.length === 0){
+                setHaveFoundFriends(false);
+            }
+        });
+    }
+
+    const inviteFriend = () => {
+        console.log("clicked invite");
+        setFriendEmail("");
     }
 
     const searchFriendsComponent = () => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
                     <Input
+                        style={{marginTop:'10px'}}
                         type="text"
                         placeholder="search friends"
                         name="searchFriends"
@@ -211,7 +230,31 @@ export const MyDashboard = () => {
                         focus
                         onChange={(e) => setSearchTerm(e.currentTarget.value)}
                     />
-                    <Button content={"Search"} onClick={submitFriendSearch}/>
+                    <Button onClick={submitFriendSearch} icon labelPosition='right'>
+                        Search
+                        <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
+                    </Button>
+            </div>
+        );
+    }
+
+    const inviteFriendsComponent = () => {
+        return (
+            <div onClick={(e) => e.stopPropagation()}>
+                <h3>Sorry No friends found, invite one!</h3>
+                <Input
+                    style={{marginTop:'10px'}}
+                    type="text"
+                    placeholder="email address"
+                    name="inviteFriends"
+                    fluid
+                    focus
+                    onChange={(e) => setFriendEmail(e.currentTarget.value)}
+                />
+                <Button onClick={inviteFriend} icon labelPosition='right'>
+                    Invite
+                    <Icon name={'envelope'}/>
+                </Button>
             </div>
         );
     }
@@ -254,8 +297,17 @@ export const MyDashboard = () => {
                             </Menu.Item>
                         ))}
                     </List>
-                    {showSidebar && searchFriendsComponent()
-                    }
+                    {showSidebar && foundFriendsList && <div onClick={(e) => e.stopPropagation()}>
+                        {foundFriendsList.map((potentialFriend) => (
+                        <Menu.Item key={potentialFriend._id}>
+                            <span style={{paddingLeft:'15px',paddingRight:'20px'}}>{potentialFriend.username}</span>
+                            <Button negative size={'mini'} compact={true} attached={'right'}>
+                                ADD
+                            </Button>
+                        </Menu.Item>
+                        ))}</div>}
+                    {!haveFoundFriends && inviteFriendsComponent()}
+                    {showSidebar && searchFriendsComponent()}
                     {/*my group members, update to have a group member specific user set*/}
                     <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>
                         <Icon size={'big'} name='users'/>

@@ -41,11 +41,11 @@ export const NavBar = () => {
                   }}
             >
                 <Container className="content-width">
-                    <Menu.Item as={Link} to="/" />{/*<Icon size="big" name="balance scale"/>*/}
+                    {/*<Menu.Item as={Link} to="/" /><Icon size="big" name="balance scale"/>*/}
                     <Menu.Item as={Link} to="/">
                         <Header as={'h2'} inverted content={'Huri Whakatau'} style={{fontFamily:'Tamaiti'}}/>
                     </Menu.Item>
-                    <Dropdown item text="Tirotiro/Browse" as={Menu.Item} style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}>
+                    <Dropdown item text="Tirotiro/Browse"  style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'22px'}}>
                         <Dropdown.Menu>
                             <Dropdown.Item as={Link}  to="/mydashboard">
                                 <h2 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'20px'}}>My Dash</h2>
