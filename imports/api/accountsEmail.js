@@ -11,7 +11,7 @@ Accounts.emailTemplates.enrollAccount = {
         const id = url.substring(url.lastIndexOf('/') + 1);
         return `Hi, you've been invited to participate in Huri Whakatau, 
             Click the link below to get started.
-            ${process.env.ROOT_URL}enroll-account/${id}
+            ${process.env.ROOT_URL}enroll-account/${id}/${Meteor.userId()}
             
             Please use username ${user.username} to complete your sign-up.
             

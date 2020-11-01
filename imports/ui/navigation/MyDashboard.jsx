@@ -231,7 +231,7 @@ export const MyDashboard = () => {
                     <Input
                         style={{marginTop:'10px'}}
                         type="text"
-                        placeholder="search friends"
+                        placeholder="Username or email"
                         name="searchFriends"
                         fluid
                         focus

@@ -16,13 +16,12 @@ Meteor.methods({
             throw new Meteor.Error("Not authorized.");
         }
 
-        const groupId = Groups.insert({
+        return Groups.insert({
             name: name,
             members: members,
             createdAt: new Date(),
             createdBy: this.userId,
         });
-        return groupId;
     },
 
     "groups.addMember"(groupId, memberId) {

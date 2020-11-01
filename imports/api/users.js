@@ -95,7 +95,43 @@ Meteor.methods({
         });
         Accounts.sendEnrollmentEmail(userId);
         return true;
-    }
+    },
+
+    // add a user to friend list
+    "users.addFriend"(userId, friendId){
+        check(userId, String);
+        check(friendId, String);
+        console.log("adding friend: ", friendId);
+        Meteor.users.update(userId,
+            { $push:
+                {friendList: friendId}
+            }
+        );
+        return true;
+    },
+
+    // remove a user from friend list
+    "users.removeFriend"(userId, friendId){
+        check(userId, String);
+        check(friendId, String);
+
+        Meteor.users.update(userId,
+            { $pull:
+                    {friendList: friendId}
+            }
+        );
+        return true;
+    },
+
+    //return array of users whose username or email matches the search term
+    "users.findInvitedFriendId"(token){
+        check(token, String);
+        console.log("finding friend")
+        const friendId =Meteor.users.findOne(
+            {"services.password.reset.token": token}, {fields: {_id: 1}}
+            );
+        return friendId;
+    },
 });
 
 if (Meteor.isServer) {
