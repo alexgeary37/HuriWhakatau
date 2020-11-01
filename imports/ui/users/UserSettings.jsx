@@ -267,8 +267,6 @@ export const UserSettings = () => {
                                                 <Label>New Password</Label>
                                                 <input/>
                                                 <Form.Button type="button" size="mini" content="Save" onClick={() => {
-                                                    // setChangeUserPassword(false);
-
                                                     updateUserPassword();
                                                 }}/>
                                             </Form.Input>

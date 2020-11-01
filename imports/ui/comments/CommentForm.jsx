@@ -108,15 +108,15 @@ export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUs
     };
 
     const handleSubmit = () => {
-        // if (typeof (editorValue.editorValue) == "undefined") { /this intended to prevent empty comments but doesn't work
-        //     return;
-        // } // If text is empty, don't submit anything.
+        if (editorValue.toString("markdown").charCodeAt(0) === 8203) {
+            return;
+        } // If editor value first is empty, don't submit anything.
 
         //todo need to replace this with an authenticated route for group members? how would that work?
         if (!isDiscussionPublic && !isUserAGroupMember){
             return;
         } else if (isDiscussionPublic && !isUserAGroupMember){
-            Meteor.call("groups.updateMembers", groupId, Meteor.userId());
+            Meteor.call("groups.addMember", groupId, Meteor.userId());
         }
 
         Meteor.call(

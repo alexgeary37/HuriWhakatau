@@ -132,8 +132,8 @@ export const Discussion = () => {
         _id: discussionScenario.discussionTemplateId,
       });
       discussionTimeLimit = discussionTemplate
-        ? discussionTemplate.timeLimit
-        : 0;
+          ? discussionTemplate.timeLimit
+          : 0;
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
@@ -162,11 +162,7 @@ export const Discussion = () => {
   const checkGroupMembership = () => {
     if (group && group.members.includes(Meteor.userId())) {
       setUserInGroup(true);
-      console.log("user in group");
-    } else {
-      console.log("user not in group");
     }
-    console.log(group)
   }
   useEffect(checkGroupMembership, [group]);
 

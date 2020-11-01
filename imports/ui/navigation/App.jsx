@@ -64,11 +64,17 @@ export const App = () => {
                         path="/experiments/create"
                         component={CreateExperiment}
                     />
-                    <Route path="/korerorero/:discussionId" component={Discussion}/> {/* probably not needed double up of the huichat path*/}
+                    <Route path="/korerorero/:discussionId"
+                           component={Discussion}/> {/* probably not needed double up of the huichat path*/}
                     <Route
-                    exact
-                    path="/enroll-account/:token"
-                    component={EnrollForm}
+                        exact
+                        path="/enroll-account/:token"
+                        component={EnrollForm}
+                    />
+                    <Route
+                        exact
+                        path="/enroll-account/:token/:invitingUser"
+                        component={EnrollForm}
                     />
                 </Switch>
             </BrowserRouter>
