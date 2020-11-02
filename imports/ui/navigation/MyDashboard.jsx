@@ -204,21 +204,36 @@ export const MyDashboard = () => {
         console.log("clicked search");
         setIsSearching(true);
         setHaveFoundFriends(true);
-        Meteor.call("users.findFriend", searchTerm, (err,response) =>{
+        Meteor.call("users.findFriend", searchTerm, (err, response) => {
             console.log("returned friends: ", response);
             setFoundFriendsList(response);
             setIsSearching(false);
             setSearchTerm("");
-            if(response.length === 0){
+            if (response.length === 0) {
                 setHaveFoundFriends(false);
+            }
+        });
+    }
+
+    const addFriend = (friendId) => {
+        console.log("clicked add friend ", friendId);
+        Meteor.call("users.addPendingFriend", friendId, Meteor.userId(), (_, response) => {
+            if (response){
+                console.log("found friends", foundFriendsList);
+                let filteredFriendsList = foundFriendsList.filter(function( friend ) {
+                    return friend._id !== friendId;
+                });
+                console.log("filtered friends", filteredFriendsList);
+                setFoundFriendsList([...filteredFriendsList]);
+                console.log("found friends2", foundFriendsList);
             }
         });
     }
 
     const inviteFriend = () => {
         console.log("clicked invite");
-        Meteor.call("users.inviteFriend", friendEmail, (err, response) => {
-            if(err){
+        Meteor.call("users.inviteFriend", friendEmail, (err, _) => {
+            if (err) {
                 setFriendInviteError(err);
             }
         });
@@ -228,19 +243,19 @@ export const MyDashboard = () => {
     const searchFriendsComponent = () => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
-                    <Input
-                        style={{marginTop:'10px'}}
-                        type="text"
-                        placeholder="Username or email"
-                        name="searchFriends"
-                        fluid
-                        focus
-                        onChange={(e) => setSearchTerm(e.currentTarget.value)}
-                    />
-                    <Button fluid onClick={submitFriendSearch} icon labelPosition='right'>
-                        Search
-                        <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
-                    </Button>
+                <Input
+                    style={{marginTop: '10px'}}
+                    type="text"
+                    placeholder="Username or email"
+                    name="searchFriends"
+                    fluid
+                    focus
+                    onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                />
+                <Button fluid onClick={submitFriendSearch} icon labelPosition='right'>
+                    Search
+                    <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
+                </Button>
             </div>
         );
     }
@@ -250,7 +265,7 @@ export const MyDashboard = () => {
             <div onClick={(e) => e.stopPropagation()}>
                 <h3>Sorry No friends found, invite one!</h3>
                 <Input
-                    style={{marginTop:'10px'}}
+                    style={{marginTop: '10px'}}
                     type="text"
                     placeholder="email address"
                     name="inviteFriends"
@@ -306,12 +321,15 @@ export const MyDashboard = () => {
                     </List>
                     {showSidebar && foundFriendsList && <div onClick={(e) => e.stopPropagation()}>
                         {foundFriendsList.map((potentialFriend) => (
-                        <Menu.Item key={potentialFriend._id}>
-                            <span style={{paddingLeft:'15px',paddingRight:'20px'}}>{potentialFriend.username}</span>
-                            <Button negative size={'mini'} compact={true} attached={'right'}>
-                                ADD
-                            </Button>
-                        </Menu.Item>
+                            <Menu.Item key={potentialFriend._id}>
+                                <span style={{
+                                    paddingLeft: '15px',
+                                    paddingRight: '20px'
+                                }}>{potentialFriend.username}</span>
+                                <Button negative size={'mini'} compact={true} attached={'right'} onClick={() => addFriend(potentialFriend._id)}>
+                                    ADD
+                                </Button>
+                            </Menu.Item>
                         ))}</div>}
                     {showSidebar && !haveFoundFriends && inviteFriendsComponent()}
                     {showSidebar && searchFriendsComponent()}
@@ -377,7 +395,7 @@ export const MyDashboard = () => {
                         <Grid doubling style={{overflow: "auto", height: "87vh"}}>
                             <GridRow columns={2}>
                                 <GridColumn width={8}>
-                                    <Segment  style={{height: "21em"}} inverted
+                                    <Segment style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
@@ -409,7 +427,7 @@ export const MyDashboard = () => {
                                     </Segment>
                                 </GridColumn>
                                 <GridColumn width={8}>
-                                    <Segment  style={{height: "21em"}} inverted
+                                    <Segment style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                         <Header as={'h3'}>All Finished Discussions</Header>
                                         <ListItem style={{overflow: "auto", height: "16em"}}
@@ -428,7 +446,7 @@ export const MyDashboard = () => {
                             </GridRow>
                             <GridRow columns={3}>
                                 <GridColumn width={5}>
-                                    <Segment  style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
+                                    <Segment style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
                                         <Header as={'h3'}>My Groups</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={groups &&
@@ -453,7 +471,7 @@ export const MyDashboard = () => {
                                 {isAdmin &&
                                 <>
                                     <GridColumn width={6}>
-                                        <Segment  style={{height: "21em"}} inverted
+                                        <Segment style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                             <Header as={'h3'}>My Discussion Templates</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
