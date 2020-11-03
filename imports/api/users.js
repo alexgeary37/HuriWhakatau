@@ -170,7 +170,8 @@ if (Meteor.isServer) {
                 fields: {
                     username: 1,
                     userDetails: 1,
-                    friends: 1,
+                    friendList: 1,
+                    pendingFriendList: 1,
                     pepeha: 1,
                     online: 1,
                 },

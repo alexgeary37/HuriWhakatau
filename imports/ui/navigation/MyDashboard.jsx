@@ -117,6 +117,7 @@ export const MyDashboard = () => {
         discussionTemplates,
         experiments,
         friends,
+        pendingFriends,
         groupMembers,
         anyFriendOnline,
         anyGroupMemberOnline,
@@ -133,6 +134,8 @@ export const MyDashboard = () => {
         const userSub = Meteor.subscribe("users");
         let fetchedFriendIds = [];
         let fetchedFriends = [];
+        let fetchedPendingFriendIds = [];
+        let fetchedPendingFriends = [];
         let fetchedGroupMemberIds = [];
         let fetchedGroupMembers = [];
         let currentUser;
@@ -159,10 +162,17 @@ export const MyDashboard = () => {
         // and get friends and users that the user is in groups with
         if (userSub.ready() && userId) {
             currentUser = Meteor.users.findOne({_id: userId});
-            if (currentUser.friends) {
-                fetchedFriendIds = currentUser.friends;
+            if (currentUser.friendList) {
+                fetchedFriendIds = currentUser.friendList;
                 fetchedFriendIds.forEach((friendId) => {
-                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}));
+                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: { username: 1, online: 1}}));
+                })
+            }
+
+            if (currentUser.pendingFriendList) {
+                fetchedPendingFriendIds = currentUser.pendingFriendList;
+                fetchedPendingFriendIds.forEach((pendingFriendId) => {
+                    fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: { username: 1}}));
                 })
             }
 
@@ -176,7 +186,7 @@ export const MyDashboard = () => {
 
             // find the users and add to array
             fetchedGroupMemberIds.forEach((memberId) => {
-                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}));
+                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: { username: 1}}));
             })
         }
 
@@ -190,6 +200,7 @@ export const MyDashboard = () => {
             discussionTemplates: fetchedDiscussionTemplates,
             experiments: fetchedExperiments,
             friends: fetchedFriends,
+            pendingFriends: fetchedPendingFriends,
             groupMembers: fetchedGroupMembers,
             anyFriendOnline: fetchedFriends.some(friend => friend.online === true),
             anyGroupMemberOnline: fetchedGroupMembers.some(member => member.online === true),
@@ -201,11 +212,9 @@ export const MyDashboard = () => {
     }
 
     const submitFriendSearch = () => {
-        console.log("clicked search");
         setIsSearching(true);
         setHaveFoundFriends(true);
         Meteor.call("users.findFriend", searchTerm, (err, response) => {
-            console.log("returned friends: ", response);
             setFoundFriendsList(response);
             setIsSearching(false);
             setSearchTerm("");
@@ -216,22 +225,30 @@ export const MyDashboard = () => {
     }
 
     const addFriend = (friendId) => {
-        console.log("clicked add friend ", friendId);
         Meteor.call("users.addPendingFriend", friendId, Meteor.userId(), (_, response) => {
             if (response){
-                console.log("found friends", foundFriendsList);
                 let filteredFriendsList = foundFriendsList.filter(function( friend ) {
                     return friend._id !== friendId;
                 });
-                console.log("filtered friends", filteredFriendsList);
                 setFoundFriendsList([...filteredFriendsList]);
-                console.log("found friends2", foundFriendsList);
             }
         });
     }
 
+    const acceptFriend = (friendId) => {
+        Meteor.call("users.removePendingFriend", Meteor.userId(), friendId, (_, response) => {
+            if (response){
+                Meteor.call("users.addFriend", Meteor.userId(), friendId)
+                Meteor.call("users.addFriend", friendId, Meteor.userId())
+            }
+        });
+    }
+
+    const declineFriend = (friendId) => {
+        Meteor.call("users.removePendingFriend", Meteor.userId(), friendId);
+    }
+
     const inviteFriend = () => {
-        console.log("clicked invite");
         Meteor.call("users.inviteFriend", friendEmail, (err, _) => {
             if (err) {
                 setFriendInviteError(err);
@@ -284,7 +301,7 @@ export const MyDashboard = () => {
     return (
         <div>
             <NavBar/>
-            <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
+            <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}} >
                 {/* right sidebar */}
                 <Sidebar
                     as={Segment}
@@ -316,6 +333,17 @@ export const MyDashboard = () => {
                             <Menu.Item key={friend._id} title={friend.online ? 'online' : 'offline'}>
                                 {friend.username}
                                 <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled/>
+                            </Menu.Item>
+                        ))}
+                        {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (
+                            <Menu.Item key={pendingFriend._id} /*title={pendingFriend.online ? 'online' : 'offline'}*/>
+                                {pendingFriend.username}
+                                <Button negative size={'mini'} compact={true} onClick={() => acceptFriend(pendingFriend._id)}>
+                                    ACCEPT
+                                </Button>
+                                <Button negative size={'mini'} compact={true} onClick={() => declineFriend(pendingFriend._id)}>
+                                    DECLINE
+                                </Button>
                             </Menu.Item>
                         ))}
                     </List>
@@ -369,7 +397,7 @@ export const MyDashboard = () => {
                     }}
                 />
                 {/*end sidebar*/}
-                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}} dimmed={showSidebar} onClick={showSidebar ? handleShowSidebar : null}>
 
                     <Container>
                         <span style={{height: "22em"}}/>
@@ -636,13 +664,6 @@ export const MyDashboard = () => {
                             toggleModal={handleToggleDiscussion}
                         />
                         }
-                        {/* Item display modals */}
-                        {isOpenTemplateDisplay &&
-                        <DisplayDiscussionTemplate
-                            toggleModal={handleToggleTemplateDisplay}
-                            template={template}/>
-                        }
-
                     </Container>
                 </Sidebar.Pusher>
             </Sidebar.Pushable>

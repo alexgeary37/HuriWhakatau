@@ -34,7 +34,7 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                     label="Template Name"
                     type="text"
                     placeholder="Template Name"
-                    value={template.name}
+                    value={templateName}
                     // onInput={({target}) => setTemplateName(target.value)}
                     autoFocus
                 />
@@ -88,18 +88,19 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                 <br/>
 
                 <Modal.Actions>
-                    <Button
-                        content="Save"
-                        onClick={() =>
-                        // {
-                            // submitTemplate();
-                            // }
-                            toggleIt
-                        }
-                        positive
-                    />
+                    {/* todo make this button save a new template if any value changed, prompt for new template name */}
+                    {/*<Button*/}
+                    {/*    content="Save"*/}
+                    {/*    onClick={() =>*/}
+                    {/*    // {*/}
+                    {/*        // submitTemplate();*/}
+                    {/*        // }*/}
+                    {/*        toggleIt*/}
+                    {/*    }*/}
+                    {/*    positive*/}
+                    {/*/>*/}
                     <Button color='black' onClick={toggleIt}>
-                        Cancel
+                        Close
                     </Button>
                 </Modal.Actions>
             </Form>
