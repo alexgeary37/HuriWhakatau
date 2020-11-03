@@ -56,7 +56,7 @@ Meteor.methods({
         check(searchTerm, String);
 
         const friends = Meteor.users.find(
-        { $or: [{username: searchTerm}, {"emails.address": searchTerm}] }, {fields: { username: 1}},
+        { $or: [{username: {$regex: searchTerm, $options: 'i'}}, {"emails.address": searchTerm}] }, {fields: { username: 1}},
         { sort: { username: 1 } }
             ).fetch();
 
@@ -103,7 +103,7 @@ Meteor.methods({
         check(friendId, String);
         console.log("adding friend: ", friendId);
         Meteor.users.update(userId,
-            { $push:
+            { $addToSet:
                 {friendList: friendId}
             }
         );
@@ -118,6 +118,32 @@ Meteor.methods({
         Meteor.users.update(userId,
             { $pull:
                     {friendList: friendId}
+            }
+        );
+        return true;
+    },
+
+    // add a user to friend list
+    "users.addPendingFriend"(userId, friendId){
+        check(userId, String);
+        check(friendId, String);
+        console.log("adding pending friend: ", friendId);
+        Meteor.users.update(userId,
+            { $addToSet:
+                    {pendingFriendList: friendId}
+            }
+        );
+        return true;
+    },
+
+    // remove a user from friend list
+    "users.removePendingFriend"(userId, friendId){
+        check(userId, String);
+        check(friendId, String);
+
+        Meteor.users.update(userId,
+            { $pull:
+                    {pendingFriendList: friendId}
             }
         );
         return true;
@@ -144,7 +170,8 @@ if (Meteor.isServer) {
                 fields: {
                     username: 1,
                     userDetails: 1,
-                    friends: 1,
+                    friendList: 1,
+                    pendingFriendList: 1,
                     pepeha: 1,
                     online: 1,
                 },

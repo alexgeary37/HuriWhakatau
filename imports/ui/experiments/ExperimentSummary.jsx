@@ -1,8 +1,14 @@
-import React from "react";
-import { List, Segment } from "semantic-ui-react";
+import React, {useState} from "react";
+import {Button, List, Segment} from "semantic-ui-react";
+import {ViewExperiment} from "/imports/ui/experiments/ViewExperiment";
 
 export const ExperimentSummary = ({ experiment }) => {
-  return (
+    const [isOpenExperimentDisplay, setIsOpenExperimentDisplay] = useState(false);
+    const toggleIt = () => {
+        setIsOpenExperimentDisplay(!isOpenExperimentDisplay);
+    }
+
+    return (
     <List.Item >
       <List.Content as={Segment} style={{
           backgroundColor: "#c4c4c4",
@@ -11,6 +17,13 @@ export const ExperimentSummary = ({ experiment }) => {
         <List.Description
           content={experiment && "Description: " + experiment.description}
         />
+          <Button content={'open'} onClick={toggleIt} />
+          {/* show exp details */}
+          {isOpenExperimentDisplay &&
+          <ViewExperiment
+              toggleModal={toggleIt}
+              experiment={experiment}/>
+          }
       </List.Content>
     </List.Item>
   );
