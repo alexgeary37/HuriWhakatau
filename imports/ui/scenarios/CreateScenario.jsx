@@ -7,7 +7,7 @@ import {Categories} from "../../api/categories";
 export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [categoryId, setCategoryId] = useState("5vQX4vhq3nbTWZ6Qe"); //make dynamically get the "other" category
+    const [categoryId, setCategoryId] = useState("NYXkv9KtqEhogjEHQ"); //make dynamically get the "other" category
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
     const [errScenarioTitle, setErrScenarioTitle] = useState("");

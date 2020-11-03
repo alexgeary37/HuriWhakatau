@@ -539,7 +539,7 @@ export const MyDashboard = () => {
                                                 <Button
                                                     fluid
                                                     onClick={handleToggleScenario}
-                                                    content="Create New"
+                                                    content="Create New Scenario"
                                                     basic
                                                     negative
                                                 />
