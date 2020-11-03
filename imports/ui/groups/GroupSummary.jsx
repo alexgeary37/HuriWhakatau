@@ -1,8 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import { List, Segment } from "semantic-ui-react";
+import {Button, List, Segment} from "semantic-ui-react";
+import {ViewGroup} from "./ViewGroup";
 
 export const GroupSummary = ({ group }) => {
+  const [isOpenGroupDisplay, setIsOpenGroupDisplay] = useState(false);
+  const toggleIt = () => {
+    setIsOpenGroupDisplay(!isOpenGroupDisplay);
+  }
+
   const { users } = useTracker(() => {
     Meteor.subscribe("users");
 
@@ -22,9 +28,16 @@ export const GroupSummary = ({ group }) => {
         backgroundColor: "#c4c4c4",
       }}>
         <List.Header as={'h4'} content={group && group.name} />
-        <List.Description
-          content={users && "Members: " + userList.join(", ")}
-        />
+        {/*<List.Description*/}
+        {/*  content={users && "Members: " + userList.join(", ")}*/}
+        {/*/>*/}
+        <Button content={'open'} onClick={toggleIt} />
+        {/* show exp details */}
+        {isOpenGroupDisplay &&
+        <ViewGroup
+            toggleModal={toggleIt}
+            group={group} />
+        }
       </List.Content>
     </List.Item>
   );
