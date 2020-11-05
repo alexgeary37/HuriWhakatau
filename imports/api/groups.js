@@ -45,6 +45,9 @@ Meteor.methods({
             {
                 $pull: {
                     members: memberId,
+                },
+                $push: {
+                    previousMembers: memberId,
                 }
             });
         return true;

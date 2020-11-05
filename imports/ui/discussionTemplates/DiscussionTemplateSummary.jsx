@@ -9,8 +9,6 @@ export const DiscussionTemplateSummary = ({ template }) => {
     setIsOpenTemplateDisplay(!isOpenTemplateDisplay);
   }
 
-
-
   return (
       <span>
     <List.Item>

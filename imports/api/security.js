@@ -61,85 +61,74 @@ Meteor.methods({
             const userId = Accounts.createUser({
                 username: finalUserName,
                 email:email,
-                pepeha: {
-                    mountain:"",
-                    river:"",
-                    waka:"",
-                    iwi:"",
-                    role:"",
-                },
-                userDetails:{
-                    firstName:"",
-                    lastName:"",
-                    ethnicity:"",
-                    location:"",
-                    gender:"",
-                    dob:"",
-                    religion:"",
-                },
+                profile: {
+                    pepeha: {
+                        mountain: "",
+                        river: "",
+                        waka: "",
+                        iwi: "",
+                        role: "",
+                    },
+                    userDetails: {
+                        firstName: "",
+                        lastName: "",
+                        ethnicity: "",
+                        location: "",
+                        gender: "",
+                        dob: "",
+                        religion: "",
+                    },
+                }
             });
             Accounts.sendEnrollmentEmail(userId);
             Roles.addUsersToRoles(userId, roles);
         // };
     },
 
-    "security.updatePepeha"(pepeha, userId){
-            console.log("updating user pepeha");
-            check(userId, String);
-            check(pepeha, Object);
+    // "security.updatePepeha"(pepeha, userId){
+    //         console.log("updating user pepeha");
+    //         check(userId, String);
+    //         check(pepeha, Object);
+    //
+    //         Meteor.users.update(userId, {
+    //             $set: {
+    //                 pepeha: pepeha,
+    //             },
+    //         });
+    //         return true;
+    // },
 
-            Meteor.users.update(userId, {
-                $set: {
-                    pepeha: pepeha,
-                },
-            });
-            return true;
-    },
-
-    // "security.updateName"(name, userId){
-    //     console.log("updating user name");
+    // "security.updateUsername"(username, userId){
+    //     console.log("updating username");
     //     check(userId, String);
-    //     check(name, String);
+    //     check(username, String);
     //
     //     Meteor.users.update(userId, {
     //         $set: {
-    //             name: name,
+    //             username: username,
     //         },
     //     });
     //     return true;
     // },
-
-    "security.updateUsername"(username, userId){
-        console.log("updating username");
-        check(userId, String);
-        check(username, String);
-
-        Meteor.users.update(userId, {
-            $set: {
-                username: username,
-            },
-        });
-        return true;
-    },
-
-    "security.updateUserDetails"(detailsObject, userId){
-        console.log("updating user details");
-        check(userId, String);
-        check(detailsObject, Object);
-
-        Meteor.users.update(userId, {
-            $set: {
-                userDetails: {
-                    firstName: detailsObject.firstName,
-                    lastName: detailsObject.lastName,
-                    ethnicity: detailsObject.ethnicity,
-                    location: detailsObject.location,
-                    gender: detailsObject.gender,
-                    dob: detailsObject.dob,
-                    religion: detailsObject.religion,
-                }
-            },
-        });
-        return true;
-    },
+    //
+    // "security.updateUserDetails"(detailsObject, userId){
+    //     console.log("updating user details");
+    //     check(userId, String);
+    //     check(detailsObject, Object);
+    //
+    //     Meteor.users.update(userId, {
+    //         $set: {
+    //             userDetails: {
+    //                 firstName: detailsObject.firstName,
+    //                 lastName: detailsObject.lastName,
+    //                 ethnicity: detailsObject.ethnicity,
+    //                 location: detailsObject.location,
+    //                 gender: detailsObject.gender,
+    //                 dob: detailsObject.dob,
+    //                 religion: detailsObject.religion,
+    //             }
+    //         },
+    //     });
+    //     return true;
+    // },
 })

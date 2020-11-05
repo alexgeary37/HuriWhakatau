@@ -35,46 +35,46 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
         >
             <Modal.Header>Scenario</Modal.Header>
             <Modal.Content>
-                <Form as={Segment} attached="bottom">
-                    <Form.Input
-                        readOnly={true}
-                        label="Title"
-                        type="text"
-                        autoFocus
-                        value={title}
-                        // onInput={({target}) => setTitle(target.value)}
-                    />
-                    <Form.Input
-                        readOnly={true}
-                        label="Description"
-                        type="text"
-                        value={description}
-                        // onInput={({target}) => setDescription(target.value)}
-                    />
+                <Form.Input
+                    readOnly={true}
+                    label="Title"
+                    type="text"
+                    autoFocus
+                    value={title}
+                    // onInput={({target}) => setTitle(target.value)}
+                />
+                <Form.Input
+                    readOnly={true}
+                    label="Description"
+                    type="text"
+                    value={description}
+                    // onInput={({target}) => setDescription(target.value)}
+                />
 
-                    {/*show catergories and discussion templates, get ids for db*/}
-                    <Form.Input
-                        readOnly={true}
-                        label="Category"
-                        type="text"
-                        value={category && category.title}
-                        // onInput={({target}) => setDescription(target.value)}
-                    />
-                    <Segment>
-                        <Header as={'h4'} content={'Discussion Template: ' + template.name}/>
-                    </Segment>
-                    {/*<Button*/}
-                    {/*    content="Save & Close"*/}
-                    {/*    onClick={(e) => {*/}
-                    {/*        submitScenario(e);*/}
-                    {/*    }}*/}
-                    {/*    positive*/}
-                    {/*/>*/}
-                    <Button color='black' onClick={toggleIt}>
-                        Close
-                    </Button>
-                </Form>
+                {/*show catergories and discussion templates, get ids for db*/}
+                <Form.Input
+                    readOnly={true}
+                    label="Category"
+                    type="text"
+                    value={category && category.title}
+                    // onInput={({target}) => setDescription(target.value)}
+                />
+                <Segment>
+                    <Header as={'h4'} content={'Discussion Template: ' + template.name}/>
+                </Segment>
             </Modal.Content>
+            <Modal.Actions>
+                {/*<Button*/}
+                {/*    content="Save & Close"*/}
+                {/*    onClick={(e) => {*/}
+                {/*        submitScenario(e);*/}
+                {/*    }}*/}
+                {/*    positive*/}
+                {/*/>*/}
+                <Button color='black' onClick={toggleIt}>
+                    Close
+                </Button>
+            </Modal.Actions>
         </Modal>
     );
 };

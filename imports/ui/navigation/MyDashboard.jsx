@@ -162,15 +162,16 @@ export const MyDashboard = () => {
         // and get friends and users that the user is in groups with
         if (userSub.ready() && userId) {
             currentUser = Meteor.users.findOne({_id: userId});
-            if (currentUser.friendList) {
-                fetchedFriendIds = currentUser.friendList;
+            if (currentUser.profile.friendList) {
+                console.log("friendslist", currentUser.profile.friendList);
+                fetchedFriendIds = currentUser.profile.friendList;
                 fetchedFriendIds.forEach((friendId) => {
                     fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: { username: 1, online: 1}}));
                 })
             }
 
             if (currentUser.pendingFriendList) {
-                fetchedPendingFriendIds = currentUser.pendingFriendList;
+                fetchedPendingFriendIds = currentUser.profile.pendingFriendList;
                 fetchedPendingFriendIds.forEach((pendingFriendId) => {
                     fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: { username: 1}}));
                 })
@@ -267,6 +268,7 @@ export const MyDashboard = () => {
                     name="searchFriends"
                     fluid
                     focus
+                    value={searchTerm}
                     onChange={(e) => setSearchTerm(e.currentTarget.value)}
                 />
                 <Button fluid onClick={submitFriendSearch} icon labelPosition='right'>
@@ -288,6 +290,7 @@ export const MyDashboard = () => {
                     name="inviteFriends"
                     fluid
                     focus
+                    value={friendEmail}
                     onChange={(e) => setFriendEmail(e.currentTarget.value)}
                 />
                 <Button fluid onClick={inviteFriend} icon labelPosition='right'>

@@ -46,21 +46,23 @@ if (Meteor.isServer) {
         defaultUser = Accounts.createUser({
             username: "Mary",
             password: "password1",
-            pepeha: {
-                mountain:"",
-                river:"",
-                waka:"",
-                iwi:"",
-                role:"",
-            },
-            userDetails:{
-                firstName:"",
-                lastName:"",
-                ethnicity:"",
-                location:"",
-                gender:"",
-                dob:"",
-                religion:"",
+            profile: {
+                pepeha: {
+                    mountain: "",
+                    river: "",
+                    waka: "",
+                    iwi: "",
+                    role: "",
+                },
+                userDetails: {
+                    firstName: "",
+                    lastName: "",
+                    ethnicity: "",
+                    location: "",
+                    gender: "",
+                    dob: "",
+                    religion: "",
+                }
             }
         });
         defaultUsers.push(defaultUser);
@@ -74,21 +76,23 @@ if (Meteor.isServer) {
         defaultUser = Accounts.createUser({
             username: "Gary",
             password: "password2",
-            pepeha: {
-                mountain:"",
-                river:"",
-                waka:"",
-                iwi:"",
-                role:"",
-            },
-            userDetails:{
-                firstName:"",
-                lastName:"",
-                ethnicity:"",
-                location:"",
-                gender:"",
-                dob:"",
-                religion:"",
+            profile: {
+                pepeha: {
+                    mountain: "",
+                    river: "",
+                    waka: "",
+                    iwi: "",
+                    role: "",
+                },
+                userDetails: {
+                    firstName: "",
+                    lastName: "",
+                    ethnicity: "",
+                    location: "",
+                    gender: "",
+                    dob: "",
+                    religion: "",
+                }
             }
         });
         defaultUsers.push(defaultUser);
@@ -100,21 +104,23 @@ if (Meteor.isServer) {
         defaultUser = Accounts.createUser({
             username: "Daisy",
             password: "password3",
-            pepeha: {
-                mountain:"",
-                river:"",
-                waka:"",
-                iwi:"",
-                role:"",
-            },
-            userDetails:{
-                firstName:"",
-                lastName:"",
-                ethnicity:"",
-                location:"",
-                gender:"",
-                dob:"",
-                religion:"",
+            profile: {
+                pepeha: {
+                    mountain: "",
+                    river: "",
+                    waka: "",
+                    iwi: "",
+                    role: "",
+                },
+                userDetails: {
+                    firstName: "",
+                    lastName: "",
+                    ethnicity: "",
+                    location: "",
+                    gender: "",
+                    dob: "",
+                    religion: "",
+                }
             }
         });
         defaultUsers.push(defaultUser);
@@ -125,21 +131,23 @@ if (Meteor.isServer) {
         defaultUser = Accounts.createUser({
             username: "Alex",
             password: "password1",
-            pepeha: {
-                mountain:"",
-                river:"",
-                waka:"",
-                iwi:"",
-                role:"",
-            },
-            userDetails:{
-                firstName:"",
-                lastName:"",
-                ethnicity:"",
-                location:"",
-                gender:"",
-                dob:"",
-                religion:"",
+            profile: {
+                pepeha: {
+                    mountain: "",
+                    river: "",
+                    waka: "",
+                    iwi: "",
+                    role: "",
+                },
+                userDetails: {
+                    firstName: "",
+                    lastName: "",
+                    ethnicity: "",
+                    location: "",
+                    gender: "",
+                    dob: "",
+                    religion: "",
+                }
             }
         });
         defaultUsers.push(defaultUser);

@@ -29,7 +29,6 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
         >
             <Modal.Header>Discussion Template</Modal.Header>
             <Modal.Content>
-            <Form >
                 <Input
                     label="Template Name"
                     type="text"
@@ -86,7 +85,7 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                 </Input>
                 <br/>
                 <br/>
-
+            </Modal.Content>
                 <Modal.Actions>
                     {/* todo make this button save a new template if any value changed, prompt for new template name */}
                     {/*<Button*/}
@@ -103,8 +102,6 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                         Close
                     </Button>
                 </Modal.Actions>
-            </Form>
-            </Modal.Content>
         </Modal>
     );
 };

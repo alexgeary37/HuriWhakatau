@@ -30,14 +30,14 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
         if (groupSub.ready() && scenarioSub.ready() && scenarioSetSub.ready()) {
             // experiment = Experiments.findOne({_id: experiment._id});
             fetchedScenarioSet = ScenarioSets.findOne({_id: experiment.scenarioSetId});
-            if(fetchedScenarioSet){
+            if (fetchedScenarioSet) {
                 scenarioSetTitle = fetchedScenarioSet.title;
                 scenarioSetDescription = fetchedScenarioSet.description;
             }
             group = Groups.findOne({_id: experiment.groupId}, {fields: {members: 1, name: 1}});
             if (group) {
                 group.members.forEach((memberId) => {
-                    groupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: { username: 1}}));
+                    groupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1}}));
                 });
                 groupName = group.name;
             }
@@ -49,7 +49,8 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
                 description: experiment.description,
                 senarioset: {
                     title: scenarioSetTitle,
-                    description: scenarioSetDescription},
+                    description: scenarioSetDescription
+                },
                 group: {
                     name: groupName,
                     members: groupMembers,
@@ -77,21 +78,21 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
                 <Segment>
                     <Header as={'h3'} content={'Group: ' + experimentDetails.group.name}/>
                     <Header as={'h3'} content={'Members'}/>
-                        {experimentDetails && experimentDetails.group.members.map((member) => (
-                            <div>{member.username}</div>
-                            ))}
+                    {experimentDetails && experimentDetails.group.members.map((member) => (
+                        <div key={member._id}>{member.username}</div>
+                    ))}
                 </Segment>
                 <Segment>
                     <Header as={'h3'} content={'Scenario Set: ' + experimentDetails.senarioset.title}/>
                     <Header as={'h4'} content={'Description: '}/>
                     {experimentDetails.senarioset.description}
                 </Segment>
-                <Modal.Actions>
-                    <Button color='black' onClick={toggleIt}>
-                        Close
-                    </Button>
-                </Modal.Actions>
             </Modal.Content>
+            <Modal.Actions>
+                <Button color='black' onClick={toggleIt}>
+                    Close
+                </Button>
+            </Modal.Actions>
         </Modal>
     );
 };
