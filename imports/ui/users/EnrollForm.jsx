@@ -24,9 +24,10 @@ export const EnrollForm = () => {
                     console.log("friend found: ", result);
                     Meteor.call("users.addFriend", invitingUser, result._id);
                     Meteor.call("users.addFriend", result._id, invitingUser);
-                    Accounts.resetPassword(token, password, () =>
-                        // history.push("/mydashboard")
-                        console.log("passwordset")
+                    Accounts.resetPassword(token, password, () => {
+                            history.push("/mydashboard")
+                            console.log("passwordset")
+                        }
                     );
                     Accounts.verifyEmail(token);
                 } else {
@@ -35,9 +36,10 @@ export const EnrollForm = () => {
             });
 
         } else {
-                Accounts.resetPassword(token, password, () =>
-                    // history.push("/mydashboard")
-                    console.log("passwordset")
+                Accounts.resetPassword(token, password, () => {
+                        history.push("/mydashboard");
+                        console.log("passwordset");
+                    }
                 );
             Accounts.verifyEmail(token);
         }
