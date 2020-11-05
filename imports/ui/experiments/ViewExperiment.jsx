@@ -79,7 +79,7 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
                     <Header as={'h3'} content={'Group: ' + experimentDetails.group.name}/>
                     <Header as={'h3'} content={'Members'}/>
                     {experimentDetails && experimentDetails.group.members.map((member) => (
-                        <div>{member.username}</div>
+                        <div key={member._id}>{member.username}</div>
                     ))}
                 </Segment>
                 <Segment>

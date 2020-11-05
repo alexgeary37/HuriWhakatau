@@ -76,21 +76,21 @@ export const UserSettings = () => {
             console.log("Adding info to states");
             setUsername(user.username);
 
-            if (user.userDetails) {
-                setUserFirstName(user.userDetails.firstName);
-                setUserLastName(user.userDetails.lastName);
-                setUserGender(user.userDetails.gender);
-                setUserReligion(user.userDetails.religion);
-                setUserEthnicity(user.userDetails.ethnicity);
-                setUserLocation(user.userDetails.location);
-                setUserDoB(user.userDetails.dob);
+            if (user.profile.userDetails) {
+                setUserFirstName(user.profile.userDetails.firstName);
+                setUserLastName(user.profile.userDetails.lastName);
+                setUserGender(user.profile.userDetails.gender);
+                setUserReligion(user.profile.userDetails.religion);
+                setUserEthnicity(user.profile.userDetails.ethnicity);
+                setUserLocation(user.profile.userDetails.location);
+                setUserDoB(user.profile.userDetails.dob);
             }
-            if (user.pepeha) {
-                setUserMountain(user.pepeha.mountain);
-                setUserRiver(user.pepeha.river);
-                setUserWaka(user.pepeha.waka);
-                setUserIwi(user.pepeha.iwi);
-                setUserRole(user.pepeha.role);
+            if (user.profile.pepeha) {
+                setUserMountain(user.profile.pepeha.mountain);
+                setUserRiver(user.profile.pepeha.river);
+                setUserWaka(user.profile.pepeha.waka);
+                setUserIwi(user.profile.pepeha.iwi);
+                setUserRole(user.profile.pepeha.role);
             }
         }
         // console.log(pepehaObject);
@@ -116,7 +116,7 @@ export const UserSettings = () => {
             console.log("sending details to db");
 
             settingUserDetailsRef.current = false;
-            Meteor.call("security.updateUserDetails", userDetailsObject, Meteor.userId());
+            Meteor.call("users.updateUserDetails", userDetailsObject, Meteor.userId());
         }
     }, [userDetailsObject]);
 
@@ -129,7 +129,7 @@ export const UserSettings = () => {
             console.log("sending to db");
 
             settingPepehaRef.current = false;
-            Meteor.call("security.updatePepeha", pepehaObject, Meteor.userId());
+            Meteor.call("users.updatePepeha", pepehaObject, Meteor.userId());
         }
     }, [pepehaObject]);
 
@@ -150,7 +150,7 @@ export const UserSettings = () => {
     }
 
     const updateUsername = () => {
-        Meteor.call("security.updateUsername", username, Meteor.userId());
+        Meteor.call("users.updateUsername", username, Meteor.userId());
     };
 
     // const updateName = () => {
@@ -176,7 +176,6 @@ export const UserSettings = () => {
     const handleUpdateUserDetails = () => {
         if (changeUserDetails) {
             updateUserDetails();
-            console.log("details managed");
         }
         setChangeUserDetails(!changeUserDetails);
     }
@@ -184,7 +183,6 @@ export const UserSettings = () => {
     const handleUpdatePepeha = () => {
         if (changeUserPepeha) {
             updatePepeha();
-            console.log("mischief managed");
         }
         setChangeUserPepeha(!changeUserPepeha);
     }

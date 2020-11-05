@@ -11,7 +11,7 @@ Meteor.methods({
 
         Meteor.users.update(userId, {
             $set: {
-                pepeha: pepeha,
+                    "profile.pepeha": pepeha,
             },
         });
         return true;
@@ -37,15 +37,15 @@ Meteor.methods({
 
         Meteor.users.update(userId, {
             $set: {
-                userDetails: {
-                    firstName: detailsObject.firstName,
-                    lastName: detailsObject.lastName,
-                    ethnicity: detailsObject.ethnicity,
-                    location: detailsObject.location,
-                    gender: detailsObject.gender,
-                    dob: detailsObject.dob,
-                    religion: detailsObject.religion,
-                }
+                "profile.userDetails": {
+                        firstName: detailsObject.firstName,
+                        lastName: detailsObject.lastName,
+                        ethnicity: detailsObject.ethnicity,
+                        location: detailsObject.location,
+                        gender: detailsObject.gender,
+                        dob: detailsObject.dob,
+                        religion: detailsObject.religion,
+                    }
             },
         });
         return true;
@@ -76,22 +76,25 @@ Meteor.methods({
         const userId = Accounts.createUser({
             username: finalUserName,
             email:email,
-            pepeha: {
-                mountain:"",
-                river:"",
-                waka:"",
-                iwi:"",
-                role:"",
-            },
-            userDetails:{
-                firstName:"",
-                lastName:"",
-                ethnicity:"",
-                location:"",
-                gender:"",
-                dob:"",
-                religion:"",
-            },
+            profile: {
+                invitedBy: Meteor.userId(),
+                pepeha: {
+                    mountain: "",
+                    river: "",
+                    waka: "",
+                    iwi: "",
+                    role: "",
+                },
+                userDetails: {
+                    firstName: "",
+                    lastName: "",
+                    ethnicity: "",
+                    location: "",
+                    gender: "",
+                    dob: "",
+                    religion: "",
+                },
+            }
         });
         Accounts.sendEnrollmentEmail(userId);
         return true;
@@ -104,7 +107,7 @@ Meteor.methods({
         console.log("adding friend: ", friendId);
         Meteor.users.update(userId,
             { $addToSet:
-                {friendList: friendId}
+                {"profile.friendList": friendId}
             }
         );
         return true;
@@ -117,7 +120,7 @@ Meteor.methods({
 
         Meteor.users.update(userId,
             { $pull:
-                    {friendList: friendId}
+                    {"profile.friendList": friendId}
             }
         );
         return true;
@@ -130,7 +133,7 @@ Meteor.methods({
         console.log("adding pending friend: ", friendId);
         Meteor.users.update(userId,
             { $addToSet:
-                    {pendingFriendList: friendId}
+                    {"profile.pendingFriendList": friendId}
             }
         );
         return true;
@@ -143,7 +146,7 @@ Meteor.methods({
 
         Meteor.users.update(userId,
             { $pull:
-                    {pendingFriendList: friendId}
+                    {"profile.pendingFriendList": friendId}
             }
         );
         return true;
@@ -169,10 +172,10 @@ if (Meteor.isServer) {
             {
                 fields: {
                     username: 1,
-                    userDetails: 1,
-                    friendList: 1,
-                    pendingFriendList: 1,
-                    pepeha: 1,
+                    "profile.userDetails": 1,
+                    "profile.friendList": 1,
+                    "profile.pendingFriendList": 1,
+                    "profile.pepeha": 1,
                     online: 1,
                 },
             }
