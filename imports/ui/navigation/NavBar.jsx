@@ -14,11 +14,9 @@ import {Link, useHistory} from "react-router-dom";
 import {useTracker} from "meteor/react-meteor-data";
 import {LoginForm} from "/imports/ui/users/LoginForm";
 
-// userLang = new Cookies().get('lang');
-
 export const NavBar = ({handleChangeLanguage}) => {
     const [showLogin, setShowLogin] = useState(false);
-    const [userLang, setUserLang] = useState("mā");
+    const [userLang, setUserLang] = useState("mā"); //defaulting to māori language
     const cookies = new Cookies();
     // userLang = cookies.get('lang');
     let history = useHistory();
@@ -44,7 +42,6 @@ export const NavBar = ({handleChangeLanguage}) => {
         // console.log(cookies.get('lang'));
         handleChangeLanguage(lang);
         setUserLang(lang);
-        // export let userLang = cookies.get('lang');
     }
     return (
         <div className="navbar">
@@ -80,16 +77,14 @@ export const NavBar = ({handleChangeLanguage}) => {
                         <Dropdown item text={"lang"}
                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>
                             <Dropdown.Menu>
-                                <Dropdown.Item style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}
-                                               text={'English'}
-                                               value={'en'}
-                                               onClick={(e, data) => updateUserLang(data.value)}
-                                />
-                                <Dropdown.Item style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}
-                                               text={'Māori'}
-                                               value={'mā'}
-                                               onClick={(e, data) => updateUserLang(data.value)}
-                                />
+                                {siteGlossary.languages && Object.keys(siteGlossary.languages).map((langKey)=>(
+                                    <Dropdown.Item style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}
+                                                   key={langKey}
+                                                   text={siteGlossary.languages[langKey]}
+                                                   value={langKey}
+                                                   onClick={(e, data) => updateUserLang(data.value)}
+                                    />
+                                ))}
                             </Dropdown.Menu>
                         </Dropdown>
                         {!user &&
