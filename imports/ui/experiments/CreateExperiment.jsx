@@ -75,6 +75,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            closeOnDimmerClick={false}
             size="small"
         >
             <Modal.Header>Create an Experiment</Modal.Header>

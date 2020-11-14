@@ -65,6 +65,7 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            closeOnDimmerClick={false}
             size="small"
         >
             <Modal.Header>Create a Scenario Set</Modal.Header>

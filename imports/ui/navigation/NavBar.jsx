@@ -65,6 +65,7 @@ export const NavBar = () => {
                                 onClick={() => {
                                     handleSignUp();
                                 }}
+                                className={'signUp'}
                                 content="Sign Up"
                                 negative
                                 style={{fontFamily:'Tamaiti', fontWeight:'bold', fontSize:'24px'}}

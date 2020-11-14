@@ -52,6 +52,7 @@ console.log("wizard? ", isWizard);
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            closeOnDimmerClick={false}
             size="small"
         >
             <Modal.Header>Create a Group</Modal.Header>

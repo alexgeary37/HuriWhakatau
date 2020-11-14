@@ -5,7 +5,9 @@ export const VerdictDisplay = () => {
   const [verdict, setText] = useState("");
 
     return (
-        <Modal open={true} size="tiny">
+        <Modal open={true}
+               closeOnDimmerClick={false}
+               size="tiny">
             <Modal.Header>Verdict</Modal.Header>
             <Modal.Content>
                 <Modal.Description>

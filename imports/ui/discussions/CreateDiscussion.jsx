@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Categories} from "../../api/categories";
 import {Topics} from "../../api/topics";
+import {Tour} from "../navigation/Tour";
 import {Groups} from "../../api/groups";
 import {DiscussionTemplates} from "../../api/discussionTemplate";
 
@@ -9,7 +11,7 @@ export const CreateDiscussion = ({toggleModal}) => {
     const [discussionTitle, setDiscussionTitle] = useState("");
     const [timeLimit, setTimeLimit] = useState(0);
     const [description, setDescription] = useState("");
-    const [topicId, setTopicId] = useState("wyXdeAoBGGKXPaEh5");
+    const [categoryId, setCategoryId] = useState("");
     const [groupId, setGroupId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
     const [isHui, setIsHui] = useState(false);
@@ -17,6 +19,13 @@ export const CreateDiscussion = ({toggleModal}) => {
     const [createNewGroup, setCreateNewGroup] = useState(false);
     const [groupName, setGroupName] = useState("");
     const [errGroupName, setErrGroupName] = useState("");
+    const createDiscussionTour = [
+        {
+            target: ".newDiscussion1",
+            content: "Give your discussion a title like 'Should Badgers be welcomed into polite Rabbit society?'" +
+                " and a description giving more detail"
+        },
+    ];
 
     const submitDiscussion = () => {
         if (groupName.length === 0 && createNewGroup) {
@@ -42,7 +51,7 @@ export const CreateDiscussion = ({toggleModal}) => {
     }
 
     const insertDiscussion = (newGroupId) => {
-        Meteor.call("scenarios.create", discussionTitle, description, topicId, discussionTemplate._id,
+        Meteor.call("scenarios.create", discussionTitle, description, categoryId, discussionTemplate._id,
             (error, result) => {
                 Meteor.call("discussions.insert", result, groupId.length !== 0 ? groupId : newGroupId, timeLimit, isHui, true);
             })
@@ -53,18 +62,27 @@ export const CreateDiscussion = ({toggleModal}) => {
         toggleModal();
     }
 
-    const {groups, topics, discussionTemplate} = useTracker(() => {
+    const {groups, categories, discussionTemplate} = useTracker(() => {
         Meteor.subscribe("groups");
         Meteor.subscribe("topics");
+        Meteor.subscribe("categories");
         Meteor.subscribe("discussionTemplates");
 
         //todo filter by user
         return {
             groups: Groups.find({members: {$elemMatch: {$eq: Meteor.userId()}}}).fetch(),
-            topics: Topics.find().fetch(),
+            categories: Categories.find().fetch(),//Topics.find().fetch(),
             discussionTemplate: DiscussionTemplates.findOne({name: "Default - Users Can Edit Comments"}),
         };
     });
+
+//check if user is in the discussion group
+    const getOtherCategory = () => {
+        if (categories.length > 0) {
+            setCategoryId(categories.find(cat => cat.title === 'Other')._id);
+        }
+    }
+    useEffect(getOtherCategory, [categories]);
 
     // enable form items as this functionality becomes available
     return (
@@ -72,9 +90,11 @@ export const CreateDiscussion = ({toggleModal}) => {
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            closeOnDimmerClick={false}
             size="small"
         >
-            <Modal.Header>Create A Discussion</Modal.Header>
+            <Tour TOUR_STEPS={createDiscussionTour}/>
+            <Modal.Header className={'newDiscussion1'} >Create A Discussion</Modal.Header>
             <Modal.Content>
                 <Form>
                     <Input
@@ -100,21 +120,21 @@ export const CreateDiscussion = ({toggleModal}) => {
                     <br/>
                     <br/>
                     <Form.Dropdown
-                        label="Topic"
-                        loading={topics.length === 0}
+                        label="Category"
+                        loading={categories.length === 0}
                         selection
                         search
                         options={
-                            topics &&
-                            topics.map((topic) => ({
-                                key: topic._id,
-                                text: topic.title,
-                                value: topic._id,
+                            categories &&
+                            categories.map((category) => ({
+                                key: category._id,
+                                text: category.title,
+                                value: category._id,
                             }))
                         }
-                        name="topics"
-                        value={topicId}
-                        onChange={(e, {value}) => setTopicId(value)}
+                        name="categories"
+                        value={categoryId}
+                        onChange={(e, {value}) => setCategoryId(value)}
                     />
                     <br/>
                     <Form.Dropdown

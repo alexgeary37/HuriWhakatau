@@ -11,11 +11,24 @@ import {
   Divider, Sidebar,
 } from "semantic-ui-react";
 import { Discussions } from "/imports/api/discussions";
+import { Tour } from "./Tour";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { Sidebars } from "./Sidebars";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 
 export const Dashboard = () => {
+  const splashTourSteps = [
+    {
+      target: '.signUp',
+      content: (
+          <div>
+            <p>
+              Sign up for more access.
+            </p>
+          </div>
+      )
+    }
+  ];
 
   const { discussions, publicDiscussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
@@ -35,6 +48,7 @@ export const Dashboard = () => {
 
   return (
     <div>
+      <Tour TOUR_STEPS={splashTourSteps}/>
       <NavBar />
       {/*<span style={{height:"20em"}} />*/}
       <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(25,50,26)'}}>

@@ -18,6 +18,7 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-easy-swipe": "0.0.18",
+    "react-joyride": "^2.2.1",
     "react-markdown": "^4.3.1",
     "react-moment": "^0.9.7",
     "react-notification-badge": "^1.5.1",
