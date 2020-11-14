@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {Categories} from "../../api/categories";
-import {Topics} from "../../api/topics";
 import {Tour} from "../navigation/Tour";
 import {Groups} from "../../api/groups";
 import {DiscussionTemplates} from "../../api/discussionTemplate";
@@ -71,7 +70,7 @@ export const CreateDiscussion = ({toggleModal}) => {
         //todo filter by user
         return {
             groups: Groups.find({members: {$elemMatch: {$eq: Meteor.userId()}}}).fetch(),
-            categories: Categories.find().fetch(),//Topics.find().fetch(),
+            categories: Categories.find().fetch(),
             discussionTemplate: DiscussionTemplates.findOne({name: "Default - Users Can Edit Comments"}),
         };
     });

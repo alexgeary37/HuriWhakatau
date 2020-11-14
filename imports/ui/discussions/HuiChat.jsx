@@ -26,7 +26,6 @@ import {Verdicts} from "/imports/api/verdicts";
 import {Scenarios} from "/imports/api/scenarios";
 import {Discussions} from "/imports/api/discussions";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
-import {Timer} from "./Timer";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Verdict} from "/imports/ui/verdicts/Verdict";
 import {Sidebars} from "/imports/ui/navigation/Sidebars";
