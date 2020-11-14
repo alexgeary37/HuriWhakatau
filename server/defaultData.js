@@ -8,7 +8,6 @@ import "/imports/api/discussionTemplate";
 import {Roles} from "meteor/alanning:roles";
 import {Meteor} from "meteor/meteor";
 import {Groups} from "../imports/api/groups";
-import {Topics} from "../imports/api/topics";
 import {Scenarios} from "../imports/api/scenarios";
 import {Categories} from "../imports/api/categories";
 import {ScenarioSets} from "../imports/api/scenarioSets";
@@ -18,10 +17,6 @@ import {DiscussionTemplates} from "../imports/api/discussionTemplate"
 
 // set up checks that each item doesn’t exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
-    //create topics if not exist
-    if(Topics.find().count() === 0){
-        //add some default discussion topics here, like Tamahau's ones
-    }
 //create categories if the basic set doesn't exist
     let categoryId;
     if (Categories.find().count() === 0) {

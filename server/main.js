@@ -15,6 +15,7 @@ import "/imports/api/accountsEmail"
 import "/server/defaultData";
 import "/imports/api/mountains";
 import "/imports/api/users"
+import "/imports/api/glossary";
 
 Meteor.startup(() => {
     process.env.MAIL_URL =

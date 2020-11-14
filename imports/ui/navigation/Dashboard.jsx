@@ -10,13 +10,22 @@ import {
   Icon,
   Divider, Sidebar,
 } from "semantic-ui-react";
+import {siteGlossary} from "../../api/glossary";
 import { Discussions } from "/imports/api/discussions";
 import { Tour } from "./Tour";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { Sidebars } from "./Sidebars";
 import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
+import Cookies from "universal-cookie/lib";
 
 export const Dashboard = () => {
+  //set up changing language on site based on user nav menu selection
+  const [userLang, setUserLang] = useState("mā");
+  const handleChangeLanguage = (lang) =>{
+    console.log("changed")
+    setUserLang(lang);
+  }
+  //set up tour of page
   const splashTourSteps = [
     {
       target: '.signUp',
@@ -46,10 +55,11 @@ export const Dashboard = () => {
     };
   });
 
+  // noinspection JSNonASCIINames
   return (
     <div>
       <Tour TOUR_STEPS={splashTourSteps}/>
-      <NavBar />
+      <NavBar handleChangeLanguage={handleChangeLanguage}/>
       {/*<span style={{height:"20em"}} />*/}
       <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(25,50,26)'}}>
         <Sidebars />
@@ -59,16 +69,16 @@ export const Dashboard = () => {
           <Header size="huge">
             <Header.Content as={Container} fluid >
 
-              Welcome to Huri Whakatau
+              {siteGlossary.siteWelcome[userLang] + " " + siteGlossary.siteName[userLang]}
             </Header.Content>
           </Header>
 
         </Segment>
 
         <Segment attached="bottom" inverted style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-          <Header content="Kōrerorero" />
+          <Header content={siteGlossary.userDiscourse[userLang]}/>
           <Segment inverted attached="top" style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-            <Header as={'h3'} content={"Public kōrerorero"} />
+            <Header as={'h3'} content={"Public " + siteGlossary.userDiscourse[userLang]} />
             <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
               {publicDiscussions &&
               publicDiscussions.map((discussion) => (
@@ -80,7 +90,7 @@ export const Dashboard = () => {
             </List>
           </Segment>
           <Segment inverted attached="top" style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-            <Header as={'h3'} content={"Finished kōrerorero"} />
+            <Header as={'h3'} content={"Finished " + siteGlossary.userDiscourse[userLang]} />
             <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
               {discussions &&
               discussions.map((discussion) => (
