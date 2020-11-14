@@ -28,19 +28,21 @@ export const ViewGroup = ({toggleModal, group}) => {
             onOpen={() => setIsOpen(true)}
             open={isOpen}
             size="small"
+            closeOnDimmerClick={false}
         >
-            <Modal.Header>Group</Modal.Header>
+            <Modal.Header>Group: {group.name}</Modal.Header>
 
             <Modal.Content>
-                <Header as={'h4'} content={'Group Name: ' + group.name}/>
+                <Header as={'h5'} content={'Group Members: '}/>
                 {members && members.map((member) => (
-                    <div>{member.username}</div>
+                    <p>{member.username}<span>{member._id === Meteor.userId() &&
+                    <span>(you)</span>}</span></p>
                 ))}
             </Modal.Content>
             <Modal.Actions>
                 {members && members.map((member) => (
                     <span>{member._id === Meteor.userId() &&
-                    <Button style={{marginRight: '15px'}} content={'Leave Group'} onClick={leaveGroup}/>}</span>
+                    <Button style={{marginRight: '15px'}} content={'Remove yourself from group'} onClick={leaveGroup}/>}</span>
                 ))}
                 <Button content={'Close'} onClick={toggleIt}/>
             </Modal.Actions>

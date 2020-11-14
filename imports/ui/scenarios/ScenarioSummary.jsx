@@ -14,7 +14,6 @@ export const ScenarioSummary = ({scenario}) => {
         const templatesSub = Meteor.subscribe("discussionTemplates");
         let template;
         if (templatesSub.ready()) {
-            console.log("ready")
             template = DiscussionTemplates.findOne({_id: scenario.discussionTemplateId});
         }
 
@@ -22,10 +21,6 @@ export const ScenarioSummary = ({scenario}) => {
             discussionTemplate: template,
         };
     });
-    const printTempl = () => {
-        console.log("template: ", discussionTemplate);
-    }
-    useEffect(printTempl, [discussionTemplate]);
 
     return (
         <List.Item /*as={Link} to={`/scenarios/${scenario._id}`}*/>
@@ -33,7 +28,6 @@ export const ScenarioSummary = ({scenario}) => {
                 backgroundColor: "#c4c4c4",
             }}>
                 <List.Header as={'h4'} content={scenario && scenario.title}/>
-                {scenario._id}
                 <List.Description
                     content={discussionTemplate && "Template: " + discussionTemplate.name}
                 />

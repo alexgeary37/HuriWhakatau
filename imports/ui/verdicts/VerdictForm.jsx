@@ -5,7 +5,9 @@ export const VerdictForm = ({ discussionId }) => {
   const [verdict, setText] = useState("");
 
   return (
-    <Modal open={true} size="tiny">
+    <Modal open={true}
+           closeOnDimmerClick={false}
+           size="tiny">
       <Modal.Header>Propose a Verdict</Modal.Header>
       <Modal.Content>
         <Modal.Description>

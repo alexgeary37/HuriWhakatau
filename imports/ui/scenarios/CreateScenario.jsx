@@ -86,6 +86,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            closeOnDimmerClick={false}
             size="small"
         >
             <Modal.Header>Create a Scenario</Modal.Header>

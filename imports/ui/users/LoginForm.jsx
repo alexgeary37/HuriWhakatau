@@ -34,6 +34,7 @@ export const LoginForm = ({toggleModal}) => {
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             open={open}
+            closeOnDimmerClick={false}
             size="mini"
             style={{padding: "10px"}}
         >

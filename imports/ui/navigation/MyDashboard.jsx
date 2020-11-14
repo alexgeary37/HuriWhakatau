@@ -18,6 +18,7 @@ import {Discussions} from "/imports/api/discussions";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {NavBar} from "./NavBar";
+import {Tour} from "./Tour";
 import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
@@ -31,7 +32,6 @@ import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
-
 
 export const MyDashboard = () => {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -53,6 +53,72 @@ export const MyDashboard = () => {
     const [friendEmail, setFriendEmail] = useState("");
     const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
+    const participantTourSteps = [
+        {
+            target: ".myDiscussions",
+            content: (<div>
+                <p>Here are the discussions you are part of.</p>
+                <p>Click one to add comments</p>
+            </div>)
+        },
+        {
+            target: ".finishedDiscussions",
+            content: (<div>
+                <p>Here are discussions that have concluded and can no longer have new comments.</p>
+                <p>Click one to see how the discussion went</p>
+            </div>)
+        },
+        {
+            target: ".myGroups",
+            content: (<div>
+                <p>Here are the groups you are part of.</p>
+                <p>Click 'Open' to see your fellow group members or leave the group</p>
+            </div>)
+        },
+        {
+            target: ".newDiscussion",
+            content: (<div>
+                <p>Click here to start a new discussion.</p>
+            </div>)
+        },
+    ];
+    const researcherTourSteps = [
+        {
+            target: ".discussionTemplates",
+            content: (<div>
+                <p>Here are your discussion templates.</p>
+                <p>By default you get three pre-made templates.</p>
+                <p> Click 'Open' to see the parameters set in each template.</p>
+            </div>)
+        },
+        {
+            target: ".myScenarios",
+            content: (<div>
+                <p>Here are your scenarios.</p>
+                <p>A scenario is a combination of discussion topic, discussion template and discussion category.
+                    This determines what your users will be talking about and what discussion options will be enabled.</p>
+                <p>Click the 'Open' button to see the scenario details.</p>
+            </div>)
+        },
+        {
+            target: ".myScenarioSets",
+            content: (<div><p>Here are your scenario sets.</p>
+                <p>A scenario set is a list of individual scenarios.
+                    When added to an Experiment this will create the discussions you want to group together.</p>
+                <p>Click the 'Open' button to see the scenario list.</p></div>)
+        },
+        {
+            target: ".myExperiments",
+            content: (<div>
+                <p>Here are your experiments. This is where the magic happens.</p>
+                <p>An experiment is a combination of a user group with a scenario set.
+                    On creating the experiment all the associated discussions will be generated with the
+                    setting determined by the discussion templates associated with each scenario.
+                    Once generated the discussions will be available to the selected users to participate in.</p>
+                <p>Click the 'Open' button to see the experiment details.</p></div>)
+        },
+    ];
+
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
     }
@@ -269,11 +335,19 @@ export const MyDashboard = () => {
                     fluid
                     focus
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    /*onChange={(e) => setSearchTerm(e.currentTarget.value)}*/
+                    onChange={(e) => {e.currentTarget.value.indexOf("@") > 0
+                        ? setFriendEmail(e.currentTarget.value) : null;
+                        setSearchTerm(e.currentTarget.value);
+                    }}
                 />
-                <Button fluid onClick={submitFriendSearch} icon labelPosition='right'>
+                <Button  onClick={submitFriendSearch} icon labelPosition='right'>
                     Search
                     <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
+                </Button>
+                <Button  onClick={inviteFriend} icon labelPosition='right'>
+                    Invite
+                    <Icon name={'envelope'}/>
                 </Button>
             </div>
         );
@@ -283,26 +357,27 @@ export const MyDashboard = () => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
                 <h3>Sorry No friends found, invite one!</h3>
-                <Input
-                    style={{marginTop: '10px'}}
-                    type="text"
-                    placeholder="email address"
-                    name="inviteFriends"
-                    fluid
-                    focus
-                    value={friendEmail}
-                    onChange={(e) => setFriendEmail(e.currentTarget.value)}
-                />
-                <Button fluid onClick={inviteFriend} icon labelPosition='right'>
-                    Invite
-                    <Icon name={'envelope'}/>
-                </Button>
+                {/*<Input*/}
+                {/*    style={{marginTop: '10px'}}*/}
+                {/*    type="text"*/}
+                {/*    placeholder="email address"*/}
+                {/*    name="inviteFriends"*/}
+                {/*    fluid*/}
+                {/*    focus*/}
+                {/*    value={friendEmail}*/}
+                {/*    onChange={(e) => setFriendEmail(e.currentTarget.value)}*/}
+                {/*/>*/}
+                {/*<Button fluid onClick={inviteFriend} icon labelPosition='right'>*/}
+                {/*    Invite*/}
+                {/*    <Icon name={'envelope'}/>*/}
+                {/*</Button>*/}
             </div>
         );
     }
 
     return (
         <div>
+            <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
             <NavBar/>
             <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}} >
                 {/* right sidebar */}
@@ -423,15 +498,16 @@ export const MyDashboard = () => {
                             </Header>
                         </Segment>
 
-                        <Grid doubling style={{overflow: "auto", height: "87vh"}}>
+                        <Grid doubling /*style={{overflow: "auto", height: "87vh"}}*/>
                             <GridRow columns={2}>
                                 <GridColumn width={8}>
                                     <Segment style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
-                                        <Header as={'h3'}>My Discussions
+                                        <Header as={'h3'} className={'myDiscussions'} >My Discussions
                                             <Button
+                                                className={'newDiscussion'}
                                                 floated={"right"}
                                                 onClick={handleToggleDiscussion}
                                                 content="New Discussion"
@@ -460,7 +536,7 @@ export const MyDashboard = () => {
                                 <GridColumn width={8}>
                                     <Segment style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <Header as={'h3'}>All Finished Discussions</Header>
+                                        <Header as={'h3'} className={'finishedDiscussions'} >All Finished Discussions</Header>
                                         <ListItem style={{overflow: "auto", height: "16em"}}
                                                   description={allFinishedDiscussions &&
                                                   allFinishedDiscussions.map((discussion) => (
@@ -478,7 +554,7 @@ export const MyDashboard = () => {
                             <GridRow columns={3}>
                                 <GridColumn width={5}>
                                     <Segment style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
-                                        <Header as={'h3'}>My Groups</Header>
+                                        <Header as={'h3'} className={'myGroups'} >My Groups</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={groups &&
                                                   groups.map((group) => (
@@ -504,7 +580,7 @@ export const MyDashboard = () => {
                                     <GridColumn width={6}>
                                         <Segment style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                            <Header as={'h3'}>My Discussion Templates</Header>
+                                            <Header as={'h3'} className={'discussionTemplates'}>My Discussion Templates</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
                                                       description={discussionTemplates &&
                                                       discussionTemplates.map((discussionTemplate) => (
@@ -529,7 +605,7 @@ export const MyDashboard = () => {
                                     <GridColumn width={5}>
                                         <Segment style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                            <Header as={'h3'}>My scenarios</Header>
+                                            <Header as={'h3'} className={'myScenarios'}>My scenarios</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
                                                       description={scenarios &&
                                                       scenarios.map((scenario) => (
@@ -558,7 +634,7 @@ export const MyDashboard = () => {
                                 <GridColumn width={5}>
                                     <Segment style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <Header as={'h3'}>My Scenario Sets</Header>
+                                        <Header as={'h3'} className={'myScenarioSets'}>My Scenario Sets</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={scenarioSets &&
                                                   scenarioSets.map((scenarioSet) => (
@@ -581,7 +657,7 @@ export const MyDashboard = () => {
                                 <GridColumn width={6}>
                                     <Segment style={{height: "21em"}} inverted
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <Header as={'h3'}>My Experiments</Header>
+                                        <Header as={'h3'} className={'myExperiments'}>My Experiments</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={experiments &&
                                                   experiments.map((experiment) => (

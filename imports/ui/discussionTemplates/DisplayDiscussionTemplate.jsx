@@ -26,6 +26,7 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
             onOpen={() => setIsOpen(true)}
             open={isOpen}
             size="small"
+            closeOnDimmerClick={false}
         >
             <Modal.Header>Discussion Template</Modal.Header>
             <Modal.Content>

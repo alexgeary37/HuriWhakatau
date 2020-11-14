@@ -31,6 +31,7 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
             onClose={() => setIsOpen(false)}
             onOpen={() => setIsOpen(true)}
             open={isOpen}
+            closeOnDimmerClick={false}
             size="small"
         >
             <Modal.Header>Scenario</Modal.Header>
