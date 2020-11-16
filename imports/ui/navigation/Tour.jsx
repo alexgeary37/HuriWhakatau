@@ -34,6 +34,7 @@ export const Tour = ({TOUR_STEPS}) => {
                     options: {
                         // arrowColor: '#e3ffeb',
                         // backgroundColor: '#e3ffeb',
+                        position: 'relative',
                         beaconSize: 70,
                         // overlayColor: 'rgba(79, 26, 0, 0.4)',
                         primaryColor: 'yellow',
