@@ -16,13 +16,16 @@ Meteor.methods({
     description,
     groupId,
     scenarioSetId,
-    hasIntroduction
+    hasIntroduction,
+    ratings,
   ) {
     check(name, String);
     check(description, String);
     check(groupId, String);
     check(scenarioSetId, String);
+    check(ratings, Array);
     let discussionIds = [];
+    console.log(ratings);
     //addcheck for user admin/researcher role
 
     const experimentId = Experiments.insert({
@@ -30,6 +33,7 @@ Meteor.methods({
       description: description,
       groupId: groupId,
       scenarioSetId: scenarioSetId,
+      ratings: ratings,
       createdAt: new Date(),
       createdBy: Meteor.userId(),
     });

@@ -53,6 +53,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                 groupId,
                 scenarioSetId,
                 hasIntroduction,
+                ratings,
             );
             toggleIt(e);
         }
