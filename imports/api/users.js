@@ -130,7 +130,7 @@ Meteor.methods({
     "users.addPendingFriend"(userId, friendId){
         check(userId, String);
         check(friendId, String);
-        console.log("adding pending friend: ", friendId);
+        console.log("adding pending friend: ", friendId, "to user", userId);
         Meteor.users.update(userId,
             { $addToSet:
                     {"profile.pendingFriendList": friendId}
@@ -177,6 +177,7 @@ if (Meteor.isServer) {
                     "profile.pendingFriendList": 1,
                     "profile.pepeha": 1,
                     online: 1,
+                    status: 1,
                 },
             }
         );

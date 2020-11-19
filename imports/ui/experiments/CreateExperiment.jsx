@@ -1,9 +1,10 @@
 import React, {useState} from "react";
-import {Container, Segment, Form, Modal, Button, Checkbox, Tab} from "semantic-ui-react";
+import {Container, Segment, Form, Modal, Button, Checkbox, Tab, Label} from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {Groups} from "/imports/api/groups";
+import {responseSet} from "../../api/ratingResponses";
 
 export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [name, setName] = useState("");
@@ -17,11 +18,11 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [errGroupId, setErrGroupId] = useState("");
     const [errScenarioSetId, setErrScenarioSetId] = useState("");
     const [ratings, setRatings] = useState([
-        {rating: "", scale: 0, reverse: false, response: "Agreement"},
-        {rating: "", scale: 0, reverse: false, response: "Agreement"},
-        {rating: "", scale: 0, reverse: false, response: "Agreement"},
-        {rating: "", scale: 0, reverse: false, response: "Agreement"},
-        {rating: "", scale: 0, reverse: false, response: "Agreement"}]);
+        {rating: "", scale: 7, reverse: false, response: "Agreement"},
+        {rating: "", scale: 7, reverse: false, response: "Agreement"},
+        {rating: "", scale: 7, reverse: false, response: "Agreement"},
+        {rating: "", scale: 7, reverse: false, response: "Agreement"},
+        {rating: "", scale: 7, reverse: false, response: "Agreement"}]);
     const [numberOfRatings, setNumberOfRatings] = useState(1);
 
     const submitExperiment = (e) => {
@@ -86,20 +87,18 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
         {points: 7, range: "0-6"}
     ];
     const incrementNumberOfRatings = () => {
-        setNumberOfRatings( numberOfRatings + 1 );
+        setNumberOfRatings(numberOfRatings + 1);
     }
 
+    // should collapse these to a single method
     const addRating = (target) => {
-        console.log("ratings=", ratings);
         let currentRatings = [...ratings];
-        console.log("currentratings=", currentRatings);
         let index = parseInt(target.name);
         currentRatings[index].rating = target.value;
         setRatings(currentRatings => [...currentRatings]);
     }
 
     const addScale = (data) => {
-        console.log("data= ",data);
         let currentRatings = [...ratings];
         let index = parseInt(data.name);
         currentRatings[index].scale = data.value;
@@ -109,7 +108,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const toggleRatingReverse = (data) => {
         let currentRatings = [...ratings];
         let index = parseInt(data.name);
-        console.log("index=", index);
         currentRatings[index].reverse = data.checked;
         setRatings(currentRatings => [...currentRatings]);
     }
@@ -122,18 +120,18 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     }
 
 
-    const responseSet = [
-        {type: "Frequency", range: "Never-Always"},
-        {type: "Quality", range: "V.Poor-Excellent"},
-        {type: "Intensity", range: "None-Severe"},
-        {type: "Agreement", range: "S.Disagree-S.Agree"},
-        {type: "Approval", range: "S.Disapprove-S.Approve"},
-        {type: "Awareness", range: "Not Aware-Extremely Aware"},
-        {type: "Importance", range: "Not at all Important-Extremely Important"},
-        {type: "Familiarity", range: "Not at all Familiar-Extremely Familiar"},
-        {type: "Satisfaction", range: "Not at all Satisfied-Extremely Satisfied"},
-        {type: "Performance", range: "Far below Standards-Far above Standards"},
-    ];
+    // const responseSet = [
+    //     {type: "Frequency", range: "Never-Always"},
+    //     {type: "Quality", range: "V.Poor-Excellent"},
+    //     {type: "Intensity", range: "None-Severe"},
+    //     {type: "Agreement", range: "S.Disagree-S.Agree"},
+    //     {type: "Approval", range: "S.Disapprove-S.Approve"},
+    //     {type: "Awareness", range: "Not Aware-Extremely Aware"},
+    //     {type: "Importance", range: "Not at all Important-Extremely Important"},
+    //     {type: "Familiarity", range: "Not at all Familiar-Extremely Familiar"},
+    //     {type: "Satisfaction", range: "Not at all Satisfied-Extremely Satisfied"},
+    //     {type: "Performance", range: "Far below Standards-Far above Standards"},
+    // ];
 
 
     const panes = [
@@ -175,6 +173,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                             <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                         )}
                         {/*show groups and scenarioSets, get ids for db*/}
+                        <Form.Group widths={2}>
                         <Form.Dropdown
                             label="Group"
                             loading={groups.length === 0}
@@ -229,6 +228,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                         ) : (
                             <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                         )}
+                        </Form.Group>
                         <Checkbox checked={hasIntroduction} label='Create an Introduction Lounge'
                                   onClick={(e, data) => setHasIntroduction(data.checked)}/>
                         <br/>
@@ -241,9 +241,15 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
             menuItem: 'Comment Ratings', render: () =>
                 <Tab.Pane style={{border: 'none'}}>
                     <Form as={Segment} attached="bottom" style={{border: 'none'}}>
-                        <Form.Group>
+                        <Button.Group widths={5} disabled>
+                            <Button basic content={"Rating"} style={{textAlign: 'left'}}/>
+                            <Button basic content={"Scale"} style={{textAlign: 'left'}}/>
+                            <Button basic content={"Response set"} style={{textAlign: 'left'}}/>
+                            <Button basic content={"Responses"} style={{textAlign: 'left'}}/>
+                            <Button basic content={"Reverse scoring"} style={{textAlign: 'left'}}/>
+                        </Button.Group>
+                        <Form.Group widths={5}>
                             <Form.Input
-                                label={"Rating"}
                                 name={'0'}
                                 type="text"
                                 placeholder={'User Rating condition 1'}
@@ -252,7 +258,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 onInput={({target}) => (addRating(target))}
                             />
                             <Form.Dropdown
-                                label={"Scale"}
                                 name={'0'}
                                 selection
                                 options={
@@ -267,7 +272,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                             />
                             <Form.Dropdown
                                 name={'0'}
-                                label={"Response Set"}
                                 selection
                                 options={
                                     responseSet.map((response) => ({
@@ -279,15 +283,16 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 value={ratings[0].response}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
+                            <Form.Field width={3}
+                                        content={responseSet.filter(response => response.type === ratings[0].response)[0].range}/>
                             <Checkbox toggle
-                                      label={'Reverse Scoring'}
                                       name={'0'}
                                       checked={ratings[0].reverse}
                                       onChange={(event, data) => toggleRatingReverse(data)}
                             />
                         </Form.Group>
                         {numberOfRatings > 1 &&
-                        <Form.Group>
+                        <Form.Group widths={5}>
                             <Form.Input
                                 name={'1'}
                                 type="text"
@@ -320,6 +325,8 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 value={ratings[1].response}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
+                            <Form.Field width={3}
+                                         content={responseSet.filter(response => response.type === ratings[1].response)[0].range}/>
                             <Checkbox toggle
                                       name={'1'}
                                       checked={ratings[1].reverse}
@@ -327,7 +334,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                             />
                         </Form.Group>}
                         {numberOfRatings > 2 &&
-                        <Form.Group>
+                        <Form.Group widths={5}>
                             <Form.Input
                                 name={'2'}
                                 type="text"
@@ -360,6 +367,8 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 value={ratings[2].response}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
+                            <Form.Field width={3}
+                                        content={responseSet.filter(response => response.type === ratings[2].response)[0].range}/>
                             <Checkbox toggle
                                       name={'2'}
                                       checked={ratings[2].reverse}
@@ -367,7 +376,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                             />
                         </Form.Group>}
                         {numberOfRatings > 3 &&
-                        <Form.Group>
+                        <Form.Group widths={5}>
                             <Form.Input
                                 name={'3'}
                                 type="text"
@@ -400,6 +409,8 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 value={ratings[3].response}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
+                            <Form.Field width={3}
+                                        content={responseSet.filter(response => response.type === ratings[3].response)[0].range}/>
                             <Checkbox toggle
                                       name={'3'}
                                       checked={ratings[3].reverse}
@@ -407,7 +418,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                             />
                         </Form.Group>}
                         {numberOfRatings > 4 &&
-                        <Form.Group>
+                        <Form.Group widths={5}>
                             <Form.Input
                                 name={'4'}
                                 type="text"
@@ -440,6 +451,8 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 value={ratings[4].response}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
+                            <Form.Field width={3}
+                                        content={responseSet.filter(response => response.type === ratings[4].response)[0].range}/>
                             <Checkbox toggle
                                       name={'4'}
                                       checked={ratings[4].reverse}
@@ -463,7 +476,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
             onOpen={() => setIsOpen(true)}
             open={isOpen}
             closeOnDimmerClick={false}
-            // size="small"
+            size="large"
         >
             <Modal.Header>Create an Experiment</Modal.Header>
             <Modal.Content>
