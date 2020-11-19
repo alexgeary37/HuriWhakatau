@@ -21,3 +21,4 @@ react-meteor-data       # React higher-order component for reactively tracking M
 accounts-password@1.6.2
 meteortesting:mocha
 alanning:roles
+mizzao:user-status

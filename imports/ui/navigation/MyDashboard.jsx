@@ -31,6 +31,7 @@ import {CreateScenarioSet} from "../scenarioSets/CreateScenarioSet";
 import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
+import NotificationBadge from "react-notification-badge";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 
 export const MyDashboard = () => {
@@ -197,7 +198,7 @@ export const MyDashboard = () => {
         Meteor.subscribe("scenarioSets");
         Meteor.subscribe("discussionTemplates");
         Meteor.subscribe("experiments");
-        const userSub = Meteor.subscribe("users");
+        let userSub = Meteor.subscribe("users");
         let fetchedFriendIds = [];
         let fetchedFriends = [];
         let fetchedPendingFriendIds = [];
@@ -226,17 +227,16 @@ export const MyDashboard = () => {
 
         //once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
-        if (userSub.ready() && userId) {
+        if (userSub.ready()) {
             currentUser = Meteor.users.findOne({_id: userId});
             if (currentUser.profile.friendList) {
-                console.log("friendslist", currentUser.profile.friendList);
                 fetchedFriendIds = currentUser.profile.friendList;
                 fetchedFriendIds.forEach((friendId) => {
-                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: { username: 1, online: 1}}));
+                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: { username: 1, status: 1}}));
                 })
             }
 
-            if (currentUser.pendingFriendList) {
+            if (currentUser.profile.pendingFriendList) {
                 fetchedPendingFriendIds = currentUser.profile.pendingFriendList;
                 fetchedPendingFriendIds.forEach((pendingFriendId) => {
                     fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: { username: 1}}));
@@ -253,7 +253,7 @@ export const MyDashboard = () => {
 
             // find the users and add to array
             fetchedGroupMemberIds.forEach((memberId) => {
-                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: { username: 1}}));
+                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: { username: 1, status: 1}}));
             })
         }
 
@@ -269,8 +269,8 @@ export const MyDashboard = () => {
             friends: fetchedFriends,
             pendingFriends: fetchedPendingFriends,
             groupMembers: fetchedGroupMembers,
-            anyFriendOnline: fetchedFriends.some(friend => friend.online === true),
-            anyGroupMemberOnline: fetchedGroupMembers.some(member => member.online === true),
+            anyFriendOnline: fetchedFriends.some(friend => friend.status.online === true),
+            anyGroupMemberOnline: fetchedGroupMembers.some(member => member.status.online === true),
         };
     });
 
@@ -326,7 +326,7 @@ export const MyDashboard = () => {
 
     const searchFriendsComponent = () => {
         return (
-            <div onClick={(e) => e.stopPropagation()}>
+            <div style={{marginLeft:"10px", width:"40vh"}} onClick={(e) => e.stopPropagation()}>
                 <Input
                     style={{marginTop: '10px'}}
                     type="text"
@@ -357,20 +357,6 @@ export const MyDashboard = () => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
                 <h3>Sorry No friends found, invite one!</h3>
-                {/*<Input*/}
-                {/*    style={{marginTop: '10px'}}*/}
-                {/*    type="text"*/}
-                {/*    placeholder="email address"*/}
-                {/*    name="inviteFriends"*/}
-                {/*    fluid*/}
-                {/*    focus*/}
-                {/*    value={friendEmail}*/}
-                {/*    onChange={(e) => setFriendEmail(e.currentTarget.value)}*/}
-                {/*/>*/}
-                {/*<Button fluid onClick={inviteFriend} icon labelPosition='right'>*/}
-                {/*    Invite*/}
-                {/*    <Icon name={'envelope'}/>*/}
-                {/*</Button>*/}
             </div>
         );
     }
@@ -398,9 +384,9 @@ export const MyDashboard = () => {
                     }}
                 >
                     {/*my friends*/}
-                    <Menu.Item title={anyFriendOnline ? 'there are friends online' : 'no friends online'}>
-                        <Icon size={'big'} name='users'/>
-                        {anyFriendOnline &&
+                    <Menu.Item style={{marginLeft:"10px", fontWeight:"bold"}}  title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>
+                        <Icon size={'large'} name='users'/>
+                        {anyFriendOnline && !showSidebar &&
                         <Rating icon='star' defaultRating={1} maxRating={1} disabled/>
                         }
                         <br/>
@@ -408,9 +394,24 @@ export const MyDashboard = () => {
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && friends && friends.map((friend) => (
-                            <Menu.Item key={friend._id} title={friend.online ? 'online' : 'offline'}>
-                                {friend.username}
-                                <Rating icon='star' defaultRating={friend.online ? 1 : 0} maxRating={1} disabled/>
+                            <Menu.Item style={{marginLeft:"20px"}} key={friend._id} title={friend.status.online ?
+                                friend.status.idle ? 'idle' : 'online' : 'offline'}>
+                                <div style={{display: 'inline-block', fontSize:"13pt"}}>{friend.username}<NotificationBadge
+                                    key={friend._id}
+                                    count={1}
+                                    effect={[null, null, null, null]}
+                                    style={{
+                                        color: friend.status.online ? friend.status.idle ? "yellow" : "green" : "red",
+                                        backgroundColor: friend.status.online ? friend.status.idle ? "yellow" : "green" : "red",
+                                        top: "-15px",
+                                        left: "",
+                                        bottom: "",
+                                        right: "-20px",
+                                        fontSize: "7px",
+                                        padding: "3px 5px",
+                                    }}
+                                /></div>
+                                {/*<Rating icon='star' defaultRating={friend.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                             </Menu.Item>
                         ))}
                         {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (
@@ -440,9 +441,10 @@ export const MyDashboard = () => {
                     {showSidebar && !haveFoundFriends && inviteFriendsComponent()}
                     {showSidebar && searchFriendsComponent()}
                     {/*my group members, update to have a group member specific user set*/}
-                    <Menu.Item title={anyGroupMemberOnline ? 'there are members online' : 'no members online'}>
-                        <Icon size={'big'} name='users'/>
-                        {anyGroupMemberOnline &&
+                    <Menu.Item style={{marginLeft:"10px", fontWeight:"bold"}} title={anyGroupMemberOnline ?
+                        'There are members online' : 'No members online'}>
+                        <Icon size={'large'} name='users'/>
+                        {anyGroupMemberOnline && !showSidebar &&
                         <Rating icon='star' defaultRating={1} maxRating={1} disabled/>
                         }
                         <br/>
@@ -450,9 +452,24 @@ export const MyDashboard = () => {
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && groupMembers && groupMembers.map((groupMember) => (
-                            <Menu.Item key={groupMember._id} title={groupMember.online ? 'online' : 'offline'}>
-                                {groupMember.username}
-                                <Rating icon='star' defaultRating={groupMember.online ? 1 : 0} maxRating={1} disabled/>
+                            <Menu.Item style={{marginLeft:"20px"}} key={groupMember._id} title={groupMember.status.online ?
+                                groupMember.status.idle ? 'idle' : 'online' : 'offline'}>
+                                <div style={{display: 'inline-block', fontSize:"13pt"}}>{groupMember.username}<NotificationBadge
+                                    key={groupMember._id}
+                                    count={1}
+                                    effect={[null, null, null, null]}
+                                    style={{
+                                    color: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",
+                                    backgroundColor: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",
+                                    top: "-15px",
+                                    left: "",
+                                    bottom: "",
+                                    right: "-20px",
+                                    fontSize: "7px",
+                                    padding: "3px 5px",
+                                }}
+                                    /></div>
+                                {/*<Rating icon='star' defaultRating={groupMember.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                             </Menu.Item>
                         ))}
                     </List>
