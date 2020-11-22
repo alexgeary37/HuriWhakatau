@@ -113,6 +113,12 @@ const responses = [
             "Influential", "Very influential", "Extremely influential"],
         range: "Not at all influential - Extremely influential",
     },
+    {
+        type: "Accuracy",
+        fullRange: ["Very Inaccurate", "Moderately Inaccurate", "Neither Accurate Nor Inaccurate", "Moderately Accurate",
+            "Very Accurate"],
+        range: "Very Inaccurate - Very Accurate",
+    },
 ];
 // Sort alphabetically by type on export
 export const responseSet = responses.sort((a, b) => (a.type > b.type) ? 1 : -1)

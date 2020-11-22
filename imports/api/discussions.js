@@ -129,8 +129,8 @@ if (Meteor.isServer) {
           deadline: 1,
           isIntroduction: 1,
           isHui: 1,
-          nextDiscussion: 1,
           isPublic: 1,
+          nextDiscussion: 1,
         },
       }
     );

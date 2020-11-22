@@ -66,7 +66,7 @@ Meteor.methods({
       const discussionTemplate = DiscussionTemplates.findOne({
         _id: scenarios[i].discussionTemplateId,
       });
-      console.log("inserting discussion");
+      console.log("inserting discussion", discussionTemplate);
       const discussionId = Meteor.call(
         "discussions.insert",
         scenarios[i]._id,
@@ -121,6 +121,8 @@ if (Meteor.isServer) {
           description: 1,
           groupId: 1,
           scenarioSetId: 1,
+          ratings: 1,
+          discussions: 1,
           createdAt: 1,
           createdBy: 1,
         },
