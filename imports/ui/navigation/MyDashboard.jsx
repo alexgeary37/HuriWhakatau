@@ -22,6 +22,7 @@ import {Tour} from "./Tour";
 import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
+import {RatingComponent} from "./RatingComponent";
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
 import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateExperiment} from "../experiments/CreateExperiment";
@@ -719,6 +720,14 @@ export const MyDashboard = () => {
                                 </GridColumn>
                             </GridRow>
                             }
+                            <GridRow>
+                                <GridColumn width={8}>
+                                    <Segment style={{height: "21em"}} inverted
+                                    style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <RatingComponent />
+                                    </Segment>
+                                </GridColumn>
+                            </GridRow>
                         </Grid>
                         {/*    Modals    */}
                         {isOpenGroupCreation &&

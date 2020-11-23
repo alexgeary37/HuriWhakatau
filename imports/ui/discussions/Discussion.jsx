@@ -275,10 +275,9 @@ export const Discussion = () => {
                     ))}
                   <div ref={commentsEndRef} />
                 </Comment.Group>
-                {discussionStatus === "active" && (
+                {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
                   <CommentForm
                       discussionId={discussionId}
-                      displayForm={discussionIsPublic || userInGroup}
                       isDiscussionPublic={discussionIsPublic}
                       isUserAGroupMember={userInGroup}
                       groupId={group._id}

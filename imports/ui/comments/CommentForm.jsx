@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import RichTextEditor from "react-rte";
 import {Button, Form, Segment} from "semantic-ui-react";
 
-export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUserAGroupMember, groupId}) => {
+export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMember, groupId}) => {
     const [keyStrokes, setKeyStrokes] = useState([]);
     const [pastedItems, setPastedItems] = useState([]);
     const [editorValue, setEditorValue] = useState(
@@ -113,9 +113,9 @@ export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUs
         } // If editor value first is empty, don't submit anything.
 
         //todo need to replace this with an authenticated route for group members? how would that work?
-        if (!isDiscussionPublic && !isUserAGroupMember){
+        if (!isDiscussionPublic && !isUserAGroupMember) {
             return;
-        } else if (isDiscussionPublic && !isUserAGroupMember){
+        } else if (isDiscussionPublic && !isUserAGroupMember) {
             Meteor.call("groups.addMember", groupId, Meteor.userId());
         }
 
@@ -147,9 +147,7 @@ export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUs
     };
 
     return (
-
         <Form>
-            {displayForm &&
             <div>
                 <RichTextEditor
                     value={editorValue}
@@ -161,12 +159,10 @@ export const CommentForm = ({discussionId, displayForm, isDiscussionPublic, isUs
                     multiline
                     required
                 />
-
                 <Button attached={"bottom"} fluid positive onClick={handleSubmit}>
                     Add Comment
                 </Button>
             </div>
-            }
         </Form>
     );
 };
