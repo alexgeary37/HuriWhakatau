@@ -10,6 +10,7 @@ import {
 } from "semantic-ui-react";
 import {Comments} from "/imports/api/comments";
 import {Experiments} from "../../api/experiments";
+import {Personality} from "../../api/personality";
 import Cookies from "universal-cookie/cjs/Cookies";
 
 export const RatingComponent = () => {
@@ -43,24 +44,12 @@ export const RatingComponent = () => {
     *   ratingLabels: labelSet,
     * }
     * */
-
-    const personalityQ = {
-        _id: "chchgvkuytuvjhgjhkvn",
-        questionnaireName: "Revised Dogmatism Scale",
-        paperDoi: "10.1080/01463370600877950",
-        items:   [
-                        {	item: 1,
-                            text: "There is a clear line between what is right and what is wrong.",
-                            scale: 5,
-                            scoringReversed: false,
-                            responseType: "Accuracy", },]
-        }
+    // cut down personality question for testing. should be in a collection and retrieved randomly.
 
     const {questionItem} = useTracker(() => {
-        const [collection, type] = Random.choice([[Experiments, 1], [Experiments, 1]]);
-        const collectionSub = type ? Meteor.subscribe("experiments") : Meteor.subscribe("experiments");
-
-        let fetchedItem;
+        const [collection, type] = Random.choice([[Experiments, 1], [Personality, 0]]);
+        const collectionSub = type ? Meteor.subscribe("experiments") : Meteor.subscribe("personality");
+        // item variables. may be condensed / modified later.
         let rating;
         let responseIndices;
         let responses;
@@ -73,36 +62,53 @@ export const RatingComponent = () => {
         let body="";
         let ratingScale=7;
         let ratingReverse=false;
-
         if(collectionSub.ready()){
-            fetchedItem = collection.find({}).fetch()[0];
             if(type){
-                // get experiment
-                const experiment = Experiments.findOne({_id: "aEwAZuSd32fzaWYWz"});
+                // get experiment,todo change this so it's while random experiment.ratings.rating === "" get random
+                //  expt. like the random username rather than the one expt I know works.
+                const experiment = collection.findOne({_id: "aEwAZuSd32fzaWYWz"});
                 if(experiment.ratings) {
-                    rating = experiment.ratings[0];
-                    responses = responseSet.find(set => set.type === rating.response)
+                    // for the moment get number of ratings the at != "",
+                    // todo change the submit expt so ratings === "" are not submitted.
+
+                    let exptRatings = experiment.ratings.filter( rating => rating.rating != "");
+                    // Select a random rating from the experiment's rating set
+                    rating = exptRatings[Math.floor(Math.random() * Math.floor(exptRatings.length))]
+                    // find the appropriate response set
+                    responses = responseSet.find(set => set.responseType === rating.responseType)
                     ratingScale = rating.scale;
                     ratingReverse = rating.reverse;
                     responseIndices = indices[ratingScale];
-                    console.log("responses", responses);
-                    console.log("responseIndices", responseIndices);
-                    responseIndices.forEach(index => labelSet.push(responses.fullRange[index]));
+                    // get the appropriate labels given the number of responses set eg 2, 5 or 7
+                    // responseIndices.forEach(index => labelSet.push(responses.fullRange[index]));
+                    indices[ratingScale].forEach(index => labelSet.push(responses.fullRange[index]));
                     header = rating.rating;
                     // get comment
                     let commentSub = Meteor.subscribe("comments");
                     if (commentSub.ready()) {
+                        // get a random comment for a discussion in the experiment.
                         // comment = Comments.find({discussionId: {$in: experiment.discussions}}).fetch();
                         comment = Comments.findOne({_id:"bkXE3GtYtkxW2q6Zt"});
-                        console.log("comment", comment);
+                        id = comment._id;
                         body = comment.text;
-                        console.log("body", body);
                     }
                 }
             } else {
-                question = personalityQ;
-                itemNum = question.items.item;
-                console.log(question);
+                const personalityQuestionnaire = collection.findOne({_id:"eEg6qCkMPsBq53khD"});
+                if(personalityQuestionnaire.items) {
+                    question = personalityQuestionnaire.items[Math.floor(
+                        Math.random() * Math.floor(personalityQuestionnaire.items.length))];
+                    // question = personalityQ;
+                    itemNum = question.item;
+                    header = question.text;
+                    body = "";
+                    ratingScale = question.scale;
+                    ratingReverse = question.scoringReversed;
+                    responses = responseSet.find(set => set.responseType === question.responseType)
+                    responseIndices = indices[ratingScale];
+                    // get the appropriate labels given the number of responses set eg 2, 5 or 7
+                    responseIndices.forEach(index => labelSet.push(responses.fullRange[index]));
+                }
             }
         }
 
@@ -119,36 +125,19 @@ export const RatingComponent = () => {
         };
     })
 
-    if(questionItem.ratingLabels){
-        console.log(questionItem.ratingLabels);
-    }
-    // this is just info
-    // const ratingInfo = {
-    //     type: "Support",
-    //     fullRange: ["Strongly oppose", "Somewhat oppose", "Slightly oppose", "neutral", "Slightly favor", "Somewhat favor",
-    //             "Strongly favor"],
-    //     range: "Strongly oppose - Strongly favor",
-    //     scale:2,
-    //     indices:[1,6],
-    //     reverse: false,
-    // }
-
-    const item = {
-        _id:"idNum",
-        item: 2,
-        text:"text",
-        scale: 2,
-        indices:[0,6],
-        reverse: false,
-        range: ["Strongly oppose","Strongly favor"]
-    }
-
+    // todo work out what submitting an answer looks like / does.
     const addAnswerValue = (value) => {
+        // if reverse coding is active.
+        // score = ratingLabels.indexOf(value) if reverse is false, else ratingLabels.reverse().indexOf(value).
+
         setAnswerString(value);
         setAnswerInt(item.range.indexOf(value)),
         console.log(answerString, answerInt);
     }
 
+    const submitAnswer = () => {
+
+    }
 
     return (
         <div>
@@ -158,9 +147,11 @@ export const RatingComponent = () => {
                     backgroundColor: "#c4c4c4",
                 }}>
                     <List.Header as={'h4'} content={questionItem && questionItem.headerText} />
+                    {questionItem.bodyText &&
                     <List.Description as={Segment}
-                        content={questionItem && questionItem.bodyText}
+                                      content={questionItem && questionItem.bodyText}
                     />
+                    }
                     <hr/>
                         {/*<input type="range" min="0" max={item.scale - 1} value={answer} name={ratingInfo.type} id={item._id + "#" + item.item}*/}
                         {/*       onChange={({target}) => addAnswerValue(target.value)}/>*/}
@@ -177,6 +168,7 @@ export const RatingComponent = () => {
                         />
                         </Form.Field>
                     )}
+                    <Button content={'Submit Answer'} onClick={submitAnswer}/>
                 </ListContent>
             </ListItem>
         </div>

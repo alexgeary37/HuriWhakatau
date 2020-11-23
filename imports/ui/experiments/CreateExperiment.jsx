@@ -242,6 +242,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                 <Tab.Pane style={{border: 'none'}}>
                     <Form as={Segment} attached="bottom" style={{border: 'none'}}>
                         <Button.Group widths={5} disabled>
+                            {/* Using buttons as column labels as these scale in the same way as form groups*/}
                             <Button basic content={"Rating"} style={{textAlign: 'left'}}/>
                             <Button basic content={"Scale"} style={{textAlign: 'left'}}/>
                             <Button basic content={"Response set"} style={{textAlign: 'left'}}/>
