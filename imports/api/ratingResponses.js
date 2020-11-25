@@ -1,4 +1,3 @@
-
 // response sets for each type of rating type. new sets should have 7 values so that the scales
 // are all treated consistently
 const responses = [
@@ -120,6 +119,7 @@ const responses = [
         range: "Very Inaccurate - Very Accurate",
     },
 ];
+
 // Sort alphabetically by type on export
 export const responseSet = responses.sort((a, b) => (a.type > b.type) ? 1 : -1)
 // When the response sets are used in the rating component use the below indices to pull out the correct labels

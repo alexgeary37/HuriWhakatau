@@ -30,6 +30,7 @@ import { UserComment } from "/imports/ui/comments/UserComment";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 import { Timer } from "./Timer"; ///
 
+
 export const Discussion = () => { ///
   console.log("Entered discussion"); ///
   const filter = {};
@@ -41,7 +42,8 @@ export const Discussion = () => { ///
   const [timeLeft, setTimeLeft] = useState(null);
   const [userInGroup, setUserInGroup] = useState(false);
   let history = useHistory();
-  //todo, if the user uses the browser back button to go back to dash from a timed discussion
+  // use to allow comments or proposing / voting on verdicts
+  // todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
   const updateTimed = () => {
     setTimedDiscussion(true);
@@ -51,7 +53,7 @@ export const Discussion = () => { ///
     console.log("deadline updated", mutableDiscussionDeadline);
   };
 
-  //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
+  // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
     let current = new Date();
     let hours = Math.floor(
@@ -74,6 +76,17 @@ export const Discussion = () => { ///
     );
   };
 
+
+
+
+
+
+
+
+
+
+
+  // if timed then trigger calc of time left and update ui every 1 second
   useEffect(() => {
     if (timedDiscussion) {
       const timer = setTimeout(() => {
@@ -172,7 +185,7 @@ export const Discussion = () => { ///
   
   useEffect(checkGroupMembership, [group]);
 
-  //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
+  // get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit === 0) {
     //probably should refactor this

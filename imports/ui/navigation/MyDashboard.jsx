@@ -722,9 +722,8 @@ export const MyDashboard = () => {
                             }
                             <GridRow>
                                 <GridColumn width={8}>
-                                    <Segment style={{height: "21em"}} inverted
-                                    style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <RatingComponent />
+                                    <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <RatingComponent />
                                     </Segment>
                                 </GridColumn>
                             </GridRow>
