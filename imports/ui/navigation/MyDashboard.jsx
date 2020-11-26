@@ -226,28 +226,33 @@ export const MyDashboard = () => {
             }
         }).fetch();
 
-        //once user collection subscription ready and there is a logged in user, find user
+        // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
         if (userSub.ready()) {
-            currentUser = Meteor.users.findOne({_id: userId});
-            if (currentUser.profile.friendList) {
-                fetchedFriendIds = currentUser.profile.friendList;
-                fetchedFriendIds.forEach((friendId) => {
+            console.log("userId:", userId);
+            currentUser = Meteor.call("users.getUser", userId, (err, user) => {
+              console.log("INSIDE Meteor.call users.getUser callback");
+              if (user.profile.friendList) {
+                  fetchedFriendIds = user.profile.friendList;
+                  fetchedFriendIds.forEach((friendId) => {
                     fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: { username: 1, status: 1}}));
-                })
-            }
+                  })
+              }
 
-            if (currentUser.profile.pendingFriendList) {
-                fetchedPendingFriendIds = currentUser.profile.pendingFriendList;
-                fetchedPendingFriendIds.forEach((pendingFriendId) => {
-                    fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: { username: 1}}));
-                })
-            }
+              if (user.profile.pendingFriendList) {
+                  fetchedPendingFriendIds = user.profile.pendingFriendList;
+                  fetchedPendingFriendIds.forEach((pendingFriendId) => {
+                      fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: { username: 1}}));
+                  })
+              }
+            });
 
+            console.log("AFTER Meteor.call users.getUser");
+            
             //add all member ids for each group the user is part of to a total, filter out the user themselves
             fetchedGroups.forEach((group) => {
                 fetchedGroupMemberIds.push(...group.members.filter(id => id !== userId));
-            })
+            });
 
             // remove duplicate values
             fetchedGroupMemberIds = new Set(fetchedGroupMemberIds);
@@ -255,7 +260,7 @@ export const MyDashboard = () => {
             // find the users and add to array
             fetchedGroupMemberIds.forEach((memberId) => {
                 fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: { username: 1, status: 1}}));
-            })
+            });
         }
 
         return {
@@ -723,7 +728,7 @@ export const MyDashboard = () => {
                             <GridRow>
                                 <GridColumn width={8}>
                                     <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <RatingComponent />
+                                        {/*<RatingComponent />*/}
                                     </Segment>
                                 </GridColumn>
                             </GridRow>

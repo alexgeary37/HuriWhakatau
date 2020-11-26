@@ -68,6 +68,7 @@ export const RatingComponent = () => {
                 // experiment. Like the random username rather than the one experiment I know works.
                 // const experiment = collection.findOne({_id: "aEwAZuSd32fzaWYWz"});
                 
+                //const experiment = collection.findOne({ $filter: { input: ratings, as: ratings, cond: {} } });
                 const experiments = collection.find({}).fetch();
                 let experiment;
                 for (i = 0; i < experiments.length; i += 1) {
