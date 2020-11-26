@@ -64,12 +64,29 @@ export const RatingComponent = () => {
         let ratingReverse=false;
         if(collectionSub.ready()){
             if(type){
-                // get experiment,todo change this so it's while random experiment.ratings.rating === "" get random
-                //  expt. like the random username rather than the one expt I know works.
-                const experiment = collection.findOne({_id: "aEwAZuSd32fzaWYWz"});
+                // get experiment,TODO: change this so it's while random experiment.ratings.rating === "" get random
+                // experiment. Like the random username rather than the one experiment I know works.
+                // const experiment = collection.findOne({_id: "aEwAZuSd32fzaWYWz"});
+                
+                //const experiment = collection.findOne({ $filter: { input: ratings, as: ratings, cond: {} } });
+                const experiments = collection.find({}).fetch();
+                let experiment;
+                for (i = 0; i < experiments.length; i += 1) {
+                  ex = experiments[i];
+                  for (j = 0; j < ex.ratings.length; j += 1) {
+                    if (ex.ratings[j].rating !== "") {
+                      experiment = ex;
+                      break;
+                    }
+                  }
+                }
+                
+                // Make sure experiment is defined/assigned in the above loop. If none were found and it wasn't assigned, what happens?? Will the next if condition have to be changed?
+                console.log("experiment", experiment);
+                
                 if(experiment.ratings) {
                     // for the moment get number of ratings the at != "",
-                    // todo change the submit expt so ratings === "" are not submitted.
+                    // todo change the submit experiment so ratings === "" are not submitted.
 
                     let exptRatings = experiment.ratings.filter( rating => rating.rating != "");
                     // Select a random rating from the experiment's rating set
@@ -83,6 +100,7 @@ export const RatingComponent = () => {
                     // responseIndices.forEach(index => labelSet.push(responses.fullRange[index]));
                     indices[ratingScale].forEach(index => labelSet.push(responses.fullRange[index]));
                     header = rating.rating;
+                    
                     // get comment
                     let commentSub = Meteor.subscribe("comments");
                     if (commentSub.ready()) {

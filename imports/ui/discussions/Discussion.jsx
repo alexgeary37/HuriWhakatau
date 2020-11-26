@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Sidebar,
   Container,
+  Segment,
   Header,
   Button,
   Comment,
@@ -8,7 +10,6 @@ import {
   Grid,
   GridColumn,
   List,
-  Segment, Sidebar,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -21,16 +22,17 @@ import { Comments } from "/imports/api/comments";
 import { Scenarios } from "/imports/api/scenarios";
 import { Discussions } from "/imports/api/discussions";
 import { DiscussionTemplates } from "/imports/api/discussionTemplate";
-import { Timer } from "./Timer";
 import { NavBar } from "/imports/ui/navigation/NavBar";
 import { Verdict } from "/imports/ui/verdicts/Verdict";
 import { Sidebars } from "/imports/ui/navigation/Sidebars";
-import { UserComment } from "/imports/ui/comments/UserComment";
 import { CommentForm } from "/imports/ui/comments/CommentForm";
+import { UserComment } from "/imports/ui/comments/UserComment";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
+import { Timer } from "./Timer"; ///
 
-export const Discussion = () => {
-  console.log("Entered discussion");
+
+export const Discussion = () => { ///
+  console.log("Entered discussion"); ///
   const filter = {};
   const { discussionId } = useParams();
   const [timedDiscussion, setTimedDiscussion] = useState(false);
@@ -40,7 +42,8 @@ export const Discussion = () => {
   const [timeLeft, setTimeLeft] = useState(null);
   const [userInGroup, setUserInGroup] = useState(false);
   let history = useHistory();
-  //todo, if the user uses the browser back button to go back to dash from a timed discussion
+  // use to allow comments or proposing / voting on verdicts
+  // todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
   const updateTimed = () => {
     setTimedDiscussion(true);
@@ -50,7 +53,7 @@ export const Discussion = () => {
     console.log("deadline updated", mutableDiscussionDeadline);
   };
 
-  //used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
+  // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
     let current = new Date();
     let hours = Math.floor(
@@ -73,6 +76,17 @@ export const Discussion = () => {
     );
   };
 
+
+
+
+
+
+
+
+
+
+
+  // if timed then trigger calc of time left and update ui every 1 second
   useEffect(() => {
     if (timedDiscussion) {
       const timer = setTimeout(() => {
@@ -94,7 +108,7 @@ export const Discussion = () => {
     discussionTemplate,
     discussionDeadline,
     discussionTimeLimit,
-    nextDiscussionId,
+    nextDiscussionId, ///
     discussionIsPublic,
   } = useTracker(() => {
     const discussionSub = Meteor.subscribe("discussions", discussionId);
@@ -162,11 +176,16 @@ export const Discussion = () => {
   const checkGroupMembership = () => {
     if (group && group.members.includes(Meteor.userId())) {
       setUserInGroup(true);
+      console.log("user in group");
+    } else {
+      console.log("user not in group");
     }
+      console.log(group)
   }
+  
   useEffect(checkGroupMembership, [group]);
 
-  //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
+  // get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit === 0) {
     //probably should refactor this
@@ -231,7 +250,7 @@ export const Discussion = () => {
   };
 
   return (
-    <div>
+    <div>                     {/**/}
       <NavBar />
       {/*hacky way to move content out from under menu*/}
       {/*<br />*/}
@@ -239,29 +258,28 @@ export const Discussion = () => {
       <br />
       <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
         <Sidebars />
-          <Container attached="bottom" style={{ width: "110vh"}}>
-        <Grid columns={3}>
-          <Grid.Row>
-            <GridColumn width={3} style={{ height: "90vh" }}>
-              <Header
+        <Container attached="bottom" style={{ width: "110vh"}}>                    {/**/}
+          <Grid columns={3}>             {/**/}
+              <GridColumn width={3} style={{ height: "90vh" }}>              {/**/}
+                <Header
                   inverted
                   content={(scenario && scenario.title) || (topic && topic.title)}
-                size="medium"
-              />
-              {/* replace the topic with scenario only once old data is cleared out */}
-              <Header as={'h5'} inverted
+                  size="medium"
+                />
+                {/* replace the topic with scenario only once old data is cleared out */}
+                <Header as={'h5'} inverted
                       content=
-              {(scenario && scenario.description) ||
-                (topic && topic.description)}/>
-              {timedDiscussion && <Timer style={{ position: "absolute", bottom: "0px", width: "95%" }} time={timeLeft} />}
-            </GridColumn>
-            <GridColumn width={10}>
-              <div
-                style={{ position: "absolute", bottom: "0px", width: "95%" }}
-              >
-                <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
-                  {comments &&
-                    comments.map((comment) => (
+                  {(scenario && scenario.description) ||
+                  (topic && topic.description)}
+                />
+                {timedDiscussion && <Timer style={{ position: "absolute", bottom: "0px", width: "95%" }} time={timeLeft} />}
+              </GridColumn>
+              <GridColumn width={10}>
+                <div
+                  style={{ position: "absolute", bottom: "0px", width: "95%" }}
+                >
+                  <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
+                    {comments && comments.map((comment) => (
                       <UserComment
                         key={comment._id}
                         comment={comment}
@@ -274,22 +292,21 @@ export const Discussion = () => {
                       />
                     ))}
                   <div ref={commentsEndRef} />
-                </Comment.Group>
-                {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
-                  <CommentForm
+                  </Comment.Group>
+                  {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
+                    <CommentForm
                       discussionId={discussionId}
                       isDiscussionPublic={discussionIsPublic}
                       isUserAGroupMember={userInGroup}
                       groupId={group._id}
-                  />
-                )}
-              </div>
-            </GridColumn>
-            <GridColumn width={3}>
-              <Header inverted content="Verdicts" size="medium" />
-              <List style={{ overflow: "auto", maxHeight: "50em" }}>
-                {verdicts &&
-                  verdicts.map((verdict) => (
+                    />
+                  )}
+                </div>
+              </GridColumn>
+              <GridColumn width={3}>
+                <Header inverted content="Verdicts" size="medium" />
+                <List style={{ overflow: "auto", maxHeight: "50em" }}>
+                  {verdicts && verdicts.map((verdict) => (
                     <List.Item key={verdict._id}>
                       <Verdict
                         key={verdict._id}
@@ -298,15 +315,15 @@ export const Discussion = () => {
                       />
                     </List.Item>
                   ))}
-                {group && hasReachedConsensus() && (
-                  <Modal open={true}>
-                    <Modal.Content>Consensus</Modal.Content>
-                    <Modal.Actions>
-                      <Button as={Link} to="/" content="Return to Dashboard" />
-                    </Modal.Actions>
-                  </Modal>
-                )}
-                {!userHasSubmittedVerdict() &&
+                  {group && hasReachedConsensus() && (
+                    <Modal open={true}>
+                      <Modal.Content>Consensus</Modal.Content>
+                      <Modal.Actions>
+                        <Button as={Link} to="/" content="Return to Dashboard" />
+                      </Modal.Actions>
+                    </Modal>
+                  )}
+                  {!userHasSubmittedVerdict() &&
                   discussionVerdictProposers &&
                   discussionStatus === "active" &&
                   (discussionVerdictProposers.includes(Meteor.userId()) ? (
@@ -321,8 +338,7 @@ export const Discussion = () => {
                       />
                     </div>
                   ))}
-                {discussionStatus !== "active" &&
-                nextDiscussionId && (
+                  {discussionStatus !== "active" && nextDiscussionId && (
                     <div style={{ textAlign: "center" }}>
                       <Button
                           style={{ margin: 10 }}
@@ -331,13 +347,12 @@ export const Discussion = () => {
                           primary
                       />
                     </div>
-                )}
-              </List>
-            </GridColumn>
-          </Grid.Row>
-        </Grid>
-      </Container>
-    </Sidebar.Pushable>
+                  )}
+                </List>
+              </GridColumn>
+          </Grid>
+        </Container>
+      </Sidebar.Pushable>
     </div>
   );
 };
