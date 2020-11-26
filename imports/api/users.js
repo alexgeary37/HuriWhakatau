@@ -50,6 +50,15 @@ Meteor.methods({
         });
         return true;
     },
+    
+    "users.getUser"(userId) {
+      check(userId, String);
+      
+      const user = Meteor.users.findOne({_id: userId});
+      console.log("user:", user);
+      
+      return user;
+    },
 
     //return array of users whose username or email matches the search term
     "users.findFriend"(searchTerm){
@@ -164,8 +173,6 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-    // Scenarios.remove({});
-
     Meteor.publish("users", function () {
         return Meteor.users.find(
             {},
