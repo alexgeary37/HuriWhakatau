@@ -229,9 +229,7 @@ export const MyDashboard = () => {
         // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
         if (userSub.ready()) {
-            console.log("userId:", userId);
             currentUser = Meteor.call("users.getUser", userId, (err, user) => {
-              console.log("INSIDE Meteor.call users.getUser callback");
               if (user.profile.friendList) {
                   fetchedFriendIds = user.profile.friendList;
                   fetchedFriendIds.forEach((friendId) => {
@@ -247,8 +245,6 @@ export const MyDashboard = () => {
               }
             });
 
-            console.log("AFTER Meteor.call users.getUser");
-            
             //add all member ids for each group the user is part of to a total, filter out the user themselves
             fetchedGroups.forEach((group) => {
                 fetchedGroupMemberIds.push(...group.members.filter(id => id !== userId));
@@ -728,7 +724,7 @@ export const MyDashboard = () => {
                             <GridRow>
                                 <GridColumn width={8}>
                                     <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        {/*<RatingComponent />*/}
+                                        <RatingComponent />
                                     </Segment>
                                 </GridColumn>
                             </GridRow>

@@ -1,5 +1,6 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import {Experiments} from "./experiments";
 
 export const Comments = new Mongo.Collection("comments");
 
@@ -81,6 +82,18 @@ Meteor.methods({
     });
 
     return true;
+  },
+
+  //get a random experiment with a non-empty rating
+  "comments.getRandomExperimentCommentForRating"(discussionIds) {
+    console.log("random comment query triggered");
+    const fetchedComment = Comments.rawCollection().aggregate([
+      {$match: {discussionId: {$in: discussionIds}}},
+      {$sample: {size: 1}}
+    ])
+        .toArray();
+
+    return fetchedComment;
   },
 });
 
