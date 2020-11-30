@@ -10,6 +10,7 @@ import {
   Icon,
   Divider, Sidebar,
 } from "semantic-ui-react";
+import {dashSplash} from "../../api/tourSteps";
 import {siteGlossary} from "../../api/glossary";
 import { Discussions } from "/imports/api/discussions";
 import { Tour } from "./Tour";
@@ -26,18 +27,7 @@ export const Dashboard = () => {
     setUserLang(lang);
   }
   //set up tour of page
-  const splashTourSteps = [
-    {
-      target: '.signUp',
-      content: (
-          <div>
-            <p>
-              Sign up for more access.
-            </p>
-          </div>
-      )
-    }
-  ];
+  const splashTourSteps = dashSplash;
 
   const { discussions, publicDiscussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");

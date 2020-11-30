@@ -7,7 +7,7 @@ import {
     Segment,
     Header,
     Grid,
-    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input
+    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input, Divider
 } from "semantic-ui-react";
 import '/imports/api/security'
 import {Link} from "react-router-dom";
@@ -16,6 +16,7 @@ import {Scenarios} from "/imports/api/scenarios";
 import {Experiments} from "/imports/api/experiments";
 import {Discussions} from "/imports/api/discussions";
 import {ScenarioSets} from "/imports/api/scenarioSets";
+import {myDashParticipant, myDashResearcher} from "/imports/api/tourSteps"
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {NavBar} from "./NavBar";
 import {Tour} from "./Tour";
@@ -34,13 +35,16 @@ import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDi
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import NotificationBadge from "react-notification-badge";
 import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
+import Cookies from "universal-cookie/lib";
 
 export const MyDashboard = () => {
+    const cookies = new Cookies();
     const [isAdmin, setIsAdmin] = useState(false);
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
     const [isOpenWizard, setIsOpenWizard] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
+    const [showTour, setShowTour] = useState(false);
     const [isOpenTemplateCreation, setIsOpenTemplateCreation] = useState(false);
     const [isOpenScenarioCreation, setIsOpenScenarioCreation] = useState(false);
     const [isOpenScenarioSetCreation, setIsOpenScenarioSetCreation] = useState(false);
@@ -55,71 +59,18 @@ export const MyDashboard = () => {
     const [friendEmail, setFriendEmail] = useState("");
     const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
-    const participantTourSteps = [
-        {
-            target: ".myDiscussions",
-            content: (<div>
-                <p>Here are the discussions you are part of.</p>
-                <p>Click one to add comments</p>
-            </div>)
-        },
-        {
-            target: ".finishedDiscussions",
-            content: (<div>
-                <p>Here are discussions that have concluded and can no longer have new comments.</p>
-                <p>Click one to see how the discussion went</p>
-            </div>)
-        },
-        {
-            target: ".myGroups",
-            content: (<div>
-                <p>Here are the groups you are part of.</p>
-                <p>Click 'Open' to see your fellow group members or leave the group</p>
-            </div>)
-        },
-        {
-            target: ".newDiscussion",
-            content: (<div>
-                <p>Click here to start a new discussion.</p>
-            </div>)
-        },
-    ];
-    const researcherTourSteps = [
-        {
-            target: ".discussionTemplates",
-            content: (<div>
-                <p>Here are your discussion templates.</p>
-                <p>By default you get three pre-made templates.</p>
-                <p> Click 'Open' to see the parameters set in each template.</p>
-            </div>)
-        },
-        {
-            target: ".myScenarios",
-            content: (<div>
-                <p>Here are your scenarios.</p>
-                <p>A scenario is a combination of discussion topic, discussion template and discussion category.
-                    This determines what your users will be talking about and what discussion options will be enabled.</p>
-                <p>Click the 'Open' button to see the scenario details.</p>
-            </div>)
-        },
-        {
-            target: ".myScenarioSets",
-            content: (<div><p>Here are your scenario sets.</p>
-                <p>A scenario set is a list of individual scenarios.
-                    When added to an Experiment this will create the discussions you want to group together.</p>
-                <p>Click the 'Open' button to see the scenario list.</p></div>)
-        },
-        {
-            target: ".myExperiments",
-            content: (<div>
-                <p>Here are your experiments. This is where the magic happens.</p>
-                <p>An experiment is a combination of a user group with a scenario set.
-                    On creating the experiment all the associated discussions will be generated with the
-                    setting determined by the discussion templates associated with each scenario.
-                    Once generated the discussions will be available to the selected users to participate in.</p>
-                <p>Click the 'Open' button to see the experiment details.</p></div>)
-        },
-    ];
+    const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
+    const participantTourSteps = myDashParticipant;
+    const researcherTourSteps = myDashResearcher;
+
+    const toggleShowTour = () => {
+        console.log('not cookie:', !cookies.get('siteTour'));
+        if (!cookies.get('siteTour')) {
+            setShowTour(!showTour);
+        }
+    }
+
+    useEffect(() => {toggleShowTour();}, []);
 
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -230,19 +181,19 @@ export const MyDashboard = () => {
         // and get friends and users that the user is in groups with
         if (userSub.ready()) {
             currentUser = Meteor.call("users.getUser", userId, (err, user) => {
-              if (user.profile.friendList) {
-                  fetchedFriendIds = user.profile.friendList;
-                  fetchedFriendIds.forEach((friendId) => {
-                    fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: { username: 1, status: 1}}));
-                  })
-              }
+                if (user.profile.friendList) {
+                    fetchedFriendIds = user.profile.friendList;
+                    fetchedFriendIds.forEach((friendId) => {
+                        fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: {username: 1, status: 1}}));
+                    })
+                }
 
-              if (user.profile.pendingFriendList) {
-                  fetchedPendingFriendIds = user.profile.pendingFriendList;
-                  fetchedPendingFriendIds.forEach((pendingFriendId) => {
-                      fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: { username: 1}}));
-                  })
-              }
+                if (user.profile.pendingFriendList) {
+                    fetchedPendingFriendIds = user.profile.pendingFriendList;
+                    fetchedPendingFriendIds.forEach((pendingFriendId) => {
+                        fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: {username: 1}}));
+                    })
+                }
             });
 
             //add all member ids for each group the user is part of to a total, filter out the user themselves
@@ -255,7 +206,7 @@ export const MyDashboard = () => {
 
             // find the users and add to array
             fetchedGroupMemberIds.forEach((memberId) => {
-                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: { username: 1, status: 1}}));
+                fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1, status: 1}}));
             });
         }
 
@@ -295,8 +246,8 @@ export const MyDashboard = () => {
 
     const addFriend = (friendId) => {
         Meteor.call("users.addPendingFriend", friendId, Meteor.userId(), (_, response) => {
-            if (response){
-                let filteredFriendsList = foundFriendsList.filter(function( friend ) {
+            if (response) {
+                let filteredFriendsList = foundFriendsList.filter(function (friend) {
                     return friend._id !== friendId;
                 });
                 setFoundFriendsList([...filteredFriendsList]);
@@ -306,7 +257,7 @@ export const MyDashboard = () => {
 
     const acceptFriend = (friendId) => {
         Meteor.call("users.removePendingFriend", Meteor.userId(), friendId, (_, response) => {
-            if (response){
+            if (response) {
                 Meteor.call("users.addFriend", Meteor.userId(), friendId)
                 Meteor.call("users.addFriend", friendId, Meteor.userId())
             }
@@ -328,7 +279,7 @@ export const MyDashboard = () => {
 
     const searchFriendsComponent = () => {
         return (
-            <div style={{marginLeft:"10px", width:"40vh"}} onClick={(e) => e.stopPropagation()}>
+            <div style={{marginLeft: "10px", width: "40vh"}} onClick={(e) => e.stopPropagation()}>
                 <Input
                     style={{marginTop: '10px'}}
                     type="text"
@@ -338,16 +289,17 @@ export const MyDashboard = () => {
                     focus
                     value={searchTerm}
                     /*onChange={(e) => setSearchTerm(e.currentTarget.value)}*/
-                    onChange={(e) => {e.currentTarget.value.indexOf("@") > 0
-                        ? setFriendEmail(e.currentTarget.value) : null;
+                    onChange={(e) => {
+                        e.currentTarget.value.indexOf("@") > 0
+                            ? setFriendEmail(e.currentTarget.value) : null;
                         setSearchTerm(e.currentTarget.value);
                     }}
                 />
-                <Button  onClick={submitFriendSearch} icon labelPosition='right'>
+                <Button onClick={submitFriendSearch} icon labelPosition='right'>
                     Search
                     <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
                 </Button>
-                <Button  onClick={inviteFriend} icon labelPosition='right'>
+                <Button onClick={inviteFriend} icon labelPosition='right'>
                     Invite
                     <Icon name={'envelope'}/>
                 </Button>
@@ -363,11 +315,17 @@ export const MyDashboard = () => {
         );
     }
 
+    const toggleDiscussionLists = () => {
+        setIsDiscussionListsHidden(!isDiscussionListsHidden);
+    }
+
     return (
         <div>
-            <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
+            {showTour &&
+                <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
+            }
             <NavBar/>
-            <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}} >
+            <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
                 {/* right sidebar */}
                 <Sidebar
                     as={Segment}
@@ -377,6 +335,8 @@ export const MyDashboard = () => {
                     vertical
                     visible
                     width={showSidebar ? "wide" : "very thin"}
+                    onMouseOver={!showSidebar ? handleShowSidebar : ''}
+                    // onMouseOut={showSidebar ? handleShowSidebar : ''}
                     onClick={handleShowSidebar}
                     style={{
                         backgroundColor: 'rgb(30, 30, 30)',
@@ -386,7 +346,8 @@ export const MyDashboard = () => {
                     }}
                 >
                     {/*my friends*/}
-                    <Menu.Item style={{marginLeft:"10px", fontWeight:"bold"}}  title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>
+                    <Menu.Item style={{marginLeft: "10px", fontWeight: "bold"}}
+                               title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>
                         <Icon size={'large'} name='users'/>
                         {anyFriendOnline && !showSidebar &&
                         <Rating icon='star' defaultRating={1} maxRating={1} disabled/>
@@ -396,9 +357,12 @@ export const MyDashboard = () => {
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && friends && friends.map((friend) => (
-                            <Menu.Item style={{marginLeft:"20px"}} key={friend._id} title={friend.status.online ?
+                            <Menu.Item style={{marginLeft: "20px"}} key={friend._id} title={friend.status.online ?
                                 friend.status.idle ? 'idle' : 'online' : 'offline'}>
-                                <div style={{display: 'inline-block', fontSize:"13pt"}}>{friend.username}<NotificationBadge
+                                <div style={{
+                                    display: 'inline-block',
+                                    fontSize: "13pt"
+                                }}>{friend.username}<NotificationBadge
                                     key={friend._id}
                                     count={1}
                                     effect={[null, null, null, null]}
@@ -419,10 +383,12 @@ export const MyDashboard = () => {
                         {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (
                             <Menu.Item key={pendingFriend._id} /*title={pendingFriend.online ? 'online' : 'offline'}*/>
                                 {pendingFriend.username}
-                                <Button negative size={'mini'} compact={true} onClick={() => acceptFriend(pendingFriend._id)}>
+                                <Button negative size={'mini'} compact={true}
+                                        onClick={() => acceptFriend(pendingFriend._id)}>
                                     ACCEPT
                                 </Button>
-                                <Button negative size={'mini'} compact={true} onClick={() => declineFriend(pendingFriend._id)}>
+                                <Button negative size={'mini'} compact={true}
+                                        onClick={() => declineFriend(pendingFriend._id)}>
                                     DECLINE
                                 </Button>
                             </Menu.Item>
@@ -435,7 +401,8 @@ export const MyDashboard = () => {
                                     paddingLeft: '15px',
                                     paddingRight: '20px'
                                 }}>{potentialFriend.username}</span>
-                                <Button negative size={'mini'} compact={true} attached={'right'} onClick={() => addFriend(potentialFriend._id)}>
+                                <Button negative size={'mini'} compact={true} attached={'right'}
+                                        onClick={() => addFriend(potentialFriend._id)}>
                                     ADD
                                 </Button>
                             </Menu.Item>
@@ -443,7 +410,7 @@ export const MyDashboard = () => {
                     {showSidebar && !haveFoundFriends && inviteFriendsComponent()}
                     {showSidebar && searchFriendsComponent()}
                     {/*my group members, update to have a group member specific user set*/}
-                    <Menu.Item style={{marginLeft:"10px", fontWeight:"bold"}} title={anyGroupMemberOnline ?
+                    <Menu.Item style={{marginLeft: "10px", fontWeight: "bold"}} title={anyGroupMemberOnline ?
                         'There are members online' : 'No members online'}>
                         <Icon size={'large'} name='users'/>
                         {anyGroupMemberOnline && !showSidebar &&
@@ -454,23 +421,27 @@ export const MyDashboard = () => {
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && groupMembers && groupMembers.map((groupMember) => (
-                            <Menu.Item style={{marginLeft:"20px"}} key={groupMember._id} title={groupMember.status.online ?
-                                groupMember.status.idle ? 'idle' : 'online' : 'offline'}>
-                                <div style={{display: 'inline-block', fontSize:"13pt"}}>{groupMember.username}<NotificationBadge
+                            <Menu.Item style={{marginLeft: "20px"}} key={groupMember._id}
+                                       title={groupMember.status.online ?
+                                           groupMember.status.idle ? 'idle' : 'online' : 'offline'}>
+                                <div style={{
+                                    display: 'inline-block',
+                                    fontSize: "13pt"
+                                }}>{groupMember.username}<NotificationBadge
                                     key={groupMember._id}
                                     count={1}
                                     effect={[null, null, null, null]}
                                     style={{
-                                    color: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",
-                                    backgroundColor: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",
-                                    top: "-15px",
-                                    left: "",
-                                    bottom: "",
-                                    right: "-20px",
-                                    fontSize: "7px",
-                                    padding: "3px 5px",
-                                }}
-                                    /></div>
+                                        color: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",
+                                        backgroundColor: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",
+                                        top: "-15px",
+                                        left: "",
+                                        bottom: "",
+                                        right: "-20px",
+                                        fontSize: "7px",
+                                        padding: "3px 5px",
+                                    }}
+                                /></div>
                                 {/*<Rating icon='star' defaultRating={groupMember.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                             </Menu.Item>
                         ))}
@@ -494,7 +465,8 @@ export const MyDashboard = () => {
                     }}
                 />
                 {/*end sidebar*/}
-                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}} dimmed={showSidebar} onClick={showSidebar ? handleShowSidebar : null}>
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}} dimmed={showSidebar}
+                                onClick={showSidebar ? handleShowSidebar : null}>
 
                     <Container>
                         <span style={{height: "22em"}}/>
@@ -518,13 +490,24 @@ export const MyDashboard = () => {
                         </Segment>
 
                         <Grid doubling /*style={{overflow: "auto", height: "87vh"}}*/>
-                            <GridRow columns={2}>
+                            <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
+                                <GridColumn width={16}>
+                                {/*<Segment attached={'top'} fluid hidden={!isDiscussionListsHidden}*/}
+                                {/*         onClick={toggleDiscussionLists}>Show discussions</Segment>*/}
+                                {/*<Segment fluid content={"hide discussions"} hidden={isDiscussionListsHidden}*/}
+                                {/*         onClick={toggleDiscussionLists}/>*/}
+                                    <Divider />
+                                    <Header as={Link} floated='right' inverted onClick={toggleDiscussionLists}>
+                                        {isDiscussionListsHidden ? 'Show': 'Hide'} Discussions</Header>
+                                    <br/>
+                                    {isDiscussionListsHidden && <Divider />}
+                                </GridColumn>
                                 <GridColumn width={8}>
-                                    <Segment style={{height: "21em"}} inverted
+                                    <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
-                                        <Header as={'h3'} className={'myDiscussions'} >My Discussions
+                                        <Header as={'h3'} className={'myDiscussions'}>My Discussions
                                             <Button
                                                 className={'newDiscussion'}
                                                 floated={"right"}
@@ -553,9 +536,10 @@ export const MyDashboard = () => {
                                     </Segment>
                                 </GridColumn>
                                 <GridColumn width={8}>
-                                    <Segment style={{height: "21em"}} inverted
+                                    <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <Header as={'h3'} className={'finishedDiscussions'} >All Finished Discussions</Header>
+                                        <Header as={'h3'} className={'finishedDiscussions'}>All Finished
+                                            Discussions</Header>
                                         <ListItem style={{overflow: "auto", height: "16em"}}
                                                   description={allFinishedDiscussions &&
                                                   allFinishedDiscussions.map((discussion) => (
@@ -573,7 +557,7 @@ export const MyDashboard = () => {
                             <GridRow columns={3}>
                                 <GridColumn width={5}>
                                     <Segment style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>
-                                        <Header as={'h3'} className={'myGroups'} >My Groups</Header>
+                                        <Header as={'h3'} className={'myGroups'}>My Groups</Header>
                                         <ListItem style={{overflow: "auto", height: "13em"}}
                                                   description={groups &&
                                                   groups.map((group) => (
@@ -599,7 +583,8 @@ export const MyDashboard = () => {
                                     <GridColumn width={6}>
                                         <Segment style={{height: "21em"}} inverted
                                                  style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                            <Header as={'h3'} className={'discussionTemplates'}>My Discussion Templates</Header>
+                                            <Header as={'h3'} className={'discussionTemplates'}>My Discussion
+                                                Templates</Header>
                                             <ListItem style={{overflow: "auto", height: "13em"}}
                                                       description={discussionTemplates &&
                                                       discussionTemplates.map((discussionTemplate) => (
@@ -723,8 +708,9 @@ export const MyDashboard = () => {
                             }
                             <GridRow>
                                 <GridColumn width={8}>
-                                    <Segment style={{height: "21em"}} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <RatingComponent />
+                                    <Segment style={{height: "21em"}} inverted
+                                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                        <RatingComponent/>
                                     </Segment>
                                 </GridColumn>
                             </GridRow>

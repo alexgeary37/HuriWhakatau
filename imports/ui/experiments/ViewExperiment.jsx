@@ -2,7 +2,7 @@ import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {Groups} from "/imports/api/groups";
 import {Experiments} from "/imports/api/experiments";
-import {Modal, Button, Label, Form, Header, SegmentGroup, Segment} from "semantic-ui-react";
+import {Modal, Button, Label, Form, Header, SegmentGroup, Segment, Tab, List, ListItem, Grid} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
 
 export const ViewExperiment = ({experiment, toggleModal}) => {
@@ -47,14 +47,15 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
             experimentDetails: {
                 name: experiment.name,
                 description: experiment.description,
-                senarioset: {
+                scenarioSet: {
                     title: scenarioSetTitle,
                     description: scenarioSetDescription
                 },
                 group: {
                     name: groupName,
                     members: groupMembers,
-                }
+                },
+                discussions: experiment.discussions,
             },
         };
     });
@@ -69,25 +70,85 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
         >
             <Modal.Header>Experiment - {experimentDetails && experimentDetails.name}</Modal.Header>
             <Modal.Content>
-                <Form.Input
-                    readOnly={true}
-                    label="Description"
-                    type="text"
-                    value={experimentDetails.description}
-                    // onInput={({target}) => setDescription(target.value)}
-                />
-                <Segment>
-                    <Header as={'h3'} content={'Group: ' + experimentDetails.group.name}/>
-                    <Header as={'h3'} content={'Members'}/>
-                    {experimentDetails && experimentDetails.group.members.map((member) => (
-                        <div key={member._id}>{member.username}</div>
-                    ))}
-                </Segment>
-                <Segment>
-                    <Header as={'h3'} content={'Scenario Set: ' + experimentDetails.senarioset.title}/>
-                    <Header as={'h4'} content={'Description: '}/>
-                    {experimentDetails.senarioset.description}
-                </Segment>
+                <Tab menu={{inverted: false}} panes={
+                    [
+                        {
+                            menuItem: 'Experiment Group & Scenario Set', render: () =>
+                                <Tab.Pane style={{border: 'none'}}>
+                                    <Modal.Header>Description: {experimentDetails.description}</Modal.Header>
+                                    <Segment loading={!experimentDetails.group.name}>
+                                        <Header as={'h3'} content={'Group: ' + experimentDetails.group.name}/>
+                                        <Header as={'h3'} content={'Members'}/>
+                                        {experimentDetails && experimentDetails.group.members.map((member) => (
+                                            <div key={member._id}>{member.username}</div>
+                                        ))}
+                                    </Segment>
+                                    <Segment loading={!experimentDetails.scenarioSet.title}>
+                                        <Header as={'h3'}
+                                                content={'Scenario Set: ' + experimentDetails.scenarioSet.title}/>
+                                        <Header as={'h4'} content={'Description: '}/>
+                                        {experimentDetails.scenarioSet.description}
+                                    </Segment>
+                                </Tab.Pane>
+                        },
+                        {
+                            menuItem: 'Comment Ratings', render: () =>
+                                <Tab.Pane style={{border: 'none'}}>
+                                    <Grid columns={4}>
+
+                                        {/*<List horizontal relaxed={'very'} size={'big'}>*/}
+                                        <Grid.Row>
+                                            <Grid.Column>
+                                                <Header>Rating</Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <Header>Response Type</Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <Header>Scale points</Header>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <Header>Reverse Scoring</Header>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                        {/*    </List>*/}
+                                        {/*    <br/>*/}
+                                        {/*</div>*/}
+                                        {experiment.ratings ? experiment.ratings.filter(rating => rating.rating != "").map((rating) => (
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    {/*<List horizontal relaxed={'very'} size={'big'}>*/}
+                                                    <ListItem description={rating.rating}/>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <ListItem description={rating.responseType}/>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <ListItem description={rating.scale}/>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <ListItem description={rating.reverse.toString()}/>
+                                                </Grid.Column>
+                                                {/*</List>*/}
+                                                {/*<br/>*/}
+                                            </Grid.Row>
+                                        )) : <p>No ratings to show</p>
+                                        }
+                                    </Grid>
+
+                                </Tab.Pane>
+                        },
+                        {
+                            menuItem: 'Discussions', render: () =>
+                                <Tab.Pane style={{border: 'none'}}>
+                                    {experimentDetails.discussions && experimentDetails.discussions.map((id) => (
+                                        <h3>
+                                            <a href={'/discussion/' + id}>Discussion {experimentDetails.discussions.indexOf(id) + 1}</a>
+                                        </h3>
+                                    ))}
+                                </Tab.Pane>
+                        }]
+                }/>
             </Modal.Content>
             <Modal.Actions>
                 <Button color='black' onClick={toggleIt}>
