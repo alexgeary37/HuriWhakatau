@@ -136,7 +136,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
 
     const panes = [
         {
-            menuItem: 'Discussion Parameters', render: () =>
+            menuItem: 'Experiment Parameters', render: () =>
                 <Tab.Pane style={{border: 'none'}}>
                     <Form as={Segment} attached="bottom" style={{border: 'none'}}>
                         <Form.Input

@@ -159,9 +159,8 @@ export const RatingComponent = () => {
                     }
                     <hr/>
                     {questionItem.ratingLabels.map((label) =>
-                        <Form.Field>
+                        <Form.Field key={label}>
                             <Checkbox
-                                key={label}
                                 radio
                                 label={label}
                                 name='quixbox'
