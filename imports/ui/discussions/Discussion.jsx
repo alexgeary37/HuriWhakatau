@@ -32,7 +32,6 @@ import { Timer } from "./Timer"; ///
 
 
 export const Discussion = () => { ///
-  console.log("Entered discussion"); ///
   const filter = {};
   const { discussionId } = useParams();
   const [timedDiscussion, setTimedDiscussion] = useState(false);
@@ -75,16 +74,6 @@ export const Discussion = () => { ///
       seconds.toString().padStart(2, "0")
     );
   };
-
-
-
-
-
-
-
-
-
-
 
   // if timed then trigger calc of time left and update ui every 1 second
   useEffect(() => {
@@ -180,9 +169,8 @@ export const Discussion = () => { ///
     } else {
       console.log("user not in group");
     }
-      console.log(group)
   }
-  
+
   useEffect(checkGroupMembership, [group]);
 
   // get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
@@ -258,9 +246,9 @@ export const Discussion = () => { ///
       <br />
       <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
         <Sidebars />
-        <Container attached="bottom" style={{ width: "110vh"}}>                    {/**/}
+        <Container attached="bottom" style={{ width: "110vh"}}>
           <Grid columns={3}>             {/**/}
-              <GridColumn width={3} style={{ height: "90vh" }}>              {/**/}
+              <GridColumn width={3} style={{ height: "90vh" }}>
                 <Header
                   inverted
                   content={(scenario && scenario.title) || (topic && topic.title)}

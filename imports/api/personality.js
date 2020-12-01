@@ -12,10 +12,8 @@ Meteor.methods({
         });
     },
 
-    //get a random experiment with a non-empty rating
+    //get a random personality question
     "personality.getRandomQuestion"() {
-
-        console.log("random personailty question triggered");
         const fetchedQuestion = Personality.rawCollection().aggregate([
             {$sample: {size: 1}},
             {

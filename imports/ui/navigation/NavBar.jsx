@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Menu,
     Container,
@@ -39,10 +39,20 @@ export const NavBar = ({handleChangeLanguage}) => {
     const updateUserLang = (lang) => {
         //add cookie with selected value
         cookies.set('lang', lang, { path: '/' });
-        // console.log(cookies.get('lang'));
-        handleChangeLanguage(lang);
-        setUserLang(lang);
+        console.log(cookies.get('lang'));
+
+        handleChangeLanguage(cookies.get('lang'));
+        setUserLang(cookies.get('lang'));
     }
+
+    useEffect(()=>{
+        if(cookies.get('lang')){
+            setUserLang(cookies.get('lang'))
+        } else {
+            cookies.set('lang', "mā", { path: '/' });
+        }
+    },[]);
+
     return (
         <div className="navbar">
             <Menu fixed="top" inverted

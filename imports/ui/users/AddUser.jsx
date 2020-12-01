@@ -12,12 +12,21 @@ export const AddUser = () => {
     const [errUsername, setErrUsername] = useState("");
     const [errEmail, setErrEmail] = useState("");
     const [userRolesList, setUserRolesList] = useState(["PARTICIPANT_I"]);
+    const [isAdmin, setIsAdmin] = useState(false);
     const userRoles = [
         'ADMIN',
         'GROUP_LEADER',
         'PARTICIPANT_I',
         'PARTICIPANT_W',
         'RESEARCHER'];
+
+    Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
+        if (error) {
+            console.log(error.reason);
+            return;
+        }
+        setIsAdmin(result);
+    });
 
     const handleSubmit = () => {
         setErrEmail("");
@@ -64,7 +73,7 @@ export const AddUser = () => {
                         <div style={{ height: "10px" }} />
                     )}
                     <br/>
-                    {Meteor.userId() &&
+                    {isAdmin &&
                     <Form.Dropdown
                         label="Which Roles do you want to assign?"
                         selection
