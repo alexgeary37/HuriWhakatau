@@ -84,9 +84,8 @@ Meteor.methods({
     return true;
   },
 
-  //get a random experiment with a non-empty rating
+  //get a random comment from discussion
   "comments.getRandomExperimentCommentForRating"(discussionIds) {
-    console.log("random comment query triggered");
     const fetchedComment = Comments.rawCollection().aggregate([
       {$match: {discussionId: {$in: discussionIds}}},
       {$sample: {size: 1}}

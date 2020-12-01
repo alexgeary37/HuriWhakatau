@@ -101,7 +101,6 @@ Meteor.methods({
 
     //get a random experiment with a non-empty rating
     "experiments.getRandomExperimentForRating"() {
-        console.log("random experiment query triggered");
         const fetchedExp = Experiments.rawCollection().aggregate([
             {$match: {ratings: {$elemMatch: {rating: {$ne: ""}}}}},
             {$sample: {size: 1}}
