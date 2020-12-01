@@ -68,7 +68,7 @@ export const EnrollForm = () => {
                         <div style={{height: "10px"}}/>
                     )}
                     <Form.Input
-                        label="Password"
+                        label="Confirm Password"
                         type="Password"
                         error={password !== confirm}
                         value={confirm}

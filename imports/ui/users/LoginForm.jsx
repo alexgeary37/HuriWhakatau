@@ -3,6 +3,7 @@ import {useHistory} from "react-router-dom";
 import {Modal, Button, Input, Form, Divider} from "semantic-ui-react";
 
 export const LoginForm = ({toggleModal}) => {
+    console.log('LoginForm');
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [open, setOpen] = useState(true);
@@ -23,7 +24,8 @@ export const LoginForm = ({toggleModal}) => {
         history.push("/mydashboard");
     };
 
-    const toggleIt = (e) => {
+    const toggleIt = () => {
+        console.log('toggleIt');
         setOpen(false);
         toggleModal();
     }
@@ -72,7 +74,7 @@ export const LoginForm = ({toggleModal}) => {
                 </Modal.Content>
                 <Divider/>
                 <Modal.Actions>
-                    <Button type={"button"} content="Cancel" color="black" onClick={() => setOpen(false)}/>
+                    <Button type={"button"} content="Cancel" color="black" onClick={(e) => toggleIt(e)}/>
                     <Button
                         content="Login"
                         labelPosition="right"

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Menu,
     Container,
@@ -14,7 +14,7 @@ import {Link, useHistory} from "react-router-dom";
 import {useTracker} from "meteor/react-meteor-data";
 import {LoginForm} from "/imports/ui/users/LoginForm";
 
-export const NavBar = ({handleChangeLanguage}) => {
+export const NavBar = ({handleChangeLanguage, handleLogin}) => {
     const [showLogin, setShowLogin] = useState(false);
     const [userLang, setUserLang] = useState("mā"); //defaulting to māori language
     const cookies = new Cookies();
@@ -41,12 +41,19 @@ export const NavBar = ({handleChangeLanguage}) => {
         console.log('lang::', lang);
         console.log('typeof lang::', typeof lang);
         cookies.set('lang', lang, { path: '/' });
-        console.log('cookies.get(\'lang\')::', cookies.get('lang'));
-        handleChangeLanguage(lang);
-        setUserLang(lang);
-        console.log('userLang', userLang);
-        console.log('cookies.getAll::', cookies.getAll().lang);
-    };
+        console.log(cookies.get('lang'));
+
+        handleChangeLanguage(cookies.get('lang'));
+        setUserLang(cookies.get('lang'));
+    }
+
+    useEffect(()=>{
+        if(cookies.get('lang')){
+            setUserLang(cookies.get('lang'))
+        } else {
+            cookies.set('lang', "mā", { path: '/' });
+        }
+    },[]);
 
     return (
         <div className="navbar">
@@ -94,17 +101,17 @@ export const NavBar = ({handleChangeLanguage}) => {
                             </Dropdown.Menu>
                         </Dropdown>
                         {!user &&
-                        <MenuItem>
-                            <Button as={'h2'}
-                                    onClick={() => {
-                                        handleSignUp();
-                                    }}
-                                    className={'signUp'}
-                                    content="Sign Up"
-                                    negative
-                                    style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}
-                            />
-                        </MenuItem>
+                            <MenuItem>
+                                <Button as={'h2'}
+                                        onClick={() => {
+                                            handleSignUp();
+                                        }}
+                                        className={'signUp'}
+                                        content="Sign Up"
+                                        negative
+                                        style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}
+                                />
+                            </MenuItem>
                         }
                         {user ?
                             <MenuItem as={Link} to="/" name="logout" onClick={logUserOut}
@@ -132,7 +139,7 @@ export const NavBar = ({handleChangeLanguage}) => {
             {showLogin &&
             <div className="dashboard-login">
                 <LoginForm
-                    toggleLogin={toggleModal}
+                    toggleModal={toggleModal}
                 />
             </div>
             }

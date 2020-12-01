@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import {
   Button,
@@ -20,6 +20,17 @@ import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 import Cookies from "universal-cookie/lib";
 
 export const Dashboard = () => {
+  const cookies = new Cookies();
+
+  // set default language cookie
+  useEffect(()=>{
+    if(cookies.get('lang')){
+      setUserLang(cookies.get('lang'))
+    } else {
+      cookies.set('lang', "mā", { path: '/' });
+    }
+  },[]);
+  
   //set up changing language on site based on user nav menu selection
   const [userLang, setUserLang] = useState("mā");
   
@@ -27,7 +38,7 @@ export const Dashboard = () => {
     console.log("changed");
     setUserLang(lang);
     console.log('langa', lang);
-  }
+  };
 
   //set up tour of page
   const splashTourSteps = dashSplash;
@@ -87,10 +98,10 @@ export const Dashboard = () => {
             <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
               {discussions &&
               discussions.map((discussion) => (
-                  <DiscussionSummary
-                      key={discussion._id}
-                      discussion={discussion}
-                  />
+                <DiscussionSummary
+                  key={discussion._id}
+                  discussion={discussion}
+                />
               ))}
             </List>
           </Segment>

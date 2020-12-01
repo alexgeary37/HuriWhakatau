@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Random} from 'meteor/random'
 import {indices, responseSet} from '/imports/api/ratingResponses'
-import {useTracker} from "meteor/react-meteor-data";
 import {
     Button, Container, Segment,
     Header, Message, List, Form,
@@ -49,10 +48,8 @@ export const RatingComponent = () => {
         if (questionType) {
             Meteor.call("experiments.getRandomExperimentForRating"
                 , (err, fetchedExperimentArray) => {
-                    // console.log(expy[0]);
                     let experiment = fetchedExperimentArray[0];
                     let exptRatings = experiment.ratings.filter(rating => rating.rating != "");
-                    console.log(exptRatings);
                     // Select a random rating from the experiment's rating set
                     rating = exptRatings[Math.floor(Math.random() * Math.floor(exptRatings.length))]
                     // find the appropriate response set
@@ -68,7 +65,6 @@ export const RatingComponent = () => {
                     Meteor.call("comments.getRandomExperimentCommentForRating", experiment.discussions
                         , (err, fetchedCommentArray) => {
                             comment = fetchedCommentArray[0];
-                            // Comments.findOne({_id: "bkXE3GtYtkxW2q6Zt"});
                             id = comment._id;
                             body = comment.text;
 
@@ -86,7 +82,6 @@ export const RatingComponent = () => {
         } else {
             Meteor.call("personality.getRandomQuestion", (err, fetchedQuestionArray) => {
                 question = fetchedQuestionArray[0];
-                console.log(question);
                 id = question._id;
                 itemNum = question.item.item;
                 header = question.item.text;
@@ -150,7 +145,6 @@ export const RatingComponent = () => {
                 }}>
                     <List.Header as={'h4'}
                                  content={questionItem && questionItem.headerText}
-                                 // content={aStub && aStub.headerText}
                     />
                     {questionItem.bodyText &&
                     <List.Description as={Segment}
@@ -166,7 +160,6 @@ export const RatingComponent = () => {
                                 name='quixbox'
                                 value={label}
                                 checked={answerString === label}
-                                // onChange={({target}) => addAnswerValue(target.value)}
                                 onChange={(e, data) => addAnswerValue(data.value)}
                             />
                         </Form.Field>

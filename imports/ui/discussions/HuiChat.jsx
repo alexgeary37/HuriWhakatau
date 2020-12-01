@@ -28,11 +28,10 @@ import {Sidebars} from "/imports/ui/navigation/Sidebars";
 import {CommentForm} from "/imports/ui/comments/CommentForm";
 import {UserComment} from "/imports/ui/comments/UserComment";
 import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
-import {UserSummary} from "/imports/ui/users/UserSummary"; ///
+import {UserSummary} from "/imports/ui/users/UserSummary";
 
 //adaption of the Discussion.jsx to bring it in line with Tamahau's designs
-export const HuiChat = () => { ///
-  console.log("Entered hui"); ///
+export const HuiChat = () => {
   const filter = {};
   const { discussionId } = useParams();
   const [timedDiscussion, setTimedDiscussion] = useState(false); // introduction eg show/hide verdict proposal etc
@@ -76,16 +75,9 @@ export const HuiChat = () => { ///
       seconds.toString().padStart(2, "0")
     );
   };
-  
-  
-  
-  
+
   const [userVotedForLeader, setUserVotedForLeader] = useState(false); ///
-  const [isDiscussion, setIsDiscussion] = useState(false); // display differently if a discussion vs ///
-  
-  
-  
-  
+
   // if timed then trigger calc of time left and update ui every 1 second
   useEffect(() => {
     if (timedDiscussion) {
@@ -166,7 +158,7 @@ export const HuiChat = () => { ///
       /// WHOLE BLOCK BELOW
       groupMembers = Meteor.users.find({
         _id: {$in: discussionGroup.members},
-      });
+      }).fetch();
       theGroupLeader = discussionGroup.groupLeader;
       //get group members an usernames for showing in the participants panel
       // discussionGroup.members.forEach((member) => {
@@ -194,23 +186,6 @@ export const HuiChat = () => { ///
       isIntroduction: discussionIsIntroduction, ///
     };
   });
-  
-  /// WHOLE block below
-  // debug msg
-  console.log(
-    "time limit: ",
-    discussionTimeLimit,
-    "\ndiscussion deadline: ",
-    discussionDeadline,
-    "timed: ",
-    timedDiscussion,
-    "group leader: ",
-    //this is undefined, even though the group does have a leader
-    groupLeader,
-    "next discussion: ",
-    nextDiscussion
-  );
-  ///
 
   //check if user is in the discussion group
   const checkGroupMembership = () => {
@@ -220,7 +195,6 @@ export const HuiChat = () => { ///
     } else {
       console.log("user not in group");
     }
-    console.log(group)
   }
 
   useEffect(checkGroupMembership, [group]);
@@ -300,18 +274,18 @@ export const HuiChat = () => { ///
       Meteor.call("discussions.addProposer", discussionId);
 
   return (
-      <div inverted style={{backgroundColor: 'rgb(30, 30, 30)'}}>                    {/**/}
-          <NavBar />
+      <div style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+          <NavBar/>
           {/*hacky way to move content out from under menu*/}
           {/*<br/>*/}
           {/*<br/>*/}
           {/*<br/>*/}
           <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
               <Sidebars />
-              <Container>                         {/**/}
-                  <span style={{height:"22em"}} />                     {/**/}
-                  <Grid columns={2} style={{width: "110vh"}}>               {/**/}
-                      <GridColumn width={10} attached="left">                   {/**/}
+              <Container>
+                  <span style={{height:"22em"}} />
+                  <Grid columns={2} style={{width: "110vh"}}>
+                      <GridColumn width={10} attached="left">
                           <Comment.Group style={{overflow: "auto", height: "75vh"}}>
                               {comments &&
                               comments.map((comment) => (
@@ -346,7 +320,7 @@ export const HuiChat = () => { ///
                               <Header
                                   inverted
                                   content={(scenario && scenario.title) || (topic && topic.title)}
-                                  size="medium" l
+                                  size="medium"
                               />
                               {/* replace the topic with scenario only once old data is cleared out */}
                               <Header as={'h5'} inverted

@@ -16,6 +16,7 @@ import {Scenarios} from "/imports/api/scenarios";
 import {Experiments} from "/imports/api/experiments";
 import {Discussions} from "/imports/api/discussions";
 import {ScenarioSets} from "/imports/api/scenarioSets";
+import {siteGlossary} from "../../api/glossary";
 import {myDashParticipant, myDashResearcher} from "/imports/api/tourSteps"
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
 import {NavBar} from "./NavBar";
@@ -39,6 +40,7 @@ import Cookies from "universal-cookie/lib";
 
 export const MyDashboard = () => {
     const cookies = new Cookies();
+    const [userLang, setUserLang] = useState("mā");
     const [isAdmin, setIsAdmin] = useState(false);
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
@@ -62,9 +64,20 @@ export const MyDashboard = () => {
     const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
     const participantTourSteps = myDashParticipant;
     const researcherTourSteps = myDashResearcher;
+    // handles user language selection for page, how to centralise this code so it doesn't get repeated every page?
+    const handleChangeLanguage = (lang) =>{
+        setUserLang(lang);
+    }
+    // set lang om load from cookie if exists.
+    useEffect(()=>{
+        if(cookies.get('lang')){
+            setUserLang(cookies.get('lang'))
+        } else {
+            cookies.set('lang', "mā", { path: '/' });
+        }
+    },[]);
 
     const toggleShowTour = () => {
-        console.log('not cookie:', !cookies.get('siteTour'));
         if (!cookies.get('siteTour')) {
             setShowTour(!showTour);
         }
@@ -100,7 +113,6 @@ export const MyDashboard = () => {
     }
 
     //get user admin role status and update isAdmin variable with call back.
-    // possibly this should be a Promise?
     Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
         if (error) {
             console.log(error.reason);
@@ -109,7 +121,6 @@ export const MyDashboard = () => {
         setIsAdmin(result);
     });
     //get user researcher role status and update isResearcher variable with call back.
-    // possibly this should be a Promise?
     Meteor.call("security.hasRole", Meteor.userId(), "RESEARCHER", (error, result) => {
         if (error) {
             console.log(error.reason);
@@ -180,7 +191,7 @@ export const MyDashboard = () => {
         // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
         if (userSub.ready()) {
-            currentUser = Meteor.call("users.getUser", userId, (err, user) => {
+            Meteor.call("users.getUser", userId, (err, user) => {
                 if (user.profile.friendList) {
                     fetchedFriendIds = user.profile.friendList;
                     fetchedFriendIds.forEach((friendId) => {
@@ -211,7 +222,7 @@ export const MyDashboard = () => {
         }
 
         return {
-            user: currentUser,
+            user: Meteor.userId(),
             myDiscussions: fetchedMyDiscussions,
             allFinishedDiscussions: fetchedAllFinishedDiscussions,
             groups: fetchedGroups,
@@ -324,7 +335,7 @@ export const MyDashboard = () => {
             {showTour &&
                 <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
             }
-            <NavBar/>
+            <NavBar handleChangeLanguage={handleChangeLanguage}/>
             <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
                 {/* right sidebar */}
                 <Sidebar
@@ -492,12 +503,8 @@ export const MyDashboard = () => {
                         <Grid doubling /*style={{overflow: "auto", height: "87vh"}}*/>
                             <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
                                 <GridColumn width={16}>
-                                {/*<Segment attached={'top'} fluid hidden={!isDiscussionListsHidden}*/}
-                                {/*         onClick={toggleDiscussionLists}>Show discussions</Segment>*/}
-                                {/*<Segment fluid content={"hide discussions"} hidden={isDiscussionListsHidden}*/}
-                                {/*         onClick={toggleDiscussionLists}/>*/}
                                     <Divider />
-                                    <Header as={Link} floated='right' inverted onClick={toggleDiscussionLists}>
+                                    <Header as={Link} to={'/mydashboard'} floated='right' inverted onClick={toggleDiscussionLists}>
                                         {isDiscussionListsHidden ? 'Show': 'Hide'} Discussions</Header>
                                     <br/>
                                     {isDiscussionListsHidden && <Divider />}
@@ -507,7 +514,7 @@ export const MyDashboard = () => {
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
-                                        <Header as={'h3'} className={'myDiscussions'}>My Discussions
+                                        <Header as={'h3'} className={'myDiscussions'}>My {siteGlossary.userDiscourse[userLang]}
                                             <Button
                                                 className={'newDiscussion'}
                                                 floated={"right"}
@@ -538,8 +545,8 @@ export const MyDashboard = () => {
                                 <GridColumn width={8}>
                                     <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                        <Header as={'h3'} className={'finishedDiscussions'}>All Finished
-                                            Discussions</Header>
+                                        <Header as={'h3'} className={'finishedDiscussions'}>
+                                            All Finished {siteGlossary.userDiscourse[userLang]}</Header>
                                         <ListItem style={{overflow: "auto", height: "16em"}}
                                                   description={allFinishedDiscussions &&
                                                   allFinishedDiscussions.map((discussion) => (
