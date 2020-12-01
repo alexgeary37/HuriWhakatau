@@ -22,10 +22,13 @@ import Cookies from "universal-cookie/lib";
 export const Dashboard = () => {
   //set up changing language on site based on user nav menu selection
   const [userLang, setUserLang] = useState("mā");
+  
   const handleChangeLanguage = (lang) =>{
-    console.log("changed")
+    console.log("changed");
     setUserLang(lang);
+    console.log('langa', lang);
   }
+
   //set up tour of page
   const splashTourSteps = dashSplash;
 

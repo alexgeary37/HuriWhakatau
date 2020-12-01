@@ -301,7 +301,7 @@ export const HuiChat = () => { ///
 
   return (
       <div inverted style={{backgroundColor: 'rgb(30, 30, 30)'}}>                    {/**/}
-          <NavBar/>
+          <NavBar />
           {/*hacky way to move content out from under menu*/}
           {/*<br/>*/}
           {/*<br/>*/}

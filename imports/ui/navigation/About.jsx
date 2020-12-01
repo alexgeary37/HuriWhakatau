@@ -320,7 +320,7 @@ export const About = () => {
 
     return (
         <div>
-            <NavBar/>
+            <NavBar />
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars />
             <Container inverted={'true'}>

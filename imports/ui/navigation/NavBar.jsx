@@ -34,17 +34,23 @@ export const NavBar = ({handleChangeLanguage}) => {
     };
     const handleSignUp = () => {
         history.push("/AddUser");
-    }
+    };
     //set user preferred language in a cookie
     const updateUserLang = (lang) => {
         //add cookie with selected value
+        console.log('lang::', lang);
+        console.log('typeof lang::', typeof lang);
         cookies.set('lang', lang, { path: '/' });
-        // console.log(cookies.get('lang'));
+        console.log('cookies.get(\'lang\')::', cookies.get('lang'));
         handleChangeLanguage(lang);
         setUserLang(lang);
-    }
+        console.log('userLang', userLang);
+        console.log('cookies.getAll::', cookies.getAll().lang);
+    };
+
     return (
         <div className="navbar">
+            <h1>{cookies.getAll().lang}</h1>
             <Menu fixed="top" inverted
                   style={{
                       backgroundColor: 'black',
