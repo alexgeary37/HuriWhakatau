@@ -50,13 +50,12 @@ Meteor.methods({
         });
         return true;
     },
-    
+
     "users.getUser"(userId) {
       check(userId, String);
-      
+
       const user = Meteor.users.findOne({_id: userId});
-      console.log("user:", user);
-      
+
       return user;
     },
 
