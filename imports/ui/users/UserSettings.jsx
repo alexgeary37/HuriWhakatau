@@ -188,11 +188,11 @@ export const UserSettings = () => {
     }
 
     return (
-        <div inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+        <div inverted="true" style={{backgroundColor: 'rgb(10, 10, 10)'}}>
             <NavBar/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars/>
-                <Container inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                <Container inverted="true" style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                     <span style={{height: "22em"}}/>
                     <Segment attached="top" clearing inverted
                              style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
@@ -205,7 +205,7 @@ export const UserSettings = () => {
                     </Segment>
                     <Grid columns={2}>
                         <GridColumn width={9}>
-                            <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                            <Segment fluid="true" inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Card.Content header="Account Details"/>
                                 <CardContent>
                                     <Form>
@@ -430,7 +430,7 @@ export const UserSettings = () => {
                                     </Form>
                                 </CardContent>
                             </Segment>
-                            <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                            <Segment fluid="true" inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Card.Content header="Profile Picture"/>
                                 <CardContent>
                                     {/*    user pic shit*/}
@@ -448,7 +448,7 @@ export const UserSettings = () => {
                         </GridColumn>
                         <GridColumn width={7}>
                             {isIndigenous &&
-                            <Segment fluid inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                            <Segment fluid="true" inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Card.Content header="Pepeha"/>
                                 <CardContent>
                                     <Form>
