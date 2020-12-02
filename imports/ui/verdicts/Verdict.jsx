@@ -1,4 +1,5 @@
 import React from "react";
+import TextTrim from "react-text-trim"
 import { useTracker } from "meteor/react-meteor-data";
 import { List, Button, Card, Header } from "semantic-ui-react";
 
@@ -37,7 +38,22 @@ export const Verdict = ({ verdict, onVote }) => {
             color="grey"
             content={verdict.postedTime.toDateString()}
           />
-          <Card.Description content={verdict.text} />
+          <Card.Description>
+          <TextTrim
+              refId="VerdictTrim"
+              text={verdict.text}
+              minLines={5}
+              maxLines={10}
+              showMoreLabel="Show More"
+              showLessLabel="Show Less"
+              delimiter="..."
+              fontSize={14}
+              lineHeight={16}
+              containerStyle={{}}
+              textWrapperStyle={{}}
+              buttonStyle={{}}
+          />
+          </Card.Description>
         </Card.Content>
         {Meteor.userId() !== verdict.authorId && !userHasVoted() ? (
           <div style={{ paddingBottom: 5, textAlign: "center" }}>
