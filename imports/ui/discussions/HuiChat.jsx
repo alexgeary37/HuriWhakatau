@@ -265,7 +265,9 @@ export const HuiChat = () => {
 
   /// WHOLE block below
   const closeChat = () => {
-      history.push("/huichat/" + nextDiscussion);
+      if(nextDiscussion) {
+          history.push("/huichat/" + nextDiscussion);
+      }
       Meteor.call("discussions.updateStatus", discussionId, "finished");
   };
   ///
@@ -370,6 +372,7 @@ export const HuiChat = () => {
                                   <Segment
                                       style={{position: "absolute", bottom: "0px", overflow: "auto", height: "50vh"}}>
                                       <Header content="Participants"/>
+                                      <Segment.Group>
                                       {groupMembers &&
                                       groupMembers.map((member) => (
                                           <List.Item key={member._id}>
@@ -385,6 +388,7 @@ export const HuiChat = () => {
                                               />
                                           </List.Item>
                                       ))}
+                                      </Segment.Group>
                                   </Segment>
                               </List>
                           </div>
