@@ -7,7 +7,7 @@ import {
     Segment,
     Header,
     Grid,
-    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input, Divider
+    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input, Divider, Checkbox
 } from "semantic-ui-react";
 import '/imports/api/security'
 import {Link} from "react-router-dom";
@@ -62,6 +62,7 @@ export const MyDashboard = () => {
     const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
     const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
+    const [filterDiscussionStatus, setFilterDiscussionStatus] = useState("finished");
     const participantTourSteps = myDashParticipant;
     const researcherTourSteps = myDashResearcher;
     // handles user language selection for page, how to centralise this code so it doesn't get repeated every page?
@@ -330,6 +331,14 @@ export const MyDashboard = () => {
         setIsDiscussionListsHidden(!isDiscussionListsHidden);
     }
 
+    const setDiscussionFilterOnStatus = (e) => {
+        if(e){
+            setFilterDiscussionStatus("active")
+        } else {
+            setFilterDiscussionStatus("finished")
+        }
+    }
+
     return (
         <div>
             {showTour &&
@@ -528,10 +537,10 @@ export const MyDashboard = () => {
 
                                         {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
-                                        {(isIndigenous !== null) &&
+                                        {isIndigenous !== null &&
                                         <ListItem style={{overflow: "auto", height: "16em"}}
                                                   description={myDiscussions &&
-                                                  myDiscussions.map((discussion) => (
+                                                  myDiscussions.filter((discussion) => discussion.status === filterDiscussionStatus).map((discussion) => (
                                                       <DiscussionSummary
                                                           key={discussion._id}
                                                           discussion={discussion}
@@ -539,6 +548,10 @@ export const MyDashboard = () => {
                                                       />
                                                   ))}/>}
                                         <Card.Content extra>
+                                            <Checkbox
+                                                toggle
+                                                onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
+                                                &nbsp; Show {filterDiscussionStatus === "active" ? "finished" : "active"}
                                         </Card.Content>
                                     </Segment>
                                 </GridColumn>
