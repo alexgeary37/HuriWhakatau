@@ -9,84 +9,6 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
         RichTextEditor.createEmptyValue()
     );
 
-    //function for recording pastes
-    const pasted = (event) => {
-        let pastedItem = {
-            i: event.clipboardData.getData('text/plain'),
-            t: Date.now(),
-        }
-        setPastedItems(pastedItems => [...pastedItems, pastedItem]);
-    };
-
-    const keystroke = (event) => {
-        let stroke = {
-            k: event.key,
-            t: Date.now(),
-        };
-        setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
-    };
-
-    // start of function to add macrons to letters if alt or alt + shift is pressed. Things crash pretty
-    // quick if you try to use it though, suspect to do with the range.collapse(false) had issues with that before
-    const macronise = (e) => {
-        let sel, range;
-        if (e.altKey && ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"].includes(e.key)) {
-            e.preventDefault();
-            if (window.getSelection) {
-                sel = window.getSelection();
-                if (sel.getRangeAt && sel.rangeCount) {
-                    console.log("range count: ", sel.rangeCount);
-                    range = sel.getRangeAt(0);
-                    console.log(sel);
-                    range.setStart(sel.focusNode, sel.focusOffset);
-                    let newOffset = sel.focusOffset + 1;
-                    switch (e.key) {
-                        case 'a': /* e.preventDefault(); */
-                            range.insertNode(document.createTextNode("ā"));
-                            break;
-                        case 'A':
-                            e.preventDefault()
-                            range.insertNode(document.createTextNode("Ā"));
-                            break;
-                        case 'e':
-                            range.insertNode(document.createTextNode("ē"));
-                            break;
-                        case 'E':
-                            range.insertNode(document.createTextNode("Ē"));
-                            break;
-                        case 'i':
-                            range.insertNode(document.createTextNode("ī"));
-                            break;
-                        case 'I':
-                            range.insertNode(document.createTextNode("Ī"));
-                            break;
-                        case 'o':
-                            range.insertNode(document.createTextNode("ō"));
-                            break;
-                        case 'O':
-                            range.insertNode(document.createTextNode("Ō"));
-                            break;
-                        case 'u':
-                            range.insertNode(document.createTextNode("ū"));
-                            break;
-                        case 'U':
-                            range.insertNode(document.createTextNode("Ū"));
-                            break;
-                        default:
-                            break;
-                    }
-                    // sel.collapse(textNode, textNode.length+newOffset);
-                    range.collapse(false);
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-                    //todo, fix this. always jumps back to second position in the text on
-                    // first try and then enters character
-                }
-            }
-        }
-    };
-
-
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
     useEffect(() => {
@@ -104,6 +26,7 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
     }, []);
 
     const handleChange = (value) => {
+        // console.log("ed val", value),
         setEditorValue(value);
     };
 
@@ -130,6 +53,87 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
         setPastedItems([]);
         setKeyStrokes([]);
     };
+
+    //function for recording pastes
+    const pasted = (event) => {
+        let pastedItem = {
+            i: event.clipboardData.getData('text/plain'),
+            t: Date.now(),
+        }
+        setPastedItems(pastedItems => [...pastedItems, pastedItem]);
+    };
+
+    const keystroke = (event) => {
+        let stroke = {
+            k: event.key,
+            t: Date.now(),
+        };
+        setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
+    };
+
+    // start of function to add macrons to letters if alt or alt + shift is pressed. Things crash pretty
+    // quick if you try to use it though, suspect to do with the range.collapse(false) had issues with that
+    // before. ***commenting out the code that doesn't work
+    // todo look at modifying the editorValue rather than the dom element. would need to determine
+    //   carat position and then insert the character there.
+    const macronise = (e) => {
+        let sel, range;
+        if (e.altKey && ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"].includes(e.key)) {
+            e.preventDefault();
+            if (window.getSelection) {
+                sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount) {
+                    range = sel.getRangeAt(0);
+                    range.setStart(sel.focusNode, sel.focusOffset);
+                    let newOffset = sel.focusOffset + 1;
+                    switch (e.key) {
+                        case 'a': /* e.preventDefault(); */
+                            // range.insertNode(document.createTextNode("ā"));
+                            let content;
+                            break;
+                        case 'A':
+                            // range.insertNode(document.createTextNode("Ā"));
+                            break;
+                        case 'e':
+                            // range.insertNode(document.createTextNode("ē"));
+                            break;
+                        case 'E':
+                            // range.insertNode(document.createTextNode("Ē"));
+                            break;
+                        case 'i':
+                            // range.insertNode(document.createTextNode("ī"));
+                            break;
+                        case 'I':
+                            // range.insertNode(document.createTextNode("Ī"));
+                            break;
+                        case 'o':
+                            // range.insertNode(document.createTextNode("ō"));
+                            break;
+                        case 'O':
+                            // range.insertNode(document.createTextNode("Ō"));
+                            break;
+                        case 'u':
+                            // range.insertNode(document.createTextNode("ū"));
+                            break;
+                        case 'U':
+                            // range.insertNode(document.createTextNode("Ū"));
+                            break;
+                        default:
+                            break;
+                    }
+                    // sel.collapse(textNode, textNode.length+newOffset);
+                    range.collapse(false);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                    //todo, fix this. always jumps back to second position in the text on
+                    // first try and then enters character
+                }
+            }
+        }
+    };
+
+
+
 
     const toolbarConfig = {
         // Optionally specify the groups to display (displayed in the order listed).
