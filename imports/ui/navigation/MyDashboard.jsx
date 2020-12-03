@@ -59,6 +59,7 @@ export const MyDashboard = () => {
     const [foundFriendsList, setFoundFriendsList] = useState([]);
     const [haveFoundFriends, setHaveFoundFriends] = useState(true);
     const [friendEmail, setFriendEmail] = useState("");
+    const [errFriendEmail, setErrFriendEmail] = useState("");
     const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
     const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
@@ -66,17 +67,17 @@ export const MyDashboard = () => {
     const participantTourSteps = myDashParticipant;
     const researcherTourSteps = myDashResearcher;
     // handles user language selection for page, how to centralise this code so it doesn't get repeated every page?
-    const handleChangeLanguage = (lang) =>{
+    const handleChangeLanguage = (lang) => {
         setUserLang(lang);
     }
     // set lang om load from cookie if exists.
-    useEffect(()=>{
-        if(cookies.get('lang')){
+    useEffect(() => {
+        if (cookies.get('lang')) {
             setUserLang(cookies.get('lang'))
         } else {
-            cookies.set('lang', "mā", { path: '/' });
+            cookies.set('lang', "mā", {path: '/'});
         }
-    },[]);
+    }, []);
 
     const toggleShowTour = () => {
         if (!cookies.get('siteTour')) {
@@ -84,7 +85,9 @@ export const MyDashboard = () => {
         }
     }
 
-    useEffect(() => {toggleShowTour();}, []);
+    useEffect(() => {
+        toggleShowTour();
+    }, []);
 
     const handleToggleWizard = () => {
         setIsOpenWizard(!isOpenWizard);
@@ -244,16 +247,18 @@ export const MyDashboard = () => {
     }
 
     const submitFriendSearch = () => {
-        setIsSearching(true);
-        setHaveFoundFriends(true);
-        Meteor.call("users.findFriend", searchTerm, (err, response) => {
-            setFoundFriendsList(response);
-            setIsSearching(false);
-            setSearchTerm("");
-            if (response.length === 0) {
-                setHaveFoundFriends(false);
-            }
-        });
+        if (searchTerm) {
+            setIsSearching(true);
+            setHaveFoundFriends(true);
+            Meteor.call("users.findFriend", searchTerm, (err, response) => {
+                setFoundFriendsList(response);
+                setIsSearching(false);
+                setSearchTerm("");
+                if (response.length === 0) {
+                    setHaveFoundFriends(false);
+                }
+            });
+        }
     }
 
     const addFriend = (friendId) => {
@@ -281,12 +286,17 @@ export const MyDashboard = () => {
     }
 
     const inviteFriend = () => {
-        Meteor.call("users.inviteFriend", friendEmail, (err, _) => {
-            if (err) {
-                setFriendInviteError(err);
-            }
-        });
-        setFriendEmail("");
+        if (friendEmail) {
+            setFriendInviteError("")
+            Meteor.call("users.inviteFriend", friendEmail, (err, _) => {
+                if (err) {
+                    setFriendInviteError(err.reason);
+                }
+            });
+            setFriendEmail("");
+        } else {
+            setFriendInviteError("Must be a valid email address")
+        }
     }
 
     const searchFriendsComponent = () => {
@@ -332,7 +342,7 @@ export const MyDashboard = () => {
     }
 
     const setDiscussionFilterOnStatus = (e) => {
-        if(e){
+        if (e) {
             setFilterDiscussionStatus("active")
         } else {
             setFilterDiscussionStatus("finished")
@@ -342,7 +352,7 @@ export const MyDashboard = () => {
     return (
         <div>
             {showTour &&
-                <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
+            <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
             }
             <NavBar handleChangeLanguage={handleChangeLanguage}/>
             <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
@@ -360,7 +370,7 @@ export const MyDashboard = () => {
                     onClick={handleShowSidebar}
                     style={{
                         backgroundColor: 'rgb(30, 30, 30)',
-                        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
+                        backgroundImage: !showSidebar ? `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})` : '',
                         backgroundSize: '60px',
                         backgroundRepeat: 'repeat-y'
                     }}
@@ -401,7 +411,8 @@ export const MyDashboard = () => {
                             </Menu.Item>
                         ))}
                         {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (
-                            <Menu.Item key={pendingFriend._id} /*title={pendingFriend.online ? 'online' : 'offline'}*/>
+                            <Menu.Item
+                                key={pendingFriend._id} /*title={pendingFriend.online ? 'online' : 'offline'}*/>
                                 {pendingFriend.username}
                                 <Button negative size={'mini'} compact={true}
                                         onClick={() => acceptFriend(pendingFriend._id)}>
@@ -429,6 +440,8 @@ export const MyDashboard = () => {
                         ))}</div>}
                     {showSidebar && !haveFoundFriends && inviteFriendsComponent()}
                     {showSidebar && searchFriendsComponent()}
+                    {showSidebar && friendInviteError && <div style={{color:'red', fontWeight: 'bold'}}>
+                        &nbsp;&nbsp;&nbsp;{friendInviteError}</div>}
                     {/*my group members, update to have a group member specific user set*/}
                     <Menu.Item style={{marginLeft: "10px", fontWeight: "bold"}} title={anyGroupMemberOnline ?
                         'There are members online' : 'No members online'}>
@@ -512,18 +525,20 @@ export const MyDashboard = () => {
                         <Grid doubling /*style={{overflow: "auto", height: "87vh"}}*/>
                             <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
                                 <GridColumn width={16}>
-                                    <Divider />
-                                    <Header as={Link} to={'/mydashboard'} floated='right' inverted onClick={toggleDiscussionLists}>
-                                        {isDiscussionListsHidden ? 'Show': 'Hide'} Discussions</Header>
+                                    <Divider/>
+                                    <Header as={Link} to={'/mydashboard'} floated='right' inverted
+                                            onClick={toggleDiscussionLists}>
+                                        {isDiscussionListsHidden ? 'Show' : 'Hide'} Discussions</Header>
                                     <br/>
-                                    {isDiscussionListsHidden && <Divider />}
+                                    {isDiscussionListsHidden && <Divider/>}
                                 </GridColumn>
                                 <GridColumn width={8}>
                                     <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}
                                              style={{backgroundColor: 'rgb(10, 10, 10)'}}
                                              title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}
                                     >
-                                        <Header as={'h3'} className={'myDiscussions'}>My {siteGlossary.userDiscourse[userLang]}
+                                        <Header as={'h3'}
+                                                className={'myDiscussions'}>My {siteGlossary.userDiscourse[userLang]}
                                             <Button
                                                 className={'newDiscussion'}
                                                 floated={"right"}
@@ -551,7 +566,7 @@ export const MyDashboard = () => {
                                             <Checkbox
                                                 toggle
                                                 onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
-                                                &nbsp; Show {filterDiscussionStatus === "active" ? "finished" : "active"}
+                                            &nbsp; Show {filterDiscussionStatus === "active" ? "finished" : "active"}
                                         </Card.Content>
                                     </Segment>
                                 </GridColumn>
@@ -778,7 +793,6 @@ export const MyDashboard = () => {
                     </Container>
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
-
         </div>
     );
 };

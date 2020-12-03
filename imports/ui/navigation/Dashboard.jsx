@@ -32,11 +32,13 @@ export const Dashboard = () => {
       cookies.set('lang', "mā", { path: '/' });
     }
   },[]);
+  
   //set up changing language on site based on user nav menu selection
   const handleChangeLanguage = (lang) =>{
-    console.log("changed")
+    console.log("changed");
     setUserLang(lang);
-  }
+    console.log('langa', lang);
+  };
 
   const { discussions, publicDiscussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
@@ -93,10 +95,10 @@ export const Dashboard = () => {
             <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
               {discussions &&
               discussions.map((discussion) => (
-                  <DiscussionSummary
-                      key={discussion._id}
-                      discussion={discussion}
-                  />
+                <DiscussionSummary
+                  key={discussion._id}
+                  discussion={discussion}
+                />
               ))}
             </List>
           </Segment>

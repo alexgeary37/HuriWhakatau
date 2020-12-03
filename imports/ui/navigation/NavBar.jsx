@@ -15,7 +15,7 @@ import {useTracker} from "meteor/react-meteor-data";
 import {LoginForm} from "/imports/ui/users/LoginForm";
 import {AcceptCookies} from "./cookieAccept";
 
-export const NavBar = ({handleChangeLanguage}) => {
+export const NavBar = ({handleChangeLanguage, handleLogin}) => {
     const [showLogin, setShowLogin] = useState(false);
     const [userLang, setUserLang] = useState("mā"); //defaulting to māori language
     const cookies = new Cookies();
@@ -34,10 +34,12 @@ export const NavBar = ({handleChangeLanguage}) => {
     };
     const handleSignUp = () => {
         history.push("/AddUser");
-    }
+    };
     //set user preferred language in a cookie
     const updateUserLang = (lang) => {
         //add cookie with selected value
+        console.log('lang::', lang);
+        console.log('typeof lang::', typeof lang);
         cookies.set('lang', lang, { path: '/' });
         console.log(cookies.get('lang'));
 
@@ -99,17 +101,17 @@ export const NavBar = ({handleChangeLanguage}) => {
                             </Dropdown.Menu>
                         </Dropdown>
                         {!user &&
-                        <MenuItem>
-                            <Button as={'h2'}
-                                    onClick={() => {
-                                        handleSignUp();
-                                    }}
-                                    className={'signUp'}
-                                    content="Sign Up"
-                                    negative
-                                    style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}
-                            />
-                        </MenuItem>
+                            <MenuItem>
+                                <Button as={'h2'}
+                                        onClick={() => {
+                                            handleSignUp();
+                                        }}
+                                        className={'signUp'}
+                                        content="Sign Up"
+                                        negative
+                                        style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}
+                                />
+                            </MenuItem>
                         }
                         {user ?
                             <MenuItem as={Link} to="/" name="logout" onClick={logUserOut}
@@ -137,7 +139,7 @@ export const NavBar = ({handleChangeLanguage}) => {
             {showLogin &&
             <div className="dashboard-login">
                 <LoginForm
-                    toggleLogin={toggleModal}
+                    toggleModal={toggleModal}
                 />
             </div>
             }
