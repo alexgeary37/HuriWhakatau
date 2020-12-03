@@ -25,35 +25,26 @@ export const UserSummary = ({
     };
 
     return (
-        <List.Item>
-            <List.Content as={Segment}>
-                {member.username}
-                {Meteor.userId() !== groupLeader && member._id === groupLeader && (
-                    <div>Group Leader</div>
-                )}
-                <Segment>
-                    <Icon className="mountain"
-                          title={member.pepeha ?
-                              member.pepeha.mountain ?
-                              member.pepeha.mountain : "no mountain set" : "no mountain set"}/>
-                    <Icon className="river"
-                          title={member.pepeha ?
-                              member.pepeha.river ?
-                              member.pepeha.river : "no river set" : "no river set"}/>
-                    <Icon className="waka"
-                          title={member.pepeha ?
-                              member.pepeha.waka ?
-                              member.pepeha.waka : "no waka set" : "no waka set"}/>
-                    <Icon className="iwi"
-                          title={member.pepeha ?
-                              member.pepeha.iwi ?
-                              member.pepeha.iwi : "no iwi set" : "no iwi set"}/>
-                    <Icon className="role"
-                          title={member.pepeha ?
-                              member.pepeha.role ?
-                              member.pepeha.role : "no role set" : "no role set"}/>
-                </Segment>
-                <ModalActions>
+        // <List.Item>
+        //     <List.Content >
+                <Segment compact>
+                    {member.username}
+                    {Meteor.userId() !== groupLeader && member._id === groupLeader && (
+                        <span> (Group Leader)</span>
+                    )}
+                    {groupLeader === Meteor.userId() &&
+                    groupLeader === member._id &&
+                    discussionStatus === "active" && (
+                        <Icon
+                            title={'End discussion and go to next'}
+                            className={'stop circle'}
+                            // size={'large'}
+                            // style={{margin: 10}}
+                            // content={"Close chat"}
+                            onClick={handleCloseChat}
+                            color={'red'}
+                        />
+                    )}
                     {Meteor.userId() !== member._id &&
                     !groupLeader &&
                     (discussionStatus = "active") && (
@@ -67,32 +58,54 @@ export const UserSummary = ({
                             }}
                         />
                     )}
-                    {groupLeader === Meteor.userId() &&
-                    groupLeader === member._id &&
-                    discussionStatus === "active" && (
-                        <div style={{textAlign: "center"}}>
-                            <Button
-                                style={{margin: 10}}
-                                content={"Close chat"}
-                                onClick={handleCloseChat}
-                                primary
-                            />
-                        </div>
-                    )}
                     {discussionStatus !== "active" &&
                     Meteor.userId() === member._id &&
                     nextDiscussionId && (
-                        <div style={{textAlign: "center"}}>
-                            <Button
-                                style={{margin: 10}}
-                                content={"Go to next"}
+                            <Icon
+                                title={'Go to next discussion'}
+                                className={'arrow alternate circle right'}
+                                // style={{margin: 10}}
+                                // content={"Go to next"}
                                 onClick={handleCloseChat}
-                                primary
+                                color={'green'}
                             />
-                        </div>
                     )}
-                </ModalActions>
-            </List.Content>
-        </List.Item>
+                    <br/>
+                    <Icon className="mountain"
+                          size='small'
+                          bordered
+                          title={member.pepeha ?
+                              member.pepeha.mountain ?
+                              member.pepeha.mountain : "no mountain set" : "no mountain set"}/>
+                    <Icon className="river"
+                          size='small'
+                          bordered
+                          title={member.pepeha ?
+                              member.pepeha.river ?
+                              member.pepeha.river : "no river set" : "no river set"}/>
+                    <Icon className="waka"
+                          size='small'
+                          bordered
+                          title={member.pepeha ?
+                              member.pepeha.waka ?
+                              member.pepeha.waka : "no waka set" : "no waka set"}/>
+                    <Icon className="iwi"
+                          size='small'
+                          bordered
+                          title={member.pepeha ?
+                              member.pepeha.iwi ?
+                              member.pepeha.iwi : "no iwi set" : "no iwi set"}/>
+                    <Icon className="user"
+                          size='small'
+                          bordered
+                          title={member.pepeha ?
+                              member.pepeha.role ?
+                              member.pepeha.role : "no role set" : "no role set"}/>
+                {/*<ModalActions>*/}
+                {/*    */}
+                {/*</ModalActions>*/}
+                </Segment>
+        //     </List.Content>
+        // </List.Item>
     );
 };

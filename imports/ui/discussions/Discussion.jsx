@@ -39,6 +39,7 @@ export const Discussion = () => { ///
     null
   );
   const [timeLeft, setTimeLeft] = useState(null);
+  const [openConsensusModal, setOpenConsensusModal] = useState('unopened');
   const [userInGroup, setUserInGroup] = useState(false);
   let history = useHistory();
   // use to allow comments or proposing / voting on verdicts
@@ -51,7 +52,6 @@ export const Discussion = () => { ///
     setMutableDiscussionDeadline(deadline);
     console.log("deadline updated", mutableDiscussionDeadline);
   };
-
   // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
     let current = new Date();
@@ -303,11 +303,12 @@ export const Discussion = () => { ///
                       />
                     </List.Item>
                   ))}
-                  {group && hasReachedConsensus() && (
-                    <Modal open={true}>
-                      <Modal.Content>Consensus</Modal.Content>
+                  {group && hasReachedConsensus() && openConsensusModal === 'unopened' && (
+                    <Modal open={true} size='mini'>
+                      <Modal.Content>Discussion reached a consensus</Modal.Content>
                       <Modal.Actions>
                         <Button as={Link} to="/" content="Return to Dashboard" />
+                        <Button content="View Discussion" onClick={() => setOpenConsensusModal('closed')} />
                       </Modal.Actions>
                     </Modal>
                   )}

@@ -13,12 +13,12 @@ import {siteGlossary} from "../../api/glossary";
 import {Link, useHistory} from "react-router-dom";
 import {useTracker} from "meteor/react-meteor-data";
 import {LoginForm} from "/imports/ui/users/LoginForm";
+import {AcceptCookies} from "./cookieAccept";
 
 export const NavBar = ({handleChangeLanguage, handleLogin}) => {
     const [showLogin, setShowLogin] = useState(false);
     const [userLang, setUserLang] = useState("mā"); //defaulting to māori language
     const cookies = new Cookies();
-    // userLang = cookies.get('lang');
     let history = useHistory();
     const {user} = useTracker(() => {
         Meteor.subscribe("users");
@@ -57,7 +57,7 @@ export const NavBar = ({handleChangeLanguage, handleLogin}) => {
 
     return (
         <div className="navbar">
-            <h1>{cookies.getAll().lang}</h1>
+            <AcceptCookies />
             <Menu fixed="top" inverted
                   style={{
                       backgroundColor: 'black',

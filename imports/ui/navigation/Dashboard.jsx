@@ -20,8 +20,10 @@ import { DiscussionSummary } from "/imports/ui/discussions/DiscussionSummary";
 import Cookies from "universal-cookie/lib";
 
 export const Dashboard = () => {
+  const [userLang, setUserLang] = useState("mā");
   const cookies = new Cookies();
-
+  //set up tour of page
+  const splashTourSteps = dashSplash;
   // set default language cookie
   useEffect(()=>{
     if(cookies.get('lang')){
@@ -32,16 +34,11 @@ export const Dashboard = () => {
   },[]);
   
   //set up changing language on site based on user nav menu selection
-  const [userLang, setUserLang] = useState("mā");
-  
   const handleChangeLanguage = (lang) =>{
     console.log("changed");
     setUserLang(lang);
     console.log('langa', lang);
   };
-
-  //set up tour of page
-  const splashTourSteps = dashSplash;
 
   const { discussions, publicDiscussions } = useTracker(() => {
     Meteor.subscribe("allDiscussions");
