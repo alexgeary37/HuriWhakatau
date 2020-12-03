@@ -75,9 +75,9 @@ export const CreateDiscussion = ({toggleModal}) => {
         };
     });
 
-    //check if user is in the discussion group
+//check if user is in the discussion group
     const getOtherCategory = () => {
-        if (categories.length > 0) {
+        if (categories.length > 0 && categoryId.length === 0) {
             setCategoryId(categories.find(cat => cat.title === 'Other')._id);
         }
     }

@@ -15,7 +15,7 @@ import {useTracker} from "meteor/react-meteor-data";
 import {LoginForm} from "/imports/ui/users/LoginForm";
 import {AcceptCookies} from "./cookieAccept";
 
-export const NavBar = ({handleChangeLanguage, handleLogin}) => {
+export const NavBar = ({handleChangeLanguage}) => {
     const [showLogin, setShowLogin] = useState(false);
     const [userLang, setUserLang] = useState("mā"); //defaulting to māori language
     const cookies = new Cookies();
@@ -121,7 +121,7 @@ export const NavBar = ({handleChangeLanguage, handleLogin}) => {
                                 <Icon name={"user"} size={"small"}/>
                             </MenuItem>
                             :
-                            <MenuItem as={Link} to="/" name="login" onClick={toggleModal}>
+                            <MenuItem as={Button} name="login" onClick={toggleModal}>
                                 <Header as={'h2'} inverted style={{
                                     fontFamily: 'Tamaiti',
                                     fontWeight: 'bold',
