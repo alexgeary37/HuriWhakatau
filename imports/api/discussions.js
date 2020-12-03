@@ -152,6 +152,7 @@ if (Meteor.isServer) {
           deadline: 1,
           isIntroduction: 1,
           nextDiscussion: 1,
+          timeLimit: 1,
           isPublic: 1,
         },
       }

@@ -8,6 +8,7 @@ export const AddUser = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isSignupComplete, setIsSignupComplete] = useState(false);
     const [userAnon, setUserAnon] = useState(false);
     const [errUsername, setErrUsername] = useState("");
     const [errEmail, setErrEmail] = useState("");
@@ -39,7 +40,8 @@ export const AddUser = () => {
                     setErrUsername(error.reason + " ");
                     return;
                 } else {
-                    history.back();
+                    // history.back();
+                    setIsSignupComplete(true);
                     setErrUsername("");
                 }
             });
@@ -50,6 +52,7 @@ export const AddUser = () => {
         <div>
             <NavBar/>
             <Container>
+                {!isSignupComplete &&
                 <Form as={Segment} attached="bottom">
                     {/*update to have ability to input a list of emails. Space or comma separated*/}
                     <Form.Input
@@ -113,7 +116,20 @@ export const AddUser = () => {
                         }
                         loading={isLoading && !errUsername && !errEmail}
                     />
-                </Form>
+                </Form>}
+                {isSignupComplete &&
+                <Form as={Segment} attached="bottom">
+                    <br/>
+                    <h3>Please check your emails for an invitation and validate you email address using the link provided</h3>
+                    <Form.Button
+                        content="Return"
+                        positive
+                        onClick={() => {
+                            history.back();
+                            }
+                        }
+                    />
+                </Form>}
             </Container>
         </div>
     );

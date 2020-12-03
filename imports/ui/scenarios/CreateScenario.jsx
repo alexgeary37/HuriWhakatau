@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
@@ -7,7 +7,7 @@ import {Categories} from "../../api/categories";
 export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [categoryId, setCategoryId] = useState("NYXkv9KtqEhogjEHQ"); //make dynamically get the "other" category
+    const [categoryId, setCategoryId] = useState(""); //make dynamically get the "other" category
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
     const [errScenarioTitle, setErrScenarioTitle] = useState("");
@@ -79,7 +79,14 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
             discussionTemplates: DiscussionTemplates.find().fetch(),
         };
     });
-    console.log(categories);
+
+    //find id of category "other" to default the dropdown.
+    const getOtherCategory = () => {
+        if (categories.length > 0 && categoryId.length === 0) {
+            setCategoryId(categories.find(cat => cat.title === 'Other')._id);
+        }
+    }
+    useEffect(getOtherCategory, [categories]);
 
     return (
         <Modal

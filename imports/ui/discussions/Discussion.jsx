@@ -50,7 +50,6 @@ export const Discussion = () => { ///
   };
   const updateDeadline = (deadline) => {
     setMutableDiscussionDeadline(deadline);
-    console.log("deadline updated", mutableDiscussionDeadline);
   };
   // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
@@ -65,7 +64,6 @@ export const Discussion = () => { ///
     let seconds = Math.floor(
       ((discussionDeadline - current) % (1000 * 60)) / 1000
     );
-    console.log("timeleft: ", minutes);
     return (
       hours.toString().padStart(2, "0") +
       ":" +
@@ -134,8 +132,8 @@ export const Discussion = () => { ///
       discussionTemplate = DiscussionTemplates.findOne({
         _id: discussionScenario.discussionTemplateId,
       });
-      discussionTimeLimit = discussionTemplate
-          ? discussionTemplate.timeLimit
+      discussionTimeLimit = discussion.timeLimit
+          ? discussion.timeLimit
           : 0;
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
@@ -248,7 +246,7 @@ export const Discussion = () => { ///
         <Sidebars />
         <Container attached="bottom" style={{ width: "110vh"}}>
           <Grid columns={3}>             {/**/}
-              <GridColumn width={3} style={{ height: "90vh" }}>
+              <GridColumn width={3} style={{ height: "90vh"}}>
                 <Header
                   inverted
                   content={(scenario && scenario.title) || (topic && topic.title)}
@@ -260,7 +258,7 @@ export const Discussion = () => { ///
                   {(scenario && scenario.description) ||
                   (topic && topic.description)}
                 />
-                {timedDiscussion && <Timer style={{ position: "absolute", bottom: "0px", width: "95%" }} time={timeLeft} />}
+                {timedDiscussion && <Timer time={timeLeft} />}
               </GridColumn>
               <GridColumn width={10}>
                 <div
