@@ -793,7 +793,6 @@ export const MyDashboard = () => {
                     </Container>
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
-
         </div>
     );
 };
