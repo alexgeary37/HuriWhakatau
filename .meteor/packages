@@ -22,3 +22,4 @@ accounts-password@1.6.2
 meteortesting:mocha
 alanning:roles
 mizzao:user-status
+percolate:synced-cron

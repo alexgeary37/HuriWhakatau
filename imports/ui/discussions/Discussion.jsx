@@ -239,10 +239,10 @@ export const Discussion = () => { ///
     <div>                     {/**/}
       <NavBar />
       {/*hacky way to move content out from under menu*/}
-      {/*<br />*/}
-      {/*<br />*/}
       <br />
-      <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+      <br />
+      <br />
+      <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
         <Sidebars />
         <Container attached="bottom" style={{ width: "110vh"}}>
           <Grid columns={3}>             {/**/}
