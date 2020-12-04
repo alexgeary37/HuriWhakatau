@@ -63,7 +63,7 @@ export const MyDashboard = () => {
     const [friendInviteError, setFriendInviteError] = useState("");
     const [template, setTemplate] = useState(null);
     const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
-    const [filterDiscussionStatus, setFilterDiscussionStatus] = useState("finished");
+    const [filterDiscussionStatus, setFilterDiscussionStatus] = useState(["active"]);
     const participantTourSteps = myDashParticipant;
     const researcherTourSteps = myDashResearcher;
     // handles user language selection for page, how to centralise this code so it doesn't get repeated every page?
@@ -343,9 +343,9 @@ export const MyDashboard = () => {
 
     const setDiscussionFilterOnStatus = (e) => {
         if (e) {
-            setFilterDiscussionStatus("active")
+            setFilterDiscussionStatus(["active"])
         } else {
-            setFilterDiscussionStatus("finished")
+            setFilterDiscussionStatus(["finished", "hung", "timedout"])
         }
     }
 
@@ -555,7 +555,7 @@ export const MyDashboard = () => {
                                         {isIndigenous !== null &&
                                         <ListItem style={{overflow: "auto", height: "16em"}}
                                                   description={myDiscussions &&
-                                                  myDiscussions.filter((discussion) => discussion.status === filterDiscussionStatus).map((discussion) => (
+                                                  myDiscussions.filter((discussion) => filterDiscussionStatus.indexOf(discussion.status) > -1 ).map((discussion) => (
                                                       <DiscussionSummary
                                                           key={discussion._id}
                                                           discussion={discussion}
@@ -565,8 +565,9 @@ export const MyDashboard = () => {
                                         <Card.Content extra>
                                             <Checkbox
                                                 toggle
+                                                checked={filterDiscussionStatus.indexOf("active") > -1}
                                                 onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
-                                            &nbsp; Show {filterDiscussionStatus === "active" ? "finished" : "active"}
+                                            &nbsp; Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}
                                         </Card.Content>
                                     </Segment>
                                 </GridColumn>
