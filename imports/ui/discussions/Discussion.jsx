@@ -202,13 +202,12 @@ export const Discussion = () => { ///
     }
   }
 
-  //set reference for end of discussion and scroll to that point on page load
+  //set reference for end of discussion and scroll to that point every time the number of comments change.
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   };
-
-  useEffect(scrollToBottom, [comments]);
+  useEffect(scrollToBottom, [comments.length]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -298,6 +297,7 @@ export const Discussion = () => { ///
                         key={verdict._id}
                         verdict={verdict}
                         onVote={hasReachedConsensus}
+                        discussionStatus={discussionStatus}
                       />
                     </List.Item>
                   ))}
