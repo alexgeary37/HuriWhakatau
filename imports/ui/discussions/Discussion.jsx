@@ -259,7 +259,7 @@ export const Discussion = () => { ///
                   {(scenario && scenario.description) ||
                   (topic && topic.description)}
                 />
-                {timedDiscussion && <Timer time={timeLeft} />}
+                {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}
               </GridColumn>
               <GridColumn width={10}>
                 <div

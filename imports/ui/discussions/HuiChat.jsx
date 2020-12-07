@@ -230,14 +230,16 @@ export const HuiChat = () => {
       }
   }
 
-  // //set reference for end of discussion and scroll to that point on page load, *
+  // set reference for end of discussion and scroll to that point on page load, *
   // *set another of these to scroll the outer part of the page up again
+  //set reference for end of discussion and scroll to that point every time the number of comments made by the current user changes.
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
-      commentsEndRef.current.scrollIntoView({behavior: "auto"});
+    commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   };
-
-  useEffect(scrollToBottom, [comments]);
+  // discussionTimeLimit changes from undefined to 0 upon page load meaning the effect will take place upon page load.
+  // There might be a better way of handling this....
+  useEffect(scrollToBottom, [discussionTimeLimit, comments.filter(x => x.authorId === Meteor.userId()).length]);
 
   /// WHOLE block below
   const handleUserGroupLeaderVote = () => {
