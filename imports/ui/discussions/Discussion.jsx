@@ -202,12 +202,14 @@ export const Discussion = () => { ///
     }
   }
 
-  //set reference for end of discussion and scroll to that point every time the number of comments change.
+  //set reference for end of discussion and scroll to that point every time the number of comments made by the current user changes.
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   };
-  useEffect(scrollToBottom, [comments.length]);
+  // discussionTimeLimit changes from undefined to 0 upon page load meaning the effect will take place upon page load.
+  // There might be a better way of handling this....
+  useEffect(scrollToBottom, [discussionTimeLimit, comments.filter(x => x.authorId === Meteor.userId()).length]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
