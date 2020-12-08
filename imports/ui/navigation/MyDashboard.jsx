@@ -1,5 +1,5 @@
 import {useTracker} from "meteor/react-meteor-data";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, Suspense, lazy} from "react";
 import {
     Button,
     Card,
@@ -25,6 +25,7 @@ import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {RatingComponent} from "./RatingComponent";
+// const ScenarioSummary = lazy(() => import("/imports/ui/scenarios/ScenarioSummary"));
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
 import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateExperiment} from "../experiments/CreateExperiment";
@@ -35,7 +36,6 @@ import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import NotificationBadge from "react-notification-badge";
-import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 import Cookies from "universal-cookie/lib";
 
 export const MyDashboard = () => {
@@ -365,8 +365,7 @@ export const MyDashboard = () => {
                     vertical
                     visible
                     width={showSidebar ? "wide" : "very thin"}
-                    onMouseOver={!showSidebar ? handleShowSidebar : ''}
-                    // onMouseOut={showSidebar ? handleShowSidebar : ''}
+                    onMouseOver={!showSidebar ? handleShowSidebar : null}
                     onClick={handleShowSidebar}
                     style={{
                         backgroundColor: 'rgb(30, 30, 30)',
@@ -498,11 +497,11 @@ export const MyDashboard = () => {
                     }}
                 />
                 {/*end sidebar*/}
-                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}} dimmed={showSidebar}
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "92vh"}} dimmed={showSidebar}
                                 onClick={showSidebar ? handleShowSidebar : null}>
 
                     <Container>
-                        <span style={{height: "22em"}}/>
+                        <span style={{height: "10em"}}/>
                         <Segment attached="top" clearing inverted
                                  style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                             <Header size="huge">
@@ -522,7 +521,7 @@ export const MyDashboard = () => {
                             </Header>
                         </Segment>
 
-                        <Grid doubling /*style={{overflow: "auto", height: "87vh"}}*/>
+                        <Grid doubling>
                             <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
                                 <GridColumn width={16}>
                                     <Divider/>

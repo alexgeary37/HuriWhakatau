@@ -19,12 +19,15 @@ Meteor.methods({
         scenarioSetId,
         hasIntroduction,
         ratings,
+        introductionCommentText,
     ) {
         check(name, String);
         check(description, String);
         check(groupId, String);
         check(scenarioSetId, String);
         check(ratings, Array);
+        check(introductionCommentText, String);
+
         let discussionIds = [];
         console.log(ratings);
         //addcheck for user admin/researcher role
@@ -56,6 +59,7 @@ Meteor.methods({
             });
             console.log("adding intro id to set", introId);
             discussionIds.push(introId);
+            Meteor.call("comments.insert",introductionCommentText, [], [], introId);
             console.log(discussionIds);
         }
 

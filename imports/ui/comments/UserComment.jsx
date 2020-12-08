@@ -72,14 +72,14 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
     // hide picker.
     const handleEmojiSelect = (selection) => {
         console.log("handling emoji");
-        let emoOb = {emoji: selection, count: 1};
+        let emoOb = {emoji: selection, count: 1, users:[Meteor.userId()]};
         let existingEmojiIds = selectedEmojis.map(function (item) {
             return item.emoji.id;
         });
         if (!existingEmojiIds.includes(emoOb.emoji.id)) {
             //trigger the useEffect callback to update db when selectedEmojis state variable has changed.
             settingEmojisRef.current = true;
-            setSelectedEmojis([...selectedEmojis, emoOb]);
+            setSelectedEmojis(selectedEmojis => [...selectedEmojis, emoOb]);
             setReactionShown(false);
             return;
         }
@@ -87,10 +87,11 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
         selectedEmojis.forEach((emoObject) => {
             if (emoObject.emoji.id === emoOb.emoji.id) {
                 emoObject.count += 1;
+                emoObject.users = [...emoObject.users, ...emoOb.users]
             }
         });
         settingEmojisRef.current = true;
-        setSelectedEmojis([...selectedEmojis]);
+        setSelectedEmojis(selectedEmojis => [...selectedEmojis]);
         setReactionShown(false);
     };
 

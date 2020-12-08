@@ -5,7 +5,7 @@ import {
     Button, Container, Segment,
     Header, Message, List, Form,
     Icon, Card, ListItem, Rating,
-    Divider, Image, Sidebar, Tab, ListContent, Checkbox,
+    Divider, Image, Sidebar, Tab, ListContent, Checkbox, Placeholder,
 } from "semantic-ui-react";
 
 export const RatingComponent = () => {
@@ -143,16 +143,24 @@ export const RatingComponent = () => {
                 <ListContent as={Segment} style={{
                     backgroundColor: "#c4c4c4",
                 }}>
+                    {questionItem.headerText ?
                     <List.Header as={'h4'}
-                                 content={questionItem && questionItem.headerText}
+                                 content={questionItem.headerText}
                     />
+                    :
+                    <Placeholder>
+                        <Placeholder.Line length={'full'} style={{backgroundColor: "#c4c4c4"}}/>
+                        <Placeholder.Line length={'very long'} style={{backgroundColor: "#c4c4c4"}}/>
+                        <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                    </Placeholder>
+                        }
                     {questionItem.bodyText &&
                     <List.Description as={Segment}
-                                      content={questionItem && questionItem.bodyText}
+                                      content={questionItem.bodyText}
                     />
                     }
                     <hr/>
-                    {questionItem.ratingLabels.map((label) =>
+                    {questionItem.ratingLabels.length > 0 ? questionItem.ratingLabels.map((label) =>
                         <Form.Field key={label}>
                             <Checkbox
                                 radio
@@ -163,7 +171,16 @@ export const RatingComponent = () => {
                                 onChange={(e, data) => addAnswerValue(data.value)}
                             />
                         </Form.Field>
-                    )}
+                    )
+                    :
+                        <Placeholder>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                        </Placeholder>
+                    }
                     <p style={{color:'red', height:"10px"}}>{submitErr && submitErr}</p>
                     <Button content={'Submit Answer'} onClick={submitAnswer}/>
                     <Button content={'Different Question'} onClick={updateQuestion}/>
