@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Container, Segment, Form, Modal, Button, Checkbox, Tab, Label} from "semantic-ui-react";
+import React, {useEffect, useState} from "react";
+import {Container, Segment, Form, Modal, Button, Checkbox, Tab, Label, Input} from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
@@ -11,6 +11,9 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [description, setDescription] = useState("");
     const [groupId, setGroupId] = useState("");
     const [scenarioSetId, setScenarioSetId] = useState("");
+    const [introductionCommentText, setIntroductionCommentText] = useState("Welcome to the " +
+        "introduction discussion. Use this space to get to know each other and vote on a group leader before " +
+        "you progress to the first topic.");
     const [isOpen, setIsOpen] = useState(true);
     const [hasIntroduction, setHasIntroduction] = useState(false);
     const [errName, setErrName] = useState("");
@@ -55,6 +58,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                 scenarioSetId,
                 hasIntroduction,
                 ratings,
+                introductionCommentText,
             );
             toggleIt(e);
         }
@@ -119,6 +123,10 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
         setRatings(currentRatings => [...currentRatings]);
     }
 
+    const printText = (e) => {
+        console.log(e);
+        console.log(introductionCommentText);
+    }
 
     // const responseSet = [
     //     {type: "Frequency", range: "Never-Always"},
@@ -132,7 +140,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     //     {type: "Satisfaction", range: "Not at all Satisfied-Extremely Satisfied"},
     //     {type: "Performance", range: "Far below Standards-Far above Standards"},
     // ];
-
 
     const panes = [
         {
@@ -233,7 +240,14 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                   onClick={(e, data) => setHasIntroduction(data.checked)}/>
                         <br/>
                         <br/>
-
+                        {hasIntroduction && <Form.Field
+                            control={'textarea'}
+                            label={'Introductory comment'}
+                            title={'A short introduction to the discussion that outlines any special ' +
+                            'requirements or instructions'}
+                            value={introductionCommentText}
+                            onChange={(event) => setIntroductionCommentText(event.currentTarget.value)}/>}
+                        <br/>
                     </Form>
                 </Tab.Pane>
         },

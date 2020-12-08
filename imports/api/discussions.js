@@ -10,7 +10,7 @@ Meteor.methods({
     check(groupId, String);
     check(timeLimit, Number);
     check(isHui, Boolean);
-    check(isPublic, Boolean);
+    check(isPublic, Boolean);  //this check causes simulation of method to fail on client not sure why
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
@@ -154,6 +154,7 @@ if (Meteor.isServer) {
           nextDiscussion: 1,
           timeLimit: 1,
           isPublic: 1,
+          isHui: 1,
         },
       }
     );
