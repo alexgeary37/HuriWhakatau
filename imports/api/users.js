@@ -169,6 +169,19 @@ Meteor.methods({
             );
         return friendId;
     },
+
+    //set user's emotional state
+    "users.setEmotion"(userId, emotionOb){
+        check(userId, String);
+        check(emotionOb, Object);
+        console.log('setting emotion');
+        Meteor.users.update(userId,
+            { $set:
+                    {"profile.emotion": emotionOb}
+            }
+        );
+        return true;
+    }
 });
 
 if (Meteor.isServer) {
@@ -182,6 +195,7 @@ if (Meteor.isServer) {
                     "profile.friendList": 1,
                     "profile.pendingFriendList": 1,
                     "profile.pepeha": 1,
+                    "profile.emotion": 1,
                     online: 1,
                     status: 1,
                 },
