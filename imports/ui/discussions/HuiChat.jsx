@@ -295,6 +295,7 @@ export const HuiChat = () => {
                                       key={comment._id}
                                       comment={comment}
                                       discussionStatus={discussionStatus}
+                                      groupLeader={groupLeader}
                                       userCanEdit={
                                           discussionTemplate
                                               ? discussionTemplate.usersCanEditComments
