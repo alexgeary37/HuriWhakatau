@@ -22,8 +22,7 @@ export const RatingComponent = () => {
                     scale: 7,
                     reverse: false,
                     ratingLabels: [],
-                }
-    );
+                });
 
     let rating;
     let responseIndices;
@@ -49,7 +48,7 @@ export const RatingComponent = () => {
             Meteor.call("experiments.getRandomExperimentForRating"
                 , (err, fetchedExperimentArray) => {
                     let experiment = fetchedExperimentArray[0];
-                    let exptRatings = experiment.ratings.filter(rating => rating.rating != "");
+                    let exptRatings = experiment.ratings.filter(rating => rating.rating !== "");
                     // Select a random rating from the experiment's rating set
                     rating = exptRatings[Math.floor(Math.random() * Math.floor(exptRatings.length))]
                     // find the appropriate response set
@@ -70,6 +69,7 @@ export const RatingComponent = () => {
 
                             setQuestionItem({
                                 itemId: id,
+                                experimentId: experiment._id,
                                 itemNumber: itemNum,
                                 headerText: header,
                                 bodyText: body,
@@ -118,7 +118,6 @@ export const RatingComponent = () => {
 
         setAnswerString(value);
         setAnswerInt(score);
-        console.log(answerString, answerInt);
     }
 
     const submitAnswer = () => {
@@ -126,9 +125,11 @@ export const RatingComponent = () => {
         if(answerString){
             console.log("question type was: ", typeOfQuestion);
             if(typeOfQuestion){
+                Meteor.call("commentRatings.addRating", questionItem.itemId, questionItem.experimentId, {userId: Meteor.userId(), ratingText: questionItem.headerText, ratingScore: answerInt})
                 console.log("a comment rating answer")
             } else {
                 console.log("a personality question answer")
+                Meteor.call("users.recordPersonalityAnswer", Meteor.userId(), {questionnaireId : questionItem.itemId, item: questionItem.itemNumber, answerScore: answerInt})
             }
             updateQuestion();
         } else {

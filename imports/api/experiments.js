@@ -110,7 +110,6 @@ Meteor.methods({
             {$sample: {size: 1}}
         ])
             .toArray();
-        console.log(fetchedExp);
         return fetchedExp;
     },
 

@@ -164,10 +164,23 @@ Meteor.methods({
     "users.findInvitedFriendId"(token){
         check(token, String);
         console.log("finding friend")
-        const friendId =Meteor.users.findOne(
+        const friendId = Meteor.users.findOne(
             {"services.password.reset.token": token}, {fields: {_id: 1}}
             );
         return friendId;
+    },
+
+    //save user personality question
+    "users.recordPersonalityAnswer"(userId, questionnaireAnswer){
+        check(userId, String);
+        check(questionnaireAnswer, Object);
+        console.log("setting personality question", questionnaireAnswer);
+
+      Meteor.users.update(userId,
+          { $addToSet:
+                  {"profile.personality": questionnaireAnswer}
+          })
+
     },
 
     //set user's emotional state
@@ -181,7 +194,7 @@ Meteor.methods({
             }
         );
         return true;
-    }
+    },
 });
 
 if (Meteor.isServer) {

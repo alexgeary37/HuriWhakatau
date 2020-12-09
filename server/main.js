@@ -17,7 +17,7 @@ import "/server/defaultData";
 import "/imports/api/mountains";
 import "/imports/api/users"
 import "/imports/api/glossary";
-import {Comments} from "../imports/api/comments";
+import "/imports/api/commentRatings";
 
 Meteor.startup(() => {
     process.env.MAIL_URL =

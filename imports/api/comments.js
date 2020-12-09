@@ -1,6 +1,5 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
-import {Experiments} from "./experiments";
 
 export const Comments = new Mongo.Collection("comments");
 
@@ -71,7 +70,6 @@ Meteor.methods({
   },
 
   "comments.updateEmojis"(emojis, commentId) {
-    console.log("updating comment emojis");
     check(commentId, String);
     check(emojis, Array);
 
