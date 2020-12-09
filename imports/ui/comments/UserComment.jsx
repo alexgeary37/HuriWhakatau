@@ -7,7 +7,7 @@ import RichTextEditor from "react-rte";
 import "emoji-mart/css/emoji-mart.css";
 import NotificationBadge from "react-notification-badge";
 
-export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
+export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [reactionShown, setReactionShown] = useState(false);
     const [selectedEmojis, setSelectedEmojis] = useState(
@@ -30,6 +30,28 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
         };
         datetime = new Intl.DateTimeFormat('en-AU', options).format(editedDateTime);
     };
+
+    let userEmotion;
+    if(comment.emotion){
+        console.log("comment emotion", comment.emotion);
+        switch (comment.emotion) {
+            case "happy":
+                userEmotion = 'yellow';
+                break;
+            case "neutral":
+                userEmotion = 'white';
+                break;
+            case "unhappy":
+                userEmotion = '#1E90FF';
+                break;
+            case "angry":
+                userEmotion = 'red';
+                break;
+            default:
+                userEmotion = 'white';
+                break;
+        }
+    }
 
     //reference boolean for the useEffect callback sending the changed emoji list to the db
     const settingEmojisRef = useRef(false);
@@ -95,34 +117,31 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
         setReactionShown(false);
     };
 
+
     //emojis to show in selector
     const customReactionEmojis = [
         {
             id: "+1",
             name: "+1",
             short_names: ["+1"],
-            // emoticons: [],
             keywords: ["thumbsup"],
         },
         {
             id: "clap",
             name: "clap",
             short_names: ["clap"],
-            // emoticons: [],
             keywords: ["clap"],
         },
         {
             id: "-1",
             name: "-1",
             short_names: ["-1"],
-            // emoticons: [],
             keywords: ["thumbsdown"],
         },
         {
             id: "heart",
             name: "heart",
             short_names: ["heart"],
-            // emoticons: [],
             keywords: ["heart"],
         },
     ];
@@ -143,8 +162,8 @@ export const UserComment = ({comment, discussionStatus, userCanEdit}) => {
                 backgroundColor: isAuthor ? "#EDE8FF" : "#F2F2F2",
                 borderRadius: 5,
                 border: "solid",
-                borderWidth: 0.5,
-                borderColor: isAuthor ? "#DFDBF0" : "#DFDBF0",
+                borderWidth: 10,
+                borderColor: groupLeader === Meteor.userId() ? userEmotion ? userEmotion : "#DFDBF0" : "#DFDBF0",
                 padding: 5,
             }}
         >

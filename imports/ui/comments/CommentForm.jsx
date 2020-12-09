@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import RichTextEditor from "react-rte";
 import {Button, Form, Segment} from "semantic-ui-react";
+import {useTracker} from "meteor/react-meteor-data";
 
 export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMember, groupId}) => {
     const [keyStrokes, setKeyStrokes] = useState([]);
@@ -8,7 +9,14 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
     const [editorValue, setEditorValue] = useState(
         RichTextEditor.createEmptyValue()
     );
+    // useTracker makes sure the component will re-render when the data changes.
+    const {user} = useTracker(() => {
+        Meteor.subscribe("users");
 
+        return {
+            user: Meteor.users.findOne({_id: Meteor.userId()}),
+        };
+    });
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
     useEffect(() => {
@@ -47,7 +55,8 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
             editorValue.toString("markdown"),
             pastedItems,
             keyStrokes,
-            discussionId
+            discussionId,
+            user.profile.emotion.emotion,
         );
         setEditorValue(RichTextEditor.createEmptyValue());
         setPastedItems([]);

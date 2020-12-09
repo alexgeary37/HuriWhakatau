@@ -8,11 +8,12 @@ Meteor.methods({
   // text: the text of the comment
   // discussionId: _id of the discussion this comment belongs to
   // Called from CommentForm.jsx
-  "comments.insert"(text, pasted, keystrokes, discussionId) {
+  "comments.insert"(text, pasted, keystrokes, discussionId, emotion) {
     check(text, String);
     check(pasted, Array);
     check(keystrokes, Array);
     check(discussionId, String);
+    check(emotion, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
@@ -27,6 +28,7 @@ Meteor.methods({
       emojis: [],
       keystrokes: keystrokes,
       pastedItems: pasted,
+      emotion: emotion,
     });
   },
 
@@ -107,6 +109,7 @@ if (Meteor.isServer) {
           keystrokes: 1,
           pasted: 1,
           editedDate: 1,
+          emotion: 1,
         },
       }
     );

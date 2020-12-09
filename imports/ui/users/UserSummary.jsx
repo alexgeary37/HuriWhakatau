@@ -75,7 +75,7 @@ export const UserSummary = ({
         }
         Meteor.call("users.setEmotion", Meteor.userId(), emotionOb);
     }
-
+    //show user's last emotional state in console foe debugging
     member?.profile?.emotion?.emotion ? console.log(member._id, " member emotion: ", member.profile.emotion.emotion) : null;
     const memberEmotionColour = () => {
         switch (member?.profile?.emotion?.emotion) {
