@@ -125,8 +125,8 @@ export const RatingComponent = () => {
         if(answerString){
             console.log("question type was: ", typeOfQuestion);
             if(typeOfQuestion){
-                Meteor.call("commentRatings.addRating", questionItem.itemId, questionItem.experimentId, {userId: Meteor.userId(), ratingText: questionItem.headerText, ratingScore: answerInt})
                 console.log("a comment rating answer")
+                Meteor.call("commentRatings.addRating", questionItem.itemId, questionItem.experimentId, {userId: Meteor.userId(), ratingText: questionItem.headerText, ratingScore: answerInt})
             } else {
                 console.log("a personality question answer")
                 Meteor.call("users.recordPersonalityAnswer", Meteor.userId(), {questionnaireId : questionItem.itemId, item: questionItem.itemNumber, answerScore: answerInt})

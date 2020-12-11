@@ -26,6 +26,7 @@ Meteor.startup(() => {
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
     // console.log("email set");
 
+
     // modified from Chris Symon's code, scheduled job to set status
     // of timed out discussions.
     // Runs only once as soon as server is started. Creates a job for

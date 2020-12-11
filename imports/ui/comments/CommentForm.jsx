@@ -66,16 +66,16 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
     //function for recording pastes
     const pasted = (event) => {
         let pastedItem = {
-            i: event.clipboardData.getData('text/plain'),
-            t: Date.now(),
+            item: event.clipboardData.getData('text/plain'),
+            timestamp: Date.now(),
         }
         setPastedItems(pastedItems => [...pastedItems, pastedItem]);
     };
 
     const keystroke = (event) => {
         let stroke = {
-            k: event.key,
-            t: Date.now(),
+            key: event.key,
+            timestamp: Date.now(),
         };
         setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
     };

@@ -1,10 +1,18 @@
 import {Mongo} from "meteor/mongo";
+import {Meteor} from "meteor/meteor";
 import {check} from "meteor/check";
 import {ScenarioSets} from "./scenarioSets";
 import {Scenarios} from "./scenarios";
 import {DiscussionTemplates} from "./discussionTemplate";
 import {Discussions} from "./discussions";
 import awaitAsyncGenerator from "@babel/runtime/helpers/esm/awaitAsyncGenerator";
+import {Categories} from "./categories";
+import {Comments} from "./comments";
+import {CommentRatings} from "./commentRatings";
+import {Groups} from "./groups";
+import {Verdicts} from "./verdicts";
+import {Personality} from "./personality";
+
 
 export const Experiments = new Mongo.Collection("experiments");
 
@@ -111,6 +119,72 @@ Meteor.methods({
         ])
             .toArray();
         return fetchedExp;
+    },
+
+    "experiments.exportDiscussion"(discussionId){
+        console.log("click " + discussionId);
+        let experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}})
+        let commentRatings = CommentRatings.find({experimentId: experiment._id}).fetch();
+        let discussion = Discussions.findOne({_id: discussionId});
+        let scenario = Scenarios.findOne({_id: discussion.scenarioId});
+        let discussionTemplate = DiscussionTemplates.findOne({_id: scenario.discussionTemplateId});
+        let discussionGroup = Groups.findOne({_id: experiment.groupId});
+        let users = Meteor.users.find({_id:{ $in: discussionGroup.members }},
+            {fields:{username:1, "profile.userDetails": 1, "profile.personality": 1}}).fetch();
+        let verdicts = Verdicts.find({discussionId: discussionId}).fetch();
+        users.forEach((user) => {
+            if(user.profile?.personality !== undefined){
+                console.log("we have userpersonality")
+            user.profile?.personality.forEach((question) => {
+                let questionnaire = Personality.findOne({_id: question.questionnaireId});
+                question.title = questionnaire.questionnaireName;
+                question.text = questionnaire.items[question.item -1].text;
+            })
+            }
+        })
+
+        let category = Categories.findOne({_id: scenario.categoryId});
+        let comments = Comments.find({discussionId: discussionId}).fetch();
+
+            let discussionData = `{
+                "experimentDetails": {
+                    "experimentName": "${experiment.name}",
+                    "experimentDescription": "${experiment.description}",
+                    "experimentRatings": ${JSON.stringify(experiment.ratings)},
+                },
+                "discussionParameters": {
+                    "discussionTemplateName": "${discussionTemplate.name}",
+                    "discussionTitle": "${scenario.title}",
+                    "discussionDescription": "${scenario.description}",
+                    "usersAreAnonymous": ${discussionTemplate.usersAreAnonymous},
+                    "usersCanSeeTypingNotification": ${discussionTemplate.showTypingNotification},
+                    "usersCanEditTheirOwnCommentsAfterPosting": ${discussionTemplate.usersCanEditComments},
+                    "usersCanReactToCommentsWithEmojis": ${discussionTemplate.canAddEmojis},
+                    "discussionCommentRepliesAreThreaded": ${discussionTemplate.discussionCommentsThreaded},
+                    "userProfileInformationIsVisibleInDiscussion": ${discussionTemplate.showProfileInfo},
+                    "commentCharacterLimit": ${discussionTemplate.commentCharacterLimit},
+                    "discussionTimeLimit": ${discussionTemplate.timeLimit},
+                    "discussionIsPublic": ${discussionTemplate.isPublic},
+                    "discussionIsInHuiFormat": ${discussionTemplate.isHui},
+                    "discussionTopicCategory": "${category.title}",
+                },
+                "discussionComments": ${JSON.stringify(comments)},
+                "discussionVerdicts" : ${JSON.stringify(verdicts)},
+                "commentUserRatings": ${JSON.stringify(commentRatings)},
+                "userInformation": ${JSON.stringify(users)},
+            }`
+
+        Email.send({
+            to: "dsten32@gmail.com",
+            from: "huriwhakatau@gmail.com",
+            subject: "Exported data for: " + scenario.title,
+            text: "Here's some data, don't spend it all in one place.",
+            attachments:[{   // utf-8 string as an attachment
+                filename: "Discussion-" + scenario.title + ".json",
+                content: discussionData,
+            }],
+        });
+        console.log("after email.")
     },
 
     // Remove an experiment from the experiments collection in the db.

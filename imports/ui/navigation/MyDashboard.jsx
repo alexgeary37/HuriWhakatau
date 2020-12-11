@@ -194,7 +194,8 @@ export const MyDashboard = () => {
 
         // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
-        if (userSub.ready()) { // need to make this more robust, not using users collection anymore but still need this to provide a time lag.
+        // if (userSub.ready()) { // need to make this more robust, not using users collection anymore but still need this to provide a time lag.
+        if (userSub.ready()){
                 if (currentUser.profile.friendList) {
                     fetchedFriendIds = [...currentUser.profile.friendList];
                     fetchedFriendIds.forEach((friendId) => {
