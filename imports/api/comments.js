@@ -86,13 +86,15 @@ Meteor.methods({
 
   //get a random comment from discussion
   "comments.getRandomExperimentCommentForRating"(discussionIds) {
-    const fetchedComment = Comments.rawCollection().aggregate([
-      {$match: {discussionId: {$in: discussionIds}}},
-      {$sample: {size: 1}}
-    ])
-        .toArray();
+    if (Meteor.isServer) {
+      const fetchedComment = Comments.rawCollection().aggregate([
+        {$match: {discussionId: {$in: discussionIds}}},
+        {$sample: {size: 1}}
+      ])
+          .toArray();
 
-    return fetchedComment;
+      return fetchedComment;
+    }
   },
 });
 

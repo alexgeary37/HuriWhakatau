@@ -155,6 +155,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
         };
     });
 
+    console.log("coomentid:", comment._id, "user state: ", userEmotion)
     return (
         <Comment
             style={{
@@ -163,7 +164,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
                 borderRadius: 5,
                 border: "solid",
                 borderWidth: 10,
-                borderColor: groupLeader === Meteor.userId() ? userEmotion ? userEmotion : "#DFDBF0" : "#DFDBF0",
+                borderColor: isAuthor || groupLeader === Meteor.userId() ? userEmotion ? userEmotion : "#DFDBF0" : "#DFDBF0",
                 padding: 5,
             }}
         >

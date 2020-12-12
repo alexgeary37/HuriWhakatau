@@ -172,7 +172,7 @@ export const MyDashboard = () => {
         let fetchedPendingFriends = [];
         let fetchedGroupMemberIds = [];
         let fetchedGroupMembers = [];
-        let currentUser;
+        let currentUser = Meteor.users.findOne({_id: Meteor.userId()});
         let groupIds = [];
         let userId = Meteor.userId();
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
@@ -194,22 +194,21 @@ export const MyDashboard = () => {
 
         // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
-        if (userSub.ready()) {
-            Meteor.call("users.getUser", userId, (err, user) => {
-                if (user.profile.friendList) {
-                    fetchedFriendIds = user.profile.friendList;
+        // if (userSub.ready()) { // need to make this more robust, not using users collection anymore but still need this to provide a time lag.
+        if (userSub.ready()){
+                if (currentUser.profile.friendList) {
+                    fetchedFriendIds = [...currentUser.profile.friendList];
                     fetchedFriendIds.forEach((friendId) => {
                         fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: {username: 1, status: 1}}));
                     })
                 }
 
-                if (user.profile.pendingFriendList) {
-                    fetchedPendingFriendIds = user.profile.pendingFriendList;
+                if (currentUser.profile.pendingFriendList) {
+                    fetchedPendingFriendIds = currentUser.profile.pendingFriendList;
                     fetchedPendingFriendIds.forEach((pendingFriendId) => {
                         fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: {username: 1}}));
                     })
                 }
-            });
 
             //add all member ids for each group the user is part of to a total, filter out the user themselves
             fetchedGroups.forEach((group) => {
@@ -224,7 +223,6 @@ export const MyDashboard = () => {
                 fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1, status: 1}}));
             });
         }
-
         return {
             user: Meteor.userId(),
             myDiscussions: fetchedMyDiscussions,
@@ -386,8 +384,9 @@ export const MyDashboard = () => {
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && friends && friends.map((friend) => (
-                            <Menu.Item style={{marginLeft: "20px"}} key={friend._id} title={friend.status.online ?
-                                friend.status.idle ? 'idle' : 'online' : 'offline'}>
+                            <Menu.Item style={{marginLeft: "20px"}} key={friend._id}
+                                       title={friend.status.online ?
+                                           friend.status.idle ? 'idle' : 'online' : 'offline'}>
                                 <div style={{
                                     display: 'inline-block',
                                     fontSize: "13pt"
@@ -409,6 +408,8 @@ export const MyDashboard = () => {
                                 {/*<Rating icon='star' defaultRating={friend.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                             </Menu.Item>
                         ))}
+                    </List>
+                    <List>
                         {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (
                             <Menu.Item
                                 key={pendingFriend._id} /*title={pendingFriend.online ? 'online' : 'offline'}*/>

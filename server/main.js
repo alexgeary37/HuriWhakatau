@@ -26,6 +26,7 @@ Meteor.startup(() => {
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
     // console.log("email set");
 
+
     // modified from Chris Symon's code, scheduled job to set status
     // of timed out discussions.
     // Runs only once as soon as server is started. Creates a job for
@@ -53,6 +54,28 @@ Meteor.startup(() => {
             }, {$set: {status: "timedout"}})
         }
     });
+
+    //a job for reverting emotional state for users after 3 minutes
+    SyncedCron.add({
+        name: "checkEmotionState", // Name of the job.
+        // Sets up the schedule for when the job is to be run.
+        schedule(parser) {
+            return parser
+                .recur()
+                .on(0)
+                .second(); // EVERY 1 minute
+        },
+
+        // The job which runs periodically according to the set schedule.
+        job(dateTime) {
+            // Bulk update all users whose emotional state was set > 3 minutes ago back to neutral.
+            console.log("dateTime three mins ago: ", new Date(Date.now() - 180000 ));
+            Meteor.users.rawCollection().updateMany({
+                "profile.emotion.timestamp": {$lte: Date.now() - 180000}
+            }, {$set: {"profile.emotion.emotion": "neutral"}})
+        }
+    });
+
 
 
     SyncedCron.start(); // Runs once as soon as the server is started.

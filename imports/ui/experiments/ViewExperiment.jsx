@@ -4,6 +4,11 @@ import {Groups} from "/imports/api/groups";
 import {Experiments} from "/imports/api/experiments";
 import {Modal, Button, Label, Form, Header, SegmentGroup, Segment, Tab, List, ListItem, Grid} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
+import {Discussions} from "../../api/discussions";
+import {Comments} from "../../api/comments";
+import {Scenarios} from "../../api/scenarios";
+import {Categories} from "../../api/categories";
+import {DiscussionTemplates} from "../../api/discussionTemplate";
 
 export const ViewExperiment = ({experiment, toggleModal}) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -59,6 +64,10 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
             },
         };
     });
+
+    const exportDiscussion = (discussionId) => {
+        Meteor.call("experiments.exportDiscussion", discussionId);
+    }
 
     return (
         <Modal
@@ -142,8 +151,10 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
                             menuItem: 'Discussions', render: () =>
                                 <Tab.Pane style={{border: 'none'}}>
                                     {experimentDetails.discussions && experimentDetails.discussions.map((id) => (
-                                        <h3>
+                                        <h3 key={id}>
                                             <a href={'/discussion/' + id}>Discussion {experimentDetails.discussions.indexOf(id) + 1}</a>
+                                            &nbsp;
+                                            <Button compact positive content={'Export discussion'} onClick={() => {exportDiscussion(id)}}/>
                                         </h3>
                                     ))}
                                 </Tab.Pane>

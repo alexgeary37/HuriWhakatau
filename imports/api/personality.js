@@ -14,17 +14,20 @@ Meteor.methods({
 
     //get a random personality question
     "personality.getRandomQuestion"() {
-        const fetchedQuestion = Personality.rawCollection().aggregate([
-            {$sample: {size: 1}},
-            {
-                $project:
-                    {
-                        item:{ $arrayElemAt: [ "$items", { $floor:{$multiply: [{$size: "$items"}, Math.random() ]}}] },
-                    }
-            }
-        ])
-            .toArray();
-        return fetchedQuestion;
+        if (Meteor.isServer) {
+
+            const fetchedQuestion = Personality.rawCollection().aggregate([
+                {$sample: {size: 1}},
+                {
+                    $project:
+                        {
+                            item: {$arrayElemAt: ["$items", {$floor: {$multiply: [{$size: "$items"}, Math.random()]}}]},
+                        }
+                }
+            ])
+                .toArray();
+            return fetchedQuestion;
+        }
     },
 });
 
