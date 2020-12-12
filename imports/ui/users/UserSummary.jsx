@@ -177,7 +177,6 @@ export const UserSummary = ({
                           member.pepeha.role : "no role set" : "no role set"}/>
             {discussionStatus === "active" &&
             Meteor.userId() === member._id &&
-            Meteor.userId() !== groupLeader &&
             <div className="reactions">
                 <Picker
                     style={{width: "auto"}}

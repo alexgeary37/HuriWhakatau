@@ -153,7 +153,8 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
                                     {experimentDetails.discussions && experimentDetails.discussions.map((id) => (
                                         <h3 key={id}>
                                             <a href={'/discussion/' + id}>Discussion {experimentDetails.discussions.indexOf(id) + 1}</a>
-                                            <Button content={'Export discussion'} onClick={() => {exportDiscussion(id)}}/>
+                                            &nbsp;
+                                            <Button compact positive content={'Export discussion'} onClick={() => {exportDiscussion(id)}}/>
                                         </h3>
                                     ))}
                                 </Tab.Pane>

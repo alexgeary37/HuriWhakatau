@@ -194,7 +194,10 @@ Meteor.methods({
         // let scoreObject = {};
         // scoreObject[item] = answerScore;
         //
-        // let userPersonality = Meteor.users.findOne({_id: userId}, {fields: {"profile.personality": 1}})
+
+        // let userPersonality = Meteor.users.findOne({_id: userId},
+        //     {fields: {"profile.personality": { $elemMatch: { questionnaireId:questionnaireAnswer.questionnaireId}}}});
+        // console.log("user personality item: ", userPersonality);
         // if (userPersonality) {
         //     let index = userPersonality.findIndex((questionnaire => questionnaire.questionnaireId === questionnaireId));
         //     if (index > -1) {
@@ -212,6 +215,15 @@ Meteor.methods({
                     {"profile.personality": questionnaireAnswer}
             })
 
+        if (Meteor.isServer) {
+
+            let user = Meteor.users.rawCollection().aggregate([
+                {$match: {_id: userId}},
+                {$unwind: "$profile.personality"},
+                {$match: {"profile.personality": {$elemMatch: {questionnaireId: questionnaireAnswer.questionnaireId}}}}
+            ]).toArray();
+            console.log("user", user);
+        }
     }
     ,
 
@@ -229,7 +241,8 @@ Meteor.methods({
         return true;
     }
     ,
-});
+})
+;
 
 if (Meteor.isServer) {
     Meteor.publish("users", function () {

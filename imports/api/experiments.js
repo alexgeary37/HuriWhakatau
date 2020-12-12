@@ -113,16 +113,22 @@ Meteor.methods({
 
     //get a random experiment with a non-empty rating
     "experiments.getRandomExperimentForRating"() {
-        const fetchedExp = Experiments.rawCollection().aggregate([
-            {$match: {ratings: {$elemMatch: {rating: {$ne: ""}}}}},
-            {$sample: {size: 1}}
-        ])
-            .toArray();
-        return fetchedExp;
+        if (Meteor.isServer) {
+
+            const fetchedExp = Experiments.rawCollection().aggregate([
+                {$match: {ratings: {$elemMatch: {rating: {$ne: ""}}}}},
+                {$sample: {size: 1}}
+            ])
+                .toArray();
+            return fetchedExp;
+        }
     },
 
     "experiments.exportDiscussion"(discussionId){
         console.log("click " + discussionId);
+        const exportingUserEmails = Meteor.users.findOne({_id: Meteor.userId()},
+            {fields: {emails: 1}});
+        console.log(exportingUserEmails)
         let experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}})
         let commentRatings = CommentRatings.find({experimentId: experiment._id}).fetch();
         let discussion = Discussions.findOne({_id: discussionId});
@@ -175,7 +181,7 @@ Meteor.methods({
             }`
 
         Email.send({
-            to: "dsten32@gmail.com",
+            to: exportingUserEmails.emails[0].address,
             from: "huriwhakatau@gmail.com",
             subject: "Exported data for: " + scenario.title,
             text: "Here's some data, don't spend it all in one place.",
