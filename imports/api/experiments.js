@@ -125,10 +125,8 @@ Meteor.methods({
     },
 
     "experiments.exportDiscussion"(discussionId){
-        console.log("click " + discussionId);
         const exportingUserEmails = Meteor.users.findOne({_id: Meteor.userId()},
             {fields: {emails: 1}});
-        console.log(exportingUserEmails)
         let experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}})
         let commentRatings = CommentRatings.find({experimentId: experiment._id}).fetch();
         let discussion = Discussions.findOne({_id: discussionId});
@@ -190,7 +188,6 @@ Meteor.methods({
                 content: discussionData,
             }],
         });
-        console.log("after email.")
     },
 
     // Remove an experiment from the experiments collection in the db.

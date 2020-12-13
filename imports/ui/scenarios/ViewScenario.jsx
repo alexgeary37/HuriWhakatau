@@ -7,24 +7,25 @@ import {Categories} from "../../api/categories";
 export const ViewScenario = ({toggleModal, scenario, template}) => {
     const title = scenario.title;
     const description = scenario.description;
-    const categoryId = scenario.categoryId;
+    const categoryIds = scenario.categoryIds;
     // const discussionTemplateId = scenario.discussionTemplateId;
     const [isOpen, setIsOpen] = useState(true);
 
+    console.log("template: ", template);
     const toggleIt = () => {
         setIsOpen(false);
         toggleModal();
     }
 
     const {
-        category
+        categories
     } = useTracker(() => {
         Meteor.subscribe("categories");
         return {
-            category: Categories.findOne({_id: categoryId}),
+            categories: Categories.find({_id: {$in: categoryIds}}).fetch(),
         };
     });
-    console.log(category);
+    console.log(categories);
 
     return (
         <Modal
@@ -38,28 +39,33 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
             <Modal.Content>
                 <Form.Input
                     readOnly={true}
-                    label="Title"
+                    label="Title: "
                     type="text"
-                    autoFocus
                     value={title}
                     // onInput={({target}) => setTitle(target.value)}
                 />
-                <Form.Input
-                    readOnly={true}
-                    label="Description"
-                    type="text"
-                    value={description}
-                    // onInput={({target}) => setDescription(target.value)}
-                />
+                <Header as={'h4'} content={'Description: '}/><>{description}</>
+                {/*<Form.Input*/}
+                {/*    readOnly={true}*/}
+                {/*    label="Description"*/}
+                {/*    type="text"*/}
+                {/*    value=*/}
+                {/*        */}
+                {/*    // onInput={({target}) => setDescription(target.value)}*/}
+                {/*/>*/}
 
                 {/*show catergories and discussion templates, get ids for db*/}
-                <Form.Input
-                    readOnly={true}
-                    label="Category"
-                    type="text"
-                    value={category && category.title}
-                    // onInput={({target}) => setDescription(target.value)}
-                />
+                <Header as={'h4'} content={'Categories: '}/>
+                {categories && categories.map((category)=>(
+                    <span key={category._id}>{category.title +" "}</span>
+                ))}
+                {/*<Form.Input*/}
+                {/*    readOnly={true}*/}
+                {/*    label="Category"*/}
+                {/*    type="text"*/}
+                {/*    value={category && category}*/}
+                {/*    // onInput={({target}) => setDescription(target.value)}*/}
+                {/*/>*/}
                 <Segment>
                     <Header as={'h4'} content={'Discussion Template: ' + template.name}/>
                 </Segment>

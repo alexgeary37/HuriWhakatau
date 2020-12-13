@@ -38,7 +38,7 @@ export const ViewScenarioSet = ({toggleModal, scenarioSet}) => {
                 <Checkbox disabled readOnly checked={isRandomised} label='Scenarios are in random order' />
                     <Header as={'h4'} content={'Scenarios:'}/>
                     {scenarios && scenarios.map((scenario) => (
-                        <div><b>Title:</b> {scenario.title}</div>
+                        <div key={scenario._id}><b>Title:</b> {scenario.title}</div>
                     )
                 )}
             </Modal.Content>

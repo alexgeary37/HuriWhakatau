@@ -67,9 +67,8 @@ Meteor.startup(() => {
         },
 
         // The job which runs periodically according to the set schedule.
-        job(dateTime) {
+        job() {
             // Bulk update all users whose emotional state was set > 3 minutes ago back to neutral.
-            console.log("dateTime three mins ago: ", new Date(Date.now() - 180000 ));
             Meteor.users.rawCollection().updateMany({
                 "profile.emotion.timestamp": {$lte: Date.now() - 180000}
             }, {$set: {"profile.emotion.emotion": "neutral"}})

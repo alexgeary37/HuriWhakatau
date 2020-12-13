@@ -7,7 +7,7 @@ import {Categories} from "../../api/categories";
 export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [categoryId, setCategoryId] = useState(""); //make dynamically get the "other" category
+    const [categoryId, setCategoryId] = useState([]); //make dynamically get the "other" category
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
     const [isOpen, setIsOpen] = useState(true);
     const [errScenarioTitle, setErrScenarioTitle] = useState("");
@@ -27,7 +27,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
             setErrScenarioDesc("")
         }
         if (categoryId.length === 0){
-            setErrCategory("Scenarios must have a category")
+            setErrCategory("Scenarios must have at least 1 category")
         } else {
             setErrCategory("")
         }
@@ -80,10 +80,19 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         };
     });
 
+    const categorySelection = (value) => {
+        setCategoryId(categoryId => [...categoryId, value]);
+    }
+
+    // add a new category
+    const addCategory = (title) => {
+        Meteor.call("categories.insert", title);
+    }
+
     //find id of category "other" to default the dropdown.
     const getOtherCategory = () => {
         if (categories.length > 0 && categoryId.length === 0) {
-            setCategoryId(categories.find(cat => cat.title === 'Other')._id);
+            setCategoryId([categories.find(cat => cat.title === 'Other')._id]);
         }
     }
     useEffect(getOtherCategory, [categories]);
@@ -128,6 +137,8 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         loading={categories.length === 0}
                         selection
                         search
+                        multiple
+                        allowAdditions
                         options={
                             categories &&
                             categories.map((category) => ({
@@ -138,7 +149,8 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         }
                         name="categories"
                         value={categoryId}
-                        onChange={(e, {value}) => setCategoryId(value)}
+                        onAddItem={(e, {value}) => addCategory(value)}
+                        onChange={(e, {value}) => setCategoryId(value.concat())}
                     />
                     {errCategory ? (
                         <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errCategory}</div>

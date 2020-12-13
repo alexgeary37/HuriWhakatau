@@ -219,7 +219,7 @@ if (Meteor.isServer) {
         scenarios.push(Scenarios.insert({
             title: "Default - Introduction",
             description: "A discussion for group members to get to know each other prior to the scheduled topic driven discussions",
-            categoryId: categoryId,
+            categoryIds: [categoryId],
             discussionTemplateId: templateId1,
             createdAt: new Date(),
             createdBy: "ADMIN",
@@ -228,7 +228,7 @@ if (Meteor.isServer) {
         scenarios.push(Scenarios.insert({
             title: "A title that sets up the discussion",
             description: "A deeper description of the topic",
-            categoryId: categoryId,
+            categoryIds: [categoryId],
             discussionTemplateId: templateId2,
             createdAt: new Date(),
             createdBy: "ADMIN",
