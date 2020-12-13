@@ -56,7 +56,7 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
             pastedItems,
             keyStrokes,
             discussionId,
-            user.profile.emotion.emotion,
+            user.profile.emotion?.emotion,
         );
         setEditorValue(RichTextEditor.createEmptyValue());
         setPastedItems([]);
