@@ -125,10 +125,8 @@ Meteor.methods({
     },
 
     "experiments.exportDiscussion"(discussionId){
-        console.log("click " + discussionId);
         const exportingUserEmails = Meteor.users.findOne({_id: Meteor.userId()},
             {fields: {emails: 1}});
-        console.log(exportingUserEmails)
         let experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}})
         let commentRatings = CommentRatings.find({experimentId: experiment._id}).fetch();
         let discussion = Discussions.findOne({_id: discussionId});
@@ -149,7 +147,11 @@ Meteor.methods({
             }
         })
 
-        let category = Categories.findOne({_id: scenario.categoryId});
+        let categories = Categories.find({_id: {$in: scenario.categoryIds}}).fetch();
+        let categoryNames = [];
+        categories.forEach((category)=>{
+            categoryNames.push(category.title);
+        })
         let comments = Comments.find({discussionId: discussionId}).fetch();
 
             let discussionData = `{
@@ -172,7 +174,7 @@ Meteor.methods({
                     "discussionTimeLimit": ${discussionTemplate.timeLimit},
                     "discussionIsPublic": ${discussionTemplate.isPublic},
                     "discussionIsInHuiFormat": ${discussionTemplate.isHui},
-                    "discussionTopicCategory": "${category.title}",
+                    "discussionTopicCategories": "${categoryNames.join(', ')}",
                 },
                 "discussionComments": ${JSON.stringify(comments)},
                 "discussionVerdicts" : ${JSON.stringify(verdicts)},
@@ -190,7 +192,6 @@ Meteor.methods({
                 content: discussionData,
             }],
         });
-        console.log("after email.")
     },
 
     // Remove an experiment from the experiments collection in the db.
@@ -201,6 +202,38 @@ Meteor.methods({
         //add role check
 
         Experiments.remove(experimentId);
+    },
+
+    //moving the group leader vote here so it can be experiment specific
+    "experiments.voteLeader"(experimentId, groupId, userId) {
+        Experiments.update(
+            {_id: experimentId},
+            {$inc: {["leaderVotes." + userId]: 1}},
+            function (err, res) {
+                let member;
+                if (err) {
+                    throw err;
+                }
+                let group = Groups.findOne({_id: groupId});
+                let experiment = Experiments.findOne({_id: experimentId}, {fields:{leaderVotes: 1}})
+                let numMembers = group.members.length;
+                let leaderVotes = experiment.leaderVotes;
+                let numVotes = 0;
+                for (member in leaderVotes) {
+                    numVotes += leaderVotes[member];
+                }
+
+                let compare = function (a, b) {
+                    return b[1] - a[1];
+                };
+
+                if (numVotes >= numMembers) {
+                    let winner = Object.entries(leaderVotes).sort(compare)[0][0];
+                    Experiments.update({_id: experimentId}, {$set: {groupLeader: winner}});
+                    console.log("winner is: ", winner);
+                }
+            }
+        );
     },
 });
 
@@ -218,6 +251,8 @@ if (Meteor.isServer) {
                     scenarioSetId: 1,
                     ratings: 1,
                     discussions: 1,
+                    leaderVotes: 1,
+                    groupLeader: 1,
                     createdAt: 1,
                     createdBy: 1,
                 },

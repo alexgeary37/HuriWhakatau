@@ -53,7 +53,6 @@ Meteor.methods({
   // commentId: _id of the comment to be updated
   // Called from Discussion.jsx
   "comments.update"(text, commentId) {
-    console.log("updating comment text");
     check(commentId, String);
     const comment = Comments.findOne(commentId);
 
@@ -80,7 +79,6 @@ Meteor.methods({
         emojis: emojis,
       },
     });
-
     return true;
   },
 
@@ -92,7 +90,6 @@ Meteor.methods({
         {$sample: {size: 1}}
       ])
           .toArray();
-
       return fetchedComment;
     }
   },

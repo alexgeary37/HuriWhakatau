@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Button, Icon, List, ModalActions, Segment} from "semantic-ui-react";
 import {Picker, Emoji} from "emoji-mart";
+import {Experiments} from "../../api/experiments";
+import {useParams} from "react-router-dom";
+import {useTracker} from "meteor/react-meteor-data";
 
 export const UserSummary = ({
                                 member,
@@ -10,14 +13,31 @@ export const UserSummary = ({
                                 groupLeader,
                                 discussionStatus,
                                 closeChat,
+                                discussionId,
                                 nextDiscussionId,
+                                experimentId,
                             }) => {
     const [userEmotionalColour, setUserEmotionalColour] = useState("white");
-    // based on dicussionsummary, update to take an actual user object and
-    // display info. in the mean time it just takes a username and shows that
+
+    // const {experimentId} = useTracker(() => {
+    //     const subExperiments = Meteor.subscribe("experiments");
+    //     let experiment;
+    //     let id;
+    //     if (subExperiments.ready()) {
+    //         experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}}, {fields:{groupLeader: 1}})
+    //     }
+    //     return {
+    //         experimentId: id,
+    //         groupLeader: leader,
+    //     }
+    // });
+    console.log("experimentId: ", experimentId, "groupLeader: ", groupLeader)
+
+    // send user vote to db and calculate winner
     const submitLeaderVote = (userId) => {
         console.log("user voted for: ", userId);
-        Meteor.call("groups.voteLeader", groupId, userId);
+        // Meteor.call("groups.voteLeader", groupId, userId);
+        Meteor.call("experiments.voteLeader",experimentId, groupId, userId);
         handleUserVoted();
     };
 

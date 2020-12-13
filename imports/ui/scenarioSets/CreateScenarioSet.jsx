@@ -7,6 +7,7 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [scenarioSet, setScenarios] = useState([]);
+    const [isRandomised, setIsRandomised] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
     const [errTitle, setErrTitle] = useState("");
     const [errDescription, setErrDescription] = useState("");
@@ -34,7 +35,8 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                 "scenarioSets.create",
                 title,
                 description,
-                scenarioSet
+                scenarioSet,
+                isRandomised,
             );
             toggleIt(e);
         }
@@ -114,6 +116,8 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                         value={scenarioSet}
                         onChange={(e, {value}) => setScenarios(value.concat())}
                     />
+                    <Checkbox disabled readOnly checked={isRandomised} label='Scenario order is randomised'
+                              onClick={(e, data) => setIsRandomised(data.checked)}/>
                     {errScenarioSet ? (
                         <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioSet}</div>
                     ) : (
