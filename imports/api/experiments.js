@@ -67,7 +67,7 @@ Meteor.methods({
             });
             console.log("adding intro id to set", introId);
             discussionIds.push(introId);
-            Meteor.call("comments.insert",introductionCommentText, [], [], introId);
+            Meteor.call("comments.insert", introductionCommentText, [], [], introId);
             console.log(discussionIds);
         }
 
@@ -124,7 +124,7 @@ Meteor.methods({
         }
     },
 
-    "experiments.exportDiscussion"(discussionId){
+    "experiments.exportDiscussion"(discussionId) {
         const exportingUserEmails = Meteor.users.findOne({_id: Meteor.userId()},
             {fields: {emails: 1}});
         let experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}})
@@ -133,28 +133,28 @@ Meteor.methods({
         let scenario = Scenarios.findOne({_id: discussion.scenarioId});
         let discussionTemplate = DiscussionTemplates.findOne({_id: scenario.discussionTemplateId});
         let discussionGroup = Groups.findOne({_id: experiment.groupId});
-        let users = Meteor.users.find({_id:{ $in: discussionGroup.members }},
-            {fields:{username:1, "profile.userDetails": 1, "profile.personality": 1}}).fetch();
+        let users = Meteor.users.find({_id: {$in: discussionGroup.members}},
+            {fields: {username: 1, "profile.userDetails": 1, "profile.personality": 1}}).fetch();
         let verdicts = Verdicts.find({discussionId: discussionId}).fetch();
         users.forEach((user) => {
-            if(user.profile?.personality !== undefined){
+            if (user.profile?.personality !== undefined) {
                 console.log("we have userpersonality")
-            user.profile?.personality.forEach((question) => {
-                let questionnaire = Personality.findOne({_id: question.questionnaireId});
-                question.title = questionnaire.questionnaireName;
-                question.text = questionnaire.items[question.item -1].text;
-            })
+                user.profile?.personality.forEach((question) => {
+                    let questionnaire = Personality.findOne({_id: question.questionnaireId});
+                    question.title = questionnaire.questionnaireName;
+                    question.text = questionnaire.items[question.item - 1].text;
+                })
             }
         })
 
         let categories = Categories.find({_id: {$in: scenario.categoryIds}}).fetch();
         let categoryNames = [];
-        categories.forEach((category)=>{
+        categories.forEach((category) => {
             categoryNames.push(category.title);
         })
         let comments = Comments.find({discussionId: discussionId}).fetch();
 
-            let discussionData = `{
+        let discussionData = `{
                 "experimentDetails": {
                     "experimentName": "${experiment.name}",
                     "experimentDescription": "${experiment.description}",
@@ -187,7 +187,7 @@ Meteor.methods({
             from: "huriwhakatau@gmail.com",
             subject: "Exported data for: " + scenario.title,
             text: "Here's some data, don't spend it all in one place.",
-            attachments:[{   // utf-8 string as an attachment
+            attachments: [{   // utf-8 string as an attachment
                 filename: "Discussion-" + scenario.title + ".json",
                 content: discussionData,
             }],
@@ -215,7 +215,7 @@ Meteor.methods({
                     throw err;
                 }
                 let group = Groups.findOne({_id: groupId});
-                let experiment = Experiments.findOne({_id: experimentId}, {fields:{leaderVotes: 1}})
+                let experiment = Experiments.findOne({_id: experimentId}, {fields: {leaderVotes: 1}})
                 let numMembers = group.members.length;
                 let leaderVotes = experiment.leaderVotes;
                 let numVotes = 0;
