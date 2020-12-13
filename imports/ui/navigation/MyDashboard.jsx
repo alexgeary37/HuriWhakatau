@@ -166,6 +166,8 @@ export const MyDashboard = () => {
         Meteor.subscribe("discussionTemplates");
         Meteor.subscribe("experiments");
         let userSub = Meteor.subscribe("users");
+        let friendsOnline;
+        let groupMembersOnline;
         let fetchedFriendIds = [];
         let fetchedFriends = [];
         let fetchedPendingFriendIds = [];
@@ -194,13 +196,16 @@ export const MyDashboard = () => {
 
         // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
-        // if (userSub.ready()) { // need to make this more robust, not using users collection anymore but still need this to provide a time lag.
-        if (userSub.ready()){
+        if (currentUser?.profile?.friendList){
                 if (currentUser.profile.friendList) {
                     fetchedFriendIds = [...currentUser.profile.friendList];
                     fetchedFriendIds.forEach((friendId) => {
                         fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: {username: 1, status: 1}}));
                     })
+                }
+
+                if(fetchedFriends[0] !== undefined){
+                    friendsOnline = fetchedFriends.some(friend => friend.status.online === true)
                 }
 
                 if (currentUser.profile.pendingFriendList) {
@@ -222,6 +227,10 @@ export const MyDashboard = () => {
             fetchedGroupMemberIds.forEach((memberId) => {
                 fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1, status: 1}}));
             });
+
+            if(fetchedGroupMembers[0] !== undefined){
+                groupMembersOnline = fetchedGroupMembers.some(member => member.status.online === true);
+            }
         }
         return {
             user: Meteor.userId(),
@@ -235,8 +244,8 @@ export const MyDashboard = () => {
             friends: fetchedFriends,
             pendingFriends: fetchedPendingFriends,
             groupMembers: fetchedGroupMembers,
-            anyFriendOnline: fetchedFriends.some(friend => friend.status.online === true),
-            anyGroupMemberOnline: fetchedGroupMembers.some(member => member.status.online === true),
+            anyFriendOnline: friendsOnline,
+            anyGroupMemberOnline: groupMembersOnline,
         };
     });
 

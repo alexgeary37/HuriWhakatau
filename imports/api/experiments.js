@@ -147,7 +147,11 @@ Meteor.methods({
             }
         })
 
-        let category = Categories.findOne({_id: scenario.categoryId});
+        let categories = Categories.find({_id: {$in: scenario.categoryIds}}).fetch();
+        let categoryNames = [];
+        categories.forEach((category)=>{
+            categoryNames.push(category.title);
+        })
         let comments = Comments.find({discussionId: discussionId}).fetch();
 
             let discussionData = `{
@@ -170,7 +174,7 @@ Meteor.methods({
                     "discussionTimeLimit": ${discussionTemplate.timeLimit},
                     "discussionIsPublic": ${discussionTemplate.isPublic},
                     "discussionIsInHuiFormat": ${discussionTemplate.isHui},
-                    "discussionTopicCategory": "${category.title}",
+                    "discussionTopicCategories": "${categoryNames.join(', ')}",
                 },
                 "discussionComments": ${JSON.stringify(comments)},
                 "discussionVerdicts" : ${JSON.stringify(verdicts)},
