@@ -199,6 +199,38 @@ Meteor.methods({
 
         Experiments.remove(experimentId);
     },
+
+    //moving the group leader vote here so it can be experiment specific
+    "experiments.voteLeader"(experimentId, groupId, userId) {
+        Experiments.update(
+            {_id: experimentId},
+            {$inc: {["leaderVotes." + userId]: 1}},
+            function (err, res) {
+                let member;
+                if (err) {
+                    throw err;
+                }
+                let group = Groups.findOne({_id: groupId});
+                let experiment = Experiments.findOne({_id: experimentId}, {fields:{leaderVotes: 1}})
+                let numMembers = group.members.length;
+                let leaderVotes = experiment.leaderVotes;
+                let numVotes = 0;
+                for (member in leaderVotes) {
+                    numVotes += leaderVotes[member];
+                }
+
+                let compare = function (a, b) {
+                    return b[1] - a[1];
+                };
+
+                if (numVotes >= numMembers) {
+                    let winner = Object.entries(leaderVotes).sort(compare)[0][0];
+                    Experiments.update({_id: experimentId}, {$set: {groupLeader: winner}});
+                    console.log("winner is: ", winner);
+                }
+            }
+        );
+    },
 });
 
 if (Meteor.isServer) {
@@ -215,6 +247,8 @@ if (Meteor.isServer) {
                     scenarioSetId: 1,
                     ratings: 1,
                     discussions: 1,
+                    leaderVotes: 1,
+                    groupLeader: 1,
                     createdAt: 1,
                     createdBy: 1,
                 },
