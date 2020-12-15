@@ -35,13 +35,13 @@ export const ViewGroup = ({toggleModal, group}) => {
             <Modal.Content>
                 <Header as={'h5'} content={'Group Members: '}/>
                 {members && members.map((member) => (
-                    <p>{member.username}<span>{member._id === Meteor.userId() &&
-                    <span>(you)</span>}</span></p>
+                    <p key={member._id}>{member.username}<span>{member._id === Meteor.userId() &&
+                    <span> (you)</span>}</span></p>
                 ))}
             </Modal.Content>
             <Modal.Actions>
                 {members && members.map((member) => (
-                    <span>{member._id === Meteor.userId() &&
+                    <span key={member._id}>{member._id === Meteor.userId() &&
                     <Button style={{marginRight: '15px'}} content={'Remove yourself from group'} onClick={leaveGroup}/>}</span>
                 ))}
                 <Button content={'Close'} onClick={toggleIt}/>

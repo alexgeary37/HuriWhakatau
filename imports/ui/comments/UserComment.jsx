@@ -14,7 +14,6 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
         comment.emojis ? [...comment.emojis] : []
     );
     let isAuthor = Meteor.userId() === comment.authorId;
-    console.log("author:", comment.authorId);
 
     //if the comment has an edited date format this for showing on the comment
     let editedDateTime,
@@ -35,7 +34,6 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
 
     let userEmotion;
     if (comment.emotion) {
-        console.log("comment emotion", comment.emotion);
         switch (comment.emotion) {
             case "happy":
                 userEmotion = 'yellow';
@@ -116,7 +114,6 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
     // add to count for current selected id.
     // hide picker.
     const handleEmojiSelect = (selection) => {
-        console.log("handling emoji");
         let emoOb = {emoji: selection, count: 1, users: [Meteor.userId()]};
         let existingEmojiIds = selectedEmojis.map(function (item) {
             return item.emoji.id;
@@ -232,7 +229,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
             )}
             {selectedEmojis &&
             selectedEmojis.map((emoji) => (
-                <span style={{marginRight: 17, margintop: 107}}>
+                <span key={emoji.emoji.id} style={{marginRight: 17, margintop: 107}}>
             <Emoji key={emoji.emoji.id} emoji={emoji.emoji} size={22}>
               <NotificationBadge
                   key={emoji.emoji.id + ":count"}

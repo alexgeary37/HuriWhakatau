@@ -8,7 +8,6 @@ Meteor.methods({
   // Called from ...
   //todo, work out how this can transition from existing data to new schema.
   "scenarios.create"(title, description, categoryIds, discussionTemplateId) {
-    console.log("Enter scenarios.create");
     check(title, String);
     check(description, String);
     check(categoryIds, Array);

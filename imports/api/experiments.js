@@ -37,7 +37,6 @@ Meteor.methods({
         check(introductionCommentText, String);
 
         let discussionIds = [];
-        console.log(ratings);
         //addcheck for user admin/researcher role
 
         const experimentId = Experiments.insert({
@@ -49,8 +48,6 @@ Meteor.methods({
             createdAt: new Date(),
             createdBy: Meteor.userId(),
         });
-
-        console.log(experimentId);
 
         //create intro discussion if needed
         if (hasIntroduction) {
@@ -138,7 +135,6 @@ Meteor.methods({
         let verdicts = Verdicts.find({discussionId: discussionId}).fetch();
         users.forEach((user) => {
             if (user.profile?.personality !== undefined) {
-                console.log("we have userpersonality")
                 user.profile?.personality.forEach((question) => {
                     let questionnaire = Personality.findOne({_id: question.questionnaireId});
                     question.title = questionnaire.questionnaireName;
@@ -230,7 +226,6 @@ Meteor.methods({
                 if (numVotes >= numMembers) {
                     let winner = Object.entries(leaderVotes).sort(compare)[0][0];
                     Experiments.update({_id: experimentId}, {$set: {groupLeader: winner}});
-                    console.log("winner is: ", winner);
                 }
             }
         );

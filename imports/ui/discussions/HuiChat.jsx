@@ -49,7 +49,6 @@ export const HuiChat = () => {
     };
     const updateDeadline = (deadline) => {
         setMutableDiscussionDeadline(deadline);
-        console.log("deadline updated", mutableDiscussionDeadline);
     };
 
     // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
@@ -66,7 +65,6 @@ export const HuiChat = () => {
         let seconds = Math.floor(
             ((discussionDeadline - current) % (1000 * 60)) / 1000
         );
-        console.log("timeleft: ", minutes);
         return (
             hours.toString().padStart(2, "0") +
             ":" +
