@@ -39,6 +39,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // Topics.remove({});
   // console.log("Topics:", Topics.find().fetch());
 
   Meteor.publish("topics", function () {

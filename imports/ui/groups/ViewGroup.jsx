@@ -41,7 +41,7 @@ export const ViewGroup = ({toggleModal, group}) => {
             </Modal.Content>
             <Modal.Actions>
                 {members && members.map((member) => (
-                    <span>{member._id === Meteor.userId() &&
+                    <span key={member.id}>{member._id === Meteor.userId() &&
                     <Button style={{marginRight: '15px'}} content={'Remove yourself from group'} onClick={leaveGroup}/>}</span>
                 ))}
                 <Button content={'Close'} onClick={toggleIt}/>

@@ -18,8 +18,8 @@ import {Personality} from "../imports/api/personality";
 
 // set up checks that each item doesn't exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
-//create categories if the basic set doesn't exist
-    let categoryId;
+    console.log('Running defaultData.js');
+    //create categories if the basic set doesn't exist
     if (Categories.find().count() === 0) {
         Categories.insert({title: "Politics"});
         Categories.insert({title: "Religion"});
@@ -31,11 +31,11 @@ if (Meteor.isServer) {
         Categories.insert({title: "Culture"});
         Categories.insert({title: "Maori Culture"});
         Categories.insert({title: "Maori Affairs"});
-    } else {
-        categoryId = Categories.findOne({title: "Other"});
     }
 
-// Create accounts
+    const categoryId = Categories.findOne({title: "Other"});
+
+    // Create accounts
     let defaultUsers = [];
     let defaultUser = "";
     if (!Accounts.findUserByUsername("Mary")) {
@@ -123,6 +123,7 @@ if (Meteor.isServer) {
     } else {
         defaultUsers.push(Accounts.findUserByUsername("Daisy")._id);
     }
+
     if (!Accounts.findUserByUsername("Alex")) {
         defaultUser = Accounts.createUser({
             username: "Alex",
@@ -152,22 +153,23 @@ if (Meteor.isServer) {
         defaultUsers.push(username._id);
     }
 
-    //console.log("undefined group: ", !Groups.findOne({name: "Starter group"})._id);
-//Create group for default users
-    if (!Groups.findOne({name: "Starter group"})._id) {
-        console.log("group method");
+    console.log("undefined group: ", !Groups.findOne({name: "Starter group"}));
+    //Create group for default users
+    if (!Groups.findOne({name: "Starter group"})) {
+        console.log("Create Starter group");
         console.log(defaultUsers);
         Groups.insert({
             name: "Starter group",
             members: defaultUsers,
             createdAt: new Date(),
             createdBy: "ADMIN",
-        })
+        });
     }
 
-    console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"})._id);
-// Set up discussion Templates:
-    if (!DiscussionTemplates.findOne({name: "Default -Timed"})._id) {
+    console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"}));
+    // Set up discussion Templates:
+    if (!DiscussionTemplates.findOne({name: "Default -Timed"})) {
+        console.log('Create Discussion Templates');
         const templateId1 = DiscussionTemplates.insert({
             name: "Default -Timed",
             usersAreAnonymous: false,
@@ -214,7 +216,8 @@ if (Meteor.isServer) {
         });
 
 
-// create some scenarios
+        // Create Scenarios
+        console.log('Create Scenarios for Discussion Templates');
         let scenarios = [];
         scenarios.push(Scenarios.insert({
             title: "Default - Introduction",
@@ -234,7 +237,8 @@ if (Meteor.isServer) {
             createdBy: "ADMIN",
         }));
 
-//create a scenario set
+        // Create a ScenarioSet
+        console.log('Create the ScenarioSet "Starter Set"');
         ScenarioSets.insert({
             title: "Starter Set",
             description: "Here's what a scenario set looks like",
@@ -243,16 +247,17 @@ if (Meteor.isServer) {
             createdAt: new Date(),
             createdBy: "ADMIN",
         });
-        console.log(scenarios);
-
+        console.log('scenarios::', scenarios);
     }
-//set up roles if they don't exist
+
+    //set up roles if they don't exist
     let createdRoles = Roles.getAllRoles();
     let roleList = [];
     createdRoles.forEach((role) => {
         roleList.push(role._id);
     });
-//set up roles
+
+    //set up roles
     const userRoles = [
         "CREATE_GROUPS",
         "CREATE_SCENARIOS",
@@ -472,4 +477,5 @@ if (Meteor.isServer) {
     //         }
     //     ],
     // })
+    console.log('Finished running defaultData.js');
 }

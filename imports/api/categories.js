@@ -29,6 +29,8 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // Categories.remove({});
+
   Meteor.publish("categories", function () {
     return Categories.find(
       {},

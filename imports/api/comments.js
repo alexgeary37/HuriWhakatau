@@ -96,6 +96,8 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
+  // Comments.remove({});
+
   Meteor.publish("comments", function (discussionId) {
     return Comments.find(
       { discussionId: discussionId },

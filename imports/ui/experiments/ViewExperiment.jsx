@@ -32,21 +32,14 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
         if (groupSub.ready() && scenarioSub.ready() && scenarioSetSub.ready() && discussionsSub.ready()) {
             fetchedScenarioSet = ScenarioSets.findOne({_id: experiment.scenarioSetId});
             if (fetchedScenarioSet) {
+                console.log('fetchedScenarioSet::', fetchedScenarioSet);
                 let scenarios = fetchedScenarioSet.scenarios;
-                let scenarioValues = [];
-                console.log('scenarios.length::', scenarios.length);
-                for (i = 0; i < scenarios.length; i += 1) {
-                    console.log(i, 'inLOOP::', typeof scenarios[i], scenarios[i]);
-                    scenarioValues.push(scenarios[i]);
-                    console.log(i, 'inLOOP2::', typeof scenarioValues, scenarioValues, scenarioValues.length);
-                }
-                console.log('scenarios::', typeof scenarios, '\n', scenarios);
-                console.log('scenarios[0]::', typeof scenarios[0], '\n', scenarios[0]);
-                console.log('scenarioValues::', typeof scenarioValues, scenarioValues);
+                console.log('typeof fetchedScenarioSet.scenarios::', typeof scenarios);
+                console.log('fetchedScenarioSet.scenarios::', scenarios);
 
                 scenarioSetTitle = fetchedScenarioSet.title;
                 scenarioSetDescription = fetchedScenarioSet.description;
-                fetchedScenarios = Scenarios.find({_id: { $in: scenarioValues }}).fetch();
+                fetchedScenarios = Scenarios.find({_id: { $in: scenarios }}).fetch();
             }
 
             group = Groups.findOne({ _id: experiment.groupId}, { fields: { members: 1, name: 1 }});
