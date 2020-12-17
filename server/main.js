@@ -17,7 +17,7 @@ import "/server/defaultData";
 import "/imports/api/mountains";
 import "/imports/api/users"
 import "/imports/api/glossary";
-import {Comments} from "../imports/api/comments";
+import "/imports/api/commentRatings";
 
 Meteor.startup(() => {
     process.env.MAIL_URL =
@@ -25,6 +25,7 @@ Meteor.startup(() => {
         "smtps://huriwhakatau%40gmail.com:huriwhakataujuryroom@smtp.gmail.com:465/";
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
     // console.log("email set");
+
 
     // modified from Chris Symon's code, scheduled job to set status
     // of timed out discussions.
@@ -53,6 +54,27 @@ Meteor.startup(() => {
             }, {$set: {status: "timedout"}})
         }
     });
+
+    //a job for reverting emotional state for users after 3 minutes
+    SyncedCron.add({
+        name: "checkEmotionState", // Name of the job.
+        // Sets up the schedule for when the job is to be run.
+        schedule(parser) {
+            return parser
+                .recur()
+                .on(0)
+                .second(); // EVERY 1 minute
+        },
+
+        // The job which runs periodically according to the set schedule.
+        job() {
+            // Bulk update all users whose emotional state was set > 3 minutes ago back to neutral.
+            Meteor.users.rawCollection().updateMany({
+                "profile.emotion.timestamp": {$lte: Date.now() - 180000}
+            }, {$set: {"profile.emotion.emotion": "neutral"}})
+        }
+    });
+
 
 
     SyncedCron.start(); // Runs once as soon as the server is started.

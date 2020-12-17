@@ -1,5 +1,5 @@
 import {useTracker} from "meteor/react-meteor-data";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, Suspense, lazy} from "react";
 import {
     Button,
     Card,
@@ -25,6 +25,7 @@ import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {RatingComponent} from "./RatingComponent";
+// const ScenarioSummary = lazy(() => import("/imports/ui/scenarios/ScenarioSummary"));
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
 import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
 import {CreateExperiment} from "../experiments/CreateExperiment";
@@ -35,7 +36,6 @@ import {ScenarioSetSummary} from "/imports/ui/scenarioSets/ScenarioSetSummary";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import NotificationBadge from "react-notification-badge";
-import {DisplayDiscussionTemplate} from "/imports/ui/discussionTemplates/DisplayDiscussionTemplate";
 import Cookies from "universal-cookie/lib";
 
 export const MyDashboard = () => {
@@ -166,13 +166,15 @@ export const MyDashboard = () => {
         Meteor.subscribe("discussionTemplates");
         Meteor.subscribe("experiments");
         let userSub = Meteor.subscribe("users");
+        let friendsOnline;
+        let groupMembersOnline;
         let fetchedFriendIds = [];
         let fetchedFriends = [];
         let fetchedPendingFriendIds = [];
         let fetchedPendingFriends = [];
         let fetchedGroupMemberIds = [];
         let fetchedGroupMembers = [];
-        let currentUser;
+        let currentUser = Meteor.users.findOne({_id: Meteor.userId()});
         let groupIds = [];
         let userId = Meteor.userId();
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
@@ -194,22 +196,24 @@ export const MyDashboard = () => {
 
         // once user collection subscription ready and there is a logged in user, find user
         // and get friends and users that the user is in groups with
-        if (userSub.ready()) {
-            Meteor.call("users.getUser", userId, (err, user) => {
-                if (user.profile.friendList) {
-                    fetchedFriendIds = user.profile.friendList;
+        if (currentUser?.profile?.friendList){
+                if (currentUser.profile.friendList) {
+                    fetchedFriendIds = [...currentUser.profile.friendList];
                     fetchedFriendIds.forEach((friendId) => {
                         fetchedFriends.push(Meteor.users.findOne({_id: friendId}, {fields: {username: 1, status: 1}}));
                     })
                 }
 
-                if (user.profile.pendingFriendList) {
-                    fetchedPendingFriendIds = user.profile.pendingFriendList;
+                if(fetchedFriends[0] !== undefined){
+                    friendsOnline = fetchedFriends.some(friend => friend.status.online === true)
+                }
+
+                if (currentUser.profile.pendingFriendList) {
+                    fetchedPendingFriendIds = currentUser.profile.pendingFriendList;
                     fetchedPendingFriendIds.forEach((pendingFriendId) => {
                         fetchedPendingFriends.push(Meteor.users.findOne({_id: pendingFriendId}, {fields: {username: 1}}));
                     })
                 }
-            });
 
             //add all member ids for each group the user is part of to a total, filter out the user themselves
             fetchedGroups.forEach((group) => {
@@ -223,8 +227,11 @@ export const MyDashboard = () => {
             fetchedGroupMemberIds.forEach((memberId) => {
                 fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1, status: 1}}));
             });
-        }
 
+            if(fetchedGroupMembers[0] !== undefined){
+                groupMembersOnline = fetchedGroupMembers.some(member => member.status.online === true);
+            }
+        }
         return {
             user: Meteor.userId(),
             myDiscussions: fetchedMyDiscussions,
@@ -237,8 +244,8 @@ export const MyDashboard = () => {
             friends: fetchedFriends,
             pendingFriends: fetchedPendingFriends,
             groupMembers: fetchedGroupMembers,
-            anyFriendOnline: fetchedFriends.some(friend => friend.status.online === true),
-            anyGroupMemberOnline: fetchedGroupMembers.some(member => member.status.online === true),
+            anyFriendOnline: friendsOnline,
+            anyGroupMemberOnline: groupMembersOnline,
         };
     });
 
@@ -365,8 +372,7 @@ export const MyDashboard = () => {
                     vertical
                     visible
                     width={showSidebar ? "wide" : "very thin"}
-                    onMouseOver={!showSidebar ? handleShowSidebar : ''}
-                    // onMouseOut={showSidebar ? handleShowSidebar : ''}
+                    onMouseOver={!showSidebar ? handleShowSidebar : null}
                     onClick={handleShowSidebar}
                     style={{
                         backgroundColor: 'rgb(30, 30, 30)',
@@ -387,8 +393,9 @@ export const MyDashboard = () => {
                     </Menu.Item>
                     <List style={{height: "15em"}}>
                         {showSidebar && friends && friends.map((friend) => (
-                            <Menu.Item style={{marginLeft: "20px"}} key={friend._id} title={friend.status.online ?
-                                friend.status.idle ? 'idle' : 'online' : 'offline'}>
+                            <Menu.Item style={{marginLeft: "20px"}} key={friend._id}
+                                       title={friend.status.online ?
+                                           friend.status.idle ? 'idle' : 'online' : 'offline'}>
                                 <div style={{
                                     display: 'inline-block',
                                     fontSize: "13pt"
@@ -410,6 +417,8 @@ export const MyDashboard = () => {
                                 {/*<Rating icon='star' defaultRating={friend.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                             </Menu.Item>
                         ))}
+                    </List>
+                    <List>
                         {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (
                             <Menu.Item
                                 key={pendingFriend._id} /*title={pendingFriend.online ? 'online' : 'offline'}*/>
@@ -498,11 +507,11 @@ export const MyDashboard = () => {
                     }}
                 />
                 {/*end sidebar*/}
-                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)'}} dimmed={showSidebar}
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "92vh"}} dimmed={showSidebar}
                                 onClick={showSidebar ? handleShowSidebar : null}>
 
                     <Container>
-                        <span style={{height: "22em"}}/>
+                        <span style={{height: "10em"}}/>
                         <Segment attached="top" clearing inverted
                                  style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                             <Header size="huge">
@@ -522,7 +531,7 @@ export const MyDashboard = () => {
                             </Header>
                         </Segment>
 
-                        <Grid doubling /*style={{overflow: "auto", height: "87vh"}}*/>
+                        <Grid doubling>
                             <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
                                 <GridColumn width={16}>
                                     <Divider/>

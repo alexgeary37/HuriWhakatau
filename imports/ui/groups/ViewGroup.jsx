@@ -35,7 +35,7 @@ export const ViewGroup = ({toggleModal, group}) => {
             <Modal.Content>
                 <Header as={'h5'} content={'Group Members: '}/>
                 {members && members.map((member) => (
-                    <p>{member.username}<span>{member._id === Meteor.userId() &&
+                    <p key={member._id}>{member.username}<span>{member._id === Meteor.userId() &&
                     <span>(you)</span>}</span></p>
                 ))}
             </Modal.Content>

@@ -166,9 +166,9 @@ export const Discussion = () => { ///
   const checkGroupMembership = () => {
     if (group && group.members.includes(Meteor.userId())) {
       setUserInGroup(true);
-      console.log("user in group");
+      //console.log("user in group");
     } else {
-      console.log("user not in group");
+      //console.log("user not in group");
     }
   }
 

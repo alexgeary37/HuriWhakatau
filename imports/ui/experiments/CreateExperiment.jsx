@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Container, Segment, Form, Modal, Button, Checkbox, Tab, Label} from "semantic-ui-react";
+import React, {useEffect, useState} from "react";
+import {Container, Segment, Form, Modal, Button, Checkbox, Tab, Label, Input} from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
@@ -11,6 +11,9 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [description, setDescription] = useState("");
     const [groupId, setGroupId] = useState("");
     const [scenarioSetId, setScenarioSetId] = useState("");
+    const [introductionCommentText, setIntroductionCommentText] = useState("Welcome to the " +
+        "introduction discussion. Use this space to get to know each other and vote on a group leader before " +
+        "you progress to the first topic.");
     const [isOpen, setIsOpen] = useState(true);
     const [hasIntroduction, setHasIntroduction] = useState(false);
     const [errName, setErrName] = useState("");
@@ -55,6 +58,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                 scenarioSetId,
                 hasIntroduction,
                 ratings,
+                introductionCommentText,
             );
             toggleIt(e);
         }
@@ -119,20 +123,10 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
         setRatings(currentRatings => [...currentRatings]);
     }
 
-
-    // const responseSet = [
-    //     {type: "Frequency", range: "Never-Always"},
-    //     {type: "Quality", range: "V.Poor-Excellent"},
-    //     {type: "Intensity", range: "None-Severe"},
-    //     {type: "Agreement", range: "S.Disagree-S.Agree"},
-    //     {type: "Approval", range: "S.Disapprove-S.Approve"},
-    //     {type: "Awareness", range: "Not Aware-Extremely Aware"},
-    //     {type: "Importance", range: "Not at all Important-Extremely Important"},
-    //     {type: "Familiarity", range: "Not at all Familiar-Extremely Familiar"},
-    //     {type: "Satisfaction", range: "Not at all Satisfied-Extremely Satisfied"},
-    //     {type: "Performance", range: "Far below Standards-Far above Standards"},
-    // ];
-
+    const printText = (e) => {
+        console.log(e);
+        console.log(introductionCommentText);
+    }
 
     const panes = [
         {
@@ -233,7 +227,14 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                   onClick={(e, data) => setHasIntroduction(data.checked)}/>
                         <br/>
                         <br/>
-
+                        {hasIntroduction && <Form.Field
+                            control={'textarea'}
+                            label={'Introductory comment'}
+                            title={'A short introduction to the discussion that outlines any special ' +
+                            'requirements or instructions'}
+                            value={introductionCommentText}
+                            onChange={(event) => setIntroductionCommentText(event.currentTarget.value)}/>}
+                        <br/>
                     </Form>
                 </Tab.Pane>
         },
@@ -276,16 +277,19 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 selection
                                 options={
                                     responseSet.map((response) => ({
-                                        key: response.type,
-                                        text: response.type,
-                                        value: response.type,
+                                        key: response.responseType,
+                                        text: response.responseType,
+                                        value: response.responseType,
                                     }))
                                 }
                                 value={ratings[0].responseType}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
                             <Form.Field width={3}
-                                        content={responseSet.filter(response => response.type === ratings[0].responseType)[0].range}/>
+                                        content={responseSet.filter(response =>
+                                            response.responseType === ratings[0].responseType)
+                                            [0].fullRange[0] + " - " + responseSet.filter(response =>
+                                            response.responseType === ratings[0].responseType)[0].fullRange[6]}/>
                             <Checkbox toggle
                                       name={'0'}
                                       checked={ratings[0].reverse}
@@ -318,16 +322,19 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 selection
                                 options={
                                     responseSet.map((response) => ({
-                                        key: response.type,
-                                        text: response.type,
-                                        value: response.type,
+                                        key: response.responseType,
+                                        text: response.responseType,
+                                        value: response.responseType,
                                     }))
                                 }
                                 value={ratings[1].responseType}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
                             <Form.Field width={3}
-                                         content={responseSet.filter(response => response.type === ratings[1].responseType)[0].range}/>
+                                         content={responseSet.filter(response =>
+                                             response.responseType === ratings[1].responseType)
+                                             [0].fullRange[0] + " - " + responseSet.filter(response =>
+                                             response.responseType === ratings[1].responseType)[0].fullRange[6]}/>
                             <Checkbox toggle
                                       name={'1'}
                                       checked={ratings[1].reverse}
@@ -360,16 +367,19 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 selection
                                 options={
                                     responseSet.map((response) => ({
-                                        key: response.type,
-                                        text: response.type,
-                                        value: response.type,
+                                        key: response.responseType,
+                                        text: response.responseType,
+                                        value: response.responseType,
                                     }))
                                 }
                                 value={ratings[2].responseType}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
                             <Form.Field width={3}
-                                        content={responseSet.filter(response => response.type === ratings[2].responseType)[0].range}/>
+                                        content={responseSet.filter(response =>
+                                            response.responseType === ratings[2].responseType)
+                                            [0].fullRange[0] + " - " + responseSet.filter(response =>
+                                            response.responseType === ratings[2].responseType)[0].fullRange[6]}/>
                             <Checkbox toggle
                                       name={'2'}
                                       checked={ratings[2].reverse}
@@ -402,16 +412,19 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 selection
                                 options={
                                     responseSet.map((response) => ({
-                                        key: response.type,
-                                        text: response.type,
-                                        value: response.type,
+                                        key: response.responseType,
+                                        text: response.responseType,
+                                        value: response.responseType,
                                     }))
                                 }
                                 value={ratings[3].responseType}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
                             <Form.Field width={3}
-                                        content={responseSet.filter(response => response.type === ratings[3].responseType)[0].range}/>
+                                        content={responseSet.filter(response =>
+                                            response.responseType === ratings[3].responseType)
+                                            [0].fullRange[0] + " - " + responseSet.filter(response =>
+                                            response.responseType === ratings[3].responseType)[0].fullRange[6]}/>
                             <Checkbox toggle
                                       name={'3'}
                                       checked={ratings[3].reverse}
@@ -444,16 +457,19 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 selection
                                 options={
                                     responseSet.map((response) => ({
-                                        key: response.type,
-                                        text: response.type,
-                                        value: response.type,
+                                        key: response.responseType,
+                                        text: response.responseType,
+                                        value: response.responseType,
                                     }))
                                 }
                                 value={ratings[4].responseType}
                                 onChange={(event, data) => addResponseSet(data)}
                             />
                             <Form.Field width={3}
-                                        content={responseSet.filter(response => response.type === ratings[4].responseType)[0].range}/>
+                                        content={responseSet.filter(response =>
+                                            response.responseType === ratings[4].responseType)
+                                            [0].fullRange[0] + " - " + responseSet.filter(response =>
+                                            response.responseType === ratings[4].responseType)[0].fullRange[6]}/>
                             <Checkbox toggle
                                       name={'4'}
                                       checked={ratings[4].reverse}

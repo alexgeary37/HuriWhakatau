@@ -5,7 +5,7 @@ import {
     Button, Container, Segment,
     Header, Message, List, Form,
     Icon, Card, ListItem, Rating,
-    Divider, Image, Sidebar, Tab, ListContent, Checkbox,
+    Divider, Image, Sidebar, Tab, ListContent, Checkbox, Placeholder,
 } from "semantic-ui-react";
 
 export const RatingComponent = () => {
@@ -22,8 +22,7 @@ export const RatingComponent = () => {
                     scale: 7,
                     reverse: false,
                     ratingLabels: [],
-                }
-    );
+                });
 
     let rating;
     let responseIndices;
@@ -49,7 +48,7 @@ export const RatingComponent = () => {
             Meteor.call("experiments.getRandomExperimentForRating"
                 , (err, fetchedExperimentArray) => {
                     let experiment = fetchedExperimentArray[0];
-                    let exptRatings = experiment.ratings.filter(rating => rating.rating != "");
+                    let exptRatings = experiment.ratings.filter(rating => rating.rating !== "");
                     // Select a random rating from the experiment's rating set
                     rating = exptRatings[Math.floor(Math.random() * Math.floor(exptRatings.length))]
                     // find the appropriate response set
@@ -70,6 +69,7 @@ export const RatingComponent = () => {
 
                             setQuestionItem({
                                 itemId: id,
+                                experimentId: experiment._id,
                                 itemNumber: itemNum,
                                 headerText: header,
                                 bodyText: body,
@@ -118,17 +118,15 @@ export const RatingComponent = () => {
 
         setAnswerString(value);
         setAnswerInt(score);
-        console.log(answerString, answerInt);
     }
 
     const submitAnswer = () => {
         //todo work out what submitting an answer looks like / does.
         if(answerString){
-            console.log("question type was: ", typeOfQuestion);
             if(typeOfQuestion){
-                console.log("a comment rating answer")
+                Meteor.call("commentRatings.addRating", questionItem.itemId, questionItem.experimentId, {userId: Meteor.userId(), ratingText: questionItem.headerText, ratingScore: answerInt})
             } else {
-                console.log("a personality question answer")
+                Meteor.call("users.recordPersonalityAnswer", Meteor.userId(), {questionnaireId : questionItem.itemId, item: questionItem.itemNumber, answerScore: answerInt})
             }
             updateQuestion();
         } else {
@@ -143,16 +141,24 @@ export const RatingComponent = () => {
                 <ListContent as={Segment} style={{
                     backgroundColor: "#c4c4c4",
                 }}>
+                    {questionItem.headerText ?
                     <List.Header as={'h4'}
-                                 content={questionItem && questionItem.headerText}
+                                 content={questionItem.headerText}
                     />
+                    :
+                    <Placeholder>
+                        <Placeholder.Line length={'full'} style={{backgroundColor: "#c4c4c4"}}/>
+                        <Placeholder.Line length={'very long'} style={{backgroundColor: "#c4c4c4"}}/>
+                        <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                    </Placeholder>
+                        }
                     {questionItem.bodyText &&
                     <List.Description as={Segment}
-                                      content={questionItem && questionItem.bodyText}
+                                      content={questionItem.bodyText}
                     />
                     }
                     <hr/>
-                    {questionItem.ratingLabels.map((label) =>
+                    {questionItem.ratingLabels.length > 0 ? questionItem.ratingLabels.map((label) =>
                         <Form.Field key={label}>
                             <Checkbox
                                 radio
@@ -163,7 +169,16 @@ export const RatingComponent = () => {
                                 onChange={(e, data) => addAnswerValue(data.value)}
                             />
                         </Form.Field>
-                    )}
+                    )
+                    :
+                        <Placeholder>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                        </Placeholder>
+                    }
                     <p style={{color:'red', height:"10px"}}>{submitErr && submitErr}</p>
                     <Button content={'Submit Answer'} onClick={submitAnswer}/>
                     <Button content={'Different Question'} onClick={updateQuestion}/>

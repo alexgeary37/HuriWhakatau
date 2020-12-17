@@ -47,19 +47,19 @@ export const CreateDiscussion = ({toggleModal}) => {
             }
             toggleIt();
         }
-    }
+    };
 
     const insertDiscussion = (newGroupId) => {
         Meteor.call("scenarios.create", discussionTitle, description, categoryId, discussionTemplate._id,
             (error, result) => {
                 Meteor.call("discussions.insert", result, groupId.length !== 0 ? groupId : newGroupId, Number(timeLimit), isHui, true);
-            })
-    }
+            });
+    };
 
     const toggleIt = () => {
         setIsOpen(false);
         toggleModal();
-    }
+    };
 
     const {groups, categories, discussionTemplate} = useTracker(() => {
         Meteor.subscribe("groups");
@@ -80,7 +80,7 @@ export const CreateDiscussion = ({toggleModal}) => {
         if (categories.length > 0 && categoryId.length === 0) {
             setCategoryId(categories.find(cat => cat.title === 'Other')._id);
         }
-    }
+    };
     useEffect(getOtherCategory, [categories]);
 
     // enable form items as this functionality becomes available
