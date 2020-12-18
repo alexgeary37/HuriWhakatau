@@ -184,6 +184,7 @@ if (Meteor.isServer) {
             timeLimit: 30,
             commentCharacterLimit: 0,
             isHui: false,
+            isPublic: false,
             createdAt: new Date(),
             createdBy: "ADMIN",
         });
@@ -198,6 +199,7 @@ if (Meteor.isServer) {
             timeLimit: 0,
             commentCharacterLimit: 0,
             isHui: false,
+            isPublic: false,
             createdAt: new Date(),
             createdBy: "ADMIN",
         });
@@ -212,6 +214,7 @@ if (Meteor.isServer) {
             timeLimit: 0,
             commentCharacterLimit: 0,
             isHui: false,
+            isPublic: false,
             createdAt: new Date(),
             createdBy: "ADMIN",
         });

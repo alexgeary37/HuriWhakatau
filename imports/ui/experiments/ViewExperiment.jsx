@@ -32,11 +32,7 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
         if (groupSub.ready() && scenarioSub.ready() && scenarioSetSub.ready() && discussionsSub.ready()) {
             fetchedScenarioSet = ScenarioSets.findOne({_id: experiment.scenarioSetId});
             if (fetchedScenarioSet) {
-                console.log('fetchedScenarioSet::', fetchedScenarioSet);
                 let scenarios = fetchedScenarioSet.scenarios;
-                console.log('typeof fetchedScenarioSet.scenarios::', typeof scenarios);
-                console.log('fetchedScenarioSet.scenarios::', scenarios);
-
                 scenarioSetTitle = fetchedScenarioSet.title;
                 scenarioSetDescription = fetchedScenarioSet.description;
                 fetchedScenarios = Scenarios.find({_id: { $in: scenarios }}).fetch();

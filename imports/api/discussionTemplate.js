@@ -17,7 +17,8 @@ Meteor.methods({
     canAddEmojis,
     timeLimit,
     commentCharacterLimit,
-    isHui
+    isHui,
+    isPublic
   ) {
     check(name, String);
     check(usersAreAnonymous, Boolean);
@@ -29,6 +30,7 @@ Meteor.methods({
     check(timeLimit, Number);
     check(commentCharacterLimit, Number);
     check(isHui, Boolean);
+    check(isPublic, Boolean);
     //addcheck for user admin/researcher role
 
     DiscussionTemplates.insert({
@@ -42,6 +44,7 @@ Meteor.methods({
       timeLimit: timeLimit,
       commentCharacterLimit: commentCharacterLimit,
       isHui: isHui,
+      isPublic: isPublic,
       createdAt: new Date(),
       createdBy: Meteor.userId(),
     });
@@ -59,7 +62,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // DiscussionTemplates.remove({});
+  DiscussionTemplates.remove({});
 
   Meteor.publish("discussionTemplates", function () {
     return DiscussionTemplates.find(
@@ -76,6 +79,7 @@ if (Meteor.isServer) {
           timeLimit: 1,
           commentCharacterLimit: 1,
           isHui: 1,
+          isPublic: 1,
           createdAt: 1,
           createdBy: 1,
         },

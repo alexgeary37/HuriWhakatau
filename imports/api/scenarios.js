@@ -34,7 +34,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Scenarios.remove({});
+  Scenarios.remove({});
 
   const scenarios = Scenarios.find({}).fetch();
   for (i = 0; i < scenarios.length; i += 1) {

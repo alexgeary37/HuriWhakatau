@@ -50,6 +50,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
             setErrGroupId("");
         }
         if (name.length > 0 && description.length > 0 && scenarioSetId.length > 0 && groupId.length > 0) {
+            console.log('hasIntroduction:', hasIntroduction);
             Meteor.call(
                 "experiments.create",
                 name,

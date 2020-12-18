@@ -33,6 +33,7 @@ Meteor.methods({
         check(description, String);
         check(groupId, String);
         check(scenarioSetId, String);
+        check(hasIntroduction, Boolean);
         check(ratings, Array);
         check(introductionCommentText, String);
 
@@ -236,7 +237,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-    // Experiments.remove({});
+    Experiments.remove({});
 
     Meteor.publish("experiments", function () {
         return Experiments.find(
