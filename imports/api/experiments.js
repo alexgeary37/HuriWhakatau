@@ -114,12 +114,10 @@ Meteor.methods({
     //get a random experiment with a non-empty rating
     "experiments.getRandomExperimentForRating"() {
         if (Meteor.isServer) {
-
             const fetchedExp = Experiments.rawCollection().aggregate([
                 {$match: {ratings: {$elemMatch: {rating: {$ne: ""}}}}},
                 {$sample: {size: 1}}
-            ])
-                .toArray();
+            ]).toArray();
             return fetchedExp;
         }
     },

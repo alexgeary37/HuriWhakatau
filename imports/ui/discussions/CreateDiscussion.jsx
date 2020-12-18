@@ -50,9 +50,9 @@ export const CreateDiscussion = ({toggleModal}) => {
     };
 
     const insertDiscussion = (newGroupId) => {
-        Meteor.call("scenarios.create", discussionTitle, description, categoryId, discussionTemplate._id,
+        Meteor.call("scenarios.create", discussionTitle, description, [categoryId], discussionTemplate._id,
             (error, result) => {
-                Meteor.call("discussions.insert", result, groupId.length !== 0 ? groupId : newGroupId, Number(timeLimit), isHui, true);
+                Meteor.call("discussions.insert", result, groupId.length !== 0 ? groupId : newGroupId, timeLimit, isHui, true);
             });
     };
 
@@ -75,10 +75,10 @@ export const CreateDiscussion = ({toggleModal}) => {
         };
     });
 
-//check if user is in the discussion group
+    //check if user is in the discussion group
     const getOtherCategory = () => {
-        if (categories.length > 0 && categoryId.length === 0) {
-            setCategoryId(categories.find(cat => cat.title === 'Other')._id);
+        if (categories.length > 0 && categoryId && categoryId.length === 0) {
+            setCategoryId(categories.filter(cat => cat.title === 'Other')._id);
         }
     };
     useEffect(getOtherCategory, [categories]);
@@ -174,7 +174,7 @@ export const CreateDiscussion = ({toggleModal}) => {
                         )}</div>}
                     <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
                            value={timeLimit}
-                           onInput={({target}) => setTimeLimit(target.value)}>
+                           onInput={({target}) => setTimeLimit(Number(target.value))}>
                         <Label>Discussion has a time limit</Label>
                         <input/>
                         <Label>mins</Label>

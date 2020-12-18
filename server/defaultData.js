@@ -33,7 +33,8 @@ if (Meteor.isServer) {
         Categories.insert({title: "Maori Affairs"});
     }
 
-    const categoryId = Categories.findOne({title: "Other"});
+    const categoryId = Categories.findOne({title: "Other"})._id;
+    console.log('categoryId:', categoryId);
 
     // Create accounts
     let defaultUsers = [];
@@ -166,9 +167,11 @@ if (Meteor.isServer) {
         });
     }
 
-    console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"}));
-    // Set up discussion Templates:
-    if (!DiscussionTemplates.findOne({name: "Default -Timed"})) {
+    // Set up DiscussionTemplates
+    // console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"}));
+    // if (!DiscussionTemplates.findOne({name: "Default -Timed"})) {
+    console.log('DiscussionTemplates count:', DiscussionTemplates.find({}).count());
+    if (DiscussionTemplates.find({}).count() === 0) {
         console.log('Create Discussion Templates');
         const templateId1 = DiscussionTemplates.insert({
             name: "Default -Timed",
@@ -184,7 +187,6 @@ if (Meteor.isServer) {
             createdAt: new Date(),
             createdBy: "ADMIN",
         });
-
         const templateId2 = DiscussionTemplates.insert({
             name: "Default - Users Can Edit Comments",
             usersAreAnonymous: false,
@@ -199,7 +201,6 @@ if (Meteor.isServer) {
             createdAt: new Date(),
             createdBy: "ADMIN",
         });
-
         DiscussionTemplates.insert({
             name: "Default - Users Can't Edit Comments",
             usersAreAnonymous: false,
@@ -215,7 +216,6 @@ if (Meteor.isServer) {
             createdBy: "ADMIN",
         });
 
-
         // Create Scenarios
         console.log('Create Scenarios for Discussion Templates');
         let scenarios = [];
@@ -227,7 +227,6 @@ if (Meteor.isServer) {
             createdAt: new Date(),
             createdBy: "ADMIN",
         }));
-
         scenarios.push(Scenarios.insert({
             title: "A title that sets up the discussion",
             description: "A deeper description of the topic",

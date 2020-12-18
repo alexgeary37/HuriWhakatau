@@ -8,24 +8,22 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
     const title = scenario.title;
     const description = scenario.description;
     const categoryIds = scenario.categoryIds;
+    const templateName = template.name;
     // const discussionTemplateId = scenario.discussionTemplateId;
     const [isOpen, setIsOpen] = useState(true);
 
-    console.log("template: ", template);
     const toggleIt = () => {
         setIsOpen(false);
         toggleModal();
     }
 
-    const {
-        categories
-    } = useTracker(() => {
+    const { categories } = useTracker(() => {
         Meteor.subscribe("categories");
         return {
             categories: Categories.find({_id: {$in: categoryIds}}).fetch(),
         };
     });
-    console.log(categories);
+    console.log('categories:', categories);
 
     return (
         <Modal
@@ -67,7 +65,7 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
                 {/*    // onInput={({target}) => setDescription(target.value)}*/}
                 {/*/>*/}
                 <Segment>
-                    <Header as={'h4'} content={'Discussion Template: ' + template.name}/>
+                    {<Header as={'h4'} content={'Discussion Template: ' + templateName}/>}
                 </Segment>
             </Modal.Content>
             <Modal.Actions>

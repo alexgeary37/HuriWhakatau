@@ -33,7 +33,7 @@ export const ScenarioSummary = ({scenario}) => {
                 />
                 <Button content={'open'} onClick={toggleIt}/>
                 {/* show exp details */}
-                {isOpenScenarioDisplay &&
+                {isOpenScenarioDisplay && scenario && discussionTemplate &&
                 <ViewScenario
                     toggleModal={toggleIt}
                     scenario={scenario}

@@ -88,7 +88,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                 <br/>
                 <br/><Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
                        value={timeLimit}
-                       onInput={({target}) => setTimeLimit(target.value)}>
+                       onInput={({target}) => setTimeLimit(Number(target.value))}>
                     <Label>Discussions have time limit</Label>
                     <input/>
                     <Label>mins</Label>
@@ -97,7 +97,7 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                 <br/>
                 <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number' labelPosition='right'
                        value={charLimit}
-                       onInput={({target}) => setCharLimit(target.value)}>
+                       onInput={({target}) => setCharLimit(Number(target.value))}>
                     <Label>Comments have character limit</Label>
                     <input/>
                     <Label>characters</Label>

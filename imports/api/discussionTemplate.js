@@ -20,6 +20,15 @@ Meteor.methods({
     isHui
   ) {
     check(name, String);
+    check(usersAreAnonymous, Boolean);
+    check(showTypingNotification, Boolean);
+    check(usersCanEditComments, Boolean);
+    check(discussionCommentsThreaded, Boolean);
+    check(showProfileInfo, Boolean);
+    check(canAddEmojis, Boolean);
+    check(timeLimit, Number);
+    check(commentCharacterLimit, Number);
+    check(isHui, Boolean);
     //addcheck for user admin/researcher role
 
     DiscussionTemplates.insert({
