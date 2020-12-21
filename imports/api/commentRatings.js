@@ -5,7 +5,6 @@ export const CommentRatings = new Mongo.Collection("commentRatings");
 
 Meteor.methods({
     "commentRatings.addRating"(commentId, experimentId, rating){
-        console.log("entered comment ratings");
         check(commentId, String);
         check(experimentId, String);
         check(rating, Object);

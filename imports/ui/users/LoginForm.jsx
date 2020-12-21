@@ -3,7 +3,6 @@ import {useHistory} from "react-router-dom";
 import {Modal, Button, Input, Form, Divider} from "semantic-ui-react";
 
 export const LoginForm = ({toggleModal}) => {
-    console.log('LoginForm');
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [open, setOpen] = useState(true);
@@ -25,7 +24,6 @@ export const LoginForm = ({toggleModal}) => {
     };
 
     const toggleIt = () => {
-        console.log('toggleIt');
         setOpen(false);
         toggleModal();
     }

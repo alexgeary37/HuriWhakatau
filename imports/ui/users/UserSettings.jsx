@@ -113,8 +113,6 @@ export const UserSettings = () => {
     // on the comment reactions. Need to change so something more like a key:value is sent.
     useEffect(() => {
         if (settingUserDetailsRef.current) {
-            console.log("sending details to db");
-
             settingUserDetailsRef.current = false;
             Meteor.call("users.updateUserDetails", userDetailsObject, Meteor.userId());
         }
@@ -126,8 +124,6 @@ export const UserSettings = () => {
     // on the comment reactions. Need to change so something more like a key:value is sent.
     useEffect(() => {
         if (settingPepehaRef.current) {
-            console.log("sending to db");
-
             settingPepehaRef.current = false;
             Meteor.call("users.updatePepeha", pepehaObject, Meteor.userId());
         }

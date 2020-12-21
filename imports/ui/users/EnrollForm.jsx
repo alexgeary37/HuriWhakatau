@@ -11,7 +11,6 @@ export const EnrollForm = () => {
     const [confirm, setConfirm] = useState("");
     const [errPassword, setErrPassword] = useState("");
     let history = useHistory();
-    console.log("user who invited = ", invitingUser)
 
     const handleFormSubmit = () => {
         if (password.length < 8) {
@@ -21,12 +20,10 @@ export const EnrollForm = () => {
             if(invitingUser) {
             Meteor.call("users.findInvitedFriendId", token, (err, result) => {
                 if (result) {
-                    console.log("friend found: ", result);
                     Meteor.call("users.addFriend", invitingUser, result._id);
                     Meteor.call("users.addFriend", result._id, invitingUser);
                     Accounts.resetPassword(token, password, () => {
                             history.push("/mydashboard")
-                            console.log("passwordset")
                         }
                     );
                     Accounts.verifyEmail(token);
@@ -38,7 +35,6 @@ export const EnrollForm = () => {
         } else {
                 Accounts.resetPassword(token, password, () => {
                         history.push("/mydashboard");
-                        console.log("passwordset");
                     }
                 );
             Accounts.verifyEmail(token);

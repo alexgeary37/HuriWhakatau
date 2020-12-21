@@ -13,6 +13,7 @@ Meteor.methods({
     check(pasted, Array);
     check(keystrokes, Array);
     check(discussionId, String);
+    if(!emotion){emotion = 'neutral'}
     check(emotion, String);
 
     // I believe this means it's checking that the user is the client currently calling this method.

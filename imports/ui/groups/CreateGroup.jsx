@@ -8,13 +8,11 @@ export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextMo
     const [isOpen, setIsOpen] = useState(true);
     const [errGroupName, setErrGroupName] = useState("");
     const [errGroupSize, setErrGroupSize] = useState("");
-console.log("wizard? ", isWizard);
 
     const toggleIt = (e) => {
         setIsOpen(false);
         toggleModal();
         if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
-            console.log(e.currentTarget.innerHTML);
             toggleNextModal();
         }
         if(isWizard && e.currentTarget.innerHTML === "Cancel"){

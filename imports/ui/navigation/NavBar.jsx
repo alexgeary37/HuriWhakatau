@@ -38,10 +38,7 @@ export const NavBar = ({handleChangeLanguage}) => {
     //set user preferred language in a cookie
     const updateUserLang = (lang) => {
         //add cookie with selected value
-        console.log('lang::', lang);
-        console.log('typeof lang::', typeof lang);
         cookies.set('lang', lang, { path: '/' });
-        console.log(cookies.get('lang'));
 
         handleChangeLanguage(cookies.get('lang'));
         setUserLang(cookies.get('lang'));

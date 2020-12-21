@@ -11,7 +11,6 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
     // const discussionTemplateId = scenario.discussionTemplateId;
     const [isOpen, setIsOpen] = useState(true);
 
-    console.log("template: ", template);
     const toggleIt = () => {
         setIsOpen(false);
         toggleModal();
@@ -25,7 +24,6 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
             categories: Categories.find({_id: {$in: categoryIds}}).fetch(),
         };
     });
-    console.log(categories);
 
     return (
         <Modal

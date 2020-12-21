@@ -29,11 +29,11 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
             minute: 'numeric',
         };
         datetime = new Intl.DateTimeFormat('en-AU', options).format(editedDateTime);
-    };
+    }
+    ;
 
     let userEmotion;
-    if(comment.emotion){
-        console.log("comment emotion", comment.emotion);
+    if (comment.emotion) {
         switch (comment.emotion) {
             case "happy":
                 userEmotion = 'yellow';
@@ -63,7 +63,28 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
         }
     }, [selectedEmojis]);
 
-    // // adding edit comment call - move to the UserComment.jsx
+    useEffect(() => {
+        //prevent context menu for comments the user is not the author of.
+        if (!isAuthor) {
+            const commentArea = document.getElementById(comment._id + ":text");
+            console.log("textarea", commentArea);
+            commentArea.addEventListener("contextmenu", function (e) {
+                console.log(e)
+                e.preventDefault();
+                e.stopPropagation();
+            });
+            //attempting to prevent ctrl + c copy
+            commentArea.addEventListener('keydown', (event) => {
+                console.log("key", event.key)
+                if (event.ctrlKey) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        }
+    }, []);
+
+    // // adding edit comment call
     const editComment = ({_id}) => {
         let commentSpan = document.getElementById(_id + ":text");
         commentSpan.contentEditable = "true";
@@ -93,8 +114,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
     // add to count for current selected id.
     // hide picker.
     const handleEmojiSelect = (selection) => {
-        console.log("handling emoji");
-        let emoOb = {emoji: selection, count: 1, users:[Meteor.userId()]};
+        let emoOb = {emoji: selection, count: 1, users: [Meteor.userId()]};
         let existingEmojiIds = selectedEmojis.map(function (item) {
             return item.emoji.id;
         });
@@ -155,7 +175,6 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
         };
     });
 
-    console.log("coomentid:", comment._id, "user state: ", userEmotion)
     return (
         <Comment
             style={{
@@ -210,7 +229,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
             )}
             {selectedEmojis &&
             selectedEmojis.map((emoji) => (
-                <span style={{marginRight: 17, margintop: 107}}>
+                <span key={emoji.emoji.id} style={{marginRight: 17, margintop: 107}}>
             <Emoji key={emoji.emoji.id} emoji={emoji.emoji} size={22}>
               <NotificationBadge
                   key={emoji.emoji.id + ":count"}
