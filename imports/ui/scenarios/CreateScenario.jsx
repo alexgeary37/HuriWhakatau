@@ -36,6 +36,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         } else {
             setErrDiscussionTemplateId("")
         }
+        console.log("Stuff that is submitted for scenario","title:", title, "desc:", description, "category:", categoryId, "discuss:", discussionTemplateId);
 
         if (title.length > 0 && description.length > 0 && categoryId.length > 0 && discussionTemplateId.length > 0) {
             Meteor.call(
@@ -61,10 +62,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         }
     }
 
-    const {
-        discussionTemplates,
-        categories
-        } = useTracker(() => {
+    const { discussionTemplates, categories } = useTracker(() => {
         Meteor.subscribe("categories");
         Meteor.subscribe("discussionTemplates");
 
@@ -80,15 +78,16 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         setCategoryId(categoryId => [...categoryId, value]);
     }
 
-    // add a new category
+    // Add a new category
     const addCategory = (title) => {
         Meteor.call("categories.insert", title);
     }
 
-    //find id of category "other" to default the dropdown.
+    // Find id of category "other" to default the dropdown.
     const getOtherCategory = () => {
-        if (categories.length > 0 && categoryId.length === 0) {
-            setCategoryId([categories.find(cat => cat.title === 'Other')._id]);
+        const cat = categories.find(cat => cat.title === 'Other');
+        if (cat && categoryId.length === 0) {
+            setCategoryId([cat._id]);
         }
     }
     useEffect(getOtherCategory, [categories]);

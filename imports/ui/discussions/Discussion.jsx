@@ -46,13 +46,16 @@ export const Discussion = () => { ///
   // todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
   const updateTimed = () => {
+    console.log('updateTimed');
     setTimedDiscussion(true);
   };
   const updateDeadline = (deadline) => {
+    console.log('updateDeadline');
     setMutableDiscussionDeadline(deadline);
   };
   // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
+    console.log('calculateTimeLeft');
     let current = new Date();
     let hours = Math.floor(
       ((discussionDeadline - current) % (1000 * 60 * 60 * 24)) /
@@ -164,7 +167,7 @@ export const Discussion = () => { ///
     if (group && group.members.includes(Meteor.userId())) {
       setUserInGroup(true);
     } else {
-      console.log("user not in group");
+      //console.log("user not in group");
     }
   }
 
@@ -174,7 +177,9 @@ export const Discussion = () => { ///
   // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit === 0) {
     //probably should refactor this
+    console.log('IF1');
   } else if (discussionDeadline == null && discussionTimeLimit > 0) {
+    console.log('ELSE IF 1');
     let currentDateTime = new Date();
     updateDeadline(
       new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
@@ -187,26 +192,31 @@ export const Discussion = () => { ///
   }
 
   if (discussionDeadline != null) {
+    console.log('IF2');
     let currentTime = new Date();
     if (discussionDeadline < currentTime && discussionStatus === "active") {
+      console.log('IF2IF');
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
     } else if (
       discussionDeadline > currentTime &&
       !timedDiscussion &&
       discussionStatus === "active"
     ) {
+      console.log('IF2IFELSE');
       updateTimed();
       calculateTimeLeft();
       //maybe put the useEffect scroll to bottom controlling state change (vv line 189) here
     }
   }
 
-  //set reference for end of discussion and scroll to that point every time the number of comments change.
+  //set reference for end of discussion and scroll to that point every time the number of comments made by the current user changes.
   const commentsEndRef = useRef(null);
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   };
-  useEffect(scrollToBottom, [comments.length]);
+  // discussionTimeLimit changes from undefined to 0 upon page load meaning the effect will take place upon page load.
+  // There might be a better way of handling this....
+  useEffect(scrollToBottom, [discussionTimeLimit, comments.filter(x => x.authorId === Meteor.userId()).length]);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -214,6 +224,7 @@ export const Discussion = () => { ///
   };
 
   const hasReachedConsensus = () => {
+    // Refactor this loop into a filter or findindex if possible!
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
@@ -226,12 +237,9 @@ export const Discussion = () => { ///
     return false;
   };
 
-  const proposeVerdict = () =>
-    Meteor.call("discussions.addProposer", discussionId);
+  const proposeVerdict = () => Meteor.call("discussions.addProposer", discussionId);
 
-  const nextDiscussion = () => {
-    history.push("/discussion/" + nextDiscussionId);
-  };
+  const nextDiscussion = () => history.push("/discussion/" + nextDiscussionId);
 
   return (
     <div>                     {/**/}
@@ -256,7 +264,7 @@ export const Discussion = () => { ///
                   {(scenario && scenario.description) ||
                   (topic && topic.description)}
                 />
-                {timedDiscussion && <Timer time={timeLeft} />}
+                {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}
               </GridColumn>
               <GridColumn width={10}>
                 <div

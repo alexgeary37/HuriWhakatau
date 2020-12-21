@@ -10,7 +10,7 @@ Meteor.methods({
     check(groupId, String);
     check(timeLimit, Number);
     check(isHui, Boolean);
-    check(isPublic, Boolean);  //this check causes simulation of method to fail on client not sure why
+    check(isPublic, Boolean); // this check causes simulation of method to fail on client not sure why
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
@@ -111,7 +111,7 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Discussions.remove({});
+  Discussions.remove({});
 
   Meteor.publish("allDiscussions", function () {
     return Discussions.find(

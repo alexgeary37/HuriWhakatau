@@ -30,7 +30,12 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // ScenarioSets.remove({});
+  ScenarioSets.remove({});
+
+  // const sets = ScenarioSets.find({}).fetch();
+  // for (i = 0; i < sets.length; i += 1) {
+  //   console.log(i, '\n', sets[i]);
+  // }
 
   Meteor.publish("scenarioSets", function () {
     return ScenarioSets.find(
