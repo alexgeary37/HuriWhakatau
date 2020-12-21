@@ -167,12 +167,14 @@ if (Meteor.isServer) {
         });
     }
 
+
     // Set up DiscussionTemplates
     // console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"}));
     // if (!DiscussionTemplates.findOne({name: "Default -Timed"})) {
     console.log('DiscussionTemplates count:', DiscussionTemplates.find({}).count());
     if (DiscussionTemplates.find({}).count() === 0) {
         console.log('Create Discussion Templates');
+
         const templateId1 = DiscussionTemplates.insert({
             name: "Default -Timed",
             usersAreAnonymous: false,

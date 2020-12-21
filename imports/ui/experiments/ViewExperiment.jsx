@@ -66,8 +66,6 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
         };
     });
 
-    console.log("scenarios: ", experimentDetails.scenarios);
-
     const exportDiscussion = (discussionId) => {
         Meteor.call("experiments.exportDiscussion", discussionId);
     }
@@ -122,7 +120,7 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
                                             </Grid.Column>
                                         </Grid.Row>
                                         {experiment.ratings ? experiment.ratings.filter(rating => rating.rating != "").map((rating) => (
-                                            <Grid.Row>
+                                            <Grid.Row key={rating.rating.length}>
                                                 <Grid.Column>
                                                     <ListItem description={rating.rating}/>
                                                 </Grid.Column>

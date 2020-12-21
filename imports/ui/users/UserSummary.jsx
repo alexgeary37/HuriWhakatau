@@ -31,11 +31,9 @@ export const UserSummary = ({
     //         groupLeader: leader,
     //     }
     // });
-    console.log("experimentId: ", experimentId, "groupLeader: ", groupLeader)
 
     // send user vote to db and calculate winner
     const submitLeaderVote = (userId) => {
-        console.log("user voted for: ", userId);
         // Meteor.call("groups.voteLeader", groupId, userId);
         Meteor.call("experiments.voteLeader",experimentId, groupId, userId);
         handleUserVoted();
@@ -95,8 +93,7 @@ export const UserSummary = ({
         }
         Meteor.call("users.setEmotion", Meteor.userId(), emotionOb);
     }
-    //show user's last emotional state in console foe debugging
-    member?.profile?.emotion?.emotion ? console.log(member._id, " member emotion: ", member.profile.emotion.emotion) : null;
+
     const memberEmotionColour = () => {
         switch (member?.profile?.emotion?.emotion) {
             case "happy":

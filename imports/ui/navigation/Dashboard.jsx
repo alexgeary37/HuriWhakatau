@@ -32,12 +32,10 @@ export const Dashboard = () => {
       cookies.set('lang', "mā", { path: '/' });
     }
   },[]);
-  
+
   //set up changing language on site based on user nav menu selection
   const handleChangeLanguage = (lang) =>{
-    console.log("changed");
     setUserLang(lang);
-    console.log('langa', lang);
   };
 
   const { discussions, publicDiscussions } = useTracker(() => {

@@ -125,7 +125,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     }
 
     const printText = (e) => {
-        console.log(e);
         console.log(introductionCommentText);
     }
 

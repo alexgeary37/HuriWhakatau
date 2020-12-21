@@ -14,7 +14,6 @@ export const Verdict = ({ verdict, onVote, discussionStatus }) => {
   });
 
   const handleVoteClick = (vote) => {
-    console.log("handleVoteClick", vote);
     Meteor.call("verdicts.addVote", verdict._id, vote, (e, result) => {
       if (result) {
         onVote();

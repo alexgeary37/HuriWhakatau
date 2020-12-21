@@ -5,7 +5,6 @@ import {Usernames} from "./usernames";
 
 Meteor.methods({
     "users.updatePepeha"(pepeha, userId) {
-        console.log("updating user pepeha");
         check(userId, String);
         check(pepeha, Object);
 
@@ -18,7 +17,6 @@ Meteor.methods({
     },
 
     "users.updateUsername"(username, userId) {
-        console.log("updating username");
         check(userId, String);
         check(username, String);
 
@@ -31,7 +29,6 @@ Meteor.methods({
     },
 
     "users.updateUserDetails"(detailsObject, userId) {
-        console.log("updating user details");
         check(userId, String);
         check(detailsObject, Object);
 
@@ -75,7 +72,6 @@ Meteor.methods({
             {sort: {username: 1}}
         ).fetch();
 
-        console.log("found friends:", friends);
         return friends;
     },
 
@@ -119,7 +115,6 @@ Meteor.methods({
     "users.addFriend"(userId, friendId) {
         check(userId, String);
         check(friendId, String);
-        console.log("adding friend: ", friendId);
         Meteor.users.update(userId,
             {
                 $addToSet:
@@ -147,7 +142,6 @@ Meteor.methods({
     "users.addPendingFriend"(userId, friendId) {
         check(userId, String);
         check(friendId, String);
-        console.log("adding pending friend: ", friendId, "to user", userId);
         Meteor.users.update(userId,
             {
                 $addToSet:
@@ -174,7 +168,6 @@ Meteor.methods({
     //return array of users whose username or email matches the search term
     "users.findInvitedFriendId"(token) {
         check(token, String);
-        console.log("finding friend")
         const friendId = Meteor.users.findOne(
             {"services.password.reset.token": token}, {fields: {_id: 1}}
         );
@@ -231,7 +224,6 @@ Meteor.methods({
     "users.setEmotion"(userId, emotionOb) {
         check(userId, String);
         check(emotionOb, Object);
-        console.log('setting emotion');
         Meteor.users.update(userId,
             {
                 $set:
