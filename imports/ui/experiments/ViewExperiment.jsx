@@ -32,19 +32,20 @@ export const ViewExperiment = ({experiment, toggleModal}) => {
         if (groupSub.ready() && scenarioSub.ready() && scenarioSetSub.ready() && discussionsSub.ready()) {
             fetchedScenarioSet = ScenarioSets.findOne({_id: experiment.scenarioSetId});
             if (fetchedScenarioSet) {
+                let scenarios = fetchedScenarioSet.scenarios;
                 scenarioSetTitle = fetchedScenarioSet.title;
                 scenarioSetDescription = fetchedScenarioSet.description;
-                fetchedScenarios = Scenarios.find({_id: {$in: fetchedScenarioSet.scenarios}}).fetch()
+                fetchedScenarios = Scenarios.find({_id: { $in: scenarios }}).fetch();
             }
 
-            group = Groups.findOne({_id: experiment.groupId}, {fields: {members: 1, name: 1}});
+            group = Groups.findOne({ _id: experiment.groupId}, { fields: { members: 1, name: 1 }});
             if (group) {
                 group.members.forEach((memberId) => {
-                    groupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1}}));
+                    groupMembers.push(Meteor.users.findOne({ _id: memberId }, { fields: { username: 1 }}));
                 });
                 groupName = group.name;
             }
-            discussions = Discussions.find({_id: {$in: experiment.discussions}}, {fields: {isHui: 1, scenarioId: 1}})
+            discussions = Discussions.find({_id: { $in: experiment.discussions }}, { fields: { isHui: 1, scenarioId: 1 }});
         }
 
         return {

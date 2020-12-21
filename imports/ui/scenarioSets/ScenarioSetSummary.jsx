@@ -27,7 +27,7 @@ export const ScenarioSetSummary = ({ scenarioSet }) => {
         />
           <Button content={'open'} onClick={toggleIt} />
           {/* show exp details */}
-          {isOpenScenarioSetDisplay &&
+          {isOpenScenarioSetDisplay && scenarioSet && 
           <ViewScenarioSet
               toggleModal={toggleIt}
               scenarioSet={scenarioSet} />
