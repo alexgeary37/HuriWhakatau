@@ -165,7 +165,7 @@ if (Meteor.isServer) {
         })
     }
 
-    console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"})._id);
+    console.log("discussion id", !DiscussionTemplates.findOne({name: "Default -Timed"})._id);
 // Set up discussion Templates:
     if (!DiscussionTemplates.findOne({name: "Default -Timed"})._id) {
         const templateId1 = DiscussionTemplates.insert({
