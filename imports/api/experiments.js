@@ -232,7 +232,12 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-    Experiments.remove({});
+    if(!process.env.MONGO_URL.includes("juryroom_admin")){
+        console.log("minimongo experiments");
+        //Experiments.remove({});
+    } else {
+        console.log("not minimongo experiments");
+    }
 
     Meteor.publish("experiments", function () {
         return Experiments.find(

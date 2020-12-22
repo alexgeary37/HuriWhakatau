@@ -33,7 +33,12 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  Scenarios.remove({});
+  if(!process.env.MONGO_URL.includes("juryroom_admin")){
+    console.log("minimongo Scenarios");
+    //Scenarios.remove({});
+  } else {
+    console.log("not minimongo Scenarios");
+  }
 
   const scenarios = Scenarios.find({}).fetch();
   for (i = 0; i < scenarios.length; i += 1) {

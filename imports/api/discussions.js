@@ -111,7 +111,12 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  Discussions.remove({});
+  if(!process.env.MONGO_URL.includes("juryroom_admin")){
+    console.log("minimongo discussions");
+    //Discussions.remove({});
+} else {
+    console.log("not minimongo discussions");
+  }
 
   Meteor.publish("allDiscussions", function () {
     return Discussions.find(

@@ -1,4 +1,11 @@
-export const Usernames = [
+import { Mongo } from "meteor/mongo";
+import { check } from "meteor/check";
+import { Discussions } from "./discussions";
+import {Verdicts} from "./verdicts";
+
+export const Usernames = new Mongo.Collection("usernames");
+
+export const randomUsernames = [
     'abaloneaccountant',
     'alligatoroptician',
     'abaloneacrobat',
@@ -1040,3 +1047,18 @@ export const Maorinames = [
     'titipounamu',
     'warapi',
     'whio']
+
+
+if (Meteor.isServer) {
+    Meteor.publish("usernames",function () {
+        return Usernames.find(
+            {},
+            {
+                fields: {
+                    name: 1,
+                },
+            }
+        );
+    });
+}
+

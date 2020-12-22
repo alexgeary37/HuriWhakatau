@@ -1,5 +1,5 @@
 import { Roles } from "meteor/alanning:roles";
-import { Usernames, Maorinames } from "/imports/api/usernames";
+import { Usernames } from "/imports/api/usernames";
 import { Random } from 'meteor/random'
 import {check} from "meteor/check";
 import {Comments} from "./comments";
