@@ -120,9 +120,14 @@ Meteor.methods({
         }
     },
 
+    // this breaks starting the app now, related to losing data from the database?
     "experiments.exportDiscussion"(discussionId) {
         const exportingUserEmails = Meteor.users.findOne({_id: Meteor.userId()},
             {fields: {emails: 1}});
+        let exportingUserEmail;
+        if(exportingUserEmails) {
+            exportingUserEmail = exportingUserEmails.emails[0].address;
+        }
         let experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}})
         let commentRatings = CommentRatings.find({experimentId: experiment._id}).fetch();
         let discussion = Discussions.findOne({_id: discussionId});
@@ -178,7 +183,7 @@ Meteor.methods({
             }`
 
         Email.send({
-            to: exportingUserEmails.emails[0].address,
+            to: exportingUserEmail,
             from: "huriwhakatau@gmail.com",
             subject: "Exported data for: " + scenario.title,
             text: "Here's some data, don't spend it all in one place.",
@@ -191,7 +196,6 @@ Meteor.methods({
 
     // Remove an experiment from the experiments collection in the db.
     // experimentId: _id of the comment to be removed
-    //
     "experiments.remove"(experimentId) {
         check(experimentId, String);
         //add role check
@@ -232,7 +236,14 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-    Experiments.remove({});
+
+    // Meteor.call("experiments.exportDiscussion","HaCZyBgCvsayGRMhB");
+    if(!process.env.MONGO_URL.includes("juryroom_admin")){
+        console.log("minimongo experiments");
+        //Experiments.remove({});
+    } else {
+        console.log("not minimongo experiments");
+    }
 
     Meteor.publish("experiments", function () {
         return Experiments.find(

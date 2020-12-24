@@ -62,7 +62,13 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  DiscussionTemplates.remove({});
+  if(!process.env.MONGO_URL.includes("juryroom_admin")){
+    console.log("minimongo discussion templates");
+    //DiscussionTemplates.remove({});
+  } else {
+    console.log("not minimongo discussion templates");
+  }
+
 
   Meteor.publish("discussionTemplates", function () {
     return DiscussionTemplates.find(

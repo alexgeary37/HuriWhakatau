@@ -30,7 +30,12 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  ScenarioSets.remove({});
+  if(!process.env.MONGO_URL.includes("juryroom_admin")){
+    console.log("minimongo ScenarioSets");
+    //ScenarioSets.remove({});
+  } else {
+    console.log("not minimongo ScenarioSets");
+  }
 
   // const sets = ScenarioSets.find({}).fetch();
   // for (i = 0; i < sets.length; i += 1) {
