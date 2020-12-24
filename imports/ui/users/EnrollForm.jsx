@@ -17,28 +17,28 @@ export const EnrollForm = () => {
             setErrPassword("Passwords must have at least 8 characters");
             return;
         } else {
-            if(invitingUser) {
-            Meteor.call("users.findInvitedFriendId", token, (err, result) => {
-                if (result) {
-                    Meteor.call("users.addFriend", invitingUser, result._id);
-                    Meteor.call("users.addFriend", result._id, invitingUser);
-                    Accounts.resetPassword(token, password, () => {
-                            history.push("/mydashboard")
-                        }
-                    );
-                    Accounts.verifyEmail(token);
-                } else {
-                    console.error(err);
-                }
-            });
+            if (invitingUser) {
+                Meteor.call("users.findInvitedFriendId", token, (err, result) => {
+                    if (result) {
+                        Meteor.call("users.addFriend", invitingUser, result._id);
+                        Meteor.call("users.addFriend", result._id, invitingUser);
+                        Accounts.resetPassword(token, password, () => {
+                                history.push("/UserSettings")
+                            }
+                        );
+                        Accounts.verifyEmail(token);
+                    } else {
+                        console.error(err);
+                    }
+                });
 
-        } else {
+            } else {
                 Accounts.resetPassword(token, password, () => {
-                        history.push("/mydashboard");
+                        history.push("/UserSettings");
                     }
                 );
-            Accounts.verifyEmail(token);
-        }
+                Accounts.verifyEmail(token);
+            }
 
 
         }
@@ -49,8 +49,10 @@ export const EnrollForm = () => {
             <NavBar/>
             <Container>
                 <Form as={Segment} attached="bottom">
-                    <p>Please enter a password to continue. After submitting you will be redirected to your dashboard
-                    where the discussions you are to participate in will be listed.</p>
+                    <p>Please enter a password to continue. After submitting you will be redirected to your user
+                        settings page where you can fill out more information. Once you are happy with your personal
+                        information head over to your dashboard where the discussions you are to participate in will be
+                        listed.</p>
                     <Form.Input
                         focus
                         label="Password"

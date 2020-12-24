@@ -46,10 +46,11 @@ Meteor.methods({
             // start of taking a list of only emails and generating
             // usernames and accounts, then sending invite emails
             let finalUserName = '';
-            if(userAnon || (!userAnon && userName === "")) {
+        let usernames = Usernames.find({},{fields:{name:1}});
+        if(userAnon || (!userAnon && userName === "")) {
                 // add in a check for using maori names and sub in the Maorinames list
                 do {
-                    finalUserName = Random.choice(Usernames);
+                    finalUserName = Random.choice(usernames);
                     // Generate new names until one that does not exist is found
                 } while (Meteor.users.findOne({username: finalUserName}));
                 console.log(finalUserName);
@@ -78,6 +79,10 @@ Meteor.methods({
                         dob: "",
                         religion: "",
                     },
+                    emotion : {
+                        emotion : "neutral",
+                        timestamp : Date.now(),
+                    }
                 }
             });
             Accounts.sendEnrollmentEmail(userId);

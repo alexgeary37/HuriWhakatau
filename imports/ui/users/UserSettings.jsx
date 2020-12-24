@@ -107,6 +107,10 @@ export const UserSettings = () => {
         setIsIndigenous(result);
     });
 
+    const exportUserData = () => {
+        Meteor.call("users.exportUserData", Meteor.userId());
+    }
+
     //reference boolean to for the useEffect callback sending the changed pepeha list to the db
     const settingUserDetailsRef = useRef(false);
     //ensure the pepeha state variable is finished updating before sending to db. Modeled
@@ -426,8 +430,8 @@ export const UserSettings = () => {
                                     </Form>
                                 </CardContent>
                             </Segment>
-                            <Segment fluid="true" inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Card.Content header="Profile Picture"/>
+                            <Segment fluid={"true"} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                                <Card.Content header={"Profile Picture"}/>
                                 <CardContent>
                                     {/*    user pic shit*/}
                                     {/*    <AvatarEditor*/}
@@ -441,6 +445,7 @@ export const UserSettings = () => {
                                     {/*    />*/}
                                 </CardContent>
                             </Segment>
+
                         </GridColumn>
                         <GridColumn width={7}>
                             {isIndigenous &&
@@ -631,6 +636,12 @@ export const UserSettings = () => {
                                 </CardContent>
                             </Segment>
                             }
+                            <Segment fluid inverted>
+                                <Card.Content header={'Privacy'}/>
+                                <CardContent>
+                                    <Button content={"Send me my data"} onClick={exportUserData}/>
+                                </CardContent>
+                            </Segment>
                         </GridColumn>
                     </Grid>
                 </Container>

@@ -36,7 +36,7 @@ if (Meteor.isServer) {
     }
 
     const categoryId = Categories.findOne({title: "Other"})._id;
-    console.log('categoryId:', categoryId);
+    // console.log('categoryId:', categoryId);
 
     // Create accounts
     let defaultUsers = [];
@@ -172,7 +172,7 @@ if (Meteor.isServer) {
         defaultUsers.push(username._id);
     }
 
-    console.log("undefined group: ", !Groups.findOne({name: "Starter group"}));
+    // console.log("undefined group: ", !Groups.findOne({name: "Starter group"}));
     //Create group for default users
     if (!Groups.findOne({name: "Starter group"})) {
         console.log("Create Starter group");
@@ -189,7 +189,7 @@ if (Meteor.isServer) {
     // Set up DiscussionTemplates
     // console.log("discid", !DiscussionTemplates.findOne({name: "Default -Timed"}));
     // if (!DiscussionTemplates.findOne({name: "Default -Timed"})) {
-    console.log('DiscussionTemplates count:', DiscussionTemplates.find({}).count());
+    // console.log('DiscussionTemplates count:', DiscussionTemplates.find({}).count());
     if (DiscussionTemplates.find({}).count() === 0) {
         console.log('Create Discussion Templates');
 
@@ -312,18 +312,12 @@ if (Meteor.isServer) {
     // newMountains.forEach((mountain) => {
     //     Mountains.insert({name: mountain});
     // })
-
- // for (let name in randomUsernames){
- //     console.log("here's names", name);
- // }
-
-
-    if (Usernames.find({}).count() === 0) {
-        for (const username in randomUsernames) {
-            console.log("username", username);
-
-            Usernames.insert({name: username});
-        }
-    }
+    // if (Usernames.find({}).count() === 0) {
+    //
+    //     for (let i = 0; i < randomUsernames.length; i++) {
+    //         console.log("here's names", randomUsernames[i]);
+    //         Usernames.insert({name: randomUsernames[i]});
+    //     }
+    // }
         console.log('Finished running defaultData.js');
 }

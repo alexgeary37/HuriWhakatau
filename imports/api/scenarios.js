@@ -40,10 +40,10 @@ if (Meteor.isServer) {
     console.log("not minimongo Scenarios");
   }
 
-  const scenarios = Scenarios.find({}).fetch();
-  for (i = 0; i < scenarios.length; i += 1) {
-    console.log(i, '\n', scenarios[i]);
-  }
+  // const scenarios = Scenarios.find({}).fetch();
+  // for (i = 0; i < scenarios.length; i += 1) {
+  //   console.log(i, '\n', scenarios[i]);
+  // }
 
   Meteor.publish("scenarios", function () {
     return Scenarios.find(

@@ -112,7 +112,7 @@ Meteor.methods({
 
 if (Meteor.isServer) {
   if(!process.env.MONGO_URL.includes("juryroom_admin")){
-    console.log("minimongo discussions");
+    console.log("minimongo discussions", process.env.MONGO_URL);
     //Discussions.remove({});
 } else {
     console.log("not minimongo discussions");

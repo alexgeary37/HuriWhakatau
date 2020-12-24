@@ -1,7 +1,9 @@
 import {check} from "meteor/check";
 import {Random} from "meteor/random";
 import {Usernames} from "./usernames";
-
+import {CommentRatings} from "./commentRatings";
+import {Comments} from "./comments";
+import {Verdicts} from "./verdicts";
 
 Meteor.methods({
     "users.updatePepeha"(pepeha, userId) {
@@ -217,8 +219,10 @@ Meteor.methods({
             ]).toArray();
             console.log("user", user);
         }
-    }
-    ,
+    },
+    "users.stuff"(thin){
+    },
+
 
     //set user's emotional state
     "users.setEmotion"(userId, emotionOb) {
@@ -231,12 +235,58 @@ Meteor.methods({
             }
         );
         return true;
-    }
-    ,
+    },
+
+    // send all user data to user email as json file
+    "users.exportUserData"(userId){
+        const user = Meteor.users.findOne({_id: userId})
+        if(user) {
+            const exportingUserEmail = user.emails[0].address;
+            const comments = Comments.find({$or: [{authorId: user._id}, {emojis: {$elemMatch: {$eq: {users: user._id}}}},]}).fetch();
+
+            const ratedCommentInfo = CommentRatings.find({ratings: {$elemMatch: {$eq: {userId: user._id}}}}).fetch();
+
+            let ratedCommentIds = [];
+            ratedCommentInfo.forEach((commentInfo) => {
+                ratedCommentIds.push(commentInfo._id);
+            });
+
+            const ratedComments = Comments.find({_id: {$in: ratedCommentIds}}).fetch();
+
+            const authoredVerdicts = Verdicts.find({authorId: user._id}, {fields: {postedTime: 1, text: 1}}).fetch();
+            const votedVerdicts = Verdicts.find({votes: {$elemMatch: {$eq: {userId: user._id}}}}, {
+                fields: {
+                    text: 1,
+                    votes: {$elemMatch: {$eq: {userId: user._id}}}
+                }
+            }).fetch();
+
+            let userData = `{
+                "ProfileDetails": ${JSON.stringify(user, null, 4)},
+                "CommentsAuthoredOrInteractedWith":  ${JSON.stringify(comments, null, 4)},
+                “CommentsRated”: ${JSON.stringify(ratedComments, null, 4)},
+                "VerdictsProposed" : ${JSON.stringify(authoredVerdicts, null, 4)},
+                "VerdictsVotedOn": ${JSON.stringify(votedVerdicts, null, 4)},
+            }`
+
+            Email.send({
+                to: exportingUserEmail,
+                from: "huriwhakatau@gmail.com",
+                subject: "Data from Huri Whakatau",
+                text: "Please find attached all the data that has been collected relating to your profile.",
+                attachments: [{   // utf-8 string as an attachment
+                    filename: "User_Data.json",
+                    content: userData,
+                }],
+            });
+        }
+    },
+
 })
 ;
 
 if (Meteor.isServer) {
+    // Meteor.call("users.exportUserData", "SXz6FTuJ9PdgrhXyo");
     Meteor.publish("users", function () {
         return Meteor.users.find(
             {},
