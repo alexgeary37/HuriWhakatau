@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import RichTextEditor from "react-rte";
 import {Button, Form, Segment} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
+import {Discussions} from "../../api/discussions";
 
 export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMember, groupId}) => {
     const [keyStrokes, setKeyStrokes] = useState([]);
@@ -10,13 +11,22 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
         RichTextEditor.createEmptyValue()
     );
     // useTracker makes sure the component will re-render when the data changes.
-    const {user} = useTracker(() => {
-        Meteor.subscribe("users");
+    const {user, typingUsers} = useTracker(() => {
+        // Meteor.subscribe("users");
+        const subDiscussions = Meteor.subscribe("discussions");
+        let discussionTypingUsersList;
+        if (subDiscussions.ready()) {
+            discussionTypingUsersList = Discussions.findOne({_id: discussionId}, {fields: {usersTyping: 1}});
+        }
+        console.log("inside", discussionTypingUsersList)
 
         return {
             user: Meteor.users.findOne({_id: Meteor.userId()}),
+            typingUsers: discussionTypingUsersList,
         };
     });
+
+    console.log("outside", typingUsers && typingUsers.usersTyping.join(","))
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
     useEffect(() => {
@@ -80,6 +90,12 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
         setKeyStrokes(keyStrokes => [...keyStrokes, stroke]);
     };
 
+    //attempting to update discussion with user name of who is typing by monitoring the keyStrokes state
+    // variable. user should be removed from discussion userTyping list after 2000 ms
+    useEffect(() => {
+        Meteor.call("discussions.addUserToTypingList", discussionId, user.username);
+    }, [keyStrokes])
+
     // start of function to add macrons to letters if alt or alt + shift is pressed. Things crash pretty
     // quick if you try to use it though, suspect to do with the range.collapse(false) had issues with that
     // before. ***commenting out the code that doesn't work
@@ -142,8 +158,6 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
     };
 
 
-
-
     const toolbarConfig = {
         // Optionally specify the groups to display (displayed in the order listed).
         INLINE_STYLE_BUTTONS: [
@@ -158,10 +172,20 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
         ],
         display: ["INLINE_STYLE_BUTTONS", "BLOCK_TYPE_BUTTONS", "LINK_BUTTONS"],
     };
+    let theusers=[];
+    if(typingUsers && typingUsers.usersTyping.length > 0){
+        typingUsers.usersTyping.forEach((user)=>{
+            theusers.push(user.user);
+        })
+    }
 
     return (
         <Form>
             <div>
+                <div style={{color: "white", height: "18px", bottomMargin: "5px"}}>
+                    {typingUsers && typingUsers.usersTyping.length > 0 &&
+                    theusers.join(", ") + (typingUsers.usersTyping.length === 1 ? " is" : " are") + " typing"}
+                </div>
                 <RichTextEditor
                     value={editorValue}
                     onChange={handleChange}
