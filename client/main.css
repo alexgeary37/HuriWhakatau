@@ -45,8 +45,9 @@ body ::-webkit-scrollbar {
 }
 
 .container {
-  padding-left:60px;
-  padding-right:60px;
+  padding-left:15px;
+  padding-right:15px;
+  margin: 5px;
   background-color: transparent;
 }
 

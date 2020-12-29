@@ -172,10 +172,11 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
         ],
         display: ["INLINE_STYLE_BUTTONS", "BLOCK_TYPE_BUTTONS", "LINK_BUTTONS"],
     };
-    let theusers=[];
+
+    let typingUsernames=[];
     if(typingUsers && typingUsers.usersTyping.length > 0){
         typingUsers.usersTyping.forEach((user)=>{
-            theusers.push(user.user);
+            typingUsernames.push(user.user);
         })
     }
 
@@ -184,7 +185,7 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
             <div>
                 <div style={{color: "white", height: "18px", bottomMargin: "5px"}}>
                     {typingUsers && typingUsers.usersTyping.length > 0 &&
-                    theusers.join(", ") + (typingUsers.usersTyping.length === 1 ? " is" : " are") + " typing"}
+                    typingUsernames.join(", ") + (typingUsers.usersTyping.length === 1 ? " is" : " are") + " typing"}
                 </div>
                 <RichTextEditor
                     value={editorValue}
