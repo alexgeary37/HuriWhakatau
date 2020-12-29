@@ -64,11 +64,10 @@ export const NavBar = ({handleChangeLanguage}) => {
                       backgroundRepeat: 'round',
                   }}
             >
-                <Container className="content-width" as={Link} to={'/'}>
-                    {/*<Menu.Item as={Link} to="/" /><Icon size="big" name="balance scale"/>*/}
-                    {/*<Menu.Item as={Link} to="/">*/}
-                        {/*<Header as={'h2'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>*/}
-                    {/*</Menu.Item>*/}
+                <Container className="content-width">
+                    <Menu.Item as={Link} to="/">
+                        <Header as={'h2'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>
+                    </Menu.Item>
                     {/*<Dropdown item text="Tirotiro/Browse"*/}
                     {/*          style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>*/}
                     {/*    <Dropdown.Menu>*/}
@@ -81,9 +80,7 @@ export const NavBar = ({handleChangeLanguage}) => {
                     {/*        </Dropdown.Item>*/}
                     {/*    </Dropdown.Menu>*/}
                     {/*</Dropdown>*/}
-                    {/*<Menu.Item>*/}
                     {/*todo put discussion title / description here when I figure it out */}
-                    {/*</Menu.Item>*/}
                     <MenuMenu position="right">
                         <Dropdown item text={"lang"}
                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>
@@ -129,7 +126,7 @@ export const NavBar = ({handleChangeLanguage}) => {
                         <MenuItem>
                             <Dropdown text={user.username}
                                       compact
-                                      inverted
+                                      inverted={"true"}
                                       style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}>
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={"/mydashboard"}

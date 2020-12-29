@@ -237,6 +237,30 @@ Meteor.methods({
         return true;
     },
 
+    //send an email to confirm user identity prior to sending data
+    "users.validateUserForDataExport"(userId){
+        const user = Meteor.users.findOne({_id: userId})
+        if(user){
+            const exportingUserEmail = user.emails[0].address;
+            const accessToken = Accounts._generateStampedLoginToken();
+
+            Accounts._insertLoginToken(user._id, accessToken);
+
+            const confirmationUrl = process.env.ROOT_URL + 'confirm-identity/' + accessToken.token + "/" + userId;
+
+            let emailBody = `Please confirm your identity by clicking the link below.            
+            
+               Confirmation URL: ${confirmationUrl}`
+
+            Email.send({
+                to: exportingUserEmail,
+                from: "huriwhakatau@gmail.com",
+                subject: "Please confirm your email prior to data export from Huri Whakatau",
+                text: emailBody,
+            });
+        }
+    },
+
     // send all user data to user email as json file
     "users.exportUserData"(userId){
         const user = Meteor.users.findOne({_id: userId})

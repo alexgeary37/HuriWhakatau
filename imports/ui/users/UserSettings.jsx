@@ -108,7 +108,8 @@ export const UserSettings = () => {
     });
 
     const exportUserData = () => {
-        Meteor.call("users.exportUserData", Meteor.userId());
+        // Meteor.call("users.exportUserData", Meteor.userId());
+        Meteor.call("users.validateUserForDataExport", Meteor.userId());
     }
 
     //reference boolean to for the useEffect callback sending the changed pepeha list to the db
