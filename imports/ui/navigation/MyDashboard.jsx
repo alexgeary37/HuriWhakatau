@@ -326,7 +326,7 @@ export const MyDashboard = () => {
                 />
                 <Button onClick={submitFriendSearch} icon labelPosition='right'>
                     Search
-                    <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
+                    <Icon loading={isSearching} name={!isSearching ? 'right arrow' : 'circle notch'}/>
                 </Button>
                 <Button onClick={inviteFriend} icon labelPosition='right'>
                     Invite

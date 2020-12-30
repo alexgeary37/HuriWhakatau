@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Container, Segment, Form} from "semantic-ui-react";
+import React, {useEffect, useState} from "react";
+import {Container, Segment, Form, Icon, Grid} from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {useHistory} from "react-router-dom";
 import {useParams} from "react-router-dom";
@@ -13,12 +13,11 @@ export const ConfirmationForm = () => {
 
     const handleConfirmation = () => {
         if (token.length !== 0) {
-
-            Meteor.loginWithToken(token, function(loginTokenErr) {
-                if (loginTokenErr) {
+            Accounts.verifyEmail(token, (err) => {
+                if (err) {
                     setConfirmationColour("red");
                     setConfirmationResult("Error: There was something wrong with the confirmation token. " +
-                        "Please try agian");
+                        "Please try again");
                 } else {
                     setConfirmationColour("blue");
                     setConfirmationResult("Email confirmed, you should receive your data shortly. " +
@@ -28,18 +27,21 @@ export const ConfirmationForm = () => {
                         history.push('/UserSettings');
                     }, 4000);
                 }
-            });
+            })
             return;
         };
-    }
+    };
 
+    useEffect(handleConfirmation,[])
 
     return (
         <div>
             <NavBar/>
             <Container>
-                <Form as={Segment} attached="bottom">
-                    <p>Please click the button below to confirm your identity and start the export process.</p>
+                <Form as={Segment} fluid={'true'} style={{textAlign: "center"}}>
+                    {!confirmationResult && <p>Verifying email, please wait...</p>}
+
+                    <Icon size={'big'} name={!confirmationResult ? 'circle notch' : ''} loading/>
 
                     {confirmationResult ? (
                         <div style={{height: "25px", color: confirmationColour}}>{confirmationResult}</div>
@@ -47,13 +49,13 @@ export const ConfirmationForm = () => {
                         <div style={{height: "25px"}}/>
                     )}
 
-                    <Form.Button
-                        content="Confirm"
-                        onClick={() => {
-                            handleConfirmation()
-                        }
-                        }
-                    />
+                    {/*<Form.Button*/}
+                    {/*    content="Confirm"*/}
+                    {/*    onClick={() => {*/}
+                    {/*        handleConfirmation()*/}
+                    {/*    }*/}
+                    {/*    }*/}
+                    {/*/>*/}
                 </Form>
             </Container>
         </div>
