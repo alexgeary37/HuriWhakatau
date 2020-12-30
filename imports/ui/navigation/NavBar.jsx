@@ -6,7 +6,7 @@ import {
     Dropdown,
     MenuItem,
     MenuMenu,
-    Button, HeaderContent, Header,
+    Button, HeaderContent, Header, Segment,
 } from "semantic-ui-react";
 import Cookies from "universal-cookie/lib";
 import {siteGlossary} from "../../api/glossary";
@@ -56,6 +56,7 @@ export const NavBar = ({handleChangeLanguage}) => {
         <div className="navbar">
             <AcceptCookies />
             <Menu fixed="top" inverted
+                  size={'large'}
                   style={{
                       backgroundColor: 'black',
                       backgroundImage: `url(${"/fren_gradient_extended_4.png"})`,
@@ -64,25 +65,22 @@ export const NavBar = ({handleChangeLanguage}) => {
                   }}
             >
                 <Container className="content-width">
-                    {/*<Menu.Item as={Link} to="/" /><Icon size="big" name="balance scale"/>*/}
                     <Menu.Item as={Link} to="/">
                         <Header as={'h2'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>
                     </Menu.Item>
-                    <Dropdown item text="Tirotiro/Browse"
-                              style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to="/mydashboard">
-                                <h2 style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>My Dash</h2>
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/UserSettings">
-                                <h2 style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>User
-                                    settings</h2>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    {/*<Menu.Item>*/}
+                    {/*<Dropdown item text="Tirotiro/Browse"*/}
+                    {/*          style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>*/}
+                    {/*    <Dropdown.Menu>*/}
+                    {/*        <Dropdown.Item as={Link} to="/mydashboard">*/}
+                    {/*            <h2 style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>My Dash</h2>*/}
+                    {/*        </Dropdown.Item>*/}
+                    {/*        <Dropdown.Item as={Link} to="/UserSettings">*/}
+                    {/*            <h2 style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>User*/}
+                    {/*                settings</h2>*/}
+                    {/*        </Dropdown.Item>*/}
+                    {/*    </Dropdown.Menu>*/}
+                    {/*</Dropdown>*/}
                     {/*todo put discussion title / description here when I figure it out */}
-                    {/*</Menu.Item>*/}
                     <MenuMenu position="right">
                         <Dropdown item text={"lang"}
                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>
@@ -111,11 +109,9 @@ export const NavBar = ({handleChangeLanguage}) => {
                             </MenuItem>
                         }
                         {user ?
-                            <MenuItem as={Link} to="/" name="logout" onClick={logUserOut}
+                            <MenuItem as={Button} name="logout" onClick={logUserOut}
                                       style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}>
-                                Logout {user.username}
-                                {/*todo replace icon with profile pic when that is ready*/}
-                                <Icon name={"user"} size={"small"}/>
+                                Logout
                             </MenuItem>
                             :
                             <MenuItem as={Button} name="login" onClick={toggleModal}>
@@ -125,6 +121,25 @@ export const NavBar = ({handleChangeLanguage}) => {
                                     fontSize: '24px'
                                 }}>Login</Header>
                             </MenuItem>
+                        }
+                        {user &&
+                        <MenuItem>
+                            <Dropdown text={user.username}
+                                      compact
+                                      inverted={"true"}
+                                      style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item as={Link} to={"/mydashboard"}
+                                                   text={'My Dashboard'}
+                                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '15px'}}>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item as={Link} to={"/UserSettings"}
+                                                   text={'User settings'}
+                                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </MenuItem>
                         }
                         <MenuItem as={Link} to="/about" name="about">
                             <Header as={'h2'} inverted

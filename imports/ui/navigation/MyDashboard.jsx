@@ -326,7 +326,7 @@ export const MyDashboard = () => {
                 />
                 <Button onClick={submitFriendSearch} icon labelPosition='right'>
                     Search
-                    <Icon name={!isSearching ? 'right arrow' : 'loading circle notch'}/>
+                    <Icon loading={isSearching} name={!isSearching ? 'right arrow' : 'circle notch'}/>
                 </Button>
                 <Button onClick={inviteFriend} icon labelPosition='right'>
                     Invite
@@ -382,7 +382,7 @@ export const MyDashboard = () => {
                     }}
                 >
                     {/*my friends*/}
-                    <Menu.Item style={{marginLeft: "10px", fontWeight: "bold"}}
+                    <Menu.Item style={{marginTop:"20px", marginLeft: "10px", fontWeight: "bold"}}
                                title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>
                         <Icon size={'large'} name='users'/>
                         {anyFriendOnline && !showSidebar &&

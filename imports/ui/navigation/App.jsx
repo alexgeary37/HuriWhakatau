@@ -19,6 +19,7 @@ import {BrowseScenarios} from "/imports/ui/scenarios/BrowseScenarios";
 import {CreateExperiment} from "/imports/ui/experiments/CreateExperiment";
 import {CreateScenarioSet} from "/imports/ui/scenarioSets/CreateScenarioSet";
 import {BrowseScenarioSets} from "/imports/ui/scenarioSets/BrowseScenarioSets";
+import {ConfirmationForm} from "../users/ConfirmationForm";
 import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 
 const browserHistory = history.createBrowserHistory();
@@ -75,6 +76,11 @@ export const App = () => {
                         exact
                         path="/enroll-account/:token/:invitingUser"
                         component={EnrollForm}
+                    />
+                    <Route
+                        exact
+                        path="/confirm-identity/:token/:userId"
+                        component={ConfirmationForm}
                     />
                 </Switch>
             </BrowserRouter>

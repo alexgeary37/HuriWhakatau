@@ -108,7 +108,8 @@ export const UserSettings = () => {
     });
 
     const exportUserData = () => {
-        Meteor.call("users.exportUserData", Meteor.userId());
+        // Meteor.call("users.exportUserData", Meteor.userId());
+        Meteor.call("users.validateUserForDataExport", Meteor.userId());
     }
 
     //reference boolean to for the useEffect callback sending the changed pepeha list to the db
@@ -188,16 +189,16 @@ export const UserSettings = () => {
     }
 
     return (
-        <div inverted="true" style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+        <div inverted={"true"} style={{backgroundColor: 'rgb(10, 10, 10)'}}>
             <NavBar/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars/>
-                <Container inverted="true" style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                <Container inverted={"true"} style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                     <span style={{height: "22em"}}/>
-                    <Segment attached="top" clearing inverted
+                    <Segment attached={"top"} clearing inverted
                              style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                         <span style={{height: "400em"}}/>
-                        <Header size="huge">
+                        <Header size={"huge"}>
                             <Header.Content as={Container} fluid>
                                 My Account - {user && user.username}
                             </Header.Content>
@@ -205,14 +206,14 @@ export const UserSettings = () => {
                     </Segment>
                     <Grid columns={2}>
                         <GridColumn width={9}>
-                            <Segment fluid="true" inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                            <Segment fluid={"true"} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Card.Content header="Account Details"/>
                                 <CardContent>
                                     <Form>
                                         {/*    change username & stuff   */}
 
-                                        <Input labelPosition="left"
-                                               type="text"
+                                        <Input labelPosition={"left"}
+                                               type={"text"}
                                                value={user && username}
                                                readOnly={!changeUsername}
                                             // size="mini"
@@ -221,11 +222,11 @@ export const UserSettings = () => {
                                             <Label style={{width: "55%"}}>Username</Label>
                                             <input/>
                                             {!changeUsername ? (
-                                                <Button type="button" size="mini" content="Change" onClick={() => {
+                                                <Button type={"button"} size="mini" content="Change" onClick={() => {
                                                     setChangeUsername(true)
                                                 }}/>
                                             ) : (
-                                                < Button type="button" size="mini" content="Save" onClick={() => {
+                                                < Button type={"button"} size="mini" content="Save" onClick={() => {
                                                     setChangeUsername(false);
                                                     updateUsername();
                                                 }}/>
@@ -449,7 +450,7 @@ export const UserSettings = () => {
                         </GridColumn>
                         <GridColumn width={7}>
                             {isIndigenous &&
-                            <Segment fluid="true" inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+                            <Segment fluid={"true"} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
                                 <Card.Content header="Pepeha"/>
                                 <CardContent>
                                     <Form>
@@ -636,7 +637,7 @@ export const UserSettings = () => {
                                 </CardContent>
                             </Segment>
                             }
-                            <Segment fluid inverted>
+                            <Segment fluid={"true"} inverted>
                                 <Card.Content header={'Privacy'}/>
                                 <CardContent>
                                     <Button content={"Send me my data"} onClick={exportUserData}/>

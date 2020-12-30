@@ -4,6 +4,8 @@ import {Usernames} from "./usernames";
 import {CommentRatings} from "./commentRatings";
 import {Comments} from "./comments";
 import {Verdicts} from "./verdicts";
+import {Meteor} from "meteor/meteor";
+import {Personality} from "./personality";
 
 Meteor.methods({
     "users.updatePepeha"(pepeha, userId) {
@@ -220,9 +222,6 @@ Meteor.methods({
             console.log("user", user);
         }
     },
-    "users.stuff"(thin){
-    },
-
 
     //set user's emotional state
     "users.setEmotion"(userId, emotionOb) {
@@ -236,6 +235,40 @@ Meteor.methods({
         );
         return true;
     },
+
+    //send an email to confirm user identity prior to sending data
+    "users.validateUserForDataExport"(userId){
+        if (Meteor.isServer) {
+            const user = Meteor.users.findOne({_id: userId})
+            if (user) {
+                const exportingUserEmail = user.emails[0].address;
+                // const accessToken = Accounts._generateStampedLoginToken();
+                //
+                // Accounts._insertLoginToken(user._id, accessToken);
+                const verificationToken = Accounts.generateVerificationToken(userId, exportingUserEmail);
+
+                // const confirmationUrl = process.env.ROOT_URL + 'confirm-identity/' + accessToken.token + "/" + userId;
+                const verificationURL = process.env.ROOT_URL + 'confirm-identity/' + verificationToken.token + "/" + userId;
+
+                let emailBody = `Please confirm your identity by clicking the link below.            
+            
+               Verification URL: ${verificationURL}`
+
+                Email.send({
+                    to: exportingUserEmail,
+                    from: "huriwhakatau@gmail.com",
+                    subject: "Please confirm your email prior to data export from Huri Whakatau",
+                    text: emailBody,
+                });
+            }
+        }
+    },
+
+    // "users.removeLoginToken"(userId, loginToken){
+    //   Meteor.users.update({userId}, {
+    //       $pull:{"services.resume.loginTokens."}
+    //   });
+    // },
 
     // send all user data to user email as json file
     "users.exportUserData"(userId){
@@ -260,6 +293,14 @@ Meteor.methods({
                     votes: {$elemMatch: {$eq: {userId: user._id}}}
                 }
             }).fetch();
+
+            if (user.profile?.personality !== undefined) {
+                user.profile?.personality.forEach((question) => {
+                    let questionnaire = Personality.findOne({_id: question.questionnaireId});
+                    question.title = questionnaire.questionnaireName;
+                    question.text = questionnaire.items[question.item - 1].text;
+                })
+            }
 
             let userData = `{
                 "ProfileDetails": ${JSON.stringify(user, null, 4)},
