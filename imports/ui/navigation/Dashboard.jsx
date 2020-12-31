@@ -1,18 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import {
-    Button,
-    Container,
-    Segment,
-    Header,
-    Message,
-    List,
-    Icon,
-    Divider, Sidebar,
-    Grid,
-    GridColumn,
-    GridRow,
-} from "semantic-ui-react";
+import { Container, Segment, Header, List,
+    Sidebar, Grid, GridColumn, GridRow } from "semantic-ui-react";
 import {dashSplash} from "../../api/tourSteps";
 import {siteGlossary} from "../../api/glossary";
 import {Discussions} from "/imports/api/discussions";
@@ -25,6 +14,7 @@ import Cookies from "universal-cookie/lib";
 export const Dashboard = () => {
     const [userLang, setUserLang] = useState("mā");
     const cookies = new Cookies();
+    const [showTour, setShowTour] = useState(false);
     //set up tour of page
     const splashTourSteps = dashSplash;
     // set default language cookie
@@ -34,6 +24,16 @@ export const Dashboard = () => {
         } else {
             cookies.set('lang', "mā", {path: '/'});
         }
+    }, []);
+
+    const toggleShowTour = () => {
+        if (!cookies.get('signup')) {
+            setShowTour(!showTour);
+        }
+    }
+
+    useEffect(() => {
+        toggleShowTour();
     }, []);
 
     //set up changing language on site based on user nav menu selection
@@ -65,7 +65,7 @@ export const Dashboard = () => {
             style={{minHeight: 800, padding: '1em 0em'}}
             vertical
         >
-            <Tour TOUR_STEPS={splashTourSteps}/>
+            {showTour && <Tour TOUR_STEPS={splashTourSteps}/>}
             <NavBar handleChangeLanguage={handleChangeLanguage}/>
             {/*<span style={{height:"20em"}} />*/}
             <Sidebar.Pushable as={Segment} style={{minHeight: 800, overflow: "auto", backgroundColor: 'rgb(25,50,26)'}}>
@@ -96,51 +96,39 @@ export const Dashboard = () => {
                         />
                     </Container>
                     {/*End of semantic example header */}
-                    {/*<span style={{height:"30em"}} />*/}
-                    {/*<Segment attached="top" clearing  inverted style={{border: 'none'}}>*/}
-                    {/*<Header size="huge">*/}
-                    {/*  <Header.Content as={Container} fluid >*/}
-
-                    {/*    {siteGlossary.siteWelcome[userLang] + " " + siteGlossary.siteName[userLang]}*/}
-                    {/*  </Header.Content>*/}
-                    {/*</Header>*/}
-
-                    {/*</Segment>*/}
                     <Segment style={{padding: '6em 0em'}} vertical>
                         <Grid container stackable verticalAlign='middle'>
                             <GridRow>
                                 <GridColumn>
-                                    {/*<Segment attached="bottom" inverted*/}
-                                    {/*         style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
-                                        {/*<Header content={siteGlossary.userDiscourse[userLang]}/>*/}
-                                        <Segment inverted attached="top"
-                                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-                                            <Header as={'h3'}
-                                                    content={"Public " + siteGlossary.userDiscourse[userLang]}/>
-                                            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
-                                                {publicDiscussions &&
-                                                publicDiscussions.map((discussion) => (
-                                                    <DiscussionSummary
-                                                        key={discussion._id}
-                                                        discussion={discussion}
-                                                    />
-                                                ))}
-                                            </List>
-                                        </Segment>
-                                        <Segment inverted attached="top"
-                                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
-                                            <Header as={'h3'}
-                                                    content={"Finished " + siteGlossary.userDiscourse[userLang]}/>
-                                            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
-                                                {discussions &&
-                                                discussions.map((discussion) => (
-                                                    <DiscussionSummary
-                                                        key={discussion._id}
-                                                        discussion={discussion}
-                                                    />
-                                                ))}
-                                            </List>
-                                        </Segment>
+                                    {/*<Header content={siteGlossary.userDiscourse[userLang]}/>*/}
+                                    <Segment inverted attached="top"
+                                             style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                                        <Header as={'h3'}
+                                                content={"Public " + siteGlossary.userDiscourse[userLang]}/>
+                                        <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
+                                            {publicDiscussions &&
+                                            publicDiscussions.map((discussion) => (
+                                                <DiscussionSummary
+                                                    key={discussion._id}
+                                                    discussion={discussion}
+                                                />
+                                            ))}
+                                        </List>
+                                    </Segment>
+                                    <Segment inverted attached="top"
+                                             style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
+                                        <Header as={'h3'}
+                                                content={"Finished " + siteGlossary.userDiscourse[userLang]}/>
+                                        <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>
+                                            {discussions &&
+                                            discussions.map((discussion) => (
+                                                <DiscussionSummary
+                                                    key={discussion._id}
+                                                    discussion={discussion}
+                                                />
+                                            ))}
+                                        </List>
+                                    </Segment>
                                     {/*</Segment>*/}
                                 </GridColumn>
                             </GridRow>

@@ -79,3 +79,11 @@ export const myDashResearcher = [
             <p>Click the 'Open' button to see the experiment details.</p></div>)
     },
 ];
+
+export const myUserSettings = [{
+    target: ".myPepeha",
+    content: (<div>
+        <p>This is your pepeha.</p>
+        <p>Here you can fill out your personal story.</p>
+        <p>If you don't have a pepeha then click the link below and see what it's all about.</p></div>)
+}]

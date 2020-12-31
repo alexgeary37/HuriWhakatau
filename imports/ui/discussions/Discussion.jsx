@@ -29,9 +29,18 @@ import { CommentForm } from "/imports/ui/comments/CommentForm";
 import { UserComment } from "/imports/ui/comments/UserComment";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 import { Timer } from "./Timer"; ///
-
+import Cookies from "universal-cookie/lib";
 
 export const Discussion = () => { ///
+  const cookies = new Cookies();
+  const [userLang, setUserLang] = useState("mā");
+  useEffect(() => {
+    if (cookies.get('lang')) {
+      setUserLang(cookies.get('lang'))
+    } else {
+      cookies.set('lang', "mā", {path: '/'});
+    }
+  }, []);
   const filter = {};
   const { discussionId } = useParams();
   const [timedDiscussion, setTimedDiscussion] = useState(false);
@@ -223,6 +232,11 @@ export const Discussion = () => { ///
     return verdicts.findIndex((x) => x.authorId === Meteor.userId()) !== -1;
   };
 
+  //set up changing language on site based on user nav menu selection
+  const handleChangeLanguage = (lang) => {
+    setUserLang(lang);
+  };
+
   const hasReachedConsensus = () => {
     // Refactor this loop into a filter or findindex if possible!
     for (i = 0; i < verdicts.length; i += 1) {
@@ -243,7 +257,7 @@ export const Discussion = () => { ///
 
   return (
     <div>                     {/**/}
-      <NavBar />
+      <NavBar handleChangeLanguage={handleChangeLanguage}/>
       {/*hacky way to move content out from under menu*/}
       <br />
       <br />

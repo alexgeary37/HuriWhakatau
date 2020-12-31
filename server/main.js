@@ -15,6 +15,7 @@ import "/imports/api/experiments"
 import "/imports/api/accountsEmail"
 import "/server/defaultData";
 import "/imports/api/mountains";
+import "/imports/api/rivers"
 import "/imports/api/users"
 import "/imports/api/glossary";
 import "/imports/api/commentRatings";

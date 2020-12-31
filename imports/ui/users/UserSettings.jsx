@@ -2,6 +2,8 @@ import "/imports/api/security";
 import "/imports/api/users";
 import React, {useState, useEffect, useRef} from "react";
 import {useTracker} from "meteor/react-meteor-data";
+import {myUserSettings} from "../../api/tourSteps";
+import {Tour} from "../navigation/Tour";
 import {
     Input,
     Button,
@@ -17,17 +19,30 @@ import {
 } from "semantic-ui-react";
 import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Mountains} from "/imports/api/mountains";
+import {Rivers} from "../../api/rivers";
 import {Sidebars} from "../navigation/Sidebars";
+import Cookies from "universal-cookie/lib";
+
 
 export const UserSettings = () => {
-    const {user, mountains} = useTracker(() => {
+    const cookies = new Cookies();
+    const [showTour, setShowTour] = useState(false);
+    const {user, mountains, rivers} = useTracker(() => {
         Meteor.subscribe("users");
         Meteor.subscribe("mountains");
+        Meteor.subscribe("rivers");
+
         return {
             user: Meteor.users.findOne({_id: Meteor.userId()}),
             mountains: Mountains.find().fetch(),
+            rivers: Rivers.find().fetch(),
         };
     });
+    const pepehaWaka = ["Aotea", "Te Arawa", "Kurahaupō", "Mātaatua", "Tainui", "Tākitimu", "Tokomaru"];
+    const pepehaIwi = ["No affiliation", "Hauraki Māori", "Ngāi Tahu", "Ngāi Tahu Whanui", "Ngāpuhi",
+        "Ngāti Kahungunu", "Ngāti Maniapoto", "Ngāti Porou", "Ngāti Raukawa", "Ngāti Ruanui", "Ngāti Tama",
+        "Ngāti Toa", "Ngāti Tūwharetoa", "Ngāti Whātua", "Te Arawa", "Te Atiawa", "Te Ātiawa", "Te Hiku, or Muriwhenua",
+        "Tūhoe", "Waikato Tainui", "Whakatōhea"];
 
     // console.log("mount", mountains[0]);
     const [changeUserPassword, setChangeUserPassword] = useState(false);
@@ -69,7 +84,6 @@ export const UserSettings = () => {
     const [userGender, setUserGender] = useState("");
     const [userReligion, setUserReligion] = useState("");
     const [userDoB, setUserDoB] = useState("");
-    // const [name, setName] = useState("");
     const [err, setErr] = useState("");
     useEffect(() => {
         if (user /*&& isIndigenous*/ && !changeUserPepeha && !changeUserDetails && !changeUsername) {
@@ -95,6 +109,16 @@ export const UserSettings = () => {
         }
         // console.log(pepehaObject);
     }, [user]);
+
+    const toggleShowTour = () => {
+        if (!cookies.get('pepehaTour')) {
+            setShowTour(!showTour);
+        }
+    }
+
+    useEffect(() => {
+        toggleShowTour();
+    }, []);
 
     //get user participant role status and update variable with call back.
     // possibly this should be a Promise?
@@ -190,6 +214,9 @@ export const UserSettings = () => {
 
     return (
         <div inverted={"true"} style={{backgroundColor: 'rgb(10, 10, 10)'}}>
+            {showTour &&
+            <Tour TOUR_STEPS={myUserSettings}/>
+            }
             <NavBar/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars/>
@@ -278,29 +305,6 @@ export const UserSettings = () => {
                                         }
                                         <Divider/>
                                         <Card.Content header="User Details"/>
-                                        {/*<br/>*/}
-                                        {/*<Input value={user && name}*/}
-                                        {/*       labelPosition="left"*/}
-                                        {/*       type="text"*/}
-                                        {/*       readOnly={!changeName}*/}
-                                        {/*    // size="mini"*/}
-                                        {/*       style={{width: "45%"}}*/}
-                                        {/*       onChange={({target}) => setName(target.value)}>*/}
-                                        {/*    <Label style={{width: "55%"}}>Name</Label>*/}
-                                        {/*    <input/>*/}
-                                        {/*    {!changeName ? (*/}
-                                        {/*        <Button type="button" size="mini" content="Change" onClick={() => {*/}
-                                        {/*            handleChangeName();*/}
-                                        {/*        }}/>*/}
-                                        {/*    ) : (*/}
-                                        {/*        < Button type="button" size="mini" content="Save" onClick={() => {*/}
-                                        {/*            handleChangeName();*/}
-                                        {/*            // setChangeName(false);*/}
-                                        {/*            // updateName();*/}
-                                        {/*        }}/>*/}
-                                        {/*    )}*/}
-                                        {/*</Input>*/}
-                                        {/*<br/>*/}
                                         <br/>
                                         <Input value={user && userFirstName}
                                                placeholder={"Enter First Name"}
@@ -407,27 +411,6 @@ export const UserSettings = () => {
                                         />
                                         <br/>
                                         <br/>
-                                        {/*<Input value={user && userFirstName}*/}
-                                        {/*       labelPosition="left"*/}
-                                        {/*       type="text"*/}
-                                        {/*       readOnly={!changeName}*/}
-                                        {/*    // size="mini"*/}
-                                        {/*       style={{width: "45%"}}*/}
-                                        {/*       onChange={({target}) => setUserFirstName(target.value)}>*/}
-                                        {/*    <Label style={{width: "55%"}}>First Name</Label>*/}
-                                        {/*    <input/>*/}
-                                        {/*    {!changeName ? (*/}
-                                        {/*        <Button size="mini" content="Change" onClick={() => {*/}
-                                        {/*            handleChangeName();*/}
-                                        {/*        }}/>*/}
-                                        {/*    ) : (*/}
-                                        {/*        < Button size="mini" content="Save" onClick={() => {*/}
-                                        {/*            handleChangeName();*/}
-                                        {/*            // setChangeName(false);*/}
-                                        {/*            // updateName();*/}
-                                        {/*        }}/>*/}
-                                        {/*    )}*/}
-                                        {/*</Input>*/}
                                     </Form>
                                 </CardContent>
                             </Segment>
@@ -449,9 +432,10 @@ export const UserSettings = () => {
 
                         </GridColumn>
                         <GridColumn width={7}>
-                            {isIndigenous &&
+                            {/*re-add the isIndigenous check later*/}
+                            {/*{isIndigenous &&*/}
                             <Segment fluid={"true"} inverted style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-                                <Card.Content header="Pepeha"/>
+                                <Card.Content header="Pepeha" className={'myPepeha'}/>
                                 <CardContent>
                                     <Form>
                                         <Dropdown
@@ -461,12 +445,9 @@ export const UserSettings = () => {
                                             name="mountain"
                                             readOnly={!changeUserPepeha}
                                             lazyLoad
-                                            // disabled={!changeUserPepeha}
-                                            // loading={mountains.length === 0}
                                             allowAdditions
                                             selection
                                             search
-                                            // fluid
                                             options={
                                                 mountains &&
                                                 mountains.map((mountain) => ({
@@ -486,119 +467,131 @@ export const UserSettings = () => {
                                                 handleUpdatePepeha()
                                             }}
                                         />
-                                        {/*<Button icon style={{marginLeft: "20px"}}>*/}
-                                        {/*    <Icon className="mountain"/>*/}
-                                        {/*</Button>*/}
-                                        {/*<Label style={{width: "55%"}}>Mountain</Label>*/}
-                                        {/*</Form.Dropdown>*/}
-
-                                        {/*<Input value={user && userMountain}*/}
-                                        {/*       labelPosition="left"*/}
-                                        {/*       type="text"*/}
-                                        {/*       size="mini"*/}
-                                        {/*       style={{width: "45%"}}*/}
-                                        {/*       readOnly={!changeUserPepeha}*/}
-                                        {/*       onChange={({target}) => setUserMountain(target.value)}*/}
-                                        {/*       // onChange={handlePepehaSelect}*/}
-                                        {/*>*/}
-                                        {/*    <Label style={{width: "55%"}}>Mountain</Label>*/}
-                                        {/*    <input/>*/}
                                         <Button type="button" icon style={{marginLeft: "20px"}}>
                                             <Icon className="mountain"/>
                                         </Button>
-                                        {/*</Input>*/}
                                         <br/>
                                         <br/>
-                                        <Input value={user && userRiver}
-                                               placeholder={"Enter River"}
-                                            // labelPosition="left"
-                                               type="text"
-                                            // size="mini"
-                                            // style={{width: "45%"}}
-                                               readOnly={!changeUserPepeha}
-                                               onChange={({target}) => setUserRiver(target.value)}
-                                               onClick={() => {
-                                                   handleUpdatePepeha()
-                                                   settingPepehaRef.current = true
-                                               }}
-                                               onBlur={() => {
-                                                   handleUpdatePepeha()
-                                               }}
-                                            // onChange={handlePepehaSelect}
-                                        >
-                                            {/*<Label style={{width: "55%"}}>River</Label>*/}
-                                            <input/>
+                                        <Dropdown
+                                            text={userRiver}
+                                            value={userRiver}
+                                            placeholder={'Select River'}
+                                            name="river"
+                                            readOnly={!changeUserPepeha}
+                                            lazyLoad
+                                            allowAdditions
+                                            selection
+                                            search
+                                            options={
+                                                rivers &&
+                                                rivers.map((river) => ({
+                                                    key: river._id,
+                                                    text: river.name,
+                                                    value: river.name,
+                                                }))
+                                            }
+                                            onChange={(e, {value}) => {
+                                                setUserRiver(value)
+                                            }}
+                                            onClick={() => {
+                                                handleUpdatePepeha()
+                                                settingPepehaRef.current = true
+                                            }}
+                                            onBlur={() => {
+                                                handleUpdatePepeha()
+                                            }}
+                                        />
+                                        {/*<Input value={user && userRiver}*/}
+                                        {/*       placeholder={"Enter River"}*/}
+                                        {/*       type="text"*/}
+                                        {/*       readOnly={!changeUserPepeha}*/}
+                                        {/*       onChange={({target}) => setUserRiver(target.value)}*/}
+                                        {/*       onClick={() => {*/}
+                                        {/*           handleUpdatePepeha()*/}
+                                        {/*           settingPepehaRef.current = true*/}
+                                        {/*       }}*/}
+                                        {/*       onBlur={() => {*/}
+                                        {/*           handleUpdatePepeha()*/}
+                                        {/*       }}*/}
+                                        {/*>*/}
+                                        {/*    <input/>*/}
                                             <Button type="button" icon style={{marginLeft: "20px"}}>
                                                 <Icon className="river"/>
                                             </Button>
-                                        </Input>
+                                        {/*</Input>*/}
                                         <br/>
                                         <br/>
-                                        <Input value={user && userWaka}
-                                               placeholder={"Enter Waka"}
-                                            // labelPosition="left"
-                                               type="text"
-                                            // size="mini"
-                                            // style={{width: "45%"}}
-                                               readOnly={!changeUserPepeha}
-                                               onChange={({target}) => setUserWaka(target.value)}
-                                               onClick={() => {
-                                                   handleUpdatePepeha()
-                                                   settingPepehaRef.current = true
-                                               }}
-                                               onBlur={() => {
-                                                   handleUpdatePepeha()
-                                               }}
-                                            // onChange={handlePepehaSelect}
-                                            // onChange={() => {settingPepehaRef.current = true;
-                                            //     setUserPepeha([...userPepeha, target.value])}}
-                                        >
-                                            {/*<Label style={{width: "55%"}}>Waka</Label>*/}
-                                            <input/>
+                                        <Dropdown
+                                            text={userWaka}
+                                            value={userWaka}
+                                            placeholder={'Select Waka'}
+                                            name="waka"
+                                            readOnly={!changeUserPepeha}
+                                            lazyLoad
+                                            selection
+                                            search
+                                            options={
+                                                pepehaWaka &&
+                                                pepehaWaka.map((waka) => ({
+                                                    key: waka,
+                                                    text: waka,
+                                                    value: waka,
+                                                }))
+                                            }
+                                            onChange={(e, {value}) => {
+                                                setUserWaka(value)
+                                            }}
+                                            onClick={() => {
+                                                handleUpdatePepeha()
+                                                settingPepehaRef.current = true
+                                            }}
+                                            onBlur={() => {
+                                                handleUpdatePepeha()
+                                            }}
+                                        />
                                             <Button type="button" icon style={{marginLeft: "20px"}}>
                                                 <Icon className="waka"/>
                                             </Button>
-                                        </Input>
                                         <br/>
                                         <br/>
-                                        <Input value={user && userIwi}
-                                            // labelPosition="left"
-                                               placeholder={"Enter Iwi"}
-                                               type="text"
-                                            // size="mini"
-                                            // style={{width: "45%"}}
-                                               readOnly={!changeUserPepeha}
-                                               onChange={({target}) => setUserIwi(target.value)}
-                                            // onChange={handlePepehaSelect}
-                                            // onChange={({target}) => {settingPepehaRef.current = true;
-                                            //     setUserPepeha([...userPepeha, target.value])}}
-                                               onClick={() => {
-                                                   handleUpdatePepeha()
-                                                   settingPepehaRef.current = true
-                                               }}
-                                               onBlur={() => {
-                                                   handleUpdatePepeha()
-                                               }}
-                                        >
-                                            {/*<Label style={{width: "55%"}}>Iwi</Label>*/}
-                                            <input/>
+                                        <Dropdown
+                                            text={userIwi}
+                                            value={userIwi}
+                                            placeholder={'Select Iwi'}
+                                            name="iwi"
+                                            readOnly={!changeUserPepeha}
+                                            lazyLoad
+                                            selection
+                                            search
+                                            options={
+                                                pepehaIwi &&
+                                                pepehaIwi.map((iwi) => ({
+                                                    key: iwi,
+                                                    text: iwi,
+                                                    value: iwi,
+                                                }))
+                                            }
+                                            onChange={(e, {value}) => {
+                                                setUserIwi(value)
+                                            }}
+                                            onClick={() => {
+                                                handleUpdatePepeha()
+                                                settingPepehaRef.current = true
+                                            }}
+                                            onBlur={() => {
+                                                handleUpdatePepeha()
+                                            }}
+                                        />
                                             <Button type="button" icon style={{marginLeft: "20px"}}>
                                                 <Icon className="iwi"/>
                                             </Button>
-                                        </Input>
                                         <br/>
                                         <br/>
                                         <Input value={user && userRole}
                                                placeholder={"Enter Employment or Role"}
-                                            // labelPosition="left"
                                                type="text"
-                                            // size="mini"
-                                            // style={{width: "45%"}}
                                                readOnly={!changeUserPepeha}
                                                onChange={({target}) => setUserRole(target.value)}
-                                            // onChange={handlePepehaSelect}
-                                            // onChange={({target}) => {settingPepehaRef.current = true;
-                                            //     setUserPepeha([...userPepeha, target.value])}}
                                                onClick={() => {
                                                    handleUpdatePepeha()
                                                    settingPepehaRef.current = true
@@ -607,7 +600,6 @@ export const UserSettings = () => {
                                                    handleUpdatePepeha()
                                                }}
                                         >
-                                            {/*<Label style={{width: "55%"}}>Employment / Role</Label>*/}
                                             <input/>
                                             <Button type="button" icon style={{marginLeft: "20px"}}>
                                                 <Icon className="role"/>
@@ -615,28 +607,11 @@ export const UserSettings = () => {
                                         </Input>
                                         <br/>
                                         <br/>
-                                        get your personalised Pepeha: https://pepeha.nz/
-                                        {/*{!changeUserPepeha ?*/}
-                                        {/*    <Button positive*/}
-                                        {/*             fluid*/}
-                                        {/*             onClick={() => {*/}
-                                        {/*                 handleUpdatePepeha()*/}
-                                        {/*                 settingPepehaRef.current = true}}*/}
-                                        {/*             content={"Update Pepeha"}/>*/}
-                                        {/*    :*/}
-                                        {/*    <Button positive*/}
-                                        {/*            fluid*/}
-                                        {/*            onClick={() => {*/}
-                                        {/*                handleUpdatePepeha();*/}
-                                        {/*                // setChangeUserPepeha(false);*/}
-                                        {/*                // updatePepeha();*/}
-                                        {/*            }}*/}
-                                        {/*            content={"Save Pepeha"}/>*/}
-                                        {/*}*/}
+                                        get your personalised Pepeha: <a href={'https://pepeha.nz/'}>https://pepeha.nz/</a>
                                     </Form>
                                 </CardContent>
                             </Segment>
-                            }
+                            {/*}*/}
                             <Segment fluid={"true"} inverted>
                                 <Card.Content header={'Privacy'}/>
                                 <CardContent>

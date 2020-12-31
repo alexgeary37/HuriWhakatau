@@ -82,7 +82,7 @@ export const NavBar = ({handleChangeLanguage}) => {
                     {/*</Dropdown>*/}
                     {/*todo put discussion title / description here when I figure it out */}
                     <MenuMenu position="right">
-                        <Dropdown item text={"lang"}
+                        <Dropdown item text={"Language"}
                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>
                             <Dropdown.Menu>
                                 {siteGlossary.languages && Object.keys(siteGlossary.languages).map((langKey)=>(
