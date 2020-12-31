@@ -181,8 +181,10 @@ export const CreateDiscussion = ({toggleModal}) => {
                     </Input>
                     <br/>
                     <br/>
-                    <Checkbox checked={isHui} label='Discussions use the Hui format'
-                              onClick={(e, data) => setIsHui(data.checked)}/>
+                    {/*huichats require an experiment to be specified. inappropriate for user created discussions.
+                    should fix in huichat component*/}
+                    {/*<Checkbox checked={isHui} label='Discussions use the Hui format'*/}
+                    {/*          onClick={(e, data) => setIsHui(data.checked)}/>*/}
                     <br/>
                     <br/>
                     <Modal.Actions>

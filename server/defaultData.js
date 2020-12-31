@@ -15,6 +15,7 @@ import {DiscussionTemplates} from "../imports/api/discussionTemplate"
 import {Usernames} from "../imports/api/usernames";
 import {randomUsernames} from "../imports/api/usernames";
 import {Personality} from "../imports/api/personality";
+import {newRivers, Rivers} from "../imports/api/rivers";
 // const Mountains = new Mongo.Collection("mountains");
 
 
@@ -319,5 +320,9 @@ if (Meteor.isServer) {
     //         Usernames.insert({name: randomUsernames[i]});
     //     }
     // }
+
+    // newRivers.forEach((river) => {
+    //         Rivers.insert({name: river});
+    //     })
         console.log('Finished running defaultData.js');
 }

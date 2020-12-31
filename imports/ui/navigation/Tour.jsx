@@ -6,10 +6,17 @@ import Cookies from "universal-cookie/lib";
 export const Tour = ({TOUR_STEPS}) => {
 
     const handleCallback = (data) => {
-        const { action, index, status, type } = data;
+        const { status, step } = data;
         if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
             const cookies = new Cookies();
-            cookies.set('siteTour', 'complete', { path: '/' });
+            if(step.target === ".myPepeha"){
+                cookies.set('pepehaTour', 'complete', { path: '/' });
+            } else if ([".myDiscussions", ".finishedDiscussions", ".myGroups", ".newDiscussion",
+                ".discussionTemplates", ".myScenarios", ".myScenarioSets", ".myExperiments"].includes(step.target)){
+                cookies.set('myDashTour', 'complete', {path: '/'});
+            } else if (step.target === ".signUp"){
+                cookies.set('signup', 'complete', {path: '/'});
+            }
         }
     }
 

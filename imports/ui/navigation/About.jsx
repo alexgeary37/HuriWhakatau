@@ -1,28 +1,41 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
-    Button,
-    Container,
-    Segment,
-    Header,
-    Message,
-    List,
-    Icon,
-    Divider, Image, Sidebar, Tab,
+    Container, Segment, Header, Icon,
+    Image, Sidebar, Tab, Message,
 } from "semantic-ui-react";
-import { Random } from "meteor/random";
-import { NavBar } from "/imports/ui/navigation/NavBar";
-import { Sidebars } from "/imports/ui/navigation/Sidebars";
-import {Link} from "react-router-dom";
+import {Random} from "meteor/random";
+import {NavBar} from "/imports/ui/navigation/NavBar";
+import {Sidebars} from "/imports/ui/navigation/Sidebars";
+import {siteGlossary} from "../../api/glossary";
+import Cookies from "universal-cookie/lib";
 
 export const About = () => {
-    const panes =  [
-        { menuItem: 'Huri Whakatau', render: () =>
+    const cookies = new Cookies();
+    const [userLang, setUserLang] = useState("mā");
+    useEffect(() => {
+        if (cookies.get('lang')) {
+            setUserLang(cookies.get('lang'))
+        } else {
+            cookies.set('lang', "mā", {path: '/'});
+        }
+    }, []);
+
+    //set up changing language on site based on user nav menu selection
+    const handleChangeLanguage = (lang) => {
+        setUserLang(lang);
+    };
+
+    const panes = [
+        {
+            menuItem: 'Huri Whakatau', render: () =>
                 <Tab.Pane inverted style={{border: 'none'}}>
                     <p>
                         Huri Whakatau is an online discussion platform we have been developing over the last two years
-                        in collaboration with Māori and Iñupiat researchers, engineers and participants. Our platform will
+                        in collaboration with Māori and Iñupiat researchers, engineers and participants. Our platform
+                        will
                         provide a cloud solution to organizations, communities and researchers for assisting small
-                        groups of people to effectively reach consensus on ‘hot’ topics. Crucially, Huri Whakatau acts as our
+                        groups of people to effectively reach consensus on ‘hot’ topics. Crucially, Huri Whakatau acts
+                        as our
                         case study to discover how software should be engineered for (and by) Māori and Indigenous
                         Peoples.
                     </p>
@@ -53,17 +66,19 @@ export const About = () => {
 
                     <Header>Indigenous Content</Header>
                     <p>
-                        The <a href={"https://maoridictionary.co.nz/search?idiom=&phrase=&proverb=&loan=&keywords=kowhaiwhai&search="}
-                               target={"_blank"}>kowhaiwhai</a> used on this site is an original design created for
+                        The <a
+                        href={"https://maoridictionary.co.nz/search?idiom=&phrase=&proverb=&loan=&keywords=kowhaiwhai&search="}
+                        target={"_blank"}>kowhaiwhai</a> used on this site is an original design created for
                         Huri Whakatau. The symbolism is intended to be a fusion of traditional Maori koru patterns and
                         circuit board architecture. The intention is to convey that this is a digital space that is
                         friendly to traditional culture.
                     </p>
                 </Tab.Pane>
         },
-        { menuItem: 'Our People', render: () =>
+        {
+            menuItem: 'Our People', render: () =>
                 <Tab.Pane inverted style={{overflow: "auto", height: "80vh", border: 'none'}}>
-                    <Image src='/PanosProfilePhoto3.jpg' size='tiny' />
+                    <Image src='/PanosProfilePhoto3.jpg' size='tiny'/>
                     <Header content={'Panos Patros: PI. The cool kind: Principal Investigator'}/>
                     Panos is a Member of Engineering New Zealand and is interested in various aspects of Software
                     Engineering.
@@ -88,14 +103,17 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/TeTaka.jpg' size='tiny' />
+                    <Image src='/TeTaka.jpg' size='tiny'/>
                     <Header content={'Te Taka Keegan: Associate Investigator'}/>
                     Te Taka completed a PhD in 2007, titled Indigenous Language Usage in a Digital Library: He
-                    Hautoa Kia Ora Tonu Ai. He has worked on a number of projects involving the Māori language and technology.
+                    Hautoa Kia Ora Tonu Ai. He has worked on a number of projects involving the Māori language and
+                    technology.
                     These include the Māori Niupepa Collection, Te Kete Ipurangi, the Microsoft keyboard, Microsoft
                     Windows and Microsoft Office in Māori, Moodle in Māori, Google Web Search in Māori, and the Māori
-                    macroniser. In 2013 Te Taka was awarded the University of Waikato's Māori/Indigenous Excellence Award for
-                    Research. In 2017 Te Taka was awarded the Prime Minister’s Supreme Award for Tertiary Teaching Excellence.
+                    macroniser. In 2013 Te Taka was awarded the University of Waikato's Māori/Indigenous Excellence
+                    Award for
+                    Research. In 2017 Te Taka was awarded the Prime Minister’s Supreme Award for Tertiary Teaching
+                    Excellence.
                     <br/>
                     <a href={""} target={"_blank"}>
                         <Icon className={"twitter"}/>
@@ -137,13 +155,14 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src={Random.choice(['/aarondant_real.jpg', '/aarondant.jpg'])} size='tiny' />
+                    <Image src={Random.choice(['/aarondant_real.jpg', '/aarondant.jpg'])} size='tiny'/>
                     <Header content={'Aaron Dant: Key Researcher'}/>
                     Aaron is Chief Data Scientist at ASRC Federal (yes all those capitals) and is responsible for
-                    research and development using a variety of techniques including natural language processing, supervised
+                    research and development using a variety of techniques including natural language processing,
+                    supervised
                     and unsupervised learning. Aaron has over 20 years of experience building enterprise scale
                     applications, including 10+ years developing cloud scale analytic systems for federal customers.
-                    In 2018 Aaron was one of  <a
+                    In 2018 Aaron was one of <a
                     href={"https://washingtonexec.com/2018/11/top-ai-execs-to-watch-aaron-dant-asrc-federal/#.X4PzAGj7Ryw"}
                     target={"_blank"}> Washington Exec's Top AI Execs to watch</a>.
                     (I for one am glad he ditched that wig).
@@ -154,7 +173,8 @@ export const About = () => {
                     <a href={"mailto: aaron.dant@asrcfederal.com"} target={"_blank"}>
                         <Icon className={"envelope"}/>
                     </a>
-                    <a href={"https://webcache.googleusercontent.com/search?q=cache:ujXBStxJACYJ:https://www.asrcfederal.com/ai-machine-learning/aaron-dant+&cd=1&hl=en&ct=clnk&gl=nz"} target={"_blank"}>
+                    <a href={"https://webcache.googleusercontent.com/search?q=cache:ujXBStxJACYJ:https://www.asrcfederal.com/ai-machine-learning/aaron-dant+&cd=1&hl=en&ct=clnk&gl=nz"}
+                       target={"_blank"}>
                         <Icon className={"world"}/>
                     </a>
                     <a href={"https://www.linkedin.com/in/aaron-dant-32365a160/"} target={"_blank"}>
@@ -163,12 +183,13 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/PhilFeldman.jpg' size='tiny' />
+                    <Image src='/PhilFeldman.jpg' size='tiny'/>
                     <Header content={'Phil Feldman: Key Researcher'}/>
                     Phil is Research Scientist at ASRC Federal and completing his Phd and is also leading the
                     development of Supervised Machine Learning, AI and Network Analytics for ASRC Federal.
                     An accomplished polymath Phil has experience in a variety of programming languages and
-                    disciplines (even ones no one cares about anymore like Pascal and R). From robotics to art, ecology, web
+                    disciplines (even ones no one cares about anymore like Pascal and R). From robotics to art, ecology,
+                    web
                     development and management, is there nothing this man can't do?
                     Yes, it's knowing that you shouldn't put your entire experience and history into a tiny menu box
                     that you have to constantly click a button to scroll through with any reliability.
@@ -191,10 +212,11 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/Alex-Geary.jpg' size='tiny' />
+                    <Image src='/Alex-Geary.jpg' size='tiny'/>
                     <Header content={'Alex Geary: Research Assistant and Software Engineer'}/>
                     Alex is currently completing his Bachelor of Computer Science with Honours at the University of
-                    Waikato. His focus is on something. Not really sure. He also completed his Bachelor of Music with Honours
+                    Waikato. His focus is on something. Not really sure. He also completed his Bachelor of Music with
+                    Honours
                     in 2016.
                     At some point you have to leave university dude.
                     <br/>
@@ -214,7 +236,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/tamahaubrown.jpg' size='tiny' />
+                    <Image src='/tamahaubrown.jpg' size='tiny'/>
                     <Header content={'Tamahau Brown: Research Assistant and Software Engineer'}/>
                     Tamahau is currently completing his Bachelor of Computer Science with Honours at the University
                     of Waikato. His focus is on Maori and indigenous representation and advancement in digital
@@ -235,7 +257,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/PriyankVyas.jfif' size='tiny' />
+                    <Image src='/PriyankVyas.jfif' size='tiny'/>
                     <Header content={'Priyank Vyas: Research Assistant and Software Engineer'}/>
                     Priyank has a Bachelor of Computing and Mathematical Sciences focused in Computer Science from
                     The University of Waikato. His focus currently is natural language processing which he is
@@ -256,7 +278,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/user-icon_291700.jpg' size='tiny' />
+                    <Image src='/user-icon_291700.jpg' size='tiny'/>
                     <Header content={'Chris Symon: Software Engineer'}/>
                     Chris built the the initial version of Huri Whakatau (or Jury Room) and while no longer with
                     us deserves to be remembered here (no, he's not dead. Just dead to me, return your emails man!).
@@ -285,10 +307,11 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/darcycowan.jpg' size='tiny' />
+                    <Image src='/darcycowan.jpg' size='tiny'/>
                     <Header content={'Darcy Cowan: Principle Software Engineer'}/>
                     Darcy obtained a Bachelor of Science in 2001. After spending 20 years in industry he joined the
-                    dark side (because they have cookies) and is now completing a Master of Computer Science at the University
+                    dark side (because they have cookies) and is now completing a Master of Computer Science at the
+                    University
                     of Waikato.
                     Darcy has built the majority of the current version of Huri Whakatau and never lets the rest of
                     the team forget it.
@@ -311,25 +334,35 @@ export const About = () => {
                         <Icon className={"wordpress"}/>
                     </a>
                     <br/>
-                    {/*https://twitter.com/FMIS_Waikato*/}
+                    {/**/}
+                    <Header content={'Darcy Cowan: Principle Software Engineer'}/>
+                    Thank you to the Faculty of Māori & Indigenous Studies at University of Waikato for input and
+                    mentorship.
+                    <br/>
+                    <a href={"https://twitter.com/FMIS_Waikato"} target={"_blank"}>
+                        <Icon className={"twitter"}/>
+                    </a>
+                    {/* links for ASRC Federal - On behalf of ASRC Federal Aaron Dant & Phil Feldman have been mentors,
+                     colleagues and friends to the students working on this project.
+                     Thank you for your knowledge, time, insight and compassion. */}
                     {/*https://twitter.com/asrc*/}
                     {/*https://www.asrcfederal.com/*/}
-                </Tab.Pane> },
+                </Tab.Pane>
+        },
     ];
-
 
     return (
         <div>
-            <NavBar />
+            <NavBar handleChangeLanguage={handleChangeLanguage}/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Sidebars />
-            <Container inverted={'true'}>
-                <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
-                    <span style={{height:"32em"}}/>
-                    <Header as={'h1'} content="About"/>
-                    <Tab menu={{inverted: true}} panes={panes} />
-                </Segment>
-            </Container>
+                <Sidebars/>
+                <Container inverted={'true'}>
+                    <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
+                        <span style={{height: "32em"}}/>
+                        <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>
+                        <Tab menu={{inverted: true}} panes={panes}/>
+                    </Segment>
+                </Container>
             </Sidebar.Pushable>
         </div>
     );

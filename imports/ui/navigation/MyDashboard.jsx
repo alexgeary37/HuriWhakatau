@@ -80,7 +80,7 @@ export const MyDashboard = () => {
     }, []);
 
     const toggleShowTour = () => {
-        if (!cookies.get('siteTour')) {
+        if (!cookies.get('myDashTour')) {
             setShowTour(!showTour);
         }
     }
