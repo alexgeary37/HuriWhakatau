@@ -42,7 +42,7 @@ export const RatingComponent = () => {
         setSubmitErr("");
         setAnswerInt(0);
         setAnswerString("");
-        questionType = Random.choice([0,1]);
+        questionType = Random.choice([0,1,0,0,0,0]);
         setTypeOfQuestion(questionType);
         if (questionType) {
             Meteor.call("experiments.getRandomExperimentForRating"

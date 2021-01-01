@@ -30,9 +30,19 @@ import {UserComment} from "/imports/ui/comments/UserComment";
 import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
 import {UserSummary} from "/imports/ui/users/UserSummary";
 import {Experiments} from "../../api/experiments";
+import {huichatTour, myUserSettings} from "../../api/tourSteps";
+import Cookies from "universal-cookie/lib";
+import {Tour} from "../navigation/Tour";
 
 //adaption of the Discussion.jsx to bring it in line with Tamahau's designs
 export const HuiChat = () => {
+    const cookies = new Cookies();
+    const [userLang, setUserLang] = useState("mā");
+    //set up changing language on site based on user nav menu selection
+    const handleChangeLanguage = (lang) => {
+        setUserLang(lang);
+    };
+    const [showTour, setShowTour] = useState(false);
     const filter = {};
     const {discussionId} = useParams();
     const [timedDiscussion, setTimedDiscussion] = useState(false); // introduction eg show/hide verdict proposal etc
@@ -50,6 +60,16 @@ export const HuiChat = () => {
     const updateDeadline = (deadline) => {
         setMutableDiscussionDeadline(deadline);
     };
+
+    const toggleShowTour = () => {
+        if (!cookies.get('huichatTour')) {
+            setShowTour(!showTour);
+        }
+    }
+
+    useEffect(() => {
+        toggleShowTour();
+    }, []);
 
     // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
     // user for discussions but not introductions, introductions should be finished by the group leader
@@ -276,9 +296,12 @@ export const HuiChat = () => {
 
     return (
         <div style={{backgroundColor: 'rgb(30, 30, 30)'}}>
+            {showTour &&
+            <Tour TOUR_STEPS={huichatTour}/>
+            }
             <NavBar/>
             {/*hacky way to move content out from under menu*/}
-            {/*<br/>*/}
+            <br/>
             {/*<br/>*/}
             {/*<br/>*/}
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>

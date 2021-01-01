@@ -52,10 +52,11 @@ Meteor.methods({
 
         //create intro discussion if needed
         if (hasIntroduction) {
+            const introductionScenario = Scenarios.findOne({title: "Default - Introduction"})._id;
             console.log("creating introduction");
             const introId = Meteor.call(
                 "discussions.insertIntroduction",
-                "wWtYSX9zP7b5yeNo7",
+                introductionScenario,
                 groupId,
                 0
             );

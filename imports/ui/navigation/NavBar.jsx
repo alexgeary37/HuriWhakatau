@@ -68,18 +68,6 @@ export const NavBar = ({handleChangeLanguage}) => {
                     <Menu.Item as={Link} to="/">
                         <Header as={'h2'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>
                     </Menu.Item>
-                    {/*<Dropdown item text="Tirotiro/Browse"*/}
-                    {/*          style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>*/}
-                    {/*    <Dropdown.Menu>*/}
-                    {/*        <Dropdown.Item as={Link} to="/mydashboard">*/}
-                    {/*            <h2 style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>My Dash</h2>*/}
-                    {/*        </Dropdown.Item>*/}
-                    {/*        <Dropdown.Item as={Link} to="/UserSettings">*/}
-                    {/*            <h2 style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>User*/}
-                    {/*                settings</h2>*/}
-                    {/*        </Dropdown.Item>*/}
-                    {/*    </Dropdown.Menu>*/}
-                    {/*</Dropdown>*/}
                     {/*todo put discussion title / description here when I figure it out */}
                     <MenuMenu position="right">
                         <Dropdown item text={"Language"}
