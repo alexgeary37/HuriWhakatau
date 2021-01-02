@@ -78,7 +78,7 @@ export const About = () => {
         {
             menuItem: 'Our People', render: () =>
                 <Tab.Pane inverted style={{overflow: "auto", height: "80vh", border: 'none'}}>
-                    <Image src='/PanosProfilePhoto3.jpg' size='tiny'/>
+                    <Image src='/PanosProfilePhoto3.jpg' size='tiny' alt={'Panos Patros Bio Picture'}/>
                     <Header content={'Panos Patros: PI. The cool kind: Principal Investigator'}/>
                     Panos is a Member of Engineering New Zealand and is interested in various aspects of Software
                     Engineering.
@@ -103,7 +103,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/TeTaka.jpg' size='tiny'/>
+                    <Image src='/TeTaka.jpg' size='tiny' alt={'Te Taka Bio Picture'}/>
                     <Header content={'Te Taka Keegan: Associate Investigator'}/>
                     Te Taka completed a PhD in 2007, titled Indigenous Language Usage in a Digital Library: He
                     Hautoa Kia Ora Tonu Ai. He has worked on a number of projects involving the Māori language and
@@ -130,7 +130,8 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src={Random.choice(['/EarlyPeterCapaldi.jpg', '/Tony_Smith.jpg'])} size='tiny'/>
+                    <Image src={Random.choice(['/EarlyPeterCapaldi.jpg', '/Tony_Smith.jpg'])} size='tiny'
+                           alt={'Tony Smith Bio Picture'}/>
                     <Header content={'Tony Smith: Associate Investigator'}/>
                     Tony received his undergraduate and graduate degrees in Computer Science from the University of
                     Calgary, and earned his PhD at the University of Waikato. A general theme of his research is
@@ -155,7 +156,8 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src={Random.choice(['/aarondant_real.jpg', '/aarondant.jpg'])} size='tiny'/>
+                    <Image src={Random.choice(['/aarondant_real.jpg', '/aarondant.jpg'])} size='tiny'
+                           alt={'Aaron Dant Bio Picture'}/>
                     <Header content={'Aaron Dant: Key Researcher'}/>
                     Aaron is Chief Data Scientist at ASRC Federal (yes all those capitals) and is responsible for
                     research and development using a variety of techniques including natural language processing,
@@ -183,7 +185,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/PhilFeldman.jpg' size='tiny'/>
+                    <Image src='/PhilFeldman.jpg' size='tiny' alt={'Phil Feldman Bio Picture'}/>
                     <Header content={'Phil Feldman: Key Researcher'}/>
                     Phil is Research Scientist at ASRC Federal and completing his Phd and is also leading the
                     development of Supervised Machine Learning, AI and Network Analytics for ASRC Federal.
@@ -212,7 +214,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/Alex-Geary.jpg' size='tiny'/>
+                    <Image src='/Alex-Geary.jpg' size='tiny' alt={'Alex Geary Bio Picture'}/>
                     <Header content={'Alex Geary: Research Assistant and Software Engineer'}/>
                     Alex is currently completing his Bachelor of Computer Science with Honours at the University of
                     Waikato. His focus is on something. Not really sure. He also completed his Bachelor of Music with
@@ -236,7 +238,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/tamahaubrown.jpg' size='tiny'/>
+                    <Image src='/tamahaubrown.jpg' size='tiny' alt={'Tamahau Brown Bio Picture'}/>
                     <Header content={'Tamahau Brown: Research Assistant and Software Engineer'}/>
                     Tamahau is currently completing his Bachelor of Computer Science with Honours at the University
                     of Waikato. His focus is on Maori and indigenous representation and advancement in digital
@@ -257,7 +259,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/PriyankVyas.jfif' size='tiny'/>
+                    <Image src='/PriyankVyas.jfif' size='tiny' alt={'Priyank Vyas Bio Picture'}/>
                     <Header content={'Priyank Vyas: Research Assistant and Software Engineer'}/>
                     Priyank has a Bachelor of Computing and Mathematical Sciences focused in Computer Science from
                     The University of Waikato. His focus currently is natural language processing which he is
@@ -278,7 +280,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/user-icon_291700.jpg' size='tiny'/>
+                    <Image src='/user-icon_291700.jpg' size='tiny' alt={'Generic Bio Picture'}/>
                     <Header content={'Chris Symon: Software Engineer'}/>
                     Chris built the the initial version of Huri Whakatau (or Jury Room) and while no longer with
                     us deserves to be remembered here (no, he's not dead. Just dead to me, return your emails man!).
@@ -307,7 +309,7 @@ export const About = () => {
                     <br/>
                     <br/>
                     <br/>
-                    <Image src='/darcycowan.jpg' size='tiny'/>
+                    <Image src='/darcycowan.jpg' size='tiny' alt={'Darcy Cowan Bio Picture'}/>
                     <Header content={'Darcy Cowan: Principle Software Engineer'}/>
                     Darcy obtained a Bachelor of Science in 2001. After spending 20 years in industry he joined the
                     dark side (because they have cookies) and is now completing a Master of Computer Science at the
@@ -335,7 +337,7 @@ export const About = () => {
                     </a>
                     <br/>
                     {/**/}
-                    <Header content={'Darcy Cowan: Principle Software Engineer'}/>
+                    <Header content={'Acknowledgements'}/>
                     Thank you to the Faculty of Māori & Indigenous Studies at University of Waikato for input and
                     mentorship.
                     <br/>
@@ -352,7 +354,7 @@ export const About = () => {
     ];
 
     return (
-        <div>
+        <div style={{padding: '1em 0em'}}>
             <NavBar handleChangeLanguage={handleChangeLanguage}/>
             <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars/>

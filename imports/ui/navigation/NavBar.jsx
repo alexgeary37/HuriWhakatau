@@ -56,6 +56,7 @@ export const NavBar = ({handleChangeLanguage}) => {
         <div className="navbar">
             <AcceptCookies />
             <Menu fixed="top" inverted
+                  aria-label="Fern header image"
                   size={'large'}
                   style={{
                       backgroundColor: 'black',
