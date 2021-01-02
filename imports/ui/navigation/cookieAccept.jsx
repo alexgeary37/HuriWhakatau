@@ -22,7 +22,7 @@ export const AcceptCookies = ({toggleModal}) => {
             flowing
             open={isOpen}
             position={'top center'}
-            trigger={<h2/>}
+            trigger={<span/>}
         >
             This site uses cookies &nbsp;&nbsp;
             <Button

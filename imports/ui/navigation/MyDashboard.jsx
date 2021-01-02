@@ -357,7 +357,8 @@ export const MyDashboard = () => {
     }
 
     return (
-        <div>
+        <div style={{padding: '1em 0em'}}
+        >
             {showTour &&
             <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
             }
@@ -443,7 +444,7 @@ export const MyDashboard = () => {
                                 }}>{potentialFriend.username}</span>
                                 <Button negative size={'mini'} compact={true} attached={'right'}
                                         onClick={() => addFriend(potentialFriend._id)}>
-                                    ADD
+                                    Request Friend
                                 </Button>
                             </Menu.Item>
                         ))}</div>}

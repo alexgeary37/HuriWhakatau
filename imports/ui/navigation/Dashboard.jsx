@@ -13,6 +13,10 @@ import Cookies from "universal-cookie/lib";
 
 export const Dashboard = () => {
     const [userLang, setUserLang] = useState("mā");
+    //set up changing language on site based on user nav menu selection
+    const handleChangeLanguage = (lang) => {
+        setUserLang(lang);
+    };
     const cookies = new Cookies();
     const [showTour, setShowTour] = useState(false);
     //set up tour of page
@@ -36,10 +40,7 @@ export const Dashboard = () => {
         toggleShowTour();
     }, []);
 
-    //set up changing language on site based on user nav menu selection
-    const handleChangeLanguage = (lang) => {
-        setUserLang(lang);
-    };
+
 
     const {discussions, publicDiscussions} = useTracker(() => {
         Meteor.subscribe("allDiscussions");

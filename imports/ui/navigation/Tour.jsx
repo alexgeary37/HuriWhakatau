@@ -16,6 +16,8 @@ export const Tour = ({TOUR_STEPS}) => {
                 cookies.set('myDashTour', 'complete', {path: '/'});
             } else if (step.target === ".signUp"){
                 cookies.set('signup', 'complete', {path: '/'});
+            } else if (['.participants'].includes(step.target)){
+                cookies.set("huichatTour",'complete', {path: '/'});
             }
         }
     }

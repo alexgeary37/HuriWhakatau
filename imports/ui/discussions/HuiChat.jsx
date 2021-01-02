@@ -9,7 +9,7 @@ import {
     Modal,
     Grid,
     GridColumn,
-    List,
+    List, GridRow,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -30,9 +30,19 @@ import {UserComment} from "/imports/ui/comments/UserComment";
 import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
 import {UserSummary} from "/imports/ui/users/UserSummary";
 import {Experiments} from "../../api/experiments";
+import {huichatTour, myUserSettings} from "../../api/tourSteps";
+import Cookies from "universal-cookie/lib";
+import {Tour} from "../navigation/Tour";
 
 //adaption of the Discussion.jsx to bring it in line with Tamahau's designs
 export const HuiChat = () => {
+    const cookies = new Cookies();
+    const [userLang, setUserLang] = useState("mā");
+    //set up changing language on site based on user nav menu selection
+    const handleChangeLanguage = (lang) => {
+        setUserLang(lang);
+    };
+    const [showTour, setShowTour] = useState(false);
     const filter = {};
     const {discussionId} = useParams();
     const [timedDiscussion, setTimedDiscussion] = useState(false); // introduction eg show/hide verdict proposal etc
@@ -44,12 +54,22 @@ export const HuiChat = () => {
     // use to allow comments or proposing / voting on verdicts
     // todo, if the user uses the browser back button to go back to dash from a timed discussion
     // and then to a non-timed discussion the timedDiscussion state stays true
-    const updateTimed = () => {
-        setTimedDiscussion(true);
-    };
-    const updateDeadline = (deadline) => {
-        setMutableDiscussionDeadline(deadline);
-    };
+    // const updateTimed = () => {
+    //     setTimedDiscussion(true);
+    // };
+    // const updateDeadline = (deadline) => {
+    //     setMutableDiscussionDeadline(deadline);
+    // };
+
+    const toggleShowTour = () => {
+        if (!cookies.get('huichatTour')) {
+            setShowTour(!showTour);
+        }
+    }
+
+    useEffect(() => {
+        toggleShowTour();
+    }, []);
 
     // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
     // user for discussions but not introductions, introductions should be finished by the group leader
@@ -94,8 +114,8 @@ export const HuiChat = () => {
         verdicts,
         discussionStatus,
         discussionTemplate,
-        discussionDeadline,
-        discussionTimeLimit,
+        // discussionDeadline,
+        // discussionTimeLimit,
         groupMembers, ///
         groupLeader, ///
         nextDiscussion, ///
@@ -118,8 +138,8 @@ export const HuiChat = () => {
         let discussionScenario;
         let discussionGroup;
         let discussionState;
-        let discussionTimeLimit;
-        let discussionDeadline;
+        // let discussionTimeLimit;
+        // let discussionDeadline;
         let discussionTopic;
         let discussionTemplate;
         let groupMembers = []; ///
@@ -146,10 +166,10 @@ export const HuiChat = () => {
             discussionTemplate = DiscussionTemplates.findOne({
                 _id: discussionScenario.discussionTemplateId,
             });
-            discussionTimeLimit = discussionTemplate
-                ? discussionTemplate.timeLimit
-                : 0;
-            discussionDeadline = discussion.deadline ? discussion.deadline : null;
+            // discussionTimeLimit = discussionTemplate
+            //     ? discussionTemplate.timeLimit
+            //     : 0;
+            // discussionDeadline = discussion.deadline ? discussion.deadline : null;
             publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
             discussionTopic = Topics.findOne({_id: discussionScenario.topicId});
             nextDiscussionId = discussion.nextDiscussion
@@ -161,7 +181,7 @@ export const HuiChat = () => {
                 _id: {$in: discussionGroup.members},
             }).fetch();
             //get the experiment id for the discussion and the group leader
-            experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}}, {fields:{groupLeader: 1}})
+            experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}}, {fields: {groupLeader: 1}})
             experimentId = experiment._id;
             theGroupLeader = experiment.groupLeader;
         }
@@ -175,8 +195,8 @@ export const HuiChat = () => {
             verdicts: Verdicts.find(filter, {sort: {postedTime: 1}}).fetch(),
             discussionStatus: discussionState,
             discussionTemplate: discussionTemplate,
-            discussionTimeLimit: discussionTimeLimit,
-            discussionDeadline: discussionDeadline,
+            // discussionTimeLimit: discussionTimeLimit,
+            // discussionDeadline: discussionDeadline,
             groupMembers: groupMembers, ///
             groupLeader: theGroupLeader, ///
             nextDiscussion: nextDiscussionId, ///
@@ -198,36 +218,36 @@ export const HuiChat = () => {
 
     useEffect(checkGroupMembership, [group]);
 
-    //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
-    // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
-    if (discussionDeadline == null && discussionTimeLimit === 0) {
-        //probably should refactor this
-    } else if (discussionDeadline == null && discussionTimeLimit > 0) {
-        let currentDateTime = new Date();
-        updateDeadline(
-            new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
-        );
-        Meteor.call(
-            "discussions.updateDeadline",
-            discussionId,
-            mutableDiscussionDeadline
-        );
-    }
-
-    if (discussionDeadline != null) {
-        let currentTime = new Date();
-        if (discussionDeadline < currentTime && discussionStatus === "active") {
-            Meteor.call("discussions.updateStatus", discussionId, "timedout");
-        } else if (
-            discussionDeadline > currentTime &&
-            !timedDiscussion &&
-            discussionStatus === "active"
-        ) {
-            updateTimed();
-            calculateTimeLeft();
-            //maybe put the useEffect scroll to bottom controlling state change (vv line 189) here
-        }
-    }
+    // //get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
+    // // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
+    // if (discussionDeadline == null && discussionTimeLimit === 0) {
+    //     //probably should refactor this
+    // } else if (discussionDeadline == null && discussionTimeLimit > 0) {
+    //     let currentDateTime = new Date();
+    //     updateDeadline(
+    //         new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
+    //     );
+    //     Meteor.call(
+    //         "discussions.updateDeadline",
+    //         discussionId,
+    //         mutableDiscussionDeadline
+    //     );
+    // }
+    //
+    // if (discussionDeadline != null) {
+    //     let currentTime = new Date();
+    //     if (discussionDeadline < currentTime && discussionStatus === "active") {
+    //         Meteor.call("discussions.updateStatus", discussionId, "timedout");
+    //     } else if (
+    //         discussionDeadline > currentTime &&
+    //         !timedDiscussion &&
+    //         discussionStatus === "active"
+    //     ) {
+    //         updateTimed();
+    //         calculateTimeLeft();
+    //         //maybe put the useEffect scroll to bottom controlling state change (vv line 189) here
+    //     }
+    // }
 
     // //set reference for end of discussion and scroll to that point on page load, *
     // *set another of these to scroll the outer part of the page up again
@@ -275,129 +295,140 @@ export const HuiChat = () => {
         Meteor.call("discussions.addProposer", discussionId);
 
     return (
-        <div style={{backgroundColor: 'rgb(30, 30, 30)'}}>
-            <NavBar/>
-            {/*hacky way to move content out from under menu*/}
-            {/*<br/>*/}
-            {/*<br/>*/}
-            {/*<br/>*/}
-            <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+        <Segment
+            inverted
+            vertical
+        >
+            {showTour &&
+            <Tour TOUR_STEPS={huichatTour}/>
+            }
+            <NavBar handleChangeLanguage={handleChangeLanguage}/>
+            <Sidebar.Pushable as={Segment} style={{height: '91vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars/>
                 <Container>
-                    <span style={{height: "22em"}}/>
-                    <Grid columns={2} style={{width: "110vh"}}>
-                        <GridColumn width={10} attached="left">
-                            <Comment.Group style={{overflow: "auto", height: "75vh"}}>
-                                {comments &&
-                                comments.map((comment) => (
-                                    <UserComment
-                                        key={comment._id}
-                                        comment={comment}
-                                        discussionStatus={discussionStatus}
-                                        groupLeader={groupLeader}
-                                        userCanEdit={
-                                            discussionTemplate
-                                                ? discussionTemplate.usersCanEditComments
-                                                : true
-                                        }
-                                    />
-                                ))}
-                                <div ref={commentsEndRef}/>
-                            </Comment.Group>
-                            {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
-                                <CommentForm
-                                    discussionId={discussionId}
-                                    isDiscussionPublic={discussionIsPublic}
-                                    isUserAGroupMember={userInGroup}
-                                    groupId={group._id}
-                                />)}
-                        </GridColumn>
-                        <GridColumn width={4}>
-                            <div style={{height: "87vh"}}>
-                                {/* this area will change depending on if isIntroduction, hide verdict stuff if true */}
-                                <Header
-                                    content={isIntroduction ? "" : "Verdicts"}
-                                    size="medium"
-                                />
-                                <Header
-                                    inverted
-                                    content={(scenario && scenario.title) || (topic && topic.title)}
-                                    size="medium"
-                                />
-                                {/* replace the topic with scenario only once old data is cleared out */}
-                                <Header as={'h5'} inverted
-                                        content=
-                                            {(scenario && scenario.description) ||
-                                            (topic && topic.description)}
-                                />
-                                <List style={{overflow: "auto", maxHeight: "50em"}}>
-                                    {!isIntroduction &&
-                                    verdicts &&
-                                    verdicts.map((verdict) => (
-                                        <List.Item key={verdict._id}>
-                                            <Verdict
-                                                key={verdict._id}
-                                                verdict={verdict}
-                                                onVote={hasReachedConsensus}
+                    <Segment vertical>
+                        <Grid columns={2} style={{width: "110vh"}} container>
+                            <GridRow>
+                                <GridColumn width={10} attached="left">
+                                    <Comment.Group style={{overflow: "auto", height: "65vh"}}>
+                                        {comments &&
+                                        comments.map((comment) => (
+                                            <UserComment
+                                                key={comment._id}
+                                                comment={comment}
+                                                discussionStatus={discussionStatus}
+                                                groupLeader={groupLeader}
+                                                userCanEdit={
+                                                    discussionTemplate
+                                                        ? discussionTemplate.usersCanEditComments
+                                                        : true
+                                                }
                                             />
-                                        </List.Item>
-                                    ))}
-                                    {!isIntroduction && group && hasReachedConsensus() && (
-                                        <Modal open={true}>
-                                            <Modal.Content>Consensus</Modal.Content>
-                                            <Modal.Actions>
-                                                <Button as={Link}
-                                                        to={nextDiscussion ? "/huichat/" + nextDiscussion : "/mydashboard"}
-                                                        content={nextDiscussion ? "Next discussion" : "Return to Dashboard"}/>
-                                            </Modal.Actions>
-                                        </Modal>
-                                    )}
-                                    {!isIntroduction &&
-                                    !userHasSubmittedVerdict() &&
-                                    discussionVerdictProposers &&
-                                    discussionStatus === "active" &&
-                                    Meteor.userId() === groupLeader &&
-                                    (discussionVerdictProposers.includes(Meteor.userId()) ? (
-                                        <VerdictForm discussionId={discussionId}/>
-                                    ) : (
-                                        <div style={{textAlign: "center"}}>
-                                            <Button
-                                                style={{margin: 10}}
-                                                content="Propose Verdict"
-                                                onClick={proposeVerdict}
-                                                primary
-                                            />
-                                        </div>
-                                    ))}
-                                    <Segment
-                                        style={{position: "absolute", bottom: "0px", overflow: "auto", height: "50vh"}}>
-                                        <Header content="Participants"/>
-                                        <Segment.Group>
-                                            {groupMembers &&
-                                            groupMembers.map((member) => (
-                                                <List.Item key={member._id}>
-                                                    <UserSummary
-                                                        member={member}
-                                                        handleUserVoted={handleUserGroupLeaderVote}
-                                                        userHasVoted={userVotedForLeader}
-                                                        groupId={group._id}
-                                                        groupLeader={groupLeader}
-                                                        discussionStatus={discussionStatus}
-                                                        closeChat={closeChat}
-                                                        discussionId={discussionId}
-                                                        nextDiscussionId={nextDiscussion}
-                                                        experimentId={experimentId}
+                                        ))}
+                                        <div ref={commentsEndRef}/>
+                                    </Comment.Group>
+                                    {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
+                                        <CommentForm
+                                            discussionId={discussionId}
+                                            isDiscussionPublic={discussionIsPublic}
+                                            isUserAGroupMember={userInGroup}
+                                            groupId={group._id}
+                                        />)}
+                                </GridColumn>
+                                <GridColumn width={4}>
+                                    <div style={{height: "83vh"}}>
+                                        {/* this area will change depending on if isIntroduction, hide verdict stuff if true */}
+                                        <Header
+                                            content={isIntroduction ? "" : "Verdicts"}
+                                            size="medium"
+                                            inverted
+                                        />
+                                        <Header
+                                            inverted
+                                            content={(scenario && scenario.title) || (topic && topic.title)}
+                                            size="medium"
+                                        />
+                                        {/* replace the topic with scenario only once old data is cleared out */}
+                                        <Header as={'h5'} inverted
+                                                content=
+                                                    {(scenario && scenario.description) ||
+                                                    (topic && topic.description)}
+                                        />
+                                        <List style={{overflow: "auto", maxHeight: "50em"}}>
+                                            {!isIntroduction &&
+                                            verdicts &&
+                                            verdicts.map((verdict) => (
+                                                <List.Item key={verdict._id}>
+                                                    <Verdict
+                                                        key={verdict._id}
+                                                        verdict={verdict}
+                                                        onVote={hasReachedConsensus}
                                                     />
                                                 </List.Item>
                                             ))}
-                                        </Segment.Group>
-                                    </Segment>
-                                </List>
-                            </div>
-                        </GridColumn>
-                    </Grid>
+                                            {!isIntroduction && group && hasReachedConsensus() && (
+                                                <Modal open={true}>
+                                                    <Modal.Content>Consensus</Modal.Content>
+                                                    <Modal.Actions>
+                                                        <Button as={Link}
+                                                                to={nextDiscussion ? "/huichat/" + nextDiscussion : "/mydashboard"}
+                                                                content={nextDiscussion ? "Next discussion" : "Return to Dashboard"}/>
+                                                    </Modal.Actions>
+                                                </Modal>
+                                            )}
+                                            {!isIntroduction &&
+                                            !userHasSubmittedVerdict() &&
+                                            discussionVerdictProposers &&
+                                            discussionStatus === "active" &&
+                                            Meteor.userId() === groupLeader &&
+                                            (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                                                <VerdictForm discussionId={discussionId}/>
+                                            ) : (
+                                                <div style={{textAlign: "center"}}>
+                                                    <Button
+                                                        style={{margin: 10}}
+                                                        content="Propose Verdict"
+                                                        onClick={proposeVerdict}
+                                                        primary
+                                                    />
+                                                </div>
+                                            ))}
+                                            <Segment
+                                                style={{
+                                                    position: "absolute",
+                                                    bottom: "0px",
+                                                    overflow: "auto",
+                                                    height: "50vh"
+                                                }}>
+                                                <Header content="Participants"/>
+                                                <Segment.Group>
+                                                    {groupMembers &&
+                                                    groupMembers.map((member) => (
+                                                        <List.Item key={member._id}>
+                                                            <UserSummary
+                                                                member={member}
+                                                                handleUserVoted={handleUserGroupLeaderVote}
+                                                                userHasVoted={userVotedForLeader}
+                                                                groupId={group._id}
+                                                                groupLeader={groupLeader}
+                                                                discussionStatus={discussionStatus}
+                                                                closeChat={closeChat}
+                                                                discussionId={discussionId}
+                                                                nextDiscussionId={nextDiscussion}
+                                                                experimentId={experimentId}
+                                                            />
+                                                        </List.Item>
+                                                    ))}
+                                                </Segment.Group>
+                                            </Segment>
+                                        </List>
+                                    </div>
+                                </GridColumn>
+                            </GridRow>
+                        </Grid>
+                    </Segment>
                 </Container>
             </Sidebar.Pushable>
-        </div>
+        </Segment>
     );
 };
