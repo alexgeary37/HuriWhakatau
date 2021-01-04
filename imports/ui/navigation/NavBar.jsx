@@ -134,6 +134,10 @@ export const NavBar = ({handleChangeLanguage}) => {
                             <Header as={'h2'} inverted
                                     style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}>About</Header>
                         </MenuItem>
+                        <MenuItem as={Link} to="/FAQ" name="FAQ">
+                            <Header as={'h2'} inverted
+                                    style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}>FAQ</Header>
+                        </MenuItem>
                     </MenuMenu>
                 </Container>
             </Menu>

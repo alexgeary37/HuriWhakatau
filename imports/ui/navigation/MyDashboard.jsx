@@ -1,12 +1,7 @@
 import {useTracker} from "meteor/react-meteor-data";
 import React, {useEffect, useState, Suspense, lazy} from "react";
 import {
-    Button,
-    Card,
-    Container,
-    Segment,
-    Header,
-    Grid,
+    Button, Card, Container, Segment, Header, Grid,
     GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input, Divider, Checkbox
 } from "semantic-ui-react";
 import '/imports/api/security'
@@ -310,7 +305,7 @@ export const MyDashboard = () => {
         return (
             <div style={{marginLeft: "10px", width: "40vh"}} onClick={(e) => e.stopPropagation()}>
                 <Input
-                    style={{marginTop: '10px'}}
+                    style={{marginTop: '10px', width:240}}
                     type="text"
                     placeholder="Username or email"
                     name="searchFriends"
@@ -368,20 +363,23 @@ export const MyDashboard = () => {
                 <Sidebar
                     as={Segment}
                     animation='overlay'
+                    className={(showSidebar ? "custom wide" : "very thin") + ' friends'}
                     icon='labeled'
-                    inverted
+                    // inverted
                     vertical
                     visible
-                    width={showSidebar ? "wide" : "very thin"}
+                    // width={showSidebar ? "wide" : "very thin"}
                     onMouseOver={!showSidebar ? handleShowSidebar : null}
                     onClick={handleShowSidebar}
                     style={{
-                        backgroundColor: 'rgb(30, 30, 30)',
-                        backgroundImage: !showSidebar ? `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})` : '',
-                        backgroundSize: '60px',
-                        backgroundRepeat: 'repeat-y'
+                        backgroundColor:"#f4f3f5"
+                        // backgroundColor: 'rgb(30, 30, 30)',
+                        // backgroundImage: !showSidebar ? `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})` : '',
+                        // backgroundSize: '60px',
+                        // backgroundRepeat: 'repeat-y'
                     }}
                 >
+                    <Icon size={'big'} name={(showSidebar ? 'left':'right') + ' arrow alternate circle'} style={{marginTop:"-10px",marginLeft:(showSidebar ? "220px":"35px")}}/>
                     {/*my friends*/}
                     <Menu.Item style={{marginTop:"20px", marginLeft: "10px", fontWeight: "bold"}}
                                title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>
@@ -392,6 +390,7 @@ export const MyDashboard = () => {
                         <br/>
                         Friends
                     </Menu.Item>
+                    <Divider/>
                     <List style={{height: "15em"}}>
                         {showSidebar && friends && friends.map((friend) => (
                             <Menu.Item style={{marginLeft: "20px"}} key={friend._id}
@@ -462,6 +461,7 @@ export const MyDashboard = () => {
                         <br/>
                         Group Members
                     </Menu.Item>
+                    <Divider/>
                     <List style={{height: "15em"}}>
                         {showSidebar && groupMembers && groupMembers.map((groupMember) => (
                             <Menu.Item style={{marginLeft: "20px"}} key={groupMember._id}
@@ -532,7 +532,7 @@ export const MyDashboard = () => {
                             </Header>
                         </Segment>
 
-                        <Grid doubling>
+                        <Grid stackable >
                             <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
                                 <GridColumn width={16}>
                                     <Divider/>
@@ -575,9 +575,10 @@ export const MyDashboard = () => {
                                         <Card.Content extra>
                                             <Checkbox
                                                 toggle
+                                                id={'filterActive'}
                                                 checked={filterDiscussionStatus.indexOf("active") > -1}
                                                 onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
-                                            &nbsp; Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}
+                                            <label style={{color:"white", marginLeft:"10px"}} for={'filterActive'}>Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
                                         </Card.Content>
                                     </Segment>
                                 </GridColumn>

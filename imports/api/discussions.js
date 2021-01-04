@@ -110,13 +110,6 @@ Meteor.methods({
     },
 
     "discussions.addUserToTypingList"(discussionId, username) {
-        console.log("adding server side", username);
-        console.log("datetime start", new Date())
-//, usersTyping:{$elemMatch: {user: {$ne: username}}}
-//         Discussions.update({_id:discussionId, }, {
-//             $addToSet: {usersTyping: {user:username, timestamp: Date.now()}},
-//         })
-
         Discussions.update({_id:discussionId,
                 $or: [{usersTyping:{$size:0}}, {$nor:[{usersTyping:{$elemMatch:{user:{$eq:username}}}}]}]},
             {
@@ -125,9 +118,7 @@ Meteor.methods({
 
 
         Meteor.setTimeout(() => {
-            console.log("removing")
             let datetimeThreshold = Date.now() - 1000;
-            console.log("datetimethreshold", datetimeThreshold,new Date(datetimeThreshold))
             Discussions.update({_id:discussionId},
                 {$pull:{usersTyping: { user: username, timestamp: { $lt: datetimeThreshold } } }},
                )

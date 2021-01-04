@@ -1,4 +1,4 @@
-import {Segment, Sidebar} from "semantic-ui-react";
+import {Menu, Segment, Sidebar} from "semantic-ui-react";
 import React from "react";
 
 export const Sidebars = () => {
@@ -9,6 +9,7 @@ export const Sidebars = () => {
                 as={Segment}
                 animation='push'
                 icon='labeled'
+                aria-label="sidebar image left"
                 inverted
                 vertical
                 visible
@@ -24,6 +25,7 @@ export const Sidebars = () => {
                 as={Segment}
                 animation='push'
                 icon='labeled'
+                aria-label="sidebar image right"
                 inverted
                 vertical
                 direction={'right'}

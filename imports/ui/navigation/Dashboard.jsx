@@ -71,7 +71,9 @@ export const Dashboard = () => {
             {/*<span style={{height:"20em"}} />*/}
             <Sidebar.Pushable as={Segment} style={{minHeight: 800, overflow: "auto", backgroundColor: 'rgb(25,50,26)'}}>
                 <Sidebars/>
-                <Container inverted={'true'} style={{overflow: "auto", height: "100vh"}}>
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "90vh"}}>
+
+                <Container inverted={'true'} >
                     {/*header from semantic ui layout example*/}
                     <Container text>
                         <Header
@@ -138,6 +140,7 @@ export const Dashboard = () => {
 
 
                 </Container>
+                </Sidebar.Pusher>
             </Sidebar.Pushable>
         </Segment>
     );
