@@ -4,6 +4,7 @@ import {Router, Route, Switch} from "react-router";
 import {BrowserRouter, useHistory} from "react-router-dom";
 import history from "history";
 import {AddUser} from "/imports/ui/users/AddUser";
+import {FAQ} from "./FAQ";
 import {About} from "./About";
 import {HuiChat} from "/imports/ui/discussions/HuiChat"
 import {Dashboard} from "./Dashboard";
@@ -38,6 +39,7 @@ export const App = () => {
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/" component={Dashboard}/>
+                    <Route exact path="/FAQ" component={FAQ}/>
                     <Route exact path="/about" component={About}/>
                     <Route exact path="/AddUser" component={AddUser}/>
                     <Route exact path="/assignroles" component={AssignRoles}/>

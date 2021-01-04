@@ -242,13 +242,16 @@ Meteor.methods({
             const user = Meteor.users.findOne({_id: userId})
             if (user) {
                 const exportingUserEmail = user.emails[0].address;
-                // const accessToken = Accounts._generateStampedLoginToken();
-                //
-                // Accounts._insertLoginToken(user._id, accessToken);
                 const verificationToken = Accounts.generateVerificationToken(userId, exportingUserEmail);
 
-                // const confirmationUrl = process.env.ROOT_URL + 'confirm-identity/' + accessToken.token + "/" + userId;
-                const verificationURL = process.env.ROOT_URL + 'confirm-identity/' + verificationToken.token + "/" + userId;
+                let verificationURL;
+                if (process.env.ROOT_URL[ process.env.ROOT_URL.length -1 ] === '/'){
+                    console.log("slash = yes");
+                    verificationURL = process.env.ROOT_URL + 'confirm-identity/' + verificationToken.token + "/" + userId;
+                } else {
+                    console.log("slash = no");
+                    verificationURL = process.env.ROOT_URL + '/confirm-identity/' + verificationToken.token + "/" + userId;
+                }
 
                 let emailBody = `Please confirm your identity by clicking the link below.            
             
@@ -263,12 +266,6 @@ Meteor.methods({
             }
         }
     },
-
-    // "users.removeLoginToken"(userId, loginToken){
-    //   Meteor.users.update({userId}, {
-    //       $pull:{"services.resume.loginTokens."}
-    //   });
-    // },
 
     // send all user data to user email as json file
     "users.exportUserData"(userId){
