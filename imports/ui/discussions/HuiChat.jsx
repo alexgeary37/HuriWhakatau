@@ -370,9 +370,12 @@ export const HuiChat = () => {
                                                 <Modal open={true}>
                                                     <Modal.Content>Consensus</Modal.Content>
                                                     <Modal.Actions>
+                                                        {nextDiscussion &&
                                                         <Button as={Link}
-                                                                to={nextDiscussion ? "/huichat/" + nextDiscussion : "/mydashboard"}
-                                                                content={nextDiscussion ? "Next discussion" : "Return to Dashboard"}/>
+                                                                to={"/huichat/" + nextDiscussion}
+                                                                content={"Next discussion"}/>}
+                                                        <Button as={Link} to="/mydashboard" content="Return to Dashboard" />
+                                                        <Button content="View Discussion" onClick={() => setOpenConsensusModal('closed')} />
                                                     </Modal.Actions>
                                                 </Modal>
                                             )}

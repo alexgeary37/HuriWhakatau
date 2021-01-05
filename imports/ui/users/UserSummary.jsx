@@ -165,33 +165,33 @@ export const UserSummary = ({
             <Icon className="mountain"
                   size='small'
                   bordered
-                  title={member.pepeha ?
-                      member.pepeha.mountain ?
-                          member.pepeha.mountain : "no mountain set" : "no mountain set"}/>
+                  title={member.profile.pepeha ?
+                      member.profile.pepeha.mountain ?
+                          member.profile.pepeha.mountain : "no mountain set" : "no mountain set"}/>
             <Icon className="river"
                   size='small'
                   bordered
-                  title={member.pepeha ?
-                      member.pepeha.river ?
-                          member.pepeha.river : "no river set" : "no river set"}/>
+                  title={member.profile.pepeha ?
+                      member.profile.pepeha.river ?
+                          member.profile.pepeha.river : "no river set" : "no river set"}/>
             <Icon className="waka"
                   size='small'
                   bordered
-                  title={member.pepeha ?
-                      member.pepeha.waka ?
-                          member.pepeha.waka : "no waka set" : "no waka set"}/>
+                  title={member.profile.pepeha ?
+                      member.profile.pepeha.waka ?
+                          member.profile.pepeha.waka : "no waka set" : "no waka set"}/>
             <Icon className="iwi"
                   size='small'
                   bordered
-                  title={member.pepeha ?
-                      member.pepeha.iwi ?
-                          member.pepeha.iwi : "no iwi set" : "no iwi set"}/>
+                  title={member.profile.pepeha ?
+                      member.profile.pepeha.iwi ?
+                          member.profile.pepeha.iwi : "no iwi set" : "no iwi set"}/>
             <Icon className="user"
                   size='small'
                   bordered
-                  title={member.pepeha ?
-                      member.pepeha.role ?
-                          member.pepeha.role : "no role set" : "no role set"}/>
+                  title={member.profile.pepeha ?
+                      member.profile.pepeha.role ?
+                          member.profile.pepeha.role : "no role set" : "no role set"}/>
             {discussionStatus === "active" &&
             Meteor.userId() === member._id &&
             <div className="reactions">
