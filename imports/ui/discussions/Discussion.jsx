@@ -326,7 +326,11 @@ export const Discussion = () => { ///
                     <Modal open={true} size='mini'>
                       <Modal.Content>Discussion reached a consensus</Modal.Content>
                       <Modal.Actions>
-                        <Button as={Link} to="/" content="Return to Dashboard" />
+                        {nextDiscussionId &&
+                        <Button as={Link}
+                                to={"/discussion/" + nextDiscussionId}
+                                content={"Next discussion"}/>}
+                        <Button as={Link} to="/mydashboard" content="Return to Dashboard" />
                         <Button content="View Discussion" onClick={() => setOpenConsensusModal('closed')} />
                       </Modal.Actions>
                     </Modal>

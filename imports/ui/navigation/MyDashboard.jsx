@@ -563,7 +563,7 @@ export const MyDashboard = () => {
                                         {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
                                         {isIndigenous !== null &&
-                                        <ListItem style={{overflow: "auto", height: "16em"}}
+                                        <ListItem style={{overflow: "auto", height: "16em", minWidth:"300px"}}
                                                   description={myDiscussions &&
                                                   myDiscussions.filter((discussion) => filterDiscussionStatus.indexOf(discussion.status) > -1 ).map((discussion) => (
                                                       <DiscussionSummary

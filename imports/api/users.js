@@ -320,6 +320,15 @@ Meteor.methods({
         }
     },
 
+    "users.sendFeedback"(message){
+        Email.send({
+            to: "huriwhakatau@gmail.com",
+            from: "huriwhakatau@gmail.com",
+            subject: "User privacy feedback",
+            text: message,
+        });
+    }
+
 })
 ;
 

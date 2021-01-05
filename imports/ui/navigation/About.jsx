@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {
     Container, Segment, Header, Icon,
-    Image, Sidebar, Tab, Message,
+    Image, Sidebar, Tab, Message, Divider,
 } from "semantic-ui-react";
 import {Random} from "meteor/random";
 import {NavBar} from "/imports/ui/navigation/NavBar";
@@ -77,7 +77,7 @@ export const About = () => {
         },
         {
             menuItem: 'Our People', render: () =>
-                <Tab.Pane inverted style={{overflow: "auto", height: "80vh", border: 'none'}}>
+                <Tab.Pane inverted style={{border: 'none'}}>
                     <Image src='/PanosProfilePhoto3.jpg' size='tiny' alt={'Panos Patros Bio Picture'}/>
                     <Header content={'Panos Patros: PI. The cool kind: Principal Investigator'}/>
                     Panos is a Member of Engineering New Zealand and is interested in various aspects of Software
@@ -100,9 +100,7 @@ export const About = () => {
                     <a href={"https://www.linkedin.com/in/panos-patros/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src='/TeTaka.jpg' size='tiny' alt={'Te Taka Bio Picture'}/>
                     <Header content={'Te Taka Keegan: Associate Investigator'}/>
                     Te Taka completed a PhD in 2007, titled Indigenous Language Usage in a Digital Library: He
@@ -127,9 +125,7 @@ export const About = () => {
                     <a href={"https://www.linkedin.com/in/te-taka-keegan-505149b/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src={Random.choice(['/EarlyPeterCapaldi.jpg', '/Tony_Smith.jpg'])} size='tiny'
                            alt={'Tony Smith Bio Picture'}/>
                     <Header content={'Tony Smith: Associate Investigator'}/>
@@ -153,9 +149,7 @@ export const About = () => {
                     <a href={"https://www.linkedin.com/in/tony-smith-84348a45/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src={Random.choice(['/aarondant_real.jpg', '/aarondant.jpg'])} size='tiny'
                            alt={'Aaron Dant Bio Picture'}/>
                     <Header content={'Aaron Dant: Key Researcher'}/>
@@ -182,9 +176,7 @@ export const About = () => {
                     <a href={"https://www.linkedin.com/in/aaron-dant-32365a160/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src='/PhilFeldman.jpg' size='tiny' alt={'Phil Feldman Bio Picture'}/>
                     <Header content={'Phil Feldman: Key Researcher'}/>
                     Phil is Research Scientist at ASRC Federal and completing his Phd and is also leading the
@@ -211,9 +203,7 @@ export const About = () => {
                     <a href={"phifel.wordpress.com/"} target={"_blank"}>
                         <Icon className={"wordpress"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src='/Alex-Geary.jpg' size='tiny' alt={'Alex Geary Bio Picture'}/>
                     <Header content={'Alex Geary: Research Assistant and Software Engineer'}/>
                     Alex is currently completing his Bachelor of Computer Science with Honours at the University of
@@ -234,10 +224,7 @@ export const About = () => {
                     <a href={"https://linkedin.com/in/alex-geary-b75438144/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src='/tamahaubrown.jpg' size='tiny' alt={'Tamahau Brown Bio Picture'}/>
                     <Header content={'Tamahau Brown: Research Assistant and Software Engineer'}/>
                     Tamahau is currently completing his Bachelor of Computer Science with Honours at the University
@@ -256,9 +243,7 @@ export const About = () => {
                     <a href={"https://www.linkedin.com/in/tamahau-brown-9287b7139/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src='/PriyankVyas.jfif' size='tiny' alt={'Priyank Vyas Bio Picture'}/>
                     <Header content={'Priyank Vyas: Research Assistant and Software Engineer'}/>
                     Priyank has a Bachelor of Computing and Mathematical Sciences focused in Computer Science from
@@ -277,9 +262,7 @@ export const About = () => {
                     <a href={"https://www.linkedin.com/in/priyank-vyas-644501110/"} target={"_blank"}>
                         <Icon className={"linkedin"}/>
                     </a>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <Image src='/user-icon_291700.jpg' size='tiny' alt={'Generic Bio Picture'}/>
                     <Header content={'Chris Symon: Software Engineer'}/>
                     Chris built the the initial version of Huri Whakatau (or Jury Room) and while no longer with
@@ -298,16 +281,13 @@ export const About = () => {
                         <Icon className={"linkedin"}/>
                     </a>
                     {/* here be dragons, I mean stuff we can't show yet*/}
-                    {/*<br/>*/}
-                    {/*<br/>*/}
-                    {/*<br/>*/}
+                    {/*<Divider/>*/}
                     {/*<Image src='/tangiora-maney.jpg' size='tiny' />*/}
                     {/*<Header content={'Tangiora Maney: Design Consultant'}/>*/}
                     {/*Tangiora is currently completing her Bachelor of Design, Communication Design at the University of Waikato.*/}
                     {/*She has provided valuable input on the design of Huri Whakatau.*/}
                     {/*https://www.linkedin.com/in/tangiora-maney-a18188199/*/}
-                    <br/>
-                    <br/>
+                    <Divider/>
                     <br/>
                     <Image src='/darcycowan.jpg' size='tiny' alt={'Darcy Cowan Bio Picture'}/>
                     <Header content={'Darcy Cowan: Principle Software Engineer'}/>
@@ -356,15 +336,17 @@ export const About = () => {
     return (
         <div style={{padding: '1em 0em'}}>
             <NavBar handleChangeLanguage={handleChangeLanguage}/>
-            <Sidebar.Pushable as={Segment} style={{height: '100vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+            <Sidebar.Pushable as={Segment} style={{height: '93vh', backgroundColor: 'rgb(30, 30, 30)'}}>
                 <Sidebars/>
-                <Container inverted={'true'}>
-                    <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
-                        <span style={{height: "32em"}}/>
-                        <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>
-                        <Tab menu={{inverted: true}} panes={panes}/>
-                    </Segment>
-                </Container>
+                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "80vh",}}>
+                    <Container inverted={'true'}>
+                        <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
+                            <span style={{height: "32em"}}/>
+                            <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>
+                            <Tab menu={{inverted: true}} panes={panes}/>
+                        </Segment>
+                    </Container>
+                </Sidebar.Pusher>
             </Sidebar.Pushable>
         </div>
     );
