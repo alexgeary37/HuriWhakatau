@@ -49,23 +49,24 @@ export const Verdict = ({ verdict, onVote, discussionStatus }) => {
             />
           </div>
         );
-      } else {
-        // Discussion is no longer active, so the buttons are disabled.
-        return (
-          <div style={{ paddingBottom: 5, textAlign: "center" }}>
-            <Button
-              content="Affirm"
-              disabled
-              size="mini"
-            />
-            <Button
-              content="Reject"
-              disabled
-              size="mini"
-            />
-          </div>
-        );
       }
+      // else { //any reason we want disabled buttons rather than simply removing?
+      //   // Discussion is no longer active, so the buttons are disabled.
+      //   return (
+      //     <div style={{ paddingBottom: 5, textAlign: "center" }}>
+      //       <Button
+      //         content="Affirm"
+      //         disabled
+      //         size="mini"
+      //       />
+      //       <Button
+      //         content="Reject"
+      //         disabled
+      //         size="mini"
+      //       />
+      //     </div>
+      //   );
+      // }
     }
   };
 

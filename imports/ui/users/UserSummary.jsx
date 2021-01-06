@@ -137,13 +137,13 @@ export const UserSummary = ({
                 />
             )}
             {Meteor.userId() !== member._id &&
-            !groupLeader &&
+            !groupLeader && !userHasVoted &&
             (discussionStatus = "active") && (
                 <Button
                     disabled={userHasVoted}
                     positive
                     value={member._id}
-                    content={"vote as leader"}
+                    content={"Vote as leader"}
                     onClick={({target}) => {
                         submitLeaderVote(target.value);
                     }}
