@@ -9,7 +9,7 @@ import {
     Modal,
     Grid,
     GridColumn,
-    List, GridRow,
+    List, GridRow, Divider,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -255,8 +255,8 @@ export const HuiChat = () => {
     const scrollToBottom = () => {
         commentsEndRef.current.scrollIntoView({behavior: "auto"});
     };
-
-    useEffect(scrollToBottom, [comments]);
+    // useEffect(scrollToBottom, []);
+    useEffect(scrollToBottom, [,comments.filter(x => x.authorId === Meteor.userId()).length]);
 
     /// WHOLE block below
     const handleUserGroupLeaderVote = () => {
@@ -307,9 +307,9 @@ export const HuiChat = () => {
                 <Sidebars/>
                 <Container>
                     <Segment vertical>
-                        <Grid columns={2} style={{width: "110vh"}} container>
+                        <Grid columns={3} style={{width: "110vh"}} container >
                             <GridRow>
-                                <GridColumn width={10} attached="left">
+                                <GridColumn width={8} attached="left">
                                     <Comment.Group style={{overflow: "auto", height: "65vh"}}>
                                         {comments &&
                                         comments.map((comment) => (
@@ -339,21 +339,58 @@ export const HuiChat = () => {
                                     <div style={{height: "83vh"}}>
                                         {/* this area will change depending on if isIntroduction, hide verdict stuff if true */}
                                         <Header
-                                            content={isIntroduction ? "" : "Verdicts"}
-                                            size="medium"
-                                            inverted
-                                        />
-                                        <Header
                                             inverted
                                             content={(scenario && scenario.title) || (topic && topic.title)}
                                             size="medium"
                                         />
+                                        <Divider/>
                                         {/* replace the topic with scenario only once old data is cleared out */}
                                         <Header as={'h5'} inverted
                                                 content=
                                                     {(scenario && scenario.description) ||
                                                     (topic && topic.description)}
                                         />
+                                        <List style={{overflow: "auto", maxHeight: "50em"}}>
+                                            <Segment
+                                                style={{
+                                                    position: "absolute",
+                                                    bottom: "0px",
+                                                    overflow: "auto",
+                                                    height: "50vh"
+                                                }}>
+                                                <Header content="Participants"/>
+                                                <Segment.Group>
+                                                    {groupMembers &&
+                                                    groupMembers.map((member) => (
+                                                        <List.Item key={member._id}>
+                                                            <UserSummary
+                                                                member={member}
+                                                                handleUserVoted={handleUserGroupLeaderVote}
+                                                                userHasVoted={userVotedForLeader}
+                                                                groupId={group._id}
+                                                                groupLeader={groupLeader}
+                                                                discussionStatus={discussionStatus}
+                                                                closeChat={closeChat}
+                                                                discussionId={discussionId}
+                                                                nextDiscussionId={nextDiscussion}
+                                                                experimentId={experimentId}
+                                                            />
+                                                        </List.Item>
+                                                    ))}
+                                                </Segment.Group>
+                                            </Segment>
+                                        </List>
+                                    </div>
+                                </GridColumn>
+                                <GridColumn width={4}>
+                                    <div style={{height: "83vh"}}>
+                                        {/* this area will change depending on if isIntroduction, hide verdict stuff if true */}
+                                        <Header
+                                            content={isIntroduction ? "" : "Verdicts"}
+                                            size="medium"
+                                            inverted
+                                        />
+                                        <Divider/>
                                         <List style={{overflow: "auto", maxHeight: "50em"}}>
                                             {!isIntroduction &&
                                             verdicts &&
@@ -362,6 +399,7 @@ export const HuiChat = () => {
                                                     <Verdict
                                                         key={verdict._id}
                                                         verdict={verdict}
+                                                        discussionStatus={discussionStatus}
                                                         onVote={hasReachedConsensus}
                                                     />
                                                 </List.Item>
@@ -396,34 +434,6 @@ export const HuiChat = () => {
                                                     />
                                                 </div>
                                             ))}
-                                            <Segment
-                                                style={{
-                                                    position: "absolute",
-                                                    bottom: "0px",
-                                                    overflow: "auto",
-                                                    height: "50vh"
-                                                }}>
-                                                <Header content="Participants"/>
-                                                <Segment.Group>
-                                                    {groupMembers &&
-                                                    groupMembers.map((member) => (
-                                                        <List.Item key={member._id}>
-                                                            <UserSummary
-                                                                member={member}
-                                                                handleUserVoted={handleUserGroupLeaderVote}
-                                                                userHasVoted={userVotedForLeader}
-                                                                groupId={group._id}
-                                                                groupLeader={groupLeader}
-                                                                discussionStatus={discussionStatus}
-                                                                closeChat={closeChat}
-                                                                discussionId={discussionId}
-                                                                nextDiscussionId={nextDiscussion}
-                                                                experimentId={experimentId}
-                                                            />
-                                                        </List.Item>
-                                                    ))}
-                                                </Segment.Group>
-                                            </Segment>
                                         </List>
                                     </div>
                                 </GridColumn>

@@ -229,6 +229,7 @@ export const UserSettings = () => {
     const sendFeedback = () => {
         if(userFeedback.length > 0){
             Meteor.call("users.sendFeedback", userFeedback)
+            setUserFeedback("");
         }
     }
 
@@ -331,7 +332,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userFirstName}
                                                    placeholder={"Enter First Name"}
-                                                   aria-lable={'Enter First Name'}
+                                                   aria-label={'Enter First Name'}
                                                    type="text"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserFirstName(target.value)}
@@ -347,7 +348,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userLastName}
                                                    placeholder={"Enter Last Name"}
-                                                   aria-lable={'Enter Last Name'}
+                                                   aria-label={'Enter Last Name'}
                                                    type="text"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserLastName(target.value)}
@@ -363,7 +364,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userGender}
                                                    placeholder={"Enter Gender"}
-                                                   aria-lable={'Enter Gender'}
+                                                   aria-label={'Enter Gender'}
                                                    type="text"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserGender(target.value)}
@@ -379,7 +380,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userDoB}
                                                    placeholder={"Enter Date of Birth"}
-                                                   aria-lable={'Enter Date of Birth'}
+                                                   aria-label={'Enter Date of Birth'}
                                                    type="date"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserDoB(target.value)}
@@ -395,7 +396,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userEthnicity}
                                                    placeholder={"Enter Ethnic Identity"}
-                                                   aria-lable={'Enter Ethnic Identity'}
+                                                   aria-label={'Enter Ethnic Identity'}
                                                    type="text"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserEthnicity(target.value)}
@@ -411,7 +412,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userReligion}
                                                    placeholder={"Enter Religion"}
-                                                   aria-lable={'Enter Religion'}
+                                                   aria-label={'Enter Religion'}
                                                    type="text"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserReligion(target.value)}
@@ -427,7 +428,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userLocation}
                                                    placeholder={"Enter Location"}
-                                                   aria-lable={'Enter Location'}
+                                                   aria-label={'Enter Location'}
                                                    type="text"
                                                    readOnly={!changeUserDetails}
                                                    onChange={({target}) => setUserLocation(target.value)}
@@ -473,7 +474,7 @@ export const UserSettings = () => {
                                                 value={userMountain}
                                                 placeholder={'Select Mountain'}
                                                 name="mountain"
-                                                aria-lable={'Pepeha Mountain'}
+                                                aria-label={'Pepeha Mountain'}
                                                 readOnly={!changeUserPepeha}
                                                 lazyLoad
                                                 allowAdditions
@@ -507,7 +508,7 @@ export const UserSettings = () => {
                                                 text={userRiver}
                                                 value={userRiver}
                                                 placeholder={'Select River'}
-                                                aria-lable={'Pepeha River'}
+                                                aria-label={'Pepeha River'}
                                                 name="river"
                                                 readOnly={!changeUserPepeha}
                                                 lazyLoad
@@ -557,7 +558,7 @@ export const UserSettings = () => {
                                                 text={userWaka}
                                                 value={userWaka}
                                                 placeholder={'Select Waka'}
-                                                aria-lable={'Pepeha Waka'}
+                                                aria-label={'Pepeha Waka'}
                                                 name="waka"
                                                 readOnly={!changeUserPepeha}
                                                 lazyLoad
@@ -591,7 +592,7 @@ export const UserSettings = () => {
                                                 text={userIwi}
                                                 value={userIwi}
                                                 placeholder={'Select Iwi'}
-                                                aria-lable={'Pepeha Iwi'}
+                                                aria-label={'Pepeha Iwi'}
                                                 name="iwi"
                                                 readOnly={!changeUserPepeha}
                                                 lazyLoad
@@ -623,7 +624,7 @@ export const UserSettings = () => {
                                             <br/>
                                             <Input value={user && userRole}
                                                    placeholder={"Enter Employment or Role"}
-                                                   aria-lable={'Pepeha Employment or Role'}
+                                                   aria-label={'Pepeha Employment or Role'}
                                                    type="text"
                                                    readOnly={!changeUserPepeha}
                                                    onChange={({target}) => setUserRole(target.value)}
@@ -668,7 +669,8 @@ export const UserSettings = () => {
                                         <Divider/>
                                         {siteGlossary.siteName[userLang]} takes privacy and data sovereignty seriously.
                                         But we are fallible humans, if there is anything we have overlooked or
-                                        undervalued please let us know.
+                                        undervalued please let us know. User feedback is anonymous, if you would like a
+                                        response please include an email address.
                                         <br/>
                                         Send {siteGlossary.siteName[userLang]} a message:
                                         <Form>

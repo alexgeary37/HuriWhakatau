@@ -9,7 +9,7 @@ import {
   Modal,
   Grid,
   GridColumn,
-  List,
+  List, Divider,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -266,12 +266,13 @@ export const Discussion = () => { ///
         <Sidebars />
         <Container attached="bottom" style={{ width: "110vh"}}>
           <Grid columns={3}>             {/**/}
-              <GridColumn width={3} style={{ height: "90vh"}}>
+              <GridColumn width={4} style={{ height: "90vh"}}>
                 <Header
                   inverted
                   content={(scenario && scenario.title) || (topic && topic.title)}
                   size="medium"
                 />
+                <Divider/>
                 {/* replace the topic with scenario only once old data is cleared out */}
                 <Header as={'h5'} inverted
                       content=
@@ -280,7 +281,7 @@ export const Discussion = () => { ///
                 />
                 {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}
               </GridColumn>
-              <GridColumn width={10}>
+              <GridColumn width={8}>
                 <div
                   style={{ position: "absolute", bottom: "0px", width: "95%" }}
                 >
@@ -309,8 +310,9 @@ export const Discussion = () => { ///
                   )}
                 </div>
               </GridColumn>
-              <GridColumn width={3}>
+              <GridColumn width={4}>
                 <Header inverted content="Verdicts" size="medium" />
+                <Divider/>
                 <List style={{ overflow: "auto", maxHeight: "50em" }}>
                   {verdicts && verdicts.map((verdict) => (
                     <List.Item key={verdict._id}>

@@ -19,6 +19,7 @@ import "/imports/api/rivers"
 import "/imports/api/users"
 import "/imports/api/glossary";
 import "/imports/api/commentRatings";
+import "/imports/api/tutorialVideos";
 
 Meteor.startup(() => {
     process.env.MAIL_URL =
