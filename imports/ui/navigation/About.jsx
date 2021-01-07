@@ -8,6 +8,7 @@ import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Sidebars} from "/imports/ui/navigation/Sidebars";
 import {siteGlossary} from "../../api/glossary";
 import Cookies from "universal-cookie/lib";
+import {Sidebarsfriends} from "./Sidebars-friends";
 
 export const About = () => {
     const cookies = new Cookies();
@@ -333,21 +334,36 @@ export const About = () => {
         },
     ];
 
+    const aboutPageContent = () => {
+        return(
+            <Container inverted={'true'}>
+                <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
+                    <span style={{height: "32em"}}/>
+                    <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>
+                    <Tab menu={{inverted: true}} panes={panes}/>
+                </Segment>
+            </Container>
+        );
+    }
+
     return (
-        <div style={{padding: '1em 0em'}}>
+        <Segment inverted
+                 style={{minHeight: 800, padding: '1em 0em'}}
+                 vertical>
             <NavBar handleChangeLanguage={handleChangeLanguage}/>
             <Sidebar.Pushable as={Segment} style={{height: '93vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Sidebars/>
-                <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "80vh",}}>
-                    <Container inverted={'true'}>
-                        <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
-                            <span style={{height: "32em"}}/>
-                            <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>
-                            <Tab menu={{inverted: true}} panes={panes}/>
-                        </Segment>
-                    </Container>
-                </Sidebar.Pusher>
+                <Sidebarsfriends page={aboutPageContent}/>
+                {/*<Sidebars/>*/}
+                {/*<Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "80vh",}}>*/}
+                {/*    <Container inverted={'true'}>*/}
+                {/*        <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>*/}
+                {/*            <span style={{height: "32em"}}/>*/}
+                {/*            <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>*/}
+                {/*            <Tab menu={{inverted: true}} panes={panes}/>*/}
+                {/*        </Segment>*/}
+                {/*    </Container>*/}
+                {/*</Sidebar.Pusher>*/}
             </Sidebar.Pushable>
-        </div>
+        </Segment>
     );
 };

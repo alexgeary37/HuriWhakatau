@@ -30,6 +30,7 @@ import { UserComment } from "/imports/ui/comments/UserComment";
 import { VerdictForm } from "/imports/ui/verdicts/VerdictForm";
 import { Timer } from "./Timer"; ///
 import Cookies from "universal-cookie/lib";
+import {Sidebarsfriends} from "../navigation/Sidebars-friends";
 
 export const Discussion = () => { ///
   const cookies = new Cookies();
@@ -55,16 +56,13 @@ export const Discussion = () => { ///
   // todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
   const updateTimed = () => {
-    console.log('updateTimed');
     setTimedDiscussion(true);
   };
   const updateDeadline = (deadline) => {
-    console.log('updateDeadline');
     setMutableDiscussionDeadline(deadline);
   };
   // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
-    console.log('calculateTimeLeft');
     let current = new Date();
     let hours = Math.floor(
       ((discussionDeadline - current) % (1000 * 60 * 60 * 24)) /
@@ -255,76 +253,70 @@ export const Discussion = () => { ///
 
   const nextDiscussion = () => history.push("/discussion/" + nextDiscussionId);
 
-  return (
-    <div>                     {/**/}
-      <NavBar handleChangeLanguage={handleChangeLanguage}/>
-      {/*hacky way to move content out from under menu*/}
-      <br />
-      <br />
-      <br />
-      <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-        <Sidebars />
+  const discussionPageContent = () =>{
+    return(
         <Container attached="bottom" style={{ width: "110vh"}}>
           <Grid columns={3}>             {/**/}
-              <GridColumn width={4} style={{ height: "90vh"}}>
-                <Header
+            <GridColumn width={4} style={{ height: "90vh"}}>
+              <Header
                   inverted
                   content={(scenario && scenario.title) || (topic && topic.title)}
                   size="medium"
-                />
-                <Divider/>
-                {/* replace the topic with scenario only once old data is cleared out */}
-                <Header as={'h5'} inverted
+              />
+              <Divider/>
+              {/* replace the topic with scenario only once old data is cleared out */}
+              <Header as={'h5'} inverted
                       content=
-                  {(scenario && scenario.description) ||
-                  (topic && topic.description)}
-                />
-                {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}
-              </GridColumn>
-              <GridColumn width={8}>
-                <div
+                          {(scenario && scenario.description) ||
+                          (topic && topic.description)}
+              />
+              {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}
+            </GridColumn>
+            <GridColumn width={8} textAlign='left'
+            >
+              <div
                   style={{ position: "absolute", bottom: "0px", width: "95%" }}
-                >
-                  <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
-                    {comments && comments.map((comment) => (
+              >
+                <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
+                  {comments && comments.map((comment) => (
                       <UserComment
-                        key={comment._id}
-                        comment={comment}
-                        discussionStatus={discussionStatus}
-                        userCanEdit={
-                          discussionTemplate
-                            ? discussionTemplate.usersCanEditComments
-                            : true
-                        }
+                          key={comment._id}
+                          comment={comment}
+                          discussionStatus={discussionStatus}
+                          userCanEdit={
+                            discussionTemplate
+                                ? discussionTemplate.usersCanEditComments
+                                : true
+                          }
                       />
-                    ))}
+                  ))}
                   <div ref={commentsEndRef} />
-                  </Comment.Group>
-                  {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
+                </Comment.Group>
+                {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
                     <CommentForm
-                      discussionId={discussionId}
-                      isDiscussionPublic={discussionIsPublic}
-                      isUserAGroupMember={userInGroup}
-                      groupId={group._id}
+                        discussionId={discussionId}
+                        isDiscussionPublic={discussionIsPublic}
+                        isUserAGroupMember={userInGroup}
+                        groupId={group._id}
                     />
-                  )}
-                </div>
-              </GridColumn>
-              <GridColumn width={4}>
-                <Header inverted content="Verdicts" size="medium" />
-                <Divider/>
-                <List style={{ overflow: "auto", maxHeight: "50em" }}>
-                  {verdicts && verdicts.map((verdict) => (
+                )}
+              </div>
+            </GridColumn>
+            <GridColumn width={4}>
+              <Header inverted content="Verdicts" size="medium" />
+              <Divider/>
+              <List style={{ overflow: "auto", maxHeight: "50em" }}>
+                {verdicts && verdicts.map((verdict) => (
                     <List.Item key={verdict._id}>
                       <Verdict
-                        key={verdict._id}
-                        verdict={verdict}
-                        onVote={hasReachedConsensus}
-                        discussionStatus={discussionStatus}
+                          key={verdict._id}
+                          verdict={verdict}
+                          onVote={hasReachedConsensus}
+                          discussionStatus={discussionStatus}
                       />
                     </List.Item>
-                  ))}
-                  {group && hasReachedConsensus() && openConsensusModal === 'unopened' && (
+                ))}
+                {group && hasReachedConsensus() && openConsensusModal === 'unopened' && (
                     <Modal open={true} size='mini'>
                       <Modal.Content>Discussion reached a consensus</Modal.Content>
                       <Modal.Actions>
@@ -336,23 +328,23 @@ export const Discussion = () => { ///
                         <Button content="View Discussion" onClick={() => setOpenConsensusModal('closed')} />
                       </Modal.Actions>
                     </Modal>
-                  )}
-                  {!userHasSubmittedVerdict() &&
-                  discussionVerdictProposers &&
-                  discussionStatus === "active" &&
-                  (discussionVerdictProposers.includes(Meteor.userId()) ? (
+                )}
+                {!userHasSubmittedVerdict() &&
+                discussionVerdictProposers &&
+                discussionStatus === "active" &&
+                (discussionVerdictProposers.includes(Meteor.userId()) ? (
                     <VerdictForm discussionId={discussionId} />
-                  ) : (
+                ) : (
                     <div style={{ textAlign: "center" }}>
                       <Button
-                        style={{ margin: 10 }}
-                        content="Propose Verdict"
-                        onClick={proposeVerdict}
-                        primary
+                          style={{ margin: 10 }}
+                          content="Propose Verdict"
+                          onClick={proposeVerdict}
+                          primary
                       />
                     </div>
-                  ))}
-                  {discussionStatus !== "active" && nextDiscussionId && (
+                ))}
+                {discussionStatus !== "active" && nextDiscussionId && (
                     <div style={{ textAlign: "center" }}>
                       <Button
                           style={{ margin: 10 }}
@@ -361,12 +353,133 @@ export const Discussion = () => { ///
                           primary
                       />
                     </div>
-                  )}
-                </List>
-              </GridColumn>
+                )}
+              </List>
+            </GridColumn>
           </Grid>
         </Container>
+    );
+  }
+
+  return (
+    // <div>
+    //   <NavBar handleChangeLanguage={handleChangeLanguage}/>
+    //   {/*hacky way to move content out from under menu*/}
+    //   <br />
+    //   <br />
+    //   <br />
+    //   <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+      <Segment inverted
+               textAlign='center'
+               style={{minHeight: 800, padding: '1em 0em'}}
+               vertical>
+        <NavBar handleChangeLanguage={handleChangeLanguage}/>
+        <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
+        <Sidebarsfriends page={discussionPageContent}/>
+        {/*<Sidebars />*/}
+        {/*<Container attached="bottom" style={{ width: "110vh"}}>*/}
+        {/*  <Grid columns={3}>             /!**!/*/}
+        {/*      <GridColumn width={4} style={{ height: "90vh"}}>*/}
+        {/*        <Header*/}
+        {/*          inverted*/}
+        {/*          content={(scenario && scenario.title) || (topic && topic.title)}*/}
+        {/*          size="medium"*/}
+        {/*        />*/}
+        {/*        <Divider/>*/}
+        {/*        /!* replace the topic with scenario only once old data is cleared out *!/*/}
+        {/*        <Header as={'h5'} inverted*/}
+        {/*              content=*/}
+        {/*          {(scenario && scenario.description) ||*/}
+        {/*          (topic && topic.description)}*/}
+        {/*        />*/}
+        {/*        {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}*/}
+        {/*      </GridColumn>*/}
+        {/*      <GridColumn width={8}>*/}
+        {/*        <div*/}
+        {/*          style={{ position: "absolute", bottom: "0px", width: "95%" }}*/}
+        {/*        >*/}
+        {/*          <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>*/}
+        {/*            {comments && comments.map((comment) => (*/}
+        {/*              <UserComment*/}
+        {/*                key={comment._id}*/}
+        {/*                comment={comment}*/}
+        {/*                discussionStatus={discussionStatus}*/}
+        {/*                userCanEdit={*/}
+        {/*                  discussionTemplate*/}
+        {/*                    ? discussionTemplate.usersCanEditComments*/}
+        {/*                    : true*/}
+        {/*                }*/}
+        {/*              />*/}
+        {/*            ))}*/}
+        {/*          <div ref={commentsEndRef} />*/}
+        {/*          </Comment.Group>*/}
+        {/*          {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (*/}
+        {/*            <CommentForm*/}
+        {/*              discussionId={discussionId}*/}
+        {/*              isDiscussionPublic={discussionIsPublic}*/}
+        {/*              isUserAGroupMember={userInGroup}*/}
+        {/*              groupId={group._id}*/}
+        {/*            />*/}
+        {/*          )}*/}
+        {/*        </div>*/}
+        {/*      </GridColumn>*/}
+        {/*      <GridColumn width={4}>*/}
+        {/*        <Header inverted content="Verdicts" size="medium" />*/}
+        {/*        <Divider/>*/}
+        {/*        <List style={{ overflow: "auto", maxHeight: "50em" }}>*/}
+        {/*          {verdicts && verdicts.map((verdict) => (*/}
+        {/*            <List.Item key={verdict._id}>*/}
+        {/*              <Verdict*/}
+        {/*                key={verdict._id}*/}
+        {/*                verdict={verdict}*/}
+        {/*                onVote={hasReachedConsensus}*/}
+        {/*                discussionStatus={discussionStatus}*/}
+        {/*              />*/}
+        {/*            </List.Item>*/}
+        {/*          ))}*/}
+        {/*          {group && hasReachedConsensus() && openConsensusModal === 'unopened' && (*/}
+        {/*            <Modal open={true} size='mini'>*/}
+        {/*              <Modal.Content>Discussion reached a consensus</Modal.Content>*/}
+        {/*              <Modal.Actions>*/}
+        {/*                {nextDiscussionId &&*/}
+        {/*                <Button as={Link}*/}
+        {/*                        to={"/discussion/" + nextDiscussionId}*/}
+        {/*                        content={"Next discussion"}/>}*/}
+        {/*                <Button as={Link} to="/mydashboard" content="Return to Dashboard" />*/}
+        {/*                <Button content="View Discussion" onClick={() => setOpenConsensusModal('closed')} />*/}
+        {/*              </Modal.Actions>*/}
+        {/*            </Modal>*/}
+        {/*          )}*/}
+        {/*          {!userHasSubmittedVerdict() &&*/}
+        {/*          discussionVerdictProposers &&*/}
+        {/*          discussionStatus === "active" &&*/}
+        {/*          (discussionVerdictProposers.includes(Meteor.userId()) ? (*/}
+        {/*            <VerdictForm discussionId={discussionId} />*/}
+        {/*          ) : (*/}
+        {/*            <div style={{ textAlign: "center" }}>*/}
+        {/*              <Button*/}
+        {/*                style={{ margin: 10 }}*/}
+        {/*                content="Propose Verdict"*/}
+        {/*                onClick={proposeVerdict}*/}
+        {/*                primary*/}
+        {/*              />*/}
+        {/*            </div>*/}
+        {/*          ))}*/}
+        {/*          {discussionStatus !== "active" && nextDiscussionId && (*/}
+        {/*            <div style={{ textAlign: "center" }}>*/}
+        {/*              <Button*/}
+        {/*                  style={{ margin: 10 }}*/}
+        {/*                  content={"Go to next"}*/}
+        {/*                  onClick={nextDiscussion}*/}
+        {/*                  primary*/}
+        {/*              />*/}
+        {/*            </div>*/}
+        {/*          )}*/}
+        {/*        </List>*/}
+        {/*      </GridColumn>*/}
+        {/*  </Grid>*/}
+        {/*</Container>*/}
       </Sidebar.Pushable>
-    </div>
+      </Segment>
   );
 };

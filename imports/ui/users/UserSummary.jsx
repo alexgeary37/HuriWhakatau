@@ -121,7 +121,7 @@ export const UserSummary = ({
             {member.username}
             {Meteor.userId() !== groupLeader &&
             member._id === groupLeader && (
-                <span> (Group Leader)</span>
+                <span><br/> (Group Leader)</span>
             )}
             {groupLeader === Meteor.userId() &&
             groupLeader === member._id &&
@@ -196,7 +196,7 @@ export const UserSummary = ({
             Meteor.userId() === member._id &&
             <div className="reactions">
                 <Picker
-                    style={{width: "auto"}}
+                    style={{width: "auto", marginTop:"-15px", paddingBottom:"-5px"}}
                     showPreview={false}
                     showSkinTones={false}
                     include={["custom"]}
