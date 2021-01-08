@@ -12,26 +12,29 @@ import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Sidebars} from "./Sidebars";
 import {DiscussionSummary} from "/imports/ui/discussions/DiscussionSummary";
 import Cookies from "universal-cookie/lib";
-import {Sidebarsfriends} from "./Sidebars-friends";
+import {Layout} from "./Layout";
 
 export const Dashboard = () => {
-    const [userLang, setUserLang] = useState("mā");
-    //set up changing language on site based on user nav menu selection
-    const handleChangeLanguage = (lang) => {
-        setUserLang(lang);
-    };
+    // const [userLang, setUserLang] = useState("mā");
+    // //set up changing language on site based on user nav menu selection
+    // const handleChangeLanguage = (lang) => {
+    //     setUserLang(lang);
+    // };
     const cookies = new Cookies();
     const [showTour, setShowTour] = useState(false);
     //set up tour of page
     const splashTourSteps = dashSplash;
     // set default language cookie
-    useEffect(() => {
-        if (cookies.get('lang')) {
-            setUserLang(cookies.get('lang'))
-        } else {
-            cookies.set('lang', "mā", {path: '/'});
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (cookies.get('lang')) {
+    //         setUserLang(cookies.get('lang'))
+    //     } else {
+    //         cookies.set('lang', "mā", {path: '/'});
+    //     }
+    //     document.title = "Home";
+    // }, []);
+
+    useEffect(()=>{document.title = "Home"},[])
 
     const toggleShowTour = () => {
         if (!cookies.get('signup')) {
@@ -60,9 +63,10 @@ export const Dashboard = () => {
         };
     });
 
-    const dashboardPageContent = () =>{
+    const dashboardPageContent = (userLang) =>{
         return(
             <Container inverted={'true'}>
+                {showTour && <Tour TOUR_STEPS={splashTourSteps}/>}
                 {/*header from semantic ui layout example*/}
                 <Container text>
                     <Header
@@ -132,88 +136,87 @@ export const Dashboard = () => {
 
     // noinspection JSNonASCIINames
     return (
-        <Segment
-            inverted
-            textAlign='center'
-            style={{minHeight: 800, padding: '1em 0em'}}
-            vertical
-        >
-            {showTour && <Tour TOUR_STEPS={splashTourSteps}/>}
-            <NavBar handleChangeLanguage={handleChangeLanguage}/>
-            {/*<span style={{height:"20em"}} />*/}
-            <Sidebar.Pushable as={Segment} style={{minHeight: 800, overflow: "auto", backgroundColor: 'rgb(25,50,26)'}}>
-                <Sidebarsfriends page={dashboardPageContent}/>
-                {/*<Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "90vh"}}>*/}
-
-                {/*    <Container inverted={'true'}>*/}
-                {/*        /!*header from semantic ui layout example*!/*/}
-                {/*        <Container text>*/}
-                {/*            <Header*/}
-                {/*                as={'h1'}*/}
-                {/*                content={siteGlossary.siteWelcome[userLang] + " " + siteGlossary.siteName[userLang]}*/}
-                {/*                inverted*/}
-                {/*                style={{*/}
-                {/*                    fontSize: '4em',*/}
-                {/*                    fontWeight: 'normal',*/}
-                {/*                    marginBottom: 0,*/}
-                {/*                    marginTop: '1.5em',*/}
-                {/*                }}*/}
-                {/*            />*/}
-                {/*            <Header*/}
-                {/*                as={'h2'}*/}
-                {/*                content={'Jump in, the discussions are fine'}*/}
-                {/*                inverted*/}
-                {/*                style={{*/}
-                {/*                    fontSize: '1.7em',*/}
-                {/*                    fontWeight: 'normal',*/}
-                {/*                    marginTop: '1.5em',*/}
-                {/*                }}*/}
-                {/*            />*/}
-                {/*        </Container>*/}
-                {/*        /!*End of semantic example header *!/*/}
-                {/*        <Segment style={{padding: '6em 0em'}} vertical>*/}
-                {/*            <Grid container stackable verticalAlign='middle'>*/}
-                {/*                <GridRow>*/}
-                {/*                    <GridColumn>*/}
-                {/*                        /!*<Header content={siteGlossary.userDiscourse[userLang]}/>*!/*/}
-                {/*                        <Segment inverted attached="top"*/}
-                {/*                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
-                {/*                            <Header as={'h3'}*/}
-                {/*                                    content={"Public " + siteGlossary.userDiscourse[userLang]}/>*/}
-                {/*                            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>*/}
-                {/*                                {publicDiscussions &&*/}
-                {/*                                publicDiscussions.map((discussion) => (*/}
-                {/*                                    <DiscussionSummary*/}
-                {/*                                        key={discussion._id}*/}
-                {/*                                        discussion={discussion}*/}
-                {/*                                    />*/}
-                {/*                                ))}*/}
-                {/*                            </List>*/}
-                {/*                        </Segment>*/}
-                {/*                        <Segment inverted attached="top"*/}
-                {/*                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
-                {/*                            <Header as={'h3'}*/}
-                {/*                                    content={"Finished " + siteGlossary.userDiscourse[userLang]}/>*/}
-                {/*                            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>*/}
-                {/*                                {discussions &&*/}
-                {/*                                discussions.map((discussion) => (*/}
-                {/*                                    <DiscussionSummary*/}
-                {/*                                        key={discussion._id}*/}
-                {/*                                        discussion={discussion}*/}
-                {/*                                    />*/}
-                {/*                                ))}*/}
-                {/*                            </List>*/}
-                {/*                        </Segment>*/}
-                {/*                        /!*</Segment>*!/*/}
-                {/*                    </GridColumn>*/}
-                {/*                </GridRow>*/}
-                {/*            </Grid>*/}
-                {/*        </Segment>*/}
-
-
-                {/*    </Container>*/}
-                {/*</Sidebar.Pusher>*/}
-            </Sidebar.Pushable>
-        </Segment>
+        // <Segment
+        //     inverted
+        //     textAlign='center'
+        //     style={{minHeight: 800, padding: '1em 0em'}}
+        //     vertical
+        // >
+        //     <NavBar handleChangeLanguage={handleChangeLanguage}/>
+        //     {/*<span style={{height:"20em"}} />*/}
+        //     <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30,30,30)'}}>
+                <Layout page={dashboardPageContent}/>
+        //         {/*<Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "90vh"}}>*/}
+        //
+        //         {/*    <Container inverted={'true'}>*/}
+        //         {/*        /!*header from semantic ui layout example*!/*/}
+        //         {/*        <Container text>*/}
+        //         {/*            <Header*/}
+        //         {/*                as={'h1'}*/}
+        //         {/*                content={siteGlossary.siteWelcome[userLang] + " " + siteGlossary.siteName[userLang]}*/}
+        //         {/*                inverted*/}
+        //         {/*                style={{*/}
+        //         {/*                    fontSize: '4em',*/}
+        //         {/*                    fontWeight: 'normal',*/}
+        //         {/*                    marginBottom: 0,*/}
+        //         {/*                    marginTop: '1.5em',*/}
+        //         {/*                }}*/}
+        //         {/*            />*/}
+        //         {/*            <Header*/}
+        //         {/*                as={'h2'}*/}
+        //         {/*                content={'Jump in, the discussions are fine'}*/}
+        //         {/*                inverted*/}
+        //         {/*                style={{*/}
+        //         {/*                    fontSize: '1.7em',*/}
+        //         {/*                    fontWeight: 'normal',*/}
+        //         {/*                    marginTop: '1.5em',*/}
+        //         {/*                }}*/}
+        //         {/*            />*/}
+        //         {/*        </Container>*/}
+        //         {/*        /!*End of semantic example header *!/*/}
+        //         {/*        <Segment style={{padding: '6em 0em'}} vertical>*/}
+        //         {/*            <Grid container stackable verticalAlign='middle'>*/}
+        //         {/*                <GridRow>*/}
+        //         {/*                    <GridColumn>*/}
+        //         {/*                        /!*<Header content={siteGlossary.userDiscourse[userLang]}/>*!/*/}
+        //         {/*                        <Segment inverted attached="top"*/}
+        //         {/*                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
+        //         {/*                            <Header as={'h3'}*/}
+        //         {/*                                    content={"Public " + siteGlossary.userDiscourse[userLang]}/>*/}
+        //         {/*                            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>*/}
+        //         {/*                                {publicDiscussions &&*/}
+        //         {/*                                publicDiscussions.map((discussion) => (*/}
+        //         {/*                                    <DiscussionSummary*/}
+        //         {/*                                        key={discussion._id}*/}
+        //         {/*                                        discussion={discussion}*/}
+        //         {/*                                    />*/}
+        //         {/*                                ))}*/}
+        //         {/*                            </List>*/}
+        //         {/*                        </Segment>*/}
+        //         {/*                        <Segment inverted attached="top"*/}
+        //         {/*                                 style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
+        //         {/*                            <Header as={'h3'}*/}
+        //         {/*                                    content={"Finished " + siteGlossary.userDiscourse[userLang]}/>*/}
+        //         {/*                            <List relaxed size="huge" style={{overflow: "auto", height: "40vh"}}>*/}
+        //         {/*                                {discussions &&*/}
+        //         {/*                                discussions.map((discussion) => (*/}
+        //         {/*                                    <DiscussionSummary*/}
+        //         {/*                                        key={discussion._id}*/}
+        //         {/*                                        discussion={discussion}*/}
+        //         {/*                                    />*/}
+        //         {/*                                ))}*/}
+        //         {/*                            </List>*/}
+        //         {/*                        </Segment>*/}
+        //         {/*                        /!*</Segment>*!/*/}
+        //         {/*                    </GridColumn>*/}
+        //         {/*                </GridRow>*/}
+        //         {/*            </Grid>*/}
+        //         {/*        </Segment>*/}
+        //
+        //
+        //         {/*    </Container>*/}
+        //         {/*</Sidebar.Pusher>*/}
+        //     </Sidebar.Pushable>
+        // </Segment>
     );
 };

@@ -32,11 +32,11 @@ import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDi
 import {DiscussionTemplateSummary} from "/imports/ui/discussionTemplates/DiscussionTemplateSummary";
 import NotificationBadge from "react-notification-badge";
 import Cookies from "universal-cookie/lib";
-import {Sidebarsfriends} from "./Sidebars-friends";
+import {Layout} from "./Layout";
 
 export const MyDashboard = () => {
     const cookies = new Cookies();
-    const [userLang, setUserLang] = useState("mā");
+    // const [userLang, setUserLang] = useState("mā");
     const [isAdmin, setIsAdmin] = useState(false);
     const [isResearcher, setIsResearcher] = useState(false);
     const [isIndigenous, setIsIndigenous] = useState(null);
@@ -63,17 +63,20 @@ export const MyDashboard = () => {
     const participantTourSteps = myDashParticipant;
     const researcherTourSteps = myDashResearcher;
     // handles user language selection for page, how to centralise this code so it doesn't get repeated every page?
-    const handleChangeLanguage = (lang) => {
-        setUserLang(lang);
-    }
-    // set lang om load from cookie if exists.
-    useEffect(() => {
-        if (cookies.get('lang')) {
-            setUserLang(cookies.get('lang'))
-        } else {
-            cookies.set('lang', "mā", {path: '/'});
-        }
-    }, []);
+    // const handleChangeLanguage = (lang) => {
+    //     setUserLang(lang);
+    // }
+    // // set lang om load from cookie if exists.
+    // useEffect(() => {
+    //     if (cookies.get('lang')) {
+    //         setUserLang(cookies.get('lang'))
+    //     } else {
+    //         cookies.set('lang', "mā", {path: '/'});
+    //     }
+    //     document.title = "My Dashboard";
+    // }, []);
+
+    useEffect(()=>{document.title = "My Dashboard"},[])
 
     const toggleShowTour = () => {
         if (!cookies.get('myDashTour')) {
@@ -211,22 +214,22 @@ export const MyDashboard = () => {
         //             })
         //         }
 
-            //add all member ids for each group the user is part of to a total, filter out the user themselves
-            // fetchedGroups.forEach((group) => {
-            //     fetchedGroupMemberIds.push(...group.members.filter(id => id !== userId));
-            // });
+        //add all member ids for each group the user is part of to a total, filter out the user themselves
+        // fetchedGroups.forEach((group) => {
+        //     fetchedGroupMemberIds.push(...group.members.filter(id => id !== userId));
+        // });
 
-            // remove duplicate values
-            // fetchedGroupMemberIds = new Set(fetchedGroupMemberIds);
+        // remove duplicate values
+        // fetchedGroupMemberIds = new Set(fetchedGroupMemberIds);
 
-            // find the users and add to array
-            // fetchedGroupMemberIds.forEach((memberId) => {
-            //     fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1, status: 1}}));
-            // });
+        // find the users and add to array
+        // fetchedGroupMemberIds.forEach((memberId) => {
+        //     fetchedGroupMembers.push(Meteor.users.findOne({_id: memberId}, {fields: {username: 1, status: 1}}));
+        // });
 
-            // if(fetchedGroupMembers[0] !== undefined){
-            //     groupMembersOnline = fetchedGroupMembers.some(member => member.status.online === true);
-            // }
+        // if(fetchedGroupMembers[0] !== undefined){
+        //     groupMembersOnline = fetchedGroupMembers.some(member => member.status.online === true);
+        // }
         // }
         return {
             user: Meteor.userId(),
@@ -352,10 +355,12 @@ export const MyDashboard = () => {
         }
     }
 
-    const myDashboardPageContent = () => {
-        return(
-            <Container>
-                <span style={{height: "10em"}}/>
+    const myDashboardPageContent = (userLang) => {
+        return (
+            <Container textAlign='left'>
+                {showTour &&
+                <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
+                }
                 <Segment attached="top" clearing inverted
                          style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>
                     <Header size="huge">
@@ -375,7 +380,7 @@ export const MyDashboard = () => {
                     </Header>
                 </Segment>
 
-                <Grid stackable >
+                <Grid stackable>
                     <GridRow columns={isDiscussionListsHidden ? 1 : 2}>
                         <GridColumn width={16}>
                             <Divider/>
@@ -406,9 +411,9 @@ export const MyDashboard = () => {
                                 {/* attempting to only load this when user
                                 role is known and render with correct link path*/}
                                 {isIndigenous !== null &&
-                                <ListItem style={{overflow: "auto", height: "16em", minWidth:"300px"}}
+                                <ListItem style={{overflow: "auto", height: "16em", minWidth: "300px"}}
                                           description={myDiscussions &&
-                                          myDiscussions.filter((discussion) => filterDiscussionStatus.indexOf(discussion.status) > -1 ).map((discussion) => (
+                                          myDiscussions.filter((discussion) => filterDiscussionStatus.indexOf(discussion.status) > -1).map((discussion) => (
                                               <DiscussionSummary
                                                   key={discussion._id}
                                                   discussion={discussion}
@@ -421,7 +426,8 @@ export const MyDashboard = () => {
                                         id={'filterActive'}
                                         checked={filterDiscussionStatus.indexOf("active") > -1}
                                         onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
-                                    <label style={{color:"white", marginLeft:"10px"}} for={'filterActive'}>Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
+                                    <label style={{color: "white", marginLeft: "10px"}}
+                                           for={'filterActive'}>Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
                                 </Card.Content>
                             </Segment>
                         </GridColumn>
@@ -650,459 +656,461 @@ export const MyDashboard = () => {
     }
 
     return (
-        <Segment inverted vertical style={{backgroundColor: 'rgb(10, 10, 10)'}}>
-            {showTour &&
-            <Tour TOUR_STEPS={isAdmin ? participantTourSteps.concat(researcherTourSteps) : participantTourSteps}/>
-            }
-            <NavBar handleChangeLanguage={handleChangeLanguage}/>
-            <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Sidebarsfriends page={myDashboardPageContent}/>
-                {/* right sidebar */}
-                {/*<Sidebar*/}
-                {/*    as={Segment}*/}
-                {/*    animation='overlay'*/}
-                {/*    className={(showSidebar ? "custom wide" : "very thin") + ' friends'}*/}
-                {/*    icon='labeled'*/}
-                {/*    // inverted*/}
-                {/*    vertical*/}
-                {/*    visible*/}
-                {/*    // width={showSidebar ? "wide" : "very thin"}*/}
-                {/*    onMouseOver={!showSidebar ? handleShowSidebar : null}*/}
-                {/*    onClick={handleShowSidebar}*/}
-                {/*    style={{*/}
-                {/*        backgroundColor:"#f4f3f5"*/}
-                {/*        // backgroundColor: 'rgb(30, 30, 30)',*/}
-                {/*        // backgroundImage: !showSidebar ? `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})` : '',*/}
-                {/*        // backgroundSize: '60px',*/}
-                {/*        // backgroundRepeat: 'repeat-y'*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    <Icon size={'big'} name={(showSidebar ? 'left':'right') + ' arrow alternate circle'} style={{marginTop:"-10px",marginLeft:(showSidebar ? "220px":"35px")}}/>*/}
-                {/*    /!*my friends*!/*/}
-                {/*    <Menu.Item style={{marginTop:"20px", marginLeft: "10px", fontWeight: "bold"}}*/}
-                {/*               title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>*/}
-                {/*        <Icon size={'large'} name='users'/>*/}
-                {/*        {anyFriendOnline && !showSidebar &&*/}
-                {/*        <Rating icon='star' defaultRating={1} maxRating={1} disabled/>*/}
-                {/*        }*/}
-                {/*        <br/>*/}
-                {/*        Friends*/}
-                {/*    </Menu.Item>*/}
-                {/*    <Divider/>*/}
-                {/*    <List style={{height: "15em"}}>*/}
-                {/*        {showSidebar && friends && friends.map((friend) => (*/}
-                {/*            <Menu.Item style={{marginLeft: "20px"}} key={friend._id}*/}
-                {/*                       title={friend.status.online ?*/}
-                {/*                           friend.status.idle ? 'idle' : 'online' : 'offline'}>*/}
-                {/*                <div style={{*/}
-                {/*                    display: 'inline-block',*/}
-                {/*                    fontSize: "13pt"*/}
-                {/*                }}>{friend.username}<NotificationBadge*/}
-                {/*                    key={friend._id}*/}
-                {/*                    count={1}*/}
-                {/*                    effect={[null, null, null, null]}*/}
-                {/*                    style={{*/}
-                {/*                        color: friend.status.online ? friend.status.idle ? "yellow" : "green" : "red",*/}
-                {/*                        backgroundColor: friend.status.online ? friend.status.idle ? "yellow" : "green" : "red",*/}
-                {/*                        top: "-15px",*/}
-                {/*                        left: "",*/}
-                {/*                        bottom: "",*/}
-                {/*                        right: "-20px",*/}
-                {/*                        fontSize: "7px",*/}
-                {/*                        padding: "3px 5px",*/}
-                {/*                    }}*/}
-                {/*                /></div>*/}
-                {/*                /!*<Rating icon='star' defaultRating={friend.status.online ? 1 : 0} maxRating={1} disabled/>*!/*/}
-                {/*            </Menu.Item>*/}
-                {/*        ))}*/}
-                {/*    </List>*/}
-                {/*    <List>*/}
-                {/*        {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (*/}
-                {/*            <Menu.Item*/}
-                {/*                key={pendingFriend._id} */}
-                {/*                {pendingFriend.username}*/}
-                {/*                <Button negative size={'mini'} compact={true}*/}
-                {/*                        onClick={() => acceptFriend(pendingFriend._id)}>*/}
-                {/*                    ACCEPT*/}
-                {/*                </Button>*/}
-                {/*                <Button negative size={'mini'} compact={true}*/}
-                {/*                        onClick={() => declineFriend(pendingFriend._id)}>*/}
-                {/*                    DECLINE*/}
-                {/*                </Button>*/}
-                {/*            </Menu.Item>*/}
-                {/*        ))}*/}
-                {/*    </List>*/}
-                {/*    {showSidebar && foundFriendsList && <div onClick={(e) => e.stopPropagation()}>*/}
-                {/*        {foundFriendsList.map((potentialFriend) => (*/}
-                {/*            <Menu.Item key={potentialFriend._id}>*/}
-                {/*                <span style={{*/}
-                {/*                    paddingLeft: '15px',*/}
-                {/*                    paddingRight: '20px'*/}
-                {/*                }}>{potentialFriend.username}</span>*/}
-                {/*                <Button negative size={'mini'} compact={true} attached={'right'}*/}
-                {/*                        onClick={() => addFriend(potentialFriend._id)}>*/}
-                {/*                    Request Friend*/}
-                {/*                </Button>*/}
-                {/*            </Menu.Item>*/}
-                {/*        ))}</div>}*/}
-                {/*    {showSidebar && !haveFoundFriends && inviteFriendsComponent()}*/}
-                {/*    {showSidebar && searchFriendsComponent()}*/}
-                {/*    {showSidebar && friendInviteError && <div style={{color:'red', fontWeight: 'bold'}}>*/}
-                {/*        &nbsp;&nbsp;&nbsp;{friendInviteError}</div>}*/}
-                {/*    /!*my group members, update to have a group member specific user set*!/*/}
-                {/*    <Menu.Item style={{marginLeft: "10px", fontWeight: "bold"}} title={anyGroupMemberOnline ?*/}
-                {/*        'There are members online' : 'No members online'}>*/}
-                {/*        <Icon size={'large'} name='users'/>*/}
-                {/*        {anyGroupMemberOnline && !showSidebar &&*/}
-                {/*        <Rating icon='star' defaultRating={1} maxRating={1} disabled/>*/}
-                {/*        }*/}
-                {/*        <br/>*/}
-                {/*        Group Members*/}
-                {/*    </Menu.Item>*/}
-                {/*    <Divider/>*/}
-                {/*    <List style={{height: "15em"}}>*/}
-                {/*        {showSidebar && groupMembers && groupMembers.map((groupMember) => (*/}
-                {/*            <Menu.Item style={{marginLeft: "20px"}} key={groupMember._id}*/}
-                {/*                       title={groupMember.status.online ?*/}
-                {/*                           groupMember.status.idle ? 'idle' : 'online' : 'offline'}>*/}
-                {/*                <div style={{*/}
-                {/*                    display: 'inline-block',*/}
-                {/*                    fontSize: "13pt"*/}
-                {/*                }}>{groupMember.username}<NotificationBadge*/}
-                {/*                    key={groupMember._id}*/}
-                {/*                    count={1}*/}
-                {/*                    effect={[null, null, null, null]}*/}
-                {/*                    style={{*/}
-                {/*                        color: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",*/}
-                {/*                        backgroundColor: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",*/}
-                {/*                        top: "-15px",*/}
-                {/*                        left: "",*/}
-                {/*                        bottom: "",*/}
-                {/*                        right: "-20px",*/}
-                {/*                        fontSize: "7px",*/}
-                {/*                        padding: "3px 5px",*/}
-                {/*                    }}*/}
-                {/*                /></div>*/}
-                {/*                /!*<Rating icon='star' defaultRating={groupMember.status.online ? 1 : 0} maxRating={1} disabled/>*!/*/}
-                {/*            </Menu.Item>*/}
-                {/*        ))}*/}
-                {/*    </List>*/}
-                {/*</Sidebar>*/}
-                {/*/!* right sidebar *!/*/}
-                {/*<Sidebar*/}
-                {/*    as={Segment}*/}
-                {/*    animation='overlay'*/}
-                {/*    icon='labeled'*/}
-                {/*    inverted*/}
-                {/*    vertical*/}
-                {/*    direction={'right'}*/}
-                {/*    visible*/}
-                {/*    width={"very thin"}*/}
-                {/*    style={{*/}
-                {/*        backgroundColor: 'rgb(30, 30, 30)',*/}
-                {/*        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,*/}
-                {/*        backgroundSize: '60px',*/}
-                {/*        backgroundRepeat: 'repeat-y'*/}
-                {/*    }}*/}
-                {/*/>*/}
-                {/*/!*end sidebar*!/*/}
-                {/*<Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "92vh"}} dimmed={showSidebar}*/}
-                {/*                onClick={showSidebar ? handleShowSidebar : null}>*/}
-
-                    {/*<Container>*/}
-                    {/*    <span style={{height: "10em"}}/>*/}
-                    {/*    <Segment attached="top" clearing inverted*/}
-                    {/*             style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
-                    {/*        <Header size="huge">*/}
-                    {/*            <Header.Content as={Container}>*/}
-                    {/*                My Dashboard {isAdmin && <span>- Admin</span>}*/}
-                    {/*                {isAdmin &&*/}
-                    {/*                <Button*/}
-                    {/*                    floated="right"*/}
-                    {/*                    onClick={() => {*/}
-                    {/*                        handleToggleWizard();*/}
-                    {/*                        handleToggleGroup();*/}
-                    {/*                    }}*/}
-                    {/*                    content="Open Experiment Wizard"*/}
-                    {/*                    negative*/}
-                    {/*                />}*/}
-                    {/*            </Header.Content>*/}
-                    {/*        </Header>*/}
-                    {/*    </Segment>*/}
-
-                    {/*    <Grid stackable >*/}
-                    {/*        <GridRow columns={isDiscussionListsHidden ? 1 : 2}>*/}
-                    {/*            <GridColumn width={16}>*/}
-                    {/*                <Divider/>*/}
-                    {/*                <Header as={Link} to={'/mydashboard'} floated='right' inverted*/}
-                    {/*                        onClick={toggleDiscussionLists}>*/}
-                    {/*                    {isDiscussionListsHidden ? 'Show' : 'Hide'} Discussions</Header>*/}
-                    {/*                <br/>*/}
-                    {/*                {isDiscussionListsHidden && <Divider/>}*/}
-                    {/*            </GridColumn>*/}
-                    {/*            <GridColumn width={8}>*/}
-                    {/*                <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}*/}
-                    {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}*/}
-                    {/*                         title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}*/}
-                    {/*                >*/}
-                    {/*                    <Header as={'h3'}*/}
-                    {/*                            className={'myDiscussions'}>My {siteGlossary.userDiscourse[userLang]}*/}
-                    {/*                        <Button*/}
-                    {/*                            className={'newDiscussion'}*/}
-                    {/*                            floated={"right"}*/}
-                    {/*                            onClick={handleToggleDiscussion}*/}
-                    {/*                            content="New Discussion"*/}
-                    {/*                            disabled={!user}*/}
-                    {/*                            negative*/}
-                    {/*                            compact*/}
-                    {/*                        />*/}
-                    {/*                    </Header>*/}
-
-                    {/*                    /!* attempting to only load this when user*/}
-                    {/*            role is known and render with correct link path*!/*/}
-                    {/*                    {isIndigenous !== null &&*/}
-                    {/*                    <ListItem style={{overflow: "auto", height: "16em", minWidth:"300px"}}*/}
-                    {/*                              description={myDiscussions &&*/}
-                    {/*                              myDiscussions.filter((discussion) => filterDiscussionStatus.indexOf(discussion.status) > -1 ).map((discussion) => (*/}
-                    {/*                                  <DiscussionSummary*/}
-                    {/*                                      key={discussion._id}*/}
-                    {/*                                      discussion={discussion}*/}
-                    {/*                                      participantRole={isIndigenous}*/}
-                    {/*                                  />*/}
-                    {/*                              ))}/>}*/}
-                    {/*                    <Card.Content extra>*/}
-                    {/*                        <Checkbox*/}
-                    {/*                            toggle*/}
-                    {/*                            id={'filterActive'}*/}
-                    {/*                            checked={filterDiscussionStatus.indexOf("active") > -1}*/}
-                    {/*                            onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>*/}
-                    {/*                        <label style={{color:"white", marginLeft:"10px"}} for={'filterActive'}>Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>*/}
-                    {/*                    </Card.Content>*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*            <GridColumn width={8}>*/}
-                    {/*                <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}*/}
-                    {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                    <Header as={'h3'} className={'finishedDiscussions'}>*/}
-                    {/*                        All Finished {siteGlossary.userDiscourse[userLang]}</Header>*/}
-                    {/*                    <ListItem style={{overflow: "auto", height: "16em"}}*/}
-                    {/*                              description={allFinishedDiscussions &&*/}
-                    {/*                              allFinishedDiscussions.map((discussion) => (*/}
-                    {/*                                  <DiscussionSummary*/}
-                    {/*                                      key={discussion._id}*/}
-                    {/*                                      discussion={discussion}*/}
-                    {/*                                      participantRole={true}*/}
-                    {/*                                  />*/}
-                    {/*                              ))}/>*/}
-                    {/*                    <Card.Content extra>*/}
-                    {/*                    </Card.Content>*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*        </GridRow>*/}
-                    {/*        <GridRow columns={3}>*/}
-                    {/*            <GridColumn width={5}>*/}
-                    {/*                <Segment style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>*/}
-                    {/*                    <Header as={'h3'} className={'myGroups'}>My Groups</Header>*/}
-                    {/*                    <ListItem style={{overflow: "auto", height: "13em"}}*/}
-                    {/*                              description={groups &&*/}
-                    {/*                              groups.map((group) => (*/}
-                    {/*                                  <GroupSummary*/}
-                    {/*                                      key={group._id}*/}
-                    {/*                                      group={group}*/}
-                    {/*                                  />*/}
-                    {/*                              ))}/>*/}
-                    {/*                    <Card.Content extra style={{margin: "1em"}}>*/}
-                    {/*                        {isAdmin &&*/}
-                    {/*                        <Button*/}
-                    {/*                            fluid*/}
-                    {/*                            onClick={handleToggleGroup}*/}
-                    {/*                            content="Create New Group"*/}
-                    {/*                            basic*/}
-                    {/*                            negative*/}
-                    {/*                        />}*/}
-                    {/*                    </Card.Content>*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*            {isAdmin &&*/}
-                    {/*            <>*/}
-                    {/*                <GridColumn width={6}>*/}
-                    {/*                    <Segment style={{height: "21em"}} inverted*/}
-                    {/*                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                        <Header as={'h3'} className={'discussionTemplates'}>My Discussion*/}
-                    {/*                            Templates</Header>*/}
-                    {/*                        <ListItem style={{overflow: "auto", height: "13em"}}*/}
-                    {/*                                  description={discussionTemplates &&*/}
-                    {/*                                  discussionTemplates.map((discussionTemplate) => (*/}
-                    {/*                                      <DiscussionTemplateSummary*/}
-                    {/*                                          key={discussionTemplate._id}*/}
-                    {/*                                          template={discussionTemplate}*/}
-                    {/*                                          toggleModal={handleToggleTemplateDisplay}*/}
-                    {/*                                      />*/}
-                    {/*                                  ))}*/}
-                    {/*                        />*/}
-                    {/*                        <Card.Content extra style={{margin: "1em"}}>*/}
-                    {/*                            <Button*/}
-                    {/*                                fluid*/}
-                    {/*                                onClick={handleToggleTemplate}*/}
-                    {/*                                content="Create New Template"*/}
-                    {/*                                basic*/}
-                    {/*                                negative*/}
-                    {/*                            />*/}
-                    {/*                        </Card.Content>*/}
-                    {/*                    </Segment>*/}
-                    {/*                </GridColumn>*/}
-                    {/*                <GridColumn width={5}>*/}
-                    {/*                    <Segment style={{height: "21em"}} inverted*/}
-                    {/*                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                        <Header as={'h3'} className={'myScenarios'}>My scenarios</Header>*/}
-                    {/*                        <ListItem style={{overflow: "auto", height: "13em"}}*/}
-                    {/*                                  description={scenarios &&*/}
-                    {/*                                  scenarios.map((scenario) => (*/}
-                    {/*                                      <ScenarioSummary*/}
-                    {/*                                          key={scenario._id}*/}
-                    {/*                                          scenario={scenario}*/}
-                    {/*                                      />*/}
-                    {/*                                  ))}/>*/}
-                    {/*                        <Card.Content extra style={{margin: "1em"}}>*/}
-                    {/*                            <Button*/}
-                    {/*                                fluid*/}
-                    {/*                                onClick={handleToggleScenario}*/}
-                    {/*                                content="Create New Scenario"*/}
-                    {/*                                basic*/}
-                    {/*                                negative*/}
-                    {/*                            />*/}
-                    {/*                        </Card.Content>*/}
-                    {/*                    </Segment>*/}
-                    {/*                </GridColumn>*/}
-                    {/*            </>*/}
-                    {/*            }*/}
-                    {/*        </GridRow>*/}
-                    {/*        {isAdmin &&*/}
-                    {/*        <GridRow columns={3}>*/}
-
-                    {/*            <GridColumn width={5}>*/}
-                    {/*                <Segment style={{height: "21em"}} inverted*/}
-                    {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                    <Header as={'h3'} className={'myScenarioSets'}>My Scenario Sets</Header>*/}
-                    {/*                    <ListItem style={{overflow: "auto", height: "13em"}}*/}
-                    {/*                              description={scenarioSets &&*/}
-                    {/*                              scenarioSets.map((scenarioSet) => (*/}
-                    {/*                                  <ScenarioSetSummary*/}
-                    {/*                                      key={scenarioSet._id}*/}
-                    {/*                                      scenarioSet={scenarioSet}*/}
-                    {/*                                  />*/}
-                    {/*                              ))}/>*/}
-                    {/*                    <Card.Content extra style={{margin: "1em"}}>*/}
-                    {/*                        <Button*/}
-                    {/*                            fluid*/}
-                    {/*                            onClick={handleToggleScenarioSet}*/}
-                    {/*                            content="Create New Set"*/}
-                    {/*                            basic*/}
-                    {/*                            negative*/}
-                    {/*                        />*/}
-                    {/*                    </Card.Content>*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*            <GridColumn width={6}>*/}
-                    {/*                <Segment style={{height: "21em"}} inverted*/}
-                    {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                    <Header as={'h3'} className={'myExperiments'}>My Experiments</Header>*/}
-                    {/*                    <ListItem style={{overflow: "auto", height: "13em"}}*/}
-                    {/*                              description={experiments &&*/}
-                    {/*                              experiments.map((experiment) => (*/}
-                    {/*                                  <ExperimentSummary*/}
-                    {/*                                      key={experiment._id}*/}
-                    {/*                                      experiment={experiment}*/}
-                    {/*                                  />*/}
-                    {/*                              ))}/>*/}
-                    {/*                    <Card.Content extra style={{margin: "1em"}}>*/}
-                    {/*                        <Button*/}
-                    {/*                            fluid*/}
-                    {/*                            onClick={handleToggleExperimentCreation}*/}
-                    {/*                            content="Create New Experiment"*/}
-                    {/*                            basic*/}
-                    {/*                            negative*/}
-                    {/*                        />*/}
-                    {/*                    </Card.Content>*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*            <GridColumn width={5}>*/}
-                    {/*                <Segment style={{height: "21em"}} inverted*/}
-                    {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                    <Header as={'h3'}>Add Users to roles</Header>*/}
-                    {/*                    <Button*/}
-                    {/*                        fluid*/}
-                    {/*                        content="Assign Roles"*/}
-                    {/*                        as={Link}*/}
-                    {/*                        to="/assignroles"*/}
-                    {/*                        basic*/}
-                    {/*                        negative*/}
-                    {/*                    />*/}
-                    {/*                    <br/>*/}
-                    {/*                    <Button*/}
-                    {/*                        fluid*/}
-                    {/*                        content="Add user"*/}
-                    {/*                        as={Link}*/}
-                    {/*                        to="/AddUser"*/}
-                    {/*                        basic*/}
-                    {/*                        negative*/}
-                    {/*                    />*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*        </GridRow>*/}
-                    {/*        }*/}
-                    {/*        <GridRow>*/}
-                    {/*            <GridColumn width={8}>*/}
-                    {/*                <Segment style={{height: "21em"}} inverted*/}
-                    {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
-                    {/*                    <RatingComponent/>*/}
-                    {/*                </Segment>*/}
-                    {/*            </GridColumn>*/}
-                    {/*        </GridRow>*/}
-                    {/*    </Grid>*/}
-                    {/*    /!*    Modals    *!/*/}
-                    {/*    {isOpenGroupCreation &&*/}
-                    {/*    <CreateGroup toggleModal={handleToggleGroup}*/}
-                    {/*                 isWizard={isOpenWizard}*/}
-                    {/*                 toggleNextModal={handleToggleScenario}*/}
-                    {/*                 toggleIsWizard={handleToggleWizard}/>}*/}
-
-                    {/*    {isOpenScenarioCreation &&*/}
-                    {/*    <CreateScenario*/}
-                    {/*        toggleModal={handleToggleScenario}*/}
-                    {/*        isWizard={isOpenWizard}*/}
-                    {/*        toggleNextModal={handleToggleScenarioSet}*/}
-                    {/*        toggleIsWizard={handleToggleWizard}/>*/}
-                    {/*    }*/}
-                    {/*    {isOpenScenarioSetCreation &&*/}
-                    {/*    <CreateScenarioSet*/}
-                    {/*        toggleModal={handleToggleScenarioSet}*/}
-                    {/*        isWizard={isOpenWizard}*/}
-                    {/*        toggleNextModal={handleToggleExperimentCreation}*/}
-                    {/*        toggleIsWizard={handleToggleWizard}/>*/}
-                    {/*    }*/}
-                    {/*    {isOpenTemplateCreation &&*/}
-                    {/*    <CreateDiscussionTemplate*/}
-                    {/*        toggleModal={handleToggleTemplate}*/}
-                    {/*        isWizard={isOpenWizard}*/}
-                    {/*        toggleNextModal={handleToggleExperimentCreation}*/}
-                    {/*        toggleIsWizard={handleToggleWizard}/>*/}
-                    {/*    }*/}
-                    {/*    {isOpenExperimentCreation &&*/}
-                    {/*    <CreateExperiment*/}
-                    {/*        toggleModal={handleToggleExperimentCreation}*/}
-                    {/*        isWizard={isOpenWizard}*/}
-                    {/*        // toggleNextModal={handleToggleScenarioSet}*/}
-                    {/*        toggleIsWizard={handleToggleWizard}/>*/}
-                    {/*    }*/}
-                    {/*    {isOpenDiscussionCreation &&*/}
-                    {/*    <CreateDiscussion*/}
-                    {/*        toggleModal={handleToggleDiscussion}*/}
-                    {/*    />*/}
-                    {/*    }*/}
-                    {/*</Container>*/}
-                 {/*</Sidebar.Pusher>*/}
-            </Sidebar.Pushable>
-        </Segment>
+        // <Segment
+        //     inverted
+        //     textAlign='center'
+        //     style={{minHeight: 800, padding: '1em 0em'}}
+        //     vertical
+        // >
+        //     <NavBar handleChangeLanguage={handleChangeLanguage}/>
+        //     <Sidebar.Pushable as={Segment} style={{height: 'auto', backgroundColor: 'rgb(30, 30, 30)'}}>
+                <Layout page={myDashboardPageContent}/>
+        //         {/* right sidebar */}
+        //         {/*<Sidebar*/}
+        //         {/*    as={Segment}*/}
+        //         {/*    animation='overlay'*/}
+        //         {/*    className={(showSidebar ? "custom wide" : "very thin") + ' friends'}*/}
+        //         {/*    icon='labeled'*/}
+        //         {/*    // inverted*/}
+        //         {/*    vertical*/}
+        //         {/*    visible*/}
+        //         {/*    // width={showSidebar ? "wide" : "very thin"}*/}
+        //         {/*    onMouseOver={!showSidebar ? handleShowSidebar : null}*/}
+        //         {/*    onClick={handleShowSidebar}*/}
+        //         {/*    style={{*/}
+        //         {/*        backgroundColor:"#f4f3f5"*/}
+        //         {/*        // backgroundColor: 'rgb(30, 30, 30)',*/}
+        //         {/*        // backgroundImage: !showSidebar ? `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})` : '',*/}
+        //         {/*        // backgroundSize: '60px',*/}
+        //         {/*        // backgroundRepeat: 'repeat-y'*/}
+        //         {/*    }}*/}
+        //         {/*>*/}
+        //         {/*    <Icon size={'big'} name={(showSidebar ? 'left':'right') + ' arrow alternate circle'} style={{marginTop:"-10px",marginLeft:(showSidebar ? "220px":"35px")}}/>*/}
+        //         {/*    /!*my friends*!/*/}
+        //         {/*    <Menu.Item style={{marginTop:"20px", marginLeft: "10px", fontWeight: "bold"}}*/}
+        //         {/*               title={anyFriendOnline ? 'There are friends online' : 'No friends online'}>*/}
+        //         {/*        <Icon size={'large'} name='users'/>*/}
+        //         {/*        {anyFriendOnline && !showSidebar &&*/}
+        //         {/*        <Rating icon='star' defaultRating={1} maxRating={1} disabled/>*/}
+        //         {/*        }*/}
+        //         {/*        <br/>*/}
+        //         {/*        Friends*/}
+        //         {/*    </Menu.Item>*/}
+        //         {/*    <Divider/>*/}
+        //         {/*    <List style={{height: "15em"}}>*/}
+        //         {/*        {showSidebar && friends && friends.map((friend) => (*/}
+        //         {/*            <Menu.Item style={{marginLeft: "20px"}} key={friend._id}*/}
+        //         {/*                       title={friend.status.online ?*/}
+        //         {/*                           friend.status.idle ? 'idle' : 'online' : 'offline'}>*/}
+        //         {/*                <div style={{*/}
+        //         {/*                    display: 'inline-block',*/}
+        //         {/*                    fontSize: "13pt"*/}
+        //         {/*                }}>{friend.username}<NotificationBadge*/}
+        //         {/*                    key={friend._id}*/}
+        //         {/*                    count={1}*/}
+        //         {/*                    effect={[null, null, null, null]}*/}
+        //         {/*                    style={{*/}
+        //         {/*                        color: friend.status.online ? friend.status.idle ? "yellow" : "green" : "red",*/}
+        //         {/*                        backgroundColor: friend.status.online ? friend.status.idle ? "yellow" : "green" : "red",*/}
+        //         {/*                        top: "-15px",*/}
+        //         {/*                        left: "",*/}
+        //         {/*                        bottom: "",*/}
+        //         {/*                        right: "-20px",*/}
+        //         {/*                        fontSize: "7px",*/}
+        //         {/*                        padding: "3px 5px",*/}
+        //         {/*                    }}*/}
+        //         {/*                /></div>*/}
+        //         {/*                /!*<Rating icon='star' defaultRating={friend.status.online ? 1 : 0} maxRating={1} disabled/>*!/*/}
+        //         {/*            </Menu.Item>*/}
+        //         {/*        ))}*/}
+        //         {/*    </List>*/}
+        //         {/*    <List>*/}
+        //         {/*        {showSidebar && pendingFriends && pendingFriends.map((pendingFriend) => (*/}
+        //         {/*            <Menu.Item*/}
+        //         {/*                key={pendingFriend._id} */}
+        //         {/*                {pendingFriend.username}*/}
+        //         {/*                <Button negative size={'mini'} compact={true}*/}
+        //         {/*                        onClick={() => acceptFriend(pendingFriend._id)}>*/}
+        //         {/*                    ACCEPT*/}
+        //         {/*                </Button>*/}
+        //         {/*                <Button negative size={'mini'} compact={true}*/}
+        //         {/*                        onClick={() => declineFriend(pendingFriend._id)}>*/}
+        //         {/*                    DECLINE*/}
+        //         {/*                </Button>*/}
+        //         {/*            </Menu.Item>*/}
+        //         {/*        ))}*/}
+        //         {/*    </List>*/}
+        //         {/*    {showSidebar && foundFriendsList && <div onClick={(e) => e.stopPropagation()}>*/}
+        //         {/*        {foundFriendsList.map((potentialFriend) => (*/}
+        //         {/*            <Menu.Item key={potentialFriend._id}>*/}
+        //         {/*                <span style={{*/}
+        //         {/*                    paddingLeft: '15px',*/}
+        //         {/*                    paddingRight: '20px'*/}
+        //         {/*                }}>{potentialFriend.username}</span>*/}
+        //         {/*                <Button negative size={'mini'} compact={true} attached={'right'}*/}
+        //         {/*                        onClick={() => addFriend(potentialFriend._id)}>*/}
+        //         {/*                    Request Friend*/}
+        //         {/*                </Button>*/}
+        //         {/*            </Menu.Item>*/}
+        //         {/*        ))}</div>}*/}
+        //         {/*    {showSidebar && !haveFoundFriends && inviteFriendsComponent()}*/}
+        //         {/*    {showSidebar && searchFriendsComponent()}*/}
+        //         {/*    {showSidebar && friendInviteError && <div style={{color:'red', fontWeight: 'bold'}}>*/}
+        //         {/*        &nbsp;&nbsp;&nbsp;{friendInviteError}</div>}*/}
+        //         {/*    /!*my group members, update to have a group member specific user set*!/*/}
+        //         {/*    <Menu.Item style={{marginLeft: "10px", fontWeight: "bold"}} title={anyGroupMemberOnline ?*/}
+        //         {/*        'There are members online' : 'No members online'}>*/}
+        //         {/*        <Icon size={'large'} name='users'/>*/}
+        //         {/*        {anyGroupMemberOnline && !showSidebar &&*/}
+        //         {/*        <Rating icon='star' defaultRating={1} maxRating={1} disabled/>*/}
+        //         {/*        }*/}
+        //         {/*        <br/>*/}
+        //         {/*        Group Members*/}
+        //         {/*    </Menu.Item>*/}
+        //         {/*    <Divider/>*/}
+        //         {/*    <List style={{height: "15em"}}>*/}
+        //         {/*        {showSidebar && groupMembers && groupMembers.map((groupMember) => (*/}
+        //         {/*            <Menu.Item style={{marginLeft: "20px"}} key={groupMember._id}*/}
+        //         {/*                       title={groupMember.status.online ?*/}
+        //         {/*                           groupMember.status.idle ? 'idle' : 'online' : 'offline'}>*/}
+        //         {/*                <div style={{*/}
+        //         {/*                    display: 'inline-block',*/}
+        //         {/*                    fontSize: "13pt"*/}
+        //         {/*                }}>{groupMember.username}<NotificationBadge*/}
+        //         {/*                    key={groupMember._id}*/}
+        //         {/*                    count={1}*/}
+        //         {/*                    effect={[null, null, null, null]}*/}
+        //         {/*                    style={{*/}
+        //         {/*                        color: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",*/}
+        //         {/*                        backgroundColor: groupMember.status.online ? groupMember.status.idle ? "yellow" : "green" : "red",*/}
+        //         {/*                        top: "-15px",*/}
+        //         {/*                        left: "",*/}
+        //         {/*                        bottom: "",*/}
+        //         {/*                        right: "-20px",*/}
+        //         {/*                        fontSize: "7px",*/}
+        //         {/*                        padding: "3px 5px",*/}
+        //         {/*                    }}*/}
+        //         {/*                /></div>*/}
+        //         {/*                /!*<Rating icon='star' defaultRating={groupMember.status.online ? 1 : 0} maxRating={1} disabled/>*!/*/}
+        //         {/*            </Menu.Item>*/}
+        //         {/*        ))}*/}
+        //         {/*    </List>*/}
+        //         {/*</Sidebar>*/}
+        //         {/*/!* right sidebar *!/*/}
+        //         {/*<Sidebar*/}
+        //         {/*    as={Segment}*/}
+        //         {/*    animation='overlay'*/}
+        //         {/*    icon='labeled'*/}
+        //         {/*    inverted*/}
+        //         {/*    vertical*/}
+        //         {/*    direction={'right'}*/}
+        //         {/*    visible*/}
+        //         {/*    width={"very thin"}*/}
+        //         {/*    style={{*/}
+        //         {/*        backgroundColor: 'rgb(30, 30, 30)',*/}
+        //         {/*        backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,*/}
+        //         {/*        backgroundSize: '60px',*/}
+        //         {/*        backgroundRepeat: 'repeat-y'*/}
+        //         {/*    }}*/}
+        //         {/*/>*/}
+        //         {/*/!*end sidebar*!/*/}
+        //         {/*<Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "92vh"}} dimmed={showSidebar}*/}
+        //         {/*                onClick={showSidebar ? handleShowSidebar : null}>*/}
+        //
+        //         {/*<Container>*/}
+        //         {/*    <span style={{height: "10em"}}/>*/}
+        //         {/*    <Segment attached="top" clearing inverted*/}
+        //         {/*             style={{backgroundColor: 'rgb(10, 10, 10)', border: 'none'}}>*/}
+        //         {/*        <Header size="huge">*/}
+        //         {/*            <Header.Content as={Container}>*/}
+        //         {/*                My Dashboard {isAdmin && <span>- Admin</span>}*/}
+        //         {/*                {isAdmin &&*/}
+        //         {/*                <Button*/}
+        //         {/*                    floated="right"*/}
+        //         {/*                    onClick={() => {*/}
+        //         {/*                        handleToggleWizard();*/}
+        //         {/*                        handleToggleGroup();*/}
+        //         {/*                    }}*/}
+        //         {/*                    content="Open Experiment Wizard"*/}
+        //         {/*                    negative*/}
+        //         {/*                />}*/}
+        //         {/*            </Header.Content>*/}
+        //         {/*        </Header>*/}
+        //         {/*    </Segment>*/}
+        //
+        //         {/*    <Grid stackable >*/}
+        //         {/*        <GridRow columns={isDiscussionListsHidden ? 1 : 2}>*/}
+        //         {/*            <GridColumn width={16}>*/}
+        //         {/*                <Divider/>*/}
+        //         {/*                <Header as={Link} to={'/mydashboard'} floated='right' inverted*/}
+        //         {/*                        onClick={toggleDiscussionLists}>*/}
+        //         {/*                    {isDiscussionListsHidden ? 'Show' : 'Hide'} Discussions</Header>*/}
+        //         {/*                <br/>*/}
+        //         {/*                {isDiscussionListsHidden && <Divider/>}*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*            <GridColumn width={8}>*/}
+        //         {/*                <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}*/}
+        //         {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}*/}
+        //         {/*                         title={!user ? "please sign-up or login to create a new discussion" : "Create a new discussion"}*/}
+        //         {/*                >*/}
+        //         {/*                    <Header as={'h3'}*/}
+        //         {/*                            className={'myDiscussions'}>My {siteGlossary.userDiscourse[userLang]}*/}
+        //         {/*                        <Button*/}
+        //         {/*                            className={'newDiscussion'}*/}
+        //         {/*                            floated={"right"}*/}
+        //         {/*                            onClick={handleToggleDiscussion}*/}
+        //         {/*                            content="New Discussion"*/}
+        //         {/*                            disabled={!user}*/}
+        //         {/*                            negative*/}
+        //         {/*                            compact*/}
+        //         {/*                        />*/}
+        //         {/*                    </Header>*/}
+        //
+        //         {/*                    /!* attempting to only load this when user*/}
+        //         {/*            role is known and render with correct link path*!/*/}
+        //         {/*                    {isIndigenous !== null &&*/}
+        //         {/*                    <ListItem style={{overflow: "auto", height: "16em", minWidth:"300px"}}*/}
+        //         {/*                              description={myDiscussions &&*/}
+        //         {/*                              myDiscussions.filter((discussion) => filterDiscussionStatus.indexOf(discussion.status) > -1 ).map((discussion) => (*/}
+        //         {/*                                  <DiscussionSummary*/}
+        //         {/*                                      key={discussion._id}*/}
+        //         {/*                                      discussion={discussion}*/}
+        //         {/*                                      participantRole={isIndigenous}*/}
+        //         {/*                                  />*/}
+        //         {/*                              ))}/>}*/}
+        //         {/*                    <Card.Content extra>*/}
+        //         {/*                        <Checkbox*/}
+        //         {/*                            toggle*/}
+        //         {/*                            id={'filterActive'}*/}
+        //         {/*                            checked={filterDiscussionStatus.indexOf("active") > -1}*/}
+        //         {/*                            onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>*/}
+        //         {/*                        <label style={{color:"white", marginLeft:"10px"}} for={'filterActive'}>Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>*/}
+        //         {/*                    </Card.Content>*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*            <GridColumn width={8}>*/}
+        //         {/*                <Segment style={{height: "23em"}} inverted hidden={isDiscussionListsHidden}*/}
+        //         {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                    <Header as={'h3'} className={'finishedDiscussions'}>*/}
+        //         {/*                        All Finished {siteGlossary.userDiscourse[userLang]}</Header>*/}
+        //         {/*                    <ListItem style={{overflow: "auto", height: "16em"}}*/}
+        //         {/*                              description={allFinishedDiscussions &&*/}
+        //         {/*                              allFinishedDiscussions.map((discussion) => (*/}
+        //         {/*                                  <DiscussionSummary*/}
+        //         {/*                                      key={discussion._id}*/}
+        //         {/*                                      discussion={discussion}*/}
+        //         {/*                                      participantRole={true}*/}
+        //         {/*                                  />*/}
+        //         {/*                              ))}/>*/}
+        //         {/*                    <Card.Content extra>*/}
+        //         {/*                    </Card.Content>*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*        </GridRow>*/}
+        //         {/*        <GridRow columns={3}>*/}
+        //         {/*            <GridColumn width={5}>*/}
+        //         {/*                <Segment style={{height: "21em", backgroundColor: 'rgb(10, 10, 10)'}} inverted>*/}
+        //         {/*                    <Header as={'h3'} className={'myGroups'}>My Groups</Header>*/}
+        //         {/*                    <ListItem style={{overflow: "auto", height: "13em"}}*/}
+        //         {/*                              description={groups &&*/}
+        //         {/*                              groups.map((group) => (*/}
+        //         {/*                                  <GroupSummary*/}
+        //         {/*                                      key={group._id}*/}
+        //         {/*                                      group={group}*/}
+        //         {/*                                  />*/}
+        //         {/*                              ))}/>*/}
+        //         {/*                    <Card.Content extra style={{margin: "1em"}}>*/}
+        //         {/*                        {isAdmin &&*/}
+        //         {/*                        <Button*/}
+        //         {/*                            fluid*/}
+        //         {/*                            onClick={handleToggleGroup}*/}
+        //         {/*                            content="Create New Group"*/}
+        //         {/*                            basic*/}
+        //         {/*                            negative*/}
+        //         {/*                        />}*/}
+        //         {/*                    </Card.Content>*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*            {isAdmin &&*/}
+        //         {/*            <>*/}
+        //         {/*                <GridColumn width={6}>*/}
+        //         {/*                    <Segment style={{height: "21em"}} inverted*/}
+        //         {/*                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                        <Header as={'h3'} className={'discussionTemplates'}>My Discussion*/}
+        //         {/*                            Templates</Header>*/}
+        //         {/*                        <ListItem style={{overflow: "auto", height: "13em"}}*/}
+        //         {/*                                  description={discussionTemplates &&*/}
+        //         {/*                                  discussionTemplates.map((discussionTemplate) => (*/}
+        //         {/*                                      <DiscussionTemplateSummary*/}
+        //         {/*                                          key={discussionTemplate._id}*/}
+        //         {/*                                          template={discussionTemplate}*/}
+        //         {/*                                          toggleModal={handleToggleTemplateDisplay}*/}
+        //         {/*                                      />*/}
+        //         {/*                                  ))}*/}
+        //         {/*                        />*/}
+        //         {/*                        <Card.Content extra style={{margin: "1em"}}>*/}
+        //         {/*                            <Button*/}
+        //         {/*                                fluid*/}
+        //         {/*                                onClick={handleToggleTemplate}*/}
+        //         {/*                                content="Create New Template"*/}
+        //         {/*                                basic*/}
+        //         {/*                                negative*/}
+        //         {/*                            />*/}
+        //         {/*                        </Card.Content>*/}
+        //         {/*                    </Segment>*/}
+        //         {/*                </GridColumn>*/}
+        //         {/*                <GridColumn width={5}>*/}
+        //         {/*                    <Segment style={{height: "21em"}} inverted*/}
+        //         {/*                             style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                        <Header as={'h3'} className={'myScenarios'}>My scenarios</Header>*/}
+        //         {/*                        <ListItem style={{overflow: "auto", height: "13em"}}*/}
+        //         {/*                                  description={scenarios &&*/}
+        //         {/*                                  scenarios.map((scenario) => (*/}
+        //         {/*                                      <ScenarioSummary*/}
+        //         {/*                                          key={scenario._id}*/}
+        //         {/*                                          scenario={scenario}*/}
+        //         {/*                                      />*/}
+        //         {/*                                  ))}/>*/}
+        //         {/*                        <Card.Content extra style={{margin: "1em"}}>*/}
+        //         {/*                            <Button*/}
+        //         {/*                                fluid*/}
+        //         {/*                                onClick={handleToggleScenario}*/}
+        //         {/*                                content="Create New Scenario"*/}
+        //         {/*                                basic*/}
+        //         {/*                                negative*/}
+        //         {/*                            />*/}
+        //         {/*                        </Card.Content>*/}
+        //         {/*                    </Segment>*/}
+        //         {/*                </GridColumn>*/}
+        //         {/*            </>*/}
+        //         {/*            }*/}
+        //         {/*        </GridRow>*/}
+        //         {/*        {isAdmin &&*/}
+        //         {/*        <GridRow columns={3}>*/}
+        //
+        //         {/*            <GridColumn width={5}>*/}
+        //         {/*                <Segment style={{height: "21em"}} inverted*/}
+        //         {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                    <Header as={'h3'} className={'myScenarioSets'}>My Scenario Sets</Header>*/}
+        //         {/*                    <ListItem style={{overflow: "auto", height: "13em"}}*/}
+        //         {/*                              description={scenarioSets &&*/}
+        //         {/*                              scenarioSets.map((scenarioSet) => (*/}
+        //         {/*                                  <ScenarioSetSummary*/}
+        //         {/*                                      key={scenarioSet._id}*/}
+        //         {/*                                      scenarioSet={scenarioSet}*/}
+        //         {/*                                  />*/}
+        //         {/*                              ))}/>*/}
+        //         {/*                    <Card.Content extra style={{margin: "1em"}}>*/}
+        //         {/*                        <Button*/}
+        //         {/*                            fluid*/}
+        //         {/*                            onClick={handleToggleScenarioSet}*/}
+        //         {/*                            content="Create New Set"*/}
+        //         {/*                            basic*/}
+        //         {/*                            negative*/}
+        //         {/*                        />*/}
+        //         {/*                    </Card.Content>*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*            <GridColumn width={6}>*/}
+        //         {/*                <Segment style={{height: "21em"}} inverted*/}
+        //         {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                    <Header as={'h3'} className={'myExperiments'}>My Experiments</Header>*/}
+        //         {/*                    <ListItem style={{overflow: "auto", height: "13em"}}*/}
+        //         {/*                              description={experiments &&*/}
+        //         {/*                              experiments.map((experiment) => (*/}
+        //         {/*                                  <ExperimentSummary*/}
+        //         {/*                                      key={experiment._id}*/}
+        //         {/*                                      experiment={experiment}*/}
+        //         {/*                                  />*/}
+        //         {/*                              ))}/>*/}
+        //         {/*                    <Card.Content extra style={{margin: "1em"}}>*/}
+        //         {/*                        <Button*/}
+        //         {/*                            fluid*/}
+        //         {/*                            onClick={handleToggleExperimentCreation}*/}
+        //         {/*                            content="Create New Experiment"*/}
+        //         {/*                            basic*/}
+        //         {/*                            negative*/}
+        //         {/*                        />*/}
+        //         {/*                    </Card.Content>*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*            <GridColumn width={5}>*/}
+        //         {/*                <Segment style={{height: "21em"}} inverted*/}
+        //         {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                    <Header as={'h3'}>Add Users to roles</Header>*/}
+        //         {/*                    <Button*/}
+        //         {/*                        fluid*/}
+        //         {/*                        content="Assign Roles"*/}
+        //         {/*                        as={Link}*/}
+        //         {/*                        to="/assignroles"*/}
+        //         {/*                        basic*/}
+        //         {/*                        negative*/}
+        //         {/*                    />*/}
+        //         {/*                    <br/>*/}
+        //         {/*                    <Button*/}
+        //         {/*                        fluid*/}
+        //         {/*                        content="Add user"*/}
+        //         {/*                        as={Link}*/}
+        //         {/*                        to="/AddUser"*/}
+        //         {/*                        basic*/}
+        //         {/*                        negative*/}
+        //         {/*                    />*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*        </GridRow>*/}
+        //         {/*        }*/}
+        //         {/*        <GridRow>*/}
+        //         {/*            <GridColumn width={8}>*/}
+        //         {/*                <Segment style={{height: "21em"}} inverted*/}
+        //         {/*                         style={{backgroundColor: 'rgb(10, 10, 10)'}}>*/}
+        //         {/*                    <RatingComponent/>*/}
+        //         {/*                </Segment>*/}
+        //         {/*            </GridColumn>*/}
+        //         {/*        </GridRow>*/}
+        //         {/*    </Grid>*/}
+        //         {/*    /!*    Modals    *!/*/}
+        //         {/*    {isOpenGroupCreation &&*/}
+        //         {/*    <CreateGroup toggleModal={handleToggleGroup}*/}
+        //         {/*                 isWizard={isOpenWizard}*/}
+        //         {/*                 toggleNextModal={handleToggleScenario}*/}
+        //         {/*                 toggleIsWizard={handleToggleWizard}/>}*/}
+        //
+        //         {/*    {isOpenScenarioCreation &&*/}
+        //         {/*    <CreateScenario*/}
+        //         {/*        toggleModal={handleToggleScenario}*/}
+        //         {/*        isWizard={isOpenWizard}*/}
+        //         {/*        toggleNextModal={handleToggleScenarioSet}*/}
+        //         {/*        toggleIsWizard={handleToggleWizard}/>*/}
+        //         {/*    }*/}
+        //         {/*    {isOpenScenarioSetCreation &&*/}
+        //         {/*    <CreateScenarioSet*/}
+        //         {/*        toggleModal={handleToggleScenarioSet}*/}
+        //         {/*        isWizard={isOpenWizard}*/}
+        //         {/*        toggleNextModal={handleToggleExperimentCreation}*/}
+        //         {/*        toggleIsWizard={handleToggleWizard}/>*/}
+        //         {/*    }*/}
+        //         {/*    {isOpenTemplateCreation &&*/}
+        //         {/*    <CreateDiscussionTemplate*/}
+        //         {/*        toggleModal={handleToggleTemplate}*/}
+        //         {/*        isWizard={isOpenWizard}*/}
+        //         {/*        toggleNextModal={handleToggleExperimentCreation}*/}
+        //         {/*        toggleIsWizard={handleToggleWizard}/>*/}
+        //         {/*    }*/}
+        //         {/*    {isOpenExperimentCreation &&*/}
+        //         {/*    <CreateExperiment*/}
+        //         {/*        toggleModal={handleToggleExperimentCreation}*/}
+        //         {/*        isWizard={isOpenWizard}*/}
+        //         {/*        // toggleNextModal={handleToggleScenarioSet}*/}
+        //         {/*        toggleIsWizard={handleToggleWizard}/>*/}
+        //         {/*    }*/}
+        //         {/*    {isOpenDiscussionCreation &&*/}
+        //         {/*    <CreateDiscussion*/}
+        //         {/*        toggleModal={handleToggleDiscussion}*/}
+        //         {/*    />*/}
+        //         {/*    }*/}
+        //         {/*</Container>*/}
+        //         {/*</Sidebar.Pusher>*/}
+        //     </Sidebar.Pushable>
+        // </Segment>
     );
 };
