@@ -2,7 +2,7 @@ import {useTracker} from "meteor/react-meteor-data";
 import React, {useEffect, useState, Suspense, lazy} from "react";
 import {
     Button, Card, Container, Segment, Header, Grid,
-    GridColumn, GridRow, ListItem, Sidebar, Menu, Icon, List, Rating, Input, Divider, Checkbox
+    GridColumn, GridRow, ListItem, Divider, Checkbox
 } from "semantic-ui-react";
 import '/imports/api/security'
 import {Link} from "react-router-dom";
@@ -251,7 +251,7 @@ export const MyDashboard = () => {
                                         checked={filterDiscussionStatus.indexOf("active") > -1}
                                         onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
                                     <label style={{color: "white", marginLeft: "10px"}}
-                                           for={'filterActive'}>Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
+                                           >Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
                                 </Card.Content>
                             </Segment>
                         </GridColumn>

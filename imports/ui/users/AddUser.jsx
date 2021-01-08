@@ -39,7 +39,6 @@ export const AddUser = () => {
                     setErrUsername(error.reason + " ");
                     return;
                 } else {
-                    // history.back();
                     setIsSignupComplete(true);
                     setErrUsername("");
                 }
