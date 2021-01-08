@@ -1,12 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {
-    Menu,
-    Container,
-    Icon,
-    Dropdown,
-    MenuItem,
-    MenuMenu,
-    Button, HeaderContent, Header, Segment,
+    Menu, Container, Dropdown,
+    MenuItem, MenuMenu, Button, Header,
 } from "semantic-ui-react";
 import Cookies from "universal-cookie/lib";
 import {siteGlossary} from "../../api/glossary";

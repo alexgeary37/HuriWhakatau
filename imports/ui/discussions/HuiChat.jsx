@@ -1,15 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {
-    Sidebar,
-    Container,
-    Segment,
-    Header,
-    Button,
-    Comment,
-    Modal,
-    Grid,
-    GridColumn,
-    List, GridRow, Divider,
+    Container, Segment, Header, Button, Comment,
+    Modal, Grid, GridColumn, List, GridRow, Divider,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -22,15 +14,13 @@ import {Comments} from "/imports/api/comments";
 import {Scenarios} from "/imports/api/scenarios";
 import {Discussions} from "/imports/api/discussions";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
-import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Verdict} from "/imports/ui/verdicts/Verdict";
-import {Sidebars} from "/imports/ui/navigation/Sidebars";
 import {CommentForm} from "/imports/ui/comments/CommentForm";
 import {UserComment} from "/imports/ui/comments/UserComment";
 import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
 import {UserSummary} from "/imports/ui/users/UserSummary";
 import {Experiments} from "../../api/experiments";
-import {huichatTour, myUserSettings} from "../../api/tourSteps";
+import {huichatTour} from "../../api/tourSteps";
 import Cookies from "universal-cookie/lib";
 import {Tour} from "../navigation/Tour";
 import {Layout} from "../navigation/Layout";
@@ -44,7 +34,6 @@ export const HuiChat = () => {
     const [userVotedForLeader, setUserVotedForLeader] = useState(false); ///
     const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
     let history = useHistory();
-    // use to allow comments or proposing / voting on verdicts
 
     const toggleShowTour = () => {
         if (!cookies.get('huichatTour')) {

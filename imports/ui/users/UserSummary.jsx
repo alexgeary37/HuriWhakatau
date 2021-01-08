@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Button, Icon, List, ModalActions, Segment} from "semantic-ui-react";
-import {Picker, Emoji} from "emoji-mart";
-import {Experiments} from "../../api/experiments";
-import {useParams} from "react-router-dom";
-import {useTracker} from "meteor/react-meteor-data";
+import {Button, Icon, Segment} from "semantic-ui-react";
+import {Picker} from "emoji-mart";
 
 export const UserSummary = ({
                                 member,
@@ -13,28 +10,13 @@ export const UserSummary = ({
                                 groupLeader,
                                 discussionStatus,
                                 closeChat,
-                                discussionId,
                                 nextDiscussionId,
                                 experimentId,
                             }) => {
     const [userEmotionalColour, setUserEmotionalColour] = useState("white");
 
-    // const {experimentId} = useTracker(() => {
-    //     const subExperiments = Meteor.subscribe("experiments");
-    //     let experiment;
-    //     let id;
-    //     if (subExperiments.ready()) {
-    //         experiment = Experiments.findOne({discussions: {$elemMatch: {$eq: discussionId}}}, {fields:{groupLeader: 1}})
-    //     }
-    //     return {
-    //         experimentId: id,
-    //         groupLeader: leader,
-    //     }
-    // });
-
     // send user vote to db and calculate winner
     const submitLeaderVote = (userId) => {
-        // Meteor.call("groups.voteLeader", groupId, userId);
         Meteor.call("experiments.voteLeader",experimentId, groupId, userId);
         handleUserVoted();
     };
@@ -129,9 +111,6 @@ export const UserSummary = ({
                 <Icon
                     title={'End discussion and go to next'}
                     className={'stop circle'}
-                    // size={'large'}
-                    // style={{margin: 10}}
-                    // content={"Close chat"}
                     onClick={handleCloseChat}
                     color={'red'}
                 />
@@ -155,8 +134,6 @@ export const UserSummary = ({
                 <Icon
                     title={'Go to next discussion'}
                     className={'arrow alternate circle right'}
-                    // style={{margin: 10}}
-                    // content={"Go to next"}
                     onClick={handleCloseChat}
                     color={'green'}
                 />

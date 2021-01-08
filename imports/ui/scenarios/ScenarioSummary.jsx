@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Button, List, Segment} from "semantic-ui-react";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
@@ -23,7 +23,7 @@ export const ScenarioSummary = ({scenario}) => {
     });
 
     return (
-        <List.Item /*as={Link} to={`/scenarios/${scenario._id}`}*/>
+        <List.Item>
             <List.Content as={Segment} style={{
                 backgroundColor: "#c4c4c4",
             }}>
@@ -32,7 +32,6 @@ export const ScenarioSummary = ({scenario}) => {
                     content={discussionTemplate && "Template: " + discussionTemplate.name}
                 />
                 <Button content={'open'} onClick={toggleIt}/>
-                {/* show exp details */}
                 {isOpenScenarioDisplay && scenario && discussionTemplate &&
                 <ViewScenario
                     toggleModal={toggleIt}

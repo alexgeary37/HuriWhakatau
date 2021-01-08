@@ -252,7 +252,6 @@ export const Layout = ({page}) => {
                                             padding: "3px 5px",
                                         }}
                                     /></div>
-                                    {/*<Rating icon='star' defaultRating={friend.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                                 </Menu.Item>
                             ))}
                         </List>
@@ -323,7 +322,6 @@ export const Layout = ({page}) => {
                                             padding: "3px 5px",
                                         }}
                                     /></div>
-                                    {/*<Rating icon='star' defaultRating={groupMember.status.online ? 1 : 0} maxRating={1} disabled/>*/}
                                 </Menu.Item>
                             ))}
                         </List>

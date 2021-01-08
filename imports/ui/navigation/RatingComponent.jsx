@@ -2,10 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Random} from 'meteor/random'
 import {indices, responseSet} from '/imports/api/ratingResponses'
 import {
-    Button, Container, Segment,
-    Header, Message, List, Form,
-    Icon, Card, ListItem, Rating,
-    Divider, Image, Sidebar, Tab, ListContent, Checkbox, Placeholder,
+    Button, Segment, Header, List, Form, ListItem, ListContent, Checkbox, Placeholder,
 } from "semantic-ui-react";
 
 export const RatingComponent = () => {

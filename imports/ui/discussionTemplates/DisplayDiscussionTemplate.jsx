@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import {Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 
 export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
-    // console.log(isCreationOpen.isCreationOpen);
     const anonymous = template.usersAreAnonymous;
     const typing = template.showTypingNotification;
     const templateName = template.name;
@@ -35,40 +34,26 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                     type="text"
                     placeholder="Template Name"
                     value={templateName}
-                    // onInput={({target}) => setTemplateName(target.value)}
                     autoFocus
                 />
                 <br/>
                 <br/>
-                <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous'
-                          // onClick={(e, data) => setAnonymous(data.checked)}
-                />
+                <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous'/>
                 <br/>
-                <Checkbox disabled readOnly checked={typing} label='Show typing notifications'
-                          // onClick={(e, data) => setTyping(data.checked)}
-                />
+                <Checkbox disabled readOnly checked={typing} label='Show typing notifications'/>
                 <br/>
-                <Checkbox checked={canEdit} label='Users can edit their own comments'
-                          // onClick={(e, data) => setCanEdit(data.checked)}
-                />
+                <Checkbox checked={canEdit} label='Users can edit their own comments'/>
                 <br/>
-                <Checkbox disabled readOnly checked={isThreaded} label='Comments are threaded'
-                          // onClick={(e, data) => setIsThreaded(data.checked)}
-                />
+                <Checkbox disabled readOnly checked={isThreaded} label='Comments are threaded'/>
                 <br/>
-                <Checkbox disabled readOnly checked={showProfile} label='Show profile info (eg pic)'
-                          // onClick={(e, data) => setShowProfile(data.checked)}
-                />
+                <Checkbox disabled readOnly checked={showProfile} label='Show profile info (eg pic)'/>
                 <br/>
                 <br/>
-                <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'
-                          // onClick={(e, data) => setCanAddEmojis(data.checked)}
-                />
+                <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'/>
                 <br/>
                 <br/>
                 <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
                        value={timeLimit}
-                       // onInput={({target}) => setTimeLimit(target.value)}
                 >
                     <Label>Discussions have time limit</Label>
                     <input/>
@@ -78,7 +63,6 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                 <br/>
                 <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number' labelPosition='right'
                        value={charLimit}
-                       // onInput={({target}) => setCharLimit(target.value)}
                 >
                     <Label>Comments have character limit</Label>
                     <input/>

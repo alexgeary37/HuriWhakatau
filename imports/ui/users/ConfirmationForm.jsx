@@ -40,22 +40,12 @@ export const ConfirmationForm = () => {
             <Container>
                 <Form as={Segment} fluid={'true'} style={{textAlign: "center"}}>
                     {!confirmationResult && <p>Verifying email, please wait...</p>}
-
                     <Icon size={'big'} name={!confirmationResult ? 'circle notch' : ''} loading/>
-
                     {confirmationResult ? (
                         <div style={{height: "25px", color: confirmationColour}}>{confirmationResult}</div>
                     ) : (
                         <div style={{height: "25px"}}/>
                     )}
-
-                    {/*<Form.Button*/}
-                    {/*    content="Confirm"*/}
-                    {/*    onClick={() => {*/}
-                    {/*        handleConfirmation()*/}
-                    {/*    }*/}
-                    {/*    }*/}
-                    {/*/>*/}
                 </Form>
             </Container>
         </div>

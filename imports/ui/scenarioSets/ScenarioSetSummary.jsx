@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import { useTracker } from "meteor/react-meteor-data";
 import {Button, List, Segment} from "semantic-ui-react";
 import {ViewScenarioSet} from "./ViewScenarioSet";
 
@@ -8,13 +7,6 @@ export const ScenarioSetSummary = ({ scenarioSet }) => {
     const toggleIt = () => {
         setIsOpenScenarioSetDisplay(!isOpenScenarioSetDisplay);
     }
-  // const { discussionTemplate } = useTracker(() => {
-  //   Meteor.subscribe("discussionTemplates");
-  //
-  //   return {
-  //     // discussionTemplate: DiscussionTemplates.findOne({ _id: scenario.discussionTemplateId}),
-  //   };
-  // });
 
   return (
     <List.Item>
@@ -27,7 +19,7 @@ export const ScenarioSetSummary = ({ scenarioSet }) => {
         />
           <Button content={'open'} onClick={toggleIt} />
           {/* show exp details */}
-          {isOpenScenarioSetDisplay && scenarioSet && 
+          {isOpenScenarioSetDisplay && scenarioSet &&
           <ViewScenarioSet
               toggleModal={toggleIt}
               scenarioSet={scenarioSet} />

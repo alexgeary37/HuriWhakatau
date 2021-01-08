@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 
 export const CreateDiscussionTemplate = ({toggleModal}) => {
     const [anonymous, setAnonymous] = useState(false);

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {Categories} from "../../api/categories";
 import {Tour} from "../navigation/Tour";
 import {Groups} from "../../api/groups";

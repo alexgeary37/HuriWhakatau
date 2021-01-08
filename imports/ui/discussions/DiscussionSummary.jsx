@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Link } from "react-router-dom";
 import { List, Segment } from "semantic-ui-react";
 import { Scenarios } from "/imports/api/scenarios";
 
 export const DiscussionSummary = ({ discussion, participantRole }) => {
-  const [isIndigenous, setIsIndigenous] = useState(participantRole);
   const { scenario } = useTracker(() => {
     Meteor.subscribe("scenarios");
 

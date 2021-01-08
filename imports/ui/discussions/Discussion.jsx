@@ -1,15 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {
-    Sidebar,
-    Container,
-    Segment,
-    Header,
-    Button,
-    Comment,
-    Modal,
-    Grid,
-    GridColumn,
-    List, Divider,
+    Container, Header, Button, Comment, Modal,
+    Grid, GridColumn, List, Divider,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -22,26 +14,14 @@ import {Comments} from "/imports/api/comments";
 import {Scenarios} from "/imports/api/scenarios";
 import {Discussions} from "/imports/api/discussions";
 import {DiscussionTemplates} from "/imports/api/discussionTemplate";
-import {NavBar} from "/imports/ui/navigation/NavBar";
 import {Verdict} from "/imports/ui/verdicts/Verdict";
-import {Sidebars} from "/imports/ui/navigation/Sidebars";
 import {CommentForm} from "/imports/ui/comments/CommentForm";
 import {UserComment} from "/imports/ui/comments/UserComment";
 import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
 import {Timer} from "./Timer"; ///
-import Cookies from "universal-cookie/lib";
 import {Layout} from "../navigation/Layout";
 
 export const Discussion = () => { ///
-    const cookies = new Cookies();
-    // const [userLang, setUserLang] = useState("mā");
-    // useEffect(() => {
-    //     if (cookies.get('lang')) {
-    //         setUserLang(cookies.get('lang'))
-    //     } else {
-    //         cookies.set('lang', "mā", {path: '/'});
-    //     }
-    // }, []);
 
     const filter = {};
     const {discussionId} = useParams();
@@ -174,12 +154,13 @@ export const Discussion = () => { ///
     const checkGroupMembership = () => {
         if (group && group.members.includes(Meteor.userId())) {
             setUserInGroup(true);
-        } else {
-            //console.log("user not in group");
         }
     }
 
-    useEffect(()=>{checkGroupMembership(); document.title = "Discussion - " + (scenario && scenario.title)}, [group]);
+    useEffect(() => {
+        checkGroupMembership();
+        document.title = "Discussion - " + (scenario && scenario.title)
+    }, [group]);
 
     // get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
     // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
@@ -213,7 +194,6 @@ export const Discussion = () => { ///
             console.log('IF2IFELSE');
             updateTimed();
             calculateTimeLeft();
-            //maybe put the useEffect scroll to bottom controlling state change (vv line 189) here
         }
     }
 
@@ -229,11 +209,6 @@ export const Discussion = () => { ///
     // Return true if this user has submitted a verdict, false otherwise.
     const userHasSubmittedVerdict = () => {
         return verdicts.findIndex((x) => x.authorId === Meteor.userId()) !== -1;
-    };
-
-    //set up changing language on site based on user nav menu selection
-    const handleChangeLanguage = (lang) => {
-        setUserLang(lang);
     };
 
     const hasReachedConsensus = () => {
@@ -364,124 +339,6 @@ export const Discussion = () => { ///
     }
 
     return (
-        // <div>
-        //   <NavBar handleChangeLanguage={handleChangeLanguage}/>
-        //   {/*hacky way to move content out from under menu*/}
-        //   <br />
-        //   <br />
-        //   <br />
-        //   <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-        // <Segment inverted
-        //          textAlign='center'
-        //          style={{minHeight: 800, padding: '1em 0em'}}
-        //          vertical>
-        //     <NavBar handleChangeLanguage={handleChangeLanguage}/>
-        //     <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Layout page={discussionPageContent}/>
-        //         {/*<Sidebars />*/}
-        //         {/*<Container attached="bottom" style={{ width: "110vh"}}>*/}
-        //         {/*  <Grid columns={3}>             /!**!/*/}
-        //         {/*      <GridColumn width={4} style={{ height: "90vh"}}>*/}
-        //         {/*        <Header*/}
-        //         {/*          inverted*/}
-        //         {/*          content={(scenario && scenario.title) || (topic && topic.title)}*/}
-        //         {/*          size="medium"*/}
-        //         {/*        />*/}
-        //         {/*        <Divider/>*/}
-        //         {/*        /!* replace the topic with scenario only once old data is cleared out *!/*/}
-        //         {/*        <Header as={'h5'} inverted*/}
-        //         {/*              content=*/}
-        //         {/*          {(scenario && scenario.description) ||*/}
-        //         {/*          (topic && topic.description)}*/}
-        //         {/*        />*/}
-        //         {/*        {timedDiscussion && discussionStatus === 'active' && <Timer time={timeLeft} />}*/}
-        //         {/*      </GridColumn>*/}
-        //         {/*      <GridColumn width={8}>*/}
-        //         {/*        <div*/}
-        //         {/*          style={{ position: "absolute", bottom: "0px", width: "95%" }}*/}
-        //         {/*        >*/}
-        //         {/*          <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>*/}
-        //         {/*            {comments && comments.map((comment) => (*/}
-        //         {/*              <UserComment*/}
-        //         {/*                key={comment._id}*/}
-        //         {/*                comment={comment}*/}
-        //         {/*                discussionStatus={discussionStatus}*/}
-        //         {/*                userCanEdit={*/}
-        //         {/*                  discussionTemplate*/}
-        //         {/*                    ? discussionTemplate.usersCanEditComments*/}
-        //         {/*                    : true*/}
-        //         {/*                }*/}
-        //         {/*              />*/}
-        //         {/*            ))}*/}
-        //         {/*          <div ref={commentsEndRef} />*/}
-        //         {/*          </Comment.Group>*/}
-        //         {/*          {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (*/}
-        //         {/*            <CommentForm*/}
-        //         {/*              discussionId={discussionId}*/}
-        //         {/*              isDiscussionPublic={discussionIsPublic}*/}
-        //         {/*              isUserAGroupMember={userInGroup}*/}
-        //         {/*              groupId={group._id}*/}
-        //         {/*            />*/}
-        //         {/*          )}*/}
-        //         {/*        </div>*/}
-        //         {/*      </GridColumn>*/}
-        //         {/*      <GridColumn width={4}>*/}
-        //         {/*        <Header inverted content="Verdicts" size="medium" />*/}
-        //         {/*        <Divider/>*/}
-        //         {/*        <List style={{ overflow: "auto", maxHeight: "50em" }}>*/}
-        //         {/*          {verdicts && verdicts.map((verdict) => (*/}
-        //         {/*            <List.Item key={verdict._id}>*/}
-        //         {/*              <Verdict*/}
-        //         {/*                key={verdict._id}*/}
-        //         {/*                verdict={verdict}*/}
-        //         {/*                onVote={hasReachedConsensus}*/}
-        //         {/*                discussionStatus={discussionStatus}*/}
-        //         {/*              />*/}
-        //         {/*            </List.Item>*/}
-        //         {/*          ))}*/}
-        //         {/*          {group && hasReachedConsensus() && openConsensusModal === 'unopened' && (*/}
-        //         {/*            <Modal open={true} size='mini'>*/}
-        //         {/*              <Modal.Content>Discussion reached a consensus</Modal.Content>*/}
-        //         {/*              <Modal.Actions>*/}
-        //         {/*                {nextDiscussionId &&*/}
-        //         {/*                <Button as={Link}*/}
-        //         {/*                        to={"/discussion/" + nextDiscussionId}*/}
-        //         {/*                        content={"Next discussion"}/>}*/}
-        //         {/*                <Button as={Link} to="/mydashboard" content="Return to Dashboard" />*/}
-        //         {/*                <Button content="View Discussion" onClick={() => setOpenConsensusModal('closed')} />*/}
-        //         {/*              </Modal.Actions>*/}
-        //         {/*            </Modal>*/}
-        //         {/*          )}*/}
-        //         {/*          {!userHasSubmittedVerdict() &&*/}
-        //         {/*          discussionVerdictProposers &&*/}
-        //         {/*          discussionStatus === "active" &&*/}
-        //         {/*          (discussionVerdictProposers.includes(Meteor.userId()) ? (*/}
-        //         {/*            <VerdictForm discussionId={discussionId} />*/}
-        //         {/*          ) : (*/}
-        //         {/*            <div style={{ textAlign: "center" }}>*/}
-        //         {/*              <Button*/}
-        //         {/*                style={{ margin: 10 }}*/}
-        //         {/*                content="Propose Verdict"*/}
-        //         {/*                onClick={proposeVerdict}*/}
-        //         {/*                primary*/}
-        //         {/*              />*/}
-        //         {/*            </div>*/}
-        //         {/*          ))}*/}
-        //         {/*          {discussionStatus !== "active" && nextDiscussionId && (*/}
-        //         {/*            <div style={{ textAlign: "center" }}>*/}
-        //         {/*              <Button*/}
-        //         {/*                  style={{ margin: 10 }}*/}
-        //         {/*                  content={"Go to next"}*/}
-        //         {/*                  onClick={nextDiscussion}*/}
-        //         {/*                  primary*/}
-        //         {/*              />*/}
-        //         {/*            </div>*/}
-        //         {/*          )}*/}
-        //         {/*        </List>*/}
-        //         {/*      </GridColumn>*/}
-        //         {/*  </Grid>*/}
-        //         {/*</Container>*/}
-        //     </Sidebar.Pushable>
-        // </Segment>
+        <Layout page={discussionPageContent}/>
     );
 };

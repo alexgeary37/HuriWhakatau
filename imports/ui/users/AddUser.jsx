@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {Container, Segment, Form, Checkbox} from "semantic-ui-react";
 import {NavBar} from "../navigation/NavBar";
-import {useTracker} from "meteor/react-meteor-data";
 
 export const AddUser = () => {
     const [userName, setUserName] = useState("");
@@ -108,8 +107,6 @@ export const AddUser = () => {
                         negative
                         disabled={email === ""}
                         onClick={() => {
-                            // userName !== "" || userAnon &&
-                            // // password !== "" &&
                             handleSubmit();
                             setIsLoading(true)
                         }

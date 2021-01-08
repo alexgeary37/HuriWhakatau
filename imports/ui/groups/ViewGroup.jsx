@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button, Header} from "semantic-ui-react";
+import {Modal, Button, Header} from "semantic-ui-react";
 
 export const ViewGroup = ({toggleModal, group}) => {
     const [isOpen, setIsOpen] = useState(true);

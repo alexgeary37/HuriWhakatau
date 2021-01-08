@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
 import {Button, List, Segment} from "semantic-ui-react";
 import {DisplayDiscussionTemplate} from "./DisplayDiscussionTemplate";
 
@@ -17,7 +16,6 @@ export const DiscussionTemplateSummary = ({ template }) => {
       }}>
         <List.Header as={"h4"} content={template && template.name} />
         <Button content={'open'} onClick={toggleIt} />
-        {/* show template details */}
         {isOpenTemplateDisplay &&
         <DisplayDiscussionTemplate
             toggleModal={toggleIt}

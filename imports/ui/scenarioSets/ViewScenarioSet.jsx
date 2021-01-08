@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button, Header} from "semantic-ui-react";
+import {Checkbox, Modal, Button, Header} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Scenarios} from "/imports/api/scenarios";
 
@@ -43,13 +43,6 @@ export const ViewScenarioSet = ({toggleModal, scenarioSet}) => {
                 )}
             </Modal.Content>
             <Modal.Actions>
-                {/*<Button*/}
-                {/*    content="Save & Close"*/}
-                {/*    onClick={(e) => {*/}
-                {/*        submitScenario(e);*/}
-                {/*    }}*/}
-                {/*    positive*/}
-                {/*/>*/}
                 <Button color='black' onClick={toggleIt}>
                     Close
                 </Button>

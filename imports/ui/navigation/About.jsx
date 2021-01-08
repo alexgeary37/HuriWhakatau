@@ -1,32 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {
     Container, Segment, Header, Icon,
-    Image, Sidebar, Tab, Message, Divider,
+    Image, Tab, Message, Divider,
 } from "semantic-ui-react";
 import {Random} from "meteor/random";
-import {NavBar} from "/imports/ui/navigation/NavBar";
-import {Sidebars} from "/imports/ui/navigation/Sidebars";
 import {siteGlossary} from "../../api/glossary";
-import Cookies from "universal-cookie/lib";
 import {Layout} from "./Layout";
 
 export const About = () => {
-    // const cookies = new Cookies();
-    // const [userLang, setUserLang] = useState("mā");
-    // useEffect(() => {
-    //     if (cookies.get('lang')) {
-    //         setUserLang(cookies.get('lang'))
-    //     } else {
-    //         cookies.set('lang', "mā", {path: '/'});
-    //     }
-    //     document.title = "About Page";
-    // }, []);
-    //
-    // //set up changing language on site based on user nav menu selection
-    // const handleChangeLanguage = (lang) => {
-    //     setUserLang(lang);
-    // };
-    useEffect(()=>{document.title = "About Page"},[])
+    useEffect(() => {
+        document.title = "About Page"
+    }, [])
 
 
     const panes = [
@@ -338,7 +322,7 @@ export const About = () => {
     ];
 
     const aboutPageContent = (userLang) => {
-        return(
+        return (
             <Container inverted={'true'} textAlign='left'>
                 <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
                     <span style={{height: "32em"}}/>
@@ -350,24 +334,6 @@ export const About = () => {
     }
 
     return (
-        // <Segment inverted
-        //          textAlign='center'
-        //          style={{minHeight: 800, padding: '1em 0em'}}
-        //          vertical>
-        //     <NavBar handleChangeLanguage={handleChangeLanguage}/>
-        //     <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30, 30, 30)'}}>
-                <Layout page={aboutPageContent}/>
-                // {/*<Sidebars/>*/}
-                // {/*<Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "80vh",}}>*/}
-                // {/*    <Container inverted={'true'}>*/}
-                // {/*        <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>*/}
-                // {/*            <span style={{height: "32em"}}/>*/}
-                // {/*            <Header as={'h1'} content={siteGlossary.siteBio[userLang]}/>*/}
-                // {/*            <Tab menu={{inverted: true}} panes={panes}/>*/}
-                // {/*        </Segment>*/}
-                // {/*    </Container>*/}
-                // {/*</Sidebar.Pusher>*/}
-        //     </Sidebar.Pushable>
-        // </Segment>
+        <Layout page={aboutPageContent}/>
     );
 };
