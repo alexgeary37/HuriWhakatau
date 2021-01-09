@@ -19,6 +19,7 @@ import {CreateGroup} from "../groups/CreateGroup";
 import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {RatingComponent} from "./RatingComponent";
+import {AddUser} from "../users/AddUser";
 // const ScenarioSummary = lazy(() => import("/imports/ui/scenarios/ScenarioSummary"));
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
 import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
@@ -46,6 +47,7 @@ export const MyDashboard = () => {
     const [isOpenGroupCreation, setIsOpenGroupCreation] = useState(false);
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
     const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
+    const [isOpenNewUser, setIsOpenNewUser] = useState(false);
     // const [template, setTemplate] = useState(null);
     const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
     const [filterDiscussionStatus, setFilterDiscussionStatus] = useState(["active"]);
@@ -90,7 +92,9 @@ export const MyDashboard = () => {
     const handleToggleDiscussion = () => {
         setIsOpenDiscussionCreation(!isOpenDiscussionCreation);
     }
-
+    const handleToggleNewUser = () => {
+        setIsOpenNewUser(!isOpenNewUser);
+    }
     //get user admin role status and update isAdmin variable with call back.
     Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
         if (error) {
@@ -417,8 +421,9 @@ export const MyDashboard = () => {
                                 <Button
                                     fluid
                                     content="Add user"
-                                    as={Link}
-                                    to="/AddUser"
+                                    onClick={handleToggleNewUser}
+                                    // as={Link}
+                                    // to="/AddUser"
                                     basic
                                     negative
                                 />
@@ -473,6 +478,11 @@ export const MyDashboard = () => {
                 {isOpenDiscussionCreation &&
                 <CreateDiscussion
                     toggleModal={handleToggleDiscussion}
+                />
+                }
+                {isOpenNewUser &&
+                <AddUser
+                    toggleModal={handleToggleNewUser}
                 />
                 }
             </Container>

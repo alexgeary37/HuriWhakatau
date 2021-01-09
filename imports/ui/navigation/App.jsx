@@ -2,9 +2,9 @@ import React from "react";
 import {Router, Route, Switch} from "react-router";
 import {BrowserRouter, useHistory} from "react-router-dom";
 import history from "history";
-import {AddUser} from "/imports/ui/users/AddUser";
 import {FAQ} from "./FAQ";
-import {About} from "./About";
+import {About} from "./About";import {AddUser} from "/imports/ui/users/AddUser";
+import {Page404} from "./404";
 import {HuiChat} from "/imports/ui/discussions/HuiChat"
 import {Dashboard} from "./Dashboard";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
@@ -74,6 +74,7 @@ export const App = () => {
                         path="/confirm-identity/:token/:userId"
                         component={ConfirmationForm}
                     />
+                    <Route component={Page404}/>
                 </Switch>
             </BrowserRouter>
         </Router>

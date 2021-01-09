@@ -1,10 +1,11 @@
-import {Button, Divider, Icon, Input, List, Menu, Rating, Segment, Sidebar} from "semantic-ui-react";
+import {Button, Divider, Grid, Header, Icon, Input, List, Menu, Rating, Segment, Sidebar} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
 import NotificationBadge from "react-notification-badge";
 import {useTracker} from "meteor/react-meteor-data";
 import {Groups} from "../../api/groups";
 import {NavBar} from "./NavBar";
 import Cookies from "universal-cookie/lib";
+import {Link} from "react-router-dom";
 
 export const Layout = ({page}) => {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -347,9 +348,52 @@ export const Layout = ({page}) => {
                                     dimmed={showSidebar}
                                     onClick={showSidebar ? handleShowSidebar : null}>
                         {page(userLang)}
+                        <Divider/>
+                        <Segment inverted style={{
+                            backgroundColor: 'rgb(10, 10, 0)'
+                        }}>
+                            <Grid>
+                                <Grid.Row columns={2}>
+                                    <Grid.Column>
+                                        <Header inverted><u>Site links</u></Header>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                    </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={5} textAlign={'left'}>
+                                    <Grid.Column>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <List>
+                                            <List.Item as={Link} to={'/'}>Home</List.Item>
+                                            <List.Item as={Link} to={'/contact-us'}>Contact Us</List.Item>
+                                            <List.Item as={Link} to={'/about'}>About Us</List.Item>
+                                            <List.Item as={Link} to={'/FAQ'}>FAQ</List.Item>
+                                        </List>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <List>
+                                            <List.Item>Research</List.Item>
+                                            <List.Item>Careers</List.Item>
+                                            <List.Item>University Links</List.Item>
+                                        </List>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <List>
+                                            <List.Item></List.Item>
+                                            <List.Item></List.Item>
+                                            <List.Item></List.Item>
+                                        </List>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </Segment>
                     </Sidebar.Pusher>
                 </div>
             </Sidebar.Pushable>
+
         </Segment>
     );
 }
