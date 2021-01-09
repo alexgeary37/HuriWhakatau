@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import {Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Form, Checkbox, Input, Label, Modal, Button, List, Grid} from "semantic-ui-react";
 
 export const CreateDiscussionTemplate = ({toggleModal}) => {
     const [anonymous, setAnonymous] = useState(false);
-    const [typing, setTyping] = useState(false);
+    const [typing, setTyping] = useState(true);
     const [templateName, setTemplateName] = useState("");
     const [canEdit, setCanEdit] = useState(true);
     const [isThreaded, setIsThreaded] = useState(false);
@@ -43,81 +43,98 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
         >
             <Modal.Header>Create A Discussion Template</Modal.Header>
             <Modal.Content>
-            <Form >
-                <Input
-                    label="Template Name"
-                    type="text"
-                    placeholder="Template Name"
-                    value={templateName}
-                    onInput={({target}) => setTemplateName(target.value)}
-                    autoFocus
-                />
-                {errName ? (
-                    <div style={{height: "10px", color: "red", marginBottom:"10px"}}>{errName}</div>
-                ) : (
-                    <div style={{height: "10px", marginBottom:"10px"}}/>
-                )}
-                <br/>
-                <br/>
-                <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous' onClick={(e, data) => setAnonymous(data.checked)}/>
-                <br/>
-                <Checkbox disabled readOnly checked={typing} label='Show typing notifications'
-                          onClick={(e, data) => setTyping(data.checked)}/>
-                <br/>
-                <Checkbox checked={canEdit} label='Users can edit their own comments'
-                          onClick={(e, data) => setCanEdit(data.checked)}/>
-                <br/>
-                <Checkbox disabled readOnly checked={isThreaded} label='Comments are threaded'
-                          onClick={(e, data) => setIsThreaded(data.checked)}/>
-                <br/>
-                <Checkbox disabled readOnly checked={showProfile} label='Show profile info (eg pic)'
-                          onClick={(e, data) => setShowProfile(data.checked)}/>
-                <br/>
-                <br/>
-                <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'
-                          onClick={(e, data) => setCanAddEmojis(data.checked)}/>
-                <br/>
-                <br/>
-                <Checkbox checked={isHui} label='Discussions use the Hui format'
-                               onClick={(e, data) => setIsHui(data.checked)}/>
-                <br/>
-                <br/>
-                <Checkbox checked={isPublic} label='Discussions open to the public'
-                          onClick={(e, data) => setIsPublic(data.checked)}/>
-                <br/>
-                <br/><Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
-                       value={timeLimit}
-                       onInput={({target}) => setTimeLimit(Number(target.value))}>
-                    <Label>Discussions have time limit</Label>
-                    <input/>
-                    <Label>mins</Label>
-                </Input>
-                <br/>
-                <br/>
-                <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number' labelPosition='right'
-                       value={charLimit}
-                       onInput={({target}) => setCharLimit(Number(target.value))}>
-                    <Label>Comments have character limit</Label>
-                    <input/>
-                    <Label>characters</Label>
-                </Input>
-                <br/>
-                <br/>
-
-                <Modal.Actions>
-                    <Button
-                        content="Save"
-                        onClick={() => {
-                            submitTemplate();
-                            }
-                        }
-                        positive
+                <Form>
+                    <Input
+                        label="Template Name"
+                        type="text"
+                        placeholder="Template Name"
+                        value={templateName}
+                        onInput={({target}) => setTemplateName(target.value)}
+                        autoFocus
                     />
-                    <Button color='black' onClick={toggleIt}>
-                        Cancel
-                    </Button>
-                </Modal.Actions>
-            </Form>
+                    {errName ? (
+                        <div style={{height: "10px", color: "red", marginBottom: "10px"}}>{errName}</div>
+                    ) : (
+                        <div style={{height: "10px", marginBottom: "10px"}}/>
+                    )}
+                    <Grid>
+                        <Grid.Row columns={2}>
+                            <Grid.Column>
+                                <List>
+                                    <List.Item>
+                                        <Checkbox checked={typing} label='Show typing notifications'
+                                                  onClick={(e, data) => setTyping(data.checked)}/>
+                                    </List.Item>
+                                    <List.Item>
+                                        <Checkbox checked={canEdit} label='Users can edit their own comments'
+                                                  onClick={(e, data) => setCanEdit(data.checked)}/>
+                                    </List.Item>
+                                    <List.Item>
+                                        <Checkbox checked={isHui} label='Discussions use the Hui format'
+                                                  onClick={(e, data) => setIsHui(data.checked)}/>
+                                    </List.Item>
+                                    <List.Item>
+                                        <Checkbox checked={isPublic} label='Discussions open to the public'
+                                                  onClick={(e, data) => setIsPublic(data.checked)}/>
+                                    </List.Item>
+                                </List>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <List>
+                                    <List.Item>
+                                        <Checkbox disabled readOnly checked={anonymous} label='Users are anonymous'
+                                                  onClick={(e, data) => setAnonymous(data.checked)}/>
+                                    </List.Item>
+                                    <List.Item>
+                                        <Checkbox disabled readOnly checked={isThreaded} label='Comments are threaded'
+                                                  onClick={(e, data) => setIsThreaded(data.checked)}/>
+                                    </List.Item>
+                                    <List.Item>
+                                        <Checkbox disabled readOnly checked={showProfile} label='Show profile info (eg pic)'
+                                                  onClick={(e, data) => setShowProfile(data.checked)}/>
+                                    </List.Item>
+                                    <List.Item>
+                                        <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'
+                                                  onClick={(e, data) => setCanAddEmojis(data.checked)}/>
+                                    </List.Item>
+                                </List>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                    <br/>
+                    <Input style={{width: '60px', rightMargin: '60px'}} type='number' labelPosition='right'
+                           value={timeLimit}
+                           onInput={({target}) => setTimeLimit(Number(target.value))}>
+                        <Label>Discussions have time limit</Label>
+                        <input/>
+                        <Label>mins</Label>
+                    </Input>
+                    <br/>
+                    <br/>
+                    <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number'
+                           labelPosition='right'
+                           value={charLimit}
+                           onInput={({target}) => setCharLimit(Number(target.value))}>
+                        <Label>Comments have character limit</Label>
+                        <input/>
+                        <Label>characters</Label>
+                    </Input>
+                    <br/>
+                    <br/>
+                    <Modal.Actions>
+                        <Button
+                            content="Save"
+                            onClick={() => {
+                                submitTemplate();
+                            }
+                            }
+                            positive
+                        />
+                        <Button color='black' onClick={toggleIt}>
+                            Cancel
+                        </Button>
+                    </Modal.Actions>
+                </Form>
             </Modal.Content>
         </Modal>
     );

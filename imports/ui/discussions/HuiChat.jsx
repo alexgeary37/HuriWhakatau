@@ -359,6 +359,6 @@ export const HuiChat = () => {
     }
 
     return (
-        <Layout page={huiChatPageContent}/>
+        <Layout page={huiChatPageContent} isDiscussion={true}/>
     );
 };
