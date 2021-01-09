@@ -16,7 +16,7 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
         toggleModal();
     }
 
-    const { categories } = useTracker(() => {
+    const {categories} = useTracker(() => {
         Meteor.subscribe("categories");
         return {
             categories: Categories.find({_id: {$in: categoryIds}}).fetch(),
@@ -43,8 +43,8 @@ export const ViewScenario = ({toggleModal, scenario, template}) => {
                 <Header as={'h4'} content={'Description: '}/><>{description}</>
                 {/*show catergories and discussion templates, get ids for db*/}
                 <Header as={'h4'} content={'Categories: '}/>
-                {categories && categories.map((category)=>(
-                    <span key={category._id}>{category.title +" "}</span>
+                {categories && categories.map((category) => (
+                    <span key={category._id}>{category.title + " "}</span>
                 ))}
                 <Segment>
                     {<Header as={'h4'} content={'Discussion Template: ' + templateName}/>}

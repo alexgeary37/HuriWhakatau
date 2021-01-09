@@ -1,7 +1,5 @@
 import React, {useState} from "react";
-import {Container, Segment, Form, Checkbox, Modal, Button} from "semantic-ui-react";
-import {NavBar} from "../navigation/NavBar";
-import {siteGlossary} from "../../api/glossary";
+import {Segment, Form, Checkbox, Modal, Button} from "semantic-ui-react";
 
 export const AddUser = ({toggleModal}) => {
     const [userName, setUserName] = useState("");
@@ -61,87 +59,73 @@ export const AddUser = ({toggleModal}) => {
             closeOnDimmerClick={false}
             size="small"
         >
-                    <Modal.Header
-                        className={'newUser'}>{isAdmin ? "Invite a new user" : "Sign-up to Huri Whakatau"}</Modal.Header>
-                    <Modal.Content>
-                        {!isSignupComplete &&
-                        <Form as={Segment} attached="bottom">
-                            {/*update to have ability to input a list of emails. Space or comma separated*/}
-                            <Form.Input
-                                label="User Name"
-                                type="text"
-                                autoFocus
-                                value={userName}
-                                onInput={({target}) => setUserName(target.value)}
-                                disabled={userAnon}
-                            />
-                            <Checkbox label="Generate random username"
-                                      checked={userAnon}
-                                      disabled={userName !== ""}
-                                      readOnly={userName !== ""}
-                                      onClick={(e, data) => setUserAnon(data.checked)}
-                            />
-                            {errUsername ? (
-                                <div style={{height: "10px", color: "red"}}>{errUsername}
-                                    Please try again or choose to have one generated for you. This can be changed
-                                    later.</div>
-                            ) : (
-                                <div style={{height: "10px"}}/>
-                            )}
-                            <br/>
-                            {isAdmin &&
-                            <Form.Dropdown
-                                label="Which Roles do you want to assign?"
-                                selection
-                                multiple
-                                options={userRoles && userRoles.map((role) => ({
-                                    key: role,
-                                    text: role[0] + role.substring(1,).toLowerCase(),
-                                    // description: role,
-                                    value: role,
-                                }))}
-                                name="roles"
-                                value={userRolesList}
-                                onChange={(e, {value}) => setUserRolesList(value.concat())}
-                            />}
-                            <Form.Input
-                                label="Email"
-                                type="email"
-                                value={email}
-                                onInput={({target}) => setEmail(target.value)}
-                            />
-                            {errEmail ? (
-                                <div style={{height: "10px", color: "red"}}>{errEmail}</div>
-                            ) : (
-                                <div style={{height: "10px"}}/>
-                            )}
-                            <br/>
-                            <Form.Button
-                                content="Submit"
-                                negative
-                                disabled={email === ""}
-                                onClick={() => {
-                                    handleSubmit();
-                                    setIsLoading(true)
-                                }
-                                }
-                                loading={isLoading && !errUsername && !errEmail}
-                            />
-                        </Form>}
-                        {isSignupComplete && !isAdmin &&
-                        <Form as={Segment} attached="bottom">
-                            <br/>
-                            <h3>Please check your emails for an invitation and validate you email address using the link
-                                provided</h3>
-                            <Form.Button
-                                content="Return"
-                                positive
-                                onClick={() => {
-                                    history.back();
-                                }
-                                }
-                            />
-                        </Form>}
+            <Modal.Header
+                className={'newUser'}>{isAdmin ? "Invite a new user" : "Sign-up to Huri Whakatau"}</Modal.Header>
+            <Modal.Content>
+                {!isSignupComplete &&
+                <Form as={Segment} attached="bottom">
+                    {/*update to have ability to input a list of emails. Space or comma separated*/}
+                    <Form.Input
+                        label="User Name"
+                        type="text"
+                        autoFocus
+                        value={userName}
+                        onInput={({target}) => setUserName(target.value)}
+                        disabled={userAnon}
+                    />
+                    <Checkbox label="Generate random username"
+                              checked={userAnon}
+                              disabled={userName !== ""}
+                              readOnly={userName !== ""}
+                              onClick={(e, data) => setUserAnon(data.checked)}
+                    />
+                    {errUsername ? (
+                        <div style={{height: "10px", color: "red"}}>{errUsername}
+                            Please try again or choose to have one generated for you. This can be changed
+                            later.</div>
+                    ) : (
+                        <div style={{height: "10px"}}/>
+                    )}
+                    <br/>
+                    {isAdmin &&
+                    <Form.Dropdown
+                        label="Which Roles do you want to assign?"
+                        selection
+                        multiple
+                        options={userRoles && userRoles.map((role) => ({
+                            key: role,
+                            text: role[0] + role.substring(1,).toLowerCase(),
+                            // description: role,
+                            value: role,
+                        }))}
+                        name="roles"
+                        value={userRolesList}
+                        onChange={(e, {value}) => setUserRolesList(value.concat())}
+                    />}
+                    <Form.Input
+                        label="Email"
+                        type="email"
+                        value={email}
+                        onInput={({target}) => setEmail(target.value)}
+                    />
+                    {errEmail ? (
+                        <div style={{height: "10px", color: "red"}}>{errEmail}</div>
+                    ) : (
+                        <div style={{height: "10px"}}/>
+                    )}
+                    <br/>
+                    <Modal.Actions>
+                        <Button
+                            content="Submit"
+                            positive
+                            disabled={email === ""}
+                            onClick={() => {
+                                handleSubmit();
+                                setIsLoading(true)
+                            }
+                            }
+                            loading={isLoading && !errUsername && !errEmail}
+                        />
                         <Button color='black' onClick={() => {
                             toggleIt();
                             {
@@ -150,7 +134,23 @@ export const AddUser = ({toggleModal}) => {
                         }}>
                             Cancel
                         </Button>
-                    </Modal.Content>
+                    </Modal.Actions>
+                </Form>}
+                {isSignupComplete && !isAdmin &&
+                <Form as={Segment} attached="bottom">
+                    <br/>
+                    <h3>Please check your emails for an invitation and validate you email address using the link
+                        provided</h3>
+                    <Form.Button
+                        content="Return"
+                        positive
+                        onClick={() => {
+                            history.back();
+                        }
+                        }
+                    />
+                </Form>}
+            </Modal.Content>
         </Modal>
     );
 };

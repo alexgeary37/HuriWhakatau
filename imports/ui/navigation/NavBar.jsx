@@ -33,23 +33,23 @@ export const NavBar = ({handleChangeLanguage}) => {
     //set user preferred language in a cookie
     const updateUserLang = (lang) => {
         //add cookie with selected value
-        cookies.set('lang', lang, { path: '/' });
+        cookies.set('lang', lang, {path: '/'});
 
         handleChangeLanguage(cookies.get('lang'));
         setUserLang(cookies.get('lang'));
     }
 
-    useEffect(()=>{
-        if(cookies.get('lang')){
+    useEffect(() => {
+        if (cookies.get('lang')) {
             setUserLang(cookies.get('lang'))
         } else {
-            cookies.set('lang', "mā", { path: '/' });
+            cookies.set('lang', "mā", {path: '/'});
         }
-    },[]);
+    }, []);
 
     return (
         <div className="navbar">
-            <AcceptCookies />
+            <AcceptCookies/>
             <Menu fixed="top" inverted
                   aria-label="Fern header image"
                   size={'large'}
@@ -62,14 +62,15 @@ export const NavBar = ({handleChangeLanguage}) => {
             >
                 <Container className="content-width">
                     <Menu.Item as={Link} to="/">
-                        <Header as={'h1'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>
+                        <Header as={'h1'} inverted content={siteGlossary.siteName[userLang]}
+                                style={{fontFamily: 'Tamaiti'}}/>
                     </Menu.Item>
                     {/*todo put discussion title / description here when I figure it out */}
                     <MenuMenu position="right">
                         <Dropdown item text={"Language"}
                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '22px'}}>
                             <Dropdown.Menu>
-                                {siteGlossary.languages && Object.keys(siteGlossary.languages).map((langKey)=>(
+                                {siteGlossary.languages && Object.keys(siteGlossary.languages).map((langKey) => (
                                     <Dropdown.Item style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}
                                                    key={langKey}
                                                    text={siteGlossary.languages[langKey]}
@@ -80,17 +81,17 @@ export const NavBar = ({handleChangeLanguage}) => {
                             </Dropdown.Menu>
                         </Dropdown>
                         {!user && false && // hiding signup button for now.
-                            <MenuItem>
-                                <Button as={'h2'}
-                                        onClick={() => {
-                                            handleSignUp();
-                                        }}
-                                        className={'signUp'}
-                                        content="Sign Up"
-                                        negative
-                                        style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}
-                                />
-                            </MenuItem>
+                        <MenuItem>
+                            <Button as={'h2'}
+                                    onClick={() => {
+                                        handleSignUp();
+                                    }}
+                                    className={'signUp'}
+                                    content="Sign Up"
+                                    negative
+                                    style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '24px'}}
+                            />
+                        </MenuItem>
                         }
                         {user ?
                             <MenuItem as={Button} name="logout" onClick={logUserOut}
@@ -115,11 +116,19 @@ export const NavBar = ({handleChangeLanguage}) => {
                                 <Dropdown.Menu>
                                     <Dropdown.Item as={Link} to={"/mydashboard"}
                                                    text={'My Dashboard'}
-                                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '15px'}}>
+                                                   style={{
+                                                       fontFamily: 'Tamaiti',
+                                                       fontWeight: 'bold',
+                                                       fontSize: '15px'
+                                                   }}>
                                     </Dropdown.Item>
                                     <Dropdown.Item as={Link} to={"/UserSettings"}
                                                    text={'User settings'}
-                                                   style={{fontFamily: 'Tamaiti', fontWeight: 'bold', fontSize: '20px'}}>
+                                                   style={{
+                                                       fontFamily: 'Tamaiti',
+                                                       fontWeight: 'bold',
+                                                       fontSize: '20px'
+                                                   }}>
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>

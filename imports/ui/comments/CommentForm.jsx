@@ -171,9 +171,9 @@ export const CommentForm = ({showTypingNotification, discussionId, isDiscussionP
         display: ["INLINE_STYLE_BUTTONS", "BLOCK_TYPE_BUTTONS", "LINK_BUTTONS"],
     };
 
-    let typingUsernames=[];
-    if(typingUsers && typingUsers.usersTyping.length > 0){
-        typingUsers.usersTyping.forEach((user)=>{
+    let typingUsernames = [];
+    if (typingUsers && typingUsers.usersTyping.length > 0) {
+        typingUsers.usersTyping.forEach((user) => {
             typingUsernames.push(user.user);
         })
     }
@@ -181,10 +181,10 @@ export const CommentForm = ({showTypingNotification, discussionId, isDiscussionP
     return (
         <Form>
             <div>{showTypingNotification &&
-                <div style={{color: "white", height: "18px", bottomMargin: "5px"}}>
-                    {typingUsers && typingUsers.usersTyping.length > 0 &&
-                    typingUsernames.join(", ") + (typingUsers.usersTyping.length === 1 ? " is" : " are") + " typing"}
-                </div>}
+            <div style={{color: "white", height: "18px", bottomMargin: "5px"}}>
+                {typingUsers && typingUsers.usersTyping.length > 0 &&
+                typingUsernames.join(", ") + (typingUsers.usersTyping.length === 1 ? " is" : " are") + " typing"}
+            </div>}
                 <RichTextEditor
                     value={editorValue}
                     onChange={handleChange}

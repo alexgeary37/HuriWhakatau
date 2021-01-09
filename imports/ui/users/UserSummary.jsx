@@ -12,12 +12,13 @@ export const UserSummary = ({
                                 closeChat,
                                 nextDiscussionId,
                                 experimentId,
+                                isIntroduction,
                             }) => {
     const [userEmotionalColour, setUserEmotionalColour] = useState("white");
 
     // send user vote to db and calculate winner
     const submitLeaderVote = (userId) => {
-        Meteor.call("experiments.voteLeader",experimentId, groupId, userId);
+        Meteor.call("experiments.voteLeader", experimentId, groupId, userId);
         handleUserVoted();
     };
 
@@ -96,10 +97,11 @@ export const UserSummary = ({
         }
     }
 
-    useEffect(memberEmotionColour,[member?.profile?.emotion?.emotion]);
+    useEffect(memberEmotionColour, [member?.profile?.emotion?.emotion]);
 
     return (
-        <Segment compact style={{backgroundColor: (Meteor.userId() === groupLeader || Meteor.userId() === member._id) ? userEmotionalColour : 'white'}}>
+        <Segment compact
+                 style={{backgroundColor: (Meteor.userId() === groupLeader || Meteor.userId() === member._id) ? userEmotionalColour : 'white'}}>
             {member.username}
             {Meteor.userId() !== groupLeader &&
             member._id === groupLeader && (
@@ -116,6 +118,7 @@ export const UserSummary = ({
                 />
             )}
             {Meteor.userId() !== member._id &&
+            isIntroduction &&
             !groupLeader && !userHasVoted &&
             (discussionStatus = "active") && (
                 <Button
@@ -173,7 +176,7 @@ export const UserSummary = ({
             Meteor.userId() === member._id &&
             <div className="reactions">
                 <Picker
-                    style={{width: "auto", marginTop:"-15px", paddingBottom:"-5px"}}
+                    style={{width: "auto", marginTop: "-15px", paddingBottom: "-5px"}}
                     showPreview={false}
                     showSkinTones={false}
                     include={["custom"]}

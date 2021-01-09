@@ -3,13 +3,13 @@ import {Router, Route, Switch} from "react-router";
 import {BrowserRouter, useHistory} from "react-router-dom";
 import history from "history";
 import {FAQ} from "./FAQ";
-import {About} from "./About";import {AddUser} from "/imports/ui/users/AddUser";
+import {About} from "./About";
+import {AddUser} from "/imports/ui/users/AddUser";
 import {Page404} from "./404";
 import {HuiChat} from "/imports/ui/discussions/HuiChat"
 import {Dashboard} from "./Dashboard";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
 import {Discussion} from "/imports/ui/discussions/Discussion";
-import {AssignRoles} from "/imports/ui/users/AssignRoles";
 import {CreateGroup} from "/imports/ui/groups/CreateGroup";
 import {MyDashboard} from "./MyDashboard";
 import {UserSettings} from "/imports/ui/users/UserSettings"
@@ -34,31 +34,30 @@ export const App = () => {
                     <Route exact path="/FAQ" component={FAQ}/>
                     <Route exact path="/about" component={About}/>
                     <Route exact path="/AddUser" component={AddUser}/>
-                    <Route exact path="/assignroles" component={AssignRoles}/>
                     <Route path="/discussion/:discussionId" component={Discussion}/>
-                    <Route exact path="/groups" component={BrowseGroups}/>
-                    <Route exact path="/groups/create" component={CreateGroup}/>
+                    {/*<Route exact path="/groups" component={BrowseGroups}/>*/}
+                    {/*<Route exact path="/groups/create" component={CreateGroup}/>*/}
                     <Route exact path="/mydashboard" component={MyDashboard}/>
-                    <Route exact path="/scenarios" component={BrowseScenarios}/>
-                    <Route exact path="/scenarios/create" component={CreateScenario}/>
-                    <Route exact path="/scenarioSets" component={BrowseScenarioSets}/>
+                    {/*<Route exact path="/scenarios" component={BrowseScenarios}/>*/}
+                    {/*<Route exact path="/scenarios/create" component={CreateScenario}/>*/}
+                    {/*<Route exact path="/scenarioSets" component={BrowseScenarioSets}/>*/}
                     <Route exact path="/UserSettings" component={UserSettings}/>
                     <Route exact path="/huichat/:discussionId" component={HuiChat}/>
-                    <Route
-                        exact
-                        path="/scenarioSets/create"
-                        component={CreateScenarioSet}
-                    />
-                    <Route
-                        exact
-                        path="/discussiontemplates/create"
-                        component={CreateDiscussionTemplate}
-                    />
-                    <Route
-                        exact
-                        path="/experiments/create"
-                        component={CreateExperiment}
-                    />
+                    {/*<Route*/}
+                    {/*    exact*/}
+                    {/*    path="/scenarioSets/create"*/}
+                    {/*    component={CreateScenarioSet}*/}
+                    {/*/>*/}
+                    {/*<Route*/}
+                    {/*    exact*/}
+                    {/*    path="/discussiontemplates/create"*/}
+                    {/*    component={CreateDiscussionTemplate}*/}
+                    {/*/>*/}
+                    {/*<Route*/}
+                    {/*    exact*/}
+                    {/*    path="/experiments/create"*/}
+                    {/*    component={CreateExperiment}*/}
+                    {/*/>*/}
                     <Route
                         exact
                         path="/enroll-account/:token"

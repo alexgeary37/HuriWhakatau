@@ -93,7 +93,7 @@ export const CreateDiscussion = ({toggleModal}) => {
             size="small"
         >
             <Tour TOUR_STEPS={createDiscussionTour}/>
-            <Modal.Header className={'newDiscussion1'} >Create A Discussion</Modal.Header>
+            <Modal.Header className={'newDiscussion1'}>Create A Discussion</Modal.Header>
             <Modal.Content>
                 <Form>
                     <Input

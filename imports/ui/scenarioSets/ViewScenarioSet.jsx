@@ -35,9 +35,9 @@ export const ViewScenarioSet = ({toggleModal, scenarioSet}) => {
                 <Header as={'h4'} content={'Description:'}/>
                 {description}
                 <br/>
-                <Checkbox disabled readOnly checked={isRandomised} label='Scenarios are in random order' />
-                    <Header as={'h4'} content={'Scenarios:'}/>
-                    {scenarios && scenarios.map((scenario) => (
+                <Checkbox disabled readOnly checked={isRandomised} label='Scenarios are in random order'/>
+                <Header as={'h4'} content={'Scenarios:'}/>
+                {scenarios && scenarios.map((scenario) => (
                         <div key={scenario._id}><b>Title:</b>{scenario.title}</div>
                     )
                 )}

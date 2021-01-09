@@ -90,11 +90,13 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
                                                   onClick={(e, data) => setIsThreaded(data.checked)}/>
                                     </List.Item>
                                     <List.Item>
-                                        <Checkbox disabled readOnly checked={showProfile} label='Show profile info (eg pic)'
+                                        <Checkbox disabled readOnly checked={showProfile}
+                                                  label='Show profile info (eg pic)'
                                                   onClick={(e, data) => setShowProfile(data.checked)}/>
                                     </List.Item>
                                     <List.Item>
-                                        <Checkbox disabled readOnly checked={canAddEmojis} label='Users can add comment reactions'
+                                        <Checkbox disabled readOnly checked={canAddEmojis}
+                                                  label='Users can add comment reactions'
                                                   onClick={(e, data) => setCanAddEmojis(data.checked)}/>
                                     </List.Item>
                                 </List>
