@@ -33,6 +33,7 @@ export const HuiChat = () => {
     const {discussionId} = useParams();
     const [userVotedForLeader, setUserVotedForLeader] = useState(false); ///
     const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
+    const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
     let history = useHistory();
 
     const toggleShowTour = () => {
@@ -128,7 +129,7 @@ export const HuiChat = () => {
             })
             experimentId = experiment._id;
             theGroupLeader = experiment.groupLeader;
-            if (experiment.leaderVotes?.length > 0) {
+            if (experiment?.leaderVotes) {
                 let leaderVoteKeys = Object.keys(experiment.leaderVotes);
                 leaderVoteKeys.forEach((key) => {
                     numVotes += experiment.leaderVotes[key];
@@ -190,13 +191,15 @@ export const HuiChat = () => {
     };
 
     const hasReachedConsensus = () => {
+        //threshold value for reaching consensus
+        let threshold = 0.75;
         for (i = 0; i < verdicts.length; i += 1) {
             const votes = verdicts[i].votes;
             if (
-                votes.length === group.members.length - 1 &&
-                votes.findIndex((x) => x.vote === false) === -1
+                // number of votes with value of true > number of group members multiplied by threshold
+                votes.filter(vote => vote.vote !== false).length > group.members.length * threshold
             ) {
-                return true;
+                return verdicts[i];
             }
         }
         return false;
@@ -212,6 +215,8 @@ export const HuiChat = () => {
     const proposeVerdict = () =>
         Meteor.call("discussions.addProposer", discussionId);
 
+    console.log("isIntroduction undefined: ", isIntroduction === undefined)
+
     const huiChatPageContent = (userLang) => {
         return (
             <Container>
@@ -219,9 +224,9 @@ export const HuiChat = () => {
                 <Tour TOUR_STEPS={huichatTour}/>
                 }
                 <Segment vertical>
-                    <Grid columns={3} style={{width: "110vh"}} container>
+                    <Grid columns={isIntroduction ? 3 : 2}  >
                         <GridRow>
-                            <GridColumn width={8} attached="left" textAlign={'left'}>
+                            <GridColumn width={isIntroduction ? 10 : 8} textAlign={'left'}>
                                 <Comment.Group style={{overflow: "auto", height: "65vh"}}>
                                     {comments &&
                                     comments.map((comment) => (
@@ -247,7 +252,7 @@ export const HuiChat = () => {
                                         groupId={group._id}
                                     />)}
                             </GridColumn>
-                            <GridColumn width={4}>
+                            <GridColumn width={isIntroduction ? 6 : 4}>
                                 <div style={{height: "83vh"}}>
                                     <Header
                                         inverted
@@ -297,11 +302,12 @@ export const HuiChat = () => {
                                     </List>
                                 </div>
                             </GridColumn>
+                            {!isIntroduction && isIntroduction !== undefined &&
                             <GridColumn width={4}>
                                 <div style={{height: "83vh"}}>
                                     {/* this area will change depending on if isIntroduction, hide verdict stuff if true */}
                                     <Header
-                                        content={isIntroduction ? "" : "Verdicts"}
+                                        content={"Verdicts"}
                                         size="medium"
                                         inverted
                                     />
@@ -320,8 +326,11 @@ export const HuiChat = () => {
                                             </List.Item>
                                         ))}
                                         {!isIntroduction && group && hasReachedConsensus() && (
-                                            <Modal open={true}>
-                                                <Modal.Content>Consensus</Modal.Content>
+                                            <Modal open={isOpenConsensusModal}>
+                                                <Modal.Content>Discussion reached a consensus:
+                                                    {<Verdict
+                                                        verdict={hasReachedConsensus()}
+                                                    />}</Modal.Content>
                                                 <Modal.Actions>
                                                     {nextDiscussion &&
                                                     <Button as={Link}
@@ -330,7 +339,7 @@ export const HuiChat = () => {
                                                     <Button as={Link} to="/mydashboard"
                                                             content="Return to Dashboard"/>
                                                     <Button content="View Discussion"
-                                                            onClick={() => setOpenConsensusModal('closed')}/>
+                                                            onClick={() => setIsOpenConsensusModal(false)}/>
                                                 </Modal.Actions>
                                             </Modal>
                                         )}
@@ -354,6 +363,7 @@ export const HuiChat = () => {
                                     </List>
                                 </div>
                             </GridColumn>
+                            }
                         </GridRow>
                     </Grid>
                 </Segment>

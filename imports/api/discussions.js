@@ -71,6 +71,17 @@ Meteor.methods({
         });
     },
 
+    "discussions.updateDeadlineTimeout"(discussionId) {
+        check(discussionId, String);
+
+        Discussions.update(discussionId, {
+            $set: {
+                deadline: null,
+                timeLimit: 0
+            },
+        });
+    },
+
     "discussions.updateStatus"(discussionId, status) {
         check(discussionId, String);
 
@@ -110,18 +121,20 @@ Meteor.methods({
     },
 
     "discussions.addUserToTypingList"(discussionId, username) {
-        Discussions.update({_id:discussionId,
-                $or: [{usersTyping:{$size:0}}, {$nor:[{usersTyping:{$elemMatch:{user:{$eq:username}}}}]}]},
+        Discussions.update({
+                _id: discussionId,
+                $or: [{usersTyping: {$size: 0}}, {$nor: [{usersTyping: {$elemMatch: {user: {$eq: username}}}}]}]
+            },
             {
-                $addToSet: {usersTyping: {user:username, timestamp: Date.now()}},
+                $addToSet: {usersTyping: {user: username, timestamp: Date.now()}},
             })
 
 
         Meteor.setTimeout(() => {
             let datetimeThreshold = Date.now() - 1000;
-            Discussions.update({_id:discussionId},
-                {$pull:{usersTyping: { user: username, timestamp: { $lt: datetimeThreshold } } }},
-               )
+            Discussions.update({_id: discussionId},
+                {$pull: {usersTyping: {user: username, timestamp: {$lt: datetimeThreshold}}}},
+            )
         }, 2000)
     },
 });

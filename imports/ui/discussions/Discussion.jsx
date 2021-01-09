@@ -30,21 +30,26 @@ export const Discussion = () => { ///
         null
     );
     const [timeLeft, setTimeLeft] = useState(null);
-    const [openConsensusModal, setOpenConsensusModal] = useState('unopened');
+    const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
     const [userInGroup, setUserInGroup] = useState(false);
     let history = useHistory();
     // use to allow comments or proposing / voting on verdicts
     // todo, if the user uses the browser back button to go back to dash from a timed discussion
     // and then to a non-timed discussion the timedDiscussion state stays true
-    const updateTimed = () => {
+    const updateTimedTrue = () => {
         setTimedDiscussion(true);
     };
+    const updateTimedFalse = () => {
+        setTimedDiscussion(false);
+    }
     const updateDeadline = (deadline) => {
         setMutableDiscussionDeadline(deadline);
     };
     // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
     const calculateTimeLeft = () => {
         let current = new Date();
+        let days = Math.floor(((discussionDeadline - current) % (1000 * 60 * 60 * 24 * 365)) /
+            (1000 * 60 * 60 * 24));
         let hours = Math.floor(
             ((discussionDeadline - current) % (1000 * 60 * 60 * 24)) /
             (1000 * 60 * 60)
@@ -56,6 +61,7 @@ export const Discussion = () => { ///
             ((discussionDeadline - current) % (1000 * 60)) / 1000
         );
         return (
+            (days ? days.toString().padStart(2, "0") + ":" : "") +
             hours.toString().padStart(2, "0") +
             ":" +
             minutes.toString().padStart(2, "0") +
@@ -185,6 +191,7 @@ export const Discussion = () => { ///
         let currentTime = new Date();
         if (discussionDeadline < currentTime && discussionStatus === "active") {
             console.log('IF2IF');
+            setTimedDiscussion(false);
             Meteor.call("discussions.updateStatus", discussionId, "timedout");
         } else if (
             discussionDeadline > currentTime &&
@@ -192,8 +199,11 @@ export const Discussion = () => { ///
             discussionStatus === "active"
         ) {
             console.log('IF2IFELSE');
-            updateTimed();
+            updateTimedTrue();
             calculateTimeLeft();
+        } else if (discussionDeadline < currentTime && discussionStatus !== "active") {
+            console.log('untiming');
+            Meteor.call("discussions.updateDeadlineTimeout", discussionId);
         }
     }
 
@@ -212,14 +222,16 @@ export const Discussion = () => { ///
     };
 
     const hasReachedConsensus = () => {
-        // Refactor this loop into a filter or findindex if possible!
+        //threshold value for reaching consensus
+        let threshold = 0.75;
         for (i = 0; i < verdicts.length; i += 1) {
             const votes = verdicts[i].votes;
             if (
-                votes.length === group.members.length - 1 &&
-                votes.findIndex((x) => x.vote === false) === -1
+                // number of votes with value of true > number of group members multiplied by threshold
+                votes.filter(vote => vote.vote !== false).length > group.members.length * threshold
             ) {
-                return true;
+                return verdicts[i];
+                // return true;
             }
         }
         return false;
@@ -293,9 +305,12 @@ export const Discussion = () => { ///
                                     />
                                 </List.Item>
                             ))}
-                            {group && hasReachedConsensus() && openConsensusModal === 'unopened' && (
-                                <Modal open={true} size='mini'>
-                                    <Modal.Content>Discussion reached a consensus</Modal.Content>
+                            {group && hasReachedConsensus() && (
+                                <Modal open={isOpenConsensusModal}>
+                                    <Modal.Content>Discussion reached a consensus:
+                                        {<Verdict
+                                            verdict={hasReachedConsensus()}
+                                        />}</Modal.Content>
                                     <Modal.Actions>
                                         {nextDiscussionId &&
                                         <Button as={Link}
@@ -303,7 +318,7 @@ export const Discussion = () => { ///
                                                 content={"Next discussion"}/>}
                                         <Button as={Link} to="/mydashboard" content="Return to Dashboard"/>
                                         <Button content="View Discussion"
-                                                onClick={() => setOpenConsensusModal('closed')}/>
+                                                onClick={() => setIsOpenConsensusModal(false)}/>
                                     </Modal.Actions>
                                 </Modal>
                             )}
