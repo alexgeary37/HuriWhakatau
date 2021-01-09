@@ -270,6 +270,7 @@ export const Discussion = () => { ///
                             </Comment.Group>
                             {discussionStatus === "active" && (discussionIsPublic || userInGroup) && (
                                 <CommentForm
+                                    showTypingNotification={discussionTemplate.showTypingNotification}
                                     discussionId={discussionId}
                                     isDiscussionPublic={discussionIsPublic}
                                     isUserAGroupMember={userInGroup}
@@ -339,6 +340,6 @@ export const Discussion = () => { ///
     }
 
     return (
-        <Layout page={discussionPageContent}/>
+        <Layout page={discussionPageContent} isDiscussion={true}/>
     );
 };

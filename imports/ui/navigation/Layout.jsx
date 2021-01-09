@@ -7,7 +7,7 @@ import {NavBar} from "./NavBar";
 import Cookies from "universal-cookie/lib";
 import {Link} from "react-router-dom";
 
-export const Layout = ({page}) => {
+export const Layout = ({page, isDiscussion}) => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [isSearching, setIsSearching] = useState(false);
@@ -349,6 +349,7 @@ export const Layout = ({page}) => {
                                     onClick={showSidebar ? handleShowSidebar : null}>
                         {page(userLang)}
                         <Divider/>
+                        {!isDiscussion &&
                         <Segment inverted style={{
                             backgroundColor: 'rgb(10, 10, 0)'
                         }}>
@@ -389,7 +390,7 @@ export const Layout = ({page}) => {
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
-                        </Segment>
+                        </Segment>}
                     </Sidebar.Pusher>
                 </div>
             </Sidebar.Pushable>

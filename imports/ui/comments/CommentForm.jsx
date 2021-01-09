@@ -4,7 +4,7 @@ import {Button, Form} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Discussions} from "../../api/discussions";
 
-export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMember, groupId}) => {
+export const CommentForm = ({showTypingNotification, discussionId, isDiscussionPublic, isUserAGroupMember, groupId}) => {
     const [keyStrokes, setKeyStrokes] = useState([]);
     const [pastedItems, setPastedItems] = useState([]);
     const [editorValue, setEditorValue] = useState(
@@ -180,11 +180,11 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
 
     return (
         <Form>
-            <div>
+            <div>{showTypingNotification &&
                 <div style={{color: "white", height: "18px", bottomMargin: "5px"}}>
                     {typingUsers && typingUsers.usersTyping.length > 0 &&
                     typingUsernames.join(", ") + (typingUsers.usersTyping.length === 1 ? " is" : " are") + " typing"}
-                </div>
+                </div>}
                 <RichTextEditor
                     value={editorValue}
                     onChange={handleChange}
