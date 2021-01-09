@@ -163,60 +163,60 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                         )}
                         {/*show groups and scenarioSets, get ids for db*/}
                         <Form.Group widths={2}>
-                        <Form.Dropdown
-                            label="Group"
-                            loading={groups.length === 0}
-                            selection
-                            search
-                            options={
-                                groups &&
-                                groups.map((group) => ({
-                                    key: group._id,
-                                    text: group.name,
-                                    value: group._id,
-                                }))
-                            }
-                            name="groups"
-                            value={groupId}
-                            onChange={(e, {value}) => setGroupId(value)}
-                        />
-                        {errGroupId ? (
-                            <div style={{
-                                height: "10px",
-                                color: "red",
-                                marginTop: "-13px",
-                                marginBottom: "10px"
-                            }}>{errGroupId}</div>
-                        ) : (
-                            <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
-                        )}
-                        <Form.Dropdown
-                            label="Scenario Set"
-                            loading={scenarioSets.length === 0}
-                            selection
-                            search
-                            options={
-                                scenarioSets &&
-                                scenarioSets.map((scenarioSet) => ({
-                                    key: scenarioSet._id,
-                                    text: scenarioSet.title,
-                                    value: scenarioSet._id,
-                                }))
-                            }
-                            name="discussion templates"
-                            value={scenarioSetId}
-                            onChange={(e, {value}) => setScenarioSetId(value)}
-                        />
-                        {errScenarioSetId ? (
-                            <div style={{
-                                height: "10px",
-                                color: "red",
-                                marginTop: "-13px",
-                                marginBottom: "10px"
-                            }}>{errScenarioSetId}</div>
-                        ) : (
-                            <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
-                        )}
+                            <Form.Dropdown
+                                label="Group"
+                                loading={groups.length === 0}
+                                selection
+                                search
+                                options={
+                                    groups &&
+                                    groups.map((group) => ({
+                                        key: group._id,
+                                        text: group.name,
+                                        value: group._id,
+                                    }))
+                                }
+                                name="groups"
+                                value={groupId}
+                                onChange={(e, {value}) => setGroupId(value)}
+                            />
+                            {errGroupId ? (
+                                <div style={{
+                                    height: "10px",
+                                    color: "red",
+                                    marginTop: "-13px",
+                                    marginBottom: "10px"
+                                }}>{errGroupId}</div>
+                            ) : (
+                                <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
+                            )}
+                            <Form.Dropdown
+                                label="Scenario Set"
+                                loading={scenarioSets.length === 0}
+                                selection
+                                search
+                                options={
+                                    scenarioSets &&
+                                    scenarioSets.map((scenarioSet) => ({
+                                        key: scenarioSet._id,
+                                        text: scenarioSet.title,
+                                        value: scenarioSet._id,
+                                    }))
+                                }
+                                name="discussion templates"
+                                value={scenarioSetId}
+                                onChange={(e, {value}) => setScenarioSetId(value)}
+                            />
+                            {errScenarioSetId ? (
+                                <div style={{
+                                    height: "10px",
+                                    color: "red",
+                                    marginTop: "-13px",
+                                    marginBottom: "10px"
+                                }}>{errScenarioSetId}</div>
+                            ) : (
+                                <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
+                            )}
                         </Form.Group>
                         <Checkbox checked={hasIntroduction} label='Create an Introduction Lounge'
                                   onClick={(e, data) => setHasIntroduction(data.checked)}/>
@@ -326,10 +326,10 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
                                 onChange={(event, data) => addResponseSet(data)}
                             />
                             <Form.Field width={3}
-                                         content={responseSet.filter(response =>
-                                             response.responseType === ratings[1].responseType)
-                                             [0].fullRange[0] + " - " + responseSet.filter(response =>
-                                             response.responseType === ratings[1].responseType)[0].fullRange[6]}/>
+                                        content={responseSet.filter(response =>
+                                            response.responseType === ratings[1].responseType)
+                                            [0].fullRange[0] + " - " + responseSet.filter(response =>
+                                            response.responseType === ratings[1].responseType)[0].fullRange[6]}/>
                             <Checkbox toggle
                                       name={'1'}
                                       checked={ratings[1].reverse}

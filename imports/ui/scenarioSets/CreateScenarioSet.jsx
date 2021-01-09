@@ -24,7 +24,7 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
         } else {
             setErrDescription("")
         }
-        if (scenarioSet.length === 0){
+        if (scenarioSet.length === 0) {
             setErrScenarioSet("Scenarios must have a topic")
         } else {
             setErrScenarioSet("")
@@ -49,7 +49,7 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
             console.log(e.currentTarget.innerHTML);
             toggleNextModal();
         }
-        if(isWizard && e.currentTarget.innerHTML === "Cancel"){
+        if (isWizard && e.currentTarget.innerHTML === "Cancel") {
             toggleIsWizard();
         }
     }
@@ -81,9 +81,14 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                         onInput={({target}) => setTitle(target.value)}
                     />
                     {errTitle ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errTitle}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errTitle}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Form.Input
                         label="Description"
@@ -92,9 +97,14 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                         onInput={({target}) => setDescription(target.value)}
                     />
                     {errDescription ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errDescription}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errDescription}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Form.Dropdown
                         label="Scenarios"
@@ -119,9 +129,14 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                     <Checkbox disabled readOnly checked={isRandomised} label='Scenario order is randomised'
                               onClick={(e, data) => setIsRandomised(data.checked)}/>
                     {errScenarioSet ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioSet}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errScenarioSet}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Button
                         content="Save"
@@ -130,15 +145,18 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
                         }}
                         positive
                     />
-                    <Button color='black' onClick={(e) =>{toggleIt(e)}}>
+                    <Button color='black' onClick={(e) => {
+                        toggleIt(e)
+                    }}>
                         Cancel
                     </Button>
                     {isWizard && <Button
                         floated="right"
                         content={"Save & Create Experiment"}
                         onClick={(e) => {
-                            submitScenarioSet(e)}}
-                        positive />}
+                            submitScenarioSet(e)
+                        }}
+                        positive/>}
                 </Form>
             </Modal.Content>
         </Modal>

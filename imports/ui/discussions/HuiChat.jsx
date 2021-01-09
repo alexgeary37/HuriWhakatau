@@ -128,10 +128,12 @@ export const HuiChat = () => {
             })
             experimentId = experiment._id;
             theGroupLeader = experiment.groupLeader;
-            let leaderVoteKeys = Object.keys(experiment.leaderVotes);
-            leaderVoteKeys.forEach((key) => {
-                numVotes += experiment.leaderVotes[key];
-            });
+            if (experiment.leaderVotes?.length > 0) {
+                let leaderVoteKeys = Object.keys(experiment.leaderVotes);
+                leaderVoteKeys.forEach((key) => {
+                    numVotes += experiment.leaderVotes[key];
+                });
+            }
         }
 
         return {
@@ -286,6 +288,7 @@ export const HuiChat = () => {
                                                             discussionId={discussionId}
                                                             nextDiscussionId={nextDiscussion}
                                                             experimentId={experimentId}
+                                                            isIntroduction={isIntroduction}
                                                         />
                                                     </List.Item>
                                                 ))}

@@ -230,7 +230,7 @@ export const Layout = ({page, isDiscussion}) => {
                             Friends
                         </Menu.Item>
                         <Divider/>
-                        <List style={{height: "15em"}}>
+                        <List>
                             {showSidebar && friends && friends.map((friend) => (
                                 <Menu.Item style={{marginLeft: "20px"}} key={friend._id}
                                            title={friend.status.online ?
@@ -300,7 +300,7 @@ export const Layout = ({page, isDiscussion}) => {
                             Group Members
                         </Menu.Item>
                         <Divider/>
-                        <List style={{height: "15em"}}>
+                        <List>
                             {showSidebar && groupMembers && groupMembers.map((groupMember) => (
                                 <Menu.Item style={{marginLeft: "20px"}} key={groupMember._id}
                                            title={groupMember.status.online ?
@@ -353,7 +353,7 @@ export const Layout = ({page, isDiscussion}) => {
                         <Segment inverted style={{
                             backgroundColor: 'rgb(10, 10, 0)'
                         }}>
-                            <Grid>
+                            <Grid stackable>
                                 <Grid.Row columns={2}>
                                     <Grid.Column>
                                         <Header inverted><u>Site links</u></Header>

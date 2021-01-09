@@ -20,6 +20,7 @@ import {GroupSummary} from "/imports/ui/groups/GroupSummary";
 import {CreateScenario} from "../scenarios/CreateScenario";
 import {RatingComponent} from "./RatingComponent";
 import {AddUser} from "../users/AddUser";
+import {AssignRoles} from "../users/AssignRoles";
 // const ScenarioSummary = lazy(() => import("/imports/ui/scenarios/ScenarioSummary"));
 import {ScenarioSummary} from "/imports/ui/scenarios/ScenarioSummary";
 import {CreateDiscussion} from "/imports/ui/discussions/CreateDiscussion";
@@ -48,13 +49,16 @@ export const MyDashboard = () => {
     const [isOpenTemplateDisplay, setIsOpenTemplateDisplay] = useState(false);
     const [isOpenDiscussionCreation, setIsOpenDiscussionCreation] = useState(false);
     const [isOpenNewUser, setIsOpenNewUser] = useState(false);
+    const [isOpenAssignRoles, setIsOpenAssignRoles] = useState(false);
     // const [template, setTemplate] = useState(null);
     const [isDiscussionListsHidden, setIsDiscussionListsHidden] = useState(false);
     const [filterDiscussionStatus, setFilterDiscussionStatus] = useState(["active"]);
     const participantTourSteps = myDashParticipant;
     const researcherTourSteps = myDashResearcher;
 
-    useEffect(()=>{document.title = "My Dashboard"},[])
+    useEffect(() => {
+        document.title = "My Dashboard"
+    }, [])
 
     const toggleShowTour = () => {
         if (!cookies.get('myDashTour')) {
@@ -94,6 +98,9 @@ export const MyDashboard = () => {
     }
     const handleToggleNewUser = () => {
         setIsOpenNewUser(!isOpenNewUser);
+    }
+    const handleToggleAssignRoles = () => {
+        setIsOpenAssignRoles(!isOpenAssignRoles);
     }
     //get user admin role status and update isAdmin variable with call back.
     Meteor.call("security.hasRole", Meteor.userId(), "ADMIN", (error, result) => {
@@ -255,7 +262,7 @@ export const MyDashboard = () => {
                                         checked={filterDiscussionStatus.indexOf("active") > -1}
                                         onClick={(e, data) => setDiscussionFilterOnStatus(data.checked)}/>
                                     <label style={{color: "white", marginLeft: "10px"}}
-                                           >Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
+                                    >Show {filterDiscussionStatus.indexOf("active") > -1 ? "finished" : "active"}</label>
                                 </Card.Content>
                             </Segment>
                         </GridColumn>
@@ -412,8 +419,9 @@ export const MyDashboard = () => {
                                 <Button
                                     fluid
                                     content="Assign Roles"
-                                    as={Link}
-                                    to="/assignroles"
+                                    onClick={handleToggleAssignRoles}
+                                    // as={Link}
+                                    // to="/assignroles"
                                     basic
                                     negative
                                 />
@@ -485,11 +493,16 @@ export const MyDashboard = () => {
                     toggleModal={handleToggleNewUser}
                 />
                 }
+                {isOpenAssignRoles &&
+                <AssignRoles
+                    toggleModal={handleToggleAssignRoles}
+                />
+                }
             </Container>
         );
     }
 
     return (
-                <Layout page={myDashboardPageContent}/>
+        <Layout page={myDashboardPageContent}/>
     );
 };

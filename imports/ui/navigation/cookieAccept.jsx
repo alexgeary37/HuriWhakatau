@@ -7,11 +7,11 @@ export const AcceptCookies = ({toggleModal}) => {
     const cookie = new Cookies();
     const toggleAccept = () => {
         setIsOpen(!isOpen)
-        cookie.set('cookie','accepted');
+        cookie.set('cookie', 'accepted');
     }
 
-    useEffect(()=>{
-        if(!cookie.get('cookie')){
+    useEffect(() => {
+        if (!cookie.get('cookie')) {
             setIsOpen(true);
         }
     }, [])

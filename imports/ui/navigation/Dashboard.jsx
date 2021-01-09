@@ -18,7 +18,9 @@ export const Dashboard = () => {
     //set up tour of page
     const splashTourSteps = dashSplash;
 
-    useEffect(()=>{document.title = "Home"},[])
+    useEffect(() => {
+        document.title = "Home"
+    }, [])
 
     const toggleShowTour = () => {
         if (!cookies.get('signup')) {
@@ -47,8 +49,8 @@ export const Dashboard = () => {
         };
     });
 
-    const dashboardPageContent = (userLang) =>{
-        return(
+    const dashboardPageContent = (userLang) => {
+        return (
             <Container inverted={'true'}>
                 {showTour && <Tour TOUR_STEPS={splashTourSteps}/>}
                 {/*header from semantic ui layout example*/}
@@ -118,6 +120,6 @@ export const Dashboard = () => {
 
     //noinspection JSNonASCIINames
     return (
-                <Layout page={dashboardPageContent}/>
+        <Layout page={dashboardPageContent}/>
     );
 };

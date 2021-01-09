@@ -23,16 +23,17 @@ export const ConfirmationForm = () => {
                     setConfirmationResult("Email confirmed, you should receive your data shortly. " +
                         "Redirecting to user settings page")
                     Meteor.call("users.exportUserData", userId);
-                    Meteor.setTimeout(()=>{
+                    Meteor.setTimeout(() => {
                         history.push('/UserSettings');
                     }, 4000);
                 }
             })
             return;
-        };
+        }
+        ;
     };
 
-    useEffect(handleConfirmation,[])
+    useEffect(handleConfirmation, [])
 
     return (
         <div>

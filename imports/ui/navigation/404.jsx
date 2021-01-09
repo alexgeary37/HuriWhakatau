@@ -13,12 +13,12 @@ export const Page404 = () => {
     }, [])
 
     const fourOhFourPageContent = () => {
-        return(
-        <Container inverted={'true'} textAlign='left'>
-            <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
-                <Header as={'h1'} content={"Ooops, page not found or we haven't built this yet sorry."}/>
-            </Segment>
-        </Container>
+        return (
+            <Container inverted={'true'} textAlign='left'>
+                <Segment attached="bottom" inverted style={{border: 'none', backgroundColor: 'transparent'}}>
+                    <Header as={'h1'} content={"Ooops, page not found or we haven't built this yet sorry."}/>
+                </Segment>
+            </Container>
         );
     }
 

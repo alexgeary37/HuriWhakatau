@@ -18,7 +18,7 @@ export const BrowseGroups = () => {
 
     return (
         <div>
-            <NavBar />
+            <NavBar/>
             <Container>
                 <Segment attached="top" clearing>
                     <Button

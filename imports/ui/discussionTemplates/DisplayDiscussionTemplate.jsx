@@ -61,7 +61,8 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                 </Input>
                 <br/>
                 <br/>
-                <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number' labelPosition='right'
+                <Input readOnly disabled style={{width: '60px', rightMargin: '70px'}} type='number'
+                       labelPosition='right'
                        value={charLimit}
                 >
                     <Label>Comments have character limit</Label>
@@ -71,22 +72,22 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
                 <br/>
                 <br/>
             </Modal.Content>
-                <Modal.Actions>
-                    {/* todo make this button save a new template if any value changed, prompt for new template name */}
-                    {/*<Button*/}
-                    {/*    content="Save"*/}
-                    {/*    onClick={() =>*/}
-                    {/*    // {*/}
-                    {/*        // submitTemplate();*/}
-                    {/*        // }*/}
-                    {/*        toggleIt*/}
-                    {/*    }*/}
-                    {/*    positive*/}
-                    {/*/>*/}
-                    <Button color='black' onClick={toggleIt}>
-                        Close
-                    </Button>
-                </Modal.Actions>
+            <Modal.Actions>
+                {/* todo make this button save a new template if any value changed, prompt for new template name */}
+                {/*<Button*/}
+                {/*    content="Save"*/}
+                {/*    onClick={() =>*/}
+                {/*    // {*/}
+                {/*        // submitTemplate();*/}
+                {/*        // }*/}
+                {/*        toggleIt*/}
+                {/*    }*/}
+                {/*    positive*/}
+                {/*/>*/}
+                <Button color='black' onClick={toggleIt}>
+                    Close
+                </Button>
+            </Modal.Actions>
         </Modal>
     );
 };

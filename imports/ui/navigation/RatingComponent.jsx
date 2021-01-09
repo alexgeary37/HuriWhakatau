@@ -12,14 +12,14 @@ export const RatingComponent = () => {
     const [submitErr, setSubmitErr] = useState("");
     const [questionItem, setQuestionItem] = useState(
         {
-                    itemId: "",
-                    itemNumber: 0,
-                    headerText: "",
-                    bodyText: "",
-                    scale: 7,
-                    reverse: false,
-                    ratingLabels: [],
-                });
+            itemId: "",
+            itemNumber: 0,
+            headerText: "",
+            bodyText: "",
+            scale: 7,
+            reverse: false,
+            ratingLabels: [],
+        });
 
     let rating;
     let responseIndices;
@@ -35,11 +35,11 @@ export const RatingComponent = () => {
     let ratingReverse = false;
     let questionType;
 
-    const updateQuestion = () =>{
+    const updateQuestion = () => {
         setSubmitErr("");
         setAnswerInt(0);
         setAnswerString("");
-        questionType = Random.choice([0,1,0,0,0,0]);
+        questionType = Random.choice([0, 1, 0, 0, 0, 0]);
         setTypeOfQuestion(questionType);
         if (questionType) {
             Meteor.call("experiments.getRandomExperimentForRating"
@@ -75,7 +75,7 @@ export const RatingComponent = () => {
                                 ratingLabels: labelSet,
                             })
                         });
-                    });
+                });
         } else {
             Meteor.call("personality.getRandomQuestion", (err, fetchedQuestionArray) => {
                 question = fetchedQuestionArray[0];
@@ -119,11 +119,19 @@ export const RatingComponent = () => {
 
     const submitAnswer = () => {
         //todo work out what submitting an answer looks like / does.
-        if(answerString){
-            if(typeOfQuestion){
-                Meteor.call("commentRatings.addRating", questionItem.itemId, questionItem.experimentId, {userId: Meteor.userId(), ratingText: questionItem.headerText, ratingScore: answerInt})
+        if (answerString) {
+            if (typeOfQuestion) {
+                Meteor.call("commentRatings.addRating", questionItem.itemId, questionItem.experimentId, {
+                    userId: Meteor.userId(),
+                    ratingText: questionItem.headerText,
+                    ratingScore: answerInt
+                })
             } else {
-                Meteor.call("users.recordPersonalityAnswer", Meteor.userId(), {questionnaireId : questionItem.itemId, item: questionItem.itemNumber, answerScore: answerInt})
+                Meteor.call("users.recordPersonalityAnswer", Meteor.userId(), {
+                    questionnaireId: questionItem.itemId,
+                    item: questionItem.itemNumber,
+                    answerScore: answerInt
+                })
             }
             updateQuestion();
         } else {
@@ -139,16 +147,16 @@ export const RatingComponent = () => {
                     backgroundColor: "#c4c4c4",
                 }}>
                     {questionItem.headerText ?
-                    <List.Header as={'h4'}
-                                 content={questionItem.headerText}
-                    />
-                    :
-                    <Placeholder>
-                        <Placeholder.Line length={'full'} style={{backgroundColor: "#c4c4c4"}}/>
-                        <Placeholder.Line length={'very long'} style={{backgroundColor: "#c4c4c4"}}/>
-                        <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
-                    </Placeholder>
-                        }
+                        <List.Header as={'h4'}
+                                     content={questionItem.headerText}
+                        />
+                        :
+                        <Placeholder>
+                            <Placeholder.Line length={'full'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'very long'} style={{backgroundColor: "#c4c4c4"}}/>
+                            <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
+                        </Placeholder>
+                    }
                     {questionItem.bodyText &&
                     <List.Description as={Segment}
                                       content={questionItem.bodyText}
@@ -156,18 +164,18 @@ export const RatingComponent = () => {
                     }
                     <hr/>
                     {questionItem.ratingLabels.length > 0 ? questionItem.ratingLabels.map((label) =>
-                        <Form.Field key={label}>
-                            <Checkbox
-                                radio
-                                label={label}
-                                name='quixbox'
-                                value={label}
-                                checked={answerString === label}
-                                onChange={(e, data) => addAnswerValue(data.value)}
-                            />
-                        </Form.Field>
-                    )
-                    :
+                            <Form.Field key={label}>
+                                <Checkbox
+                                    radio
+                                    label={label}
+                                    name='quixbox'
+                                    value={label}
+                                    checked={answerString === label}
+                                    onChange={(e, data) => addAnswerValue(data.value)}
+                                />
+                            </Form.Field>
+                        )
+                        :
                         <Placeholder>
                             <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
                             <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
@@ -176,7 +184,7 @@ export const RatingComponent = () => {
                             <Placeholder.Line length={'medium'} style={{backgroundColor: "#c4c4c4"}}/>
                         </Placeholder>
                     }
-                    <p style={{color:'red', height:"10px"}}>{submitErr && submitErr}</p>
+                    <p style={{color: 'red', height: "10px"}}>{submitErr && submitErr}</p>
                     <Button content={'Submit Answer'} onClick={submitAnswer}/>
                     <Button content={'Different Question'} onClick={updateQuestion}/>
                 </ListContent>

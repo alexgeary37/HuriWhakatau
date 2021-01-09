@@ -26,17 +26,17 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
         } else {
             setErrScenarioDesc("")
         }
-        if (categoryId.length === 0){
+        if (categoryId.length === 0) {
             setErrCategory("Scenarios must have at least 1 category")
         } else {
             setErrCategory("")
         }
-        if (discussionTemplateId.length === 0){
+        if (discussionTemplateId.length === 0) {
             setErrDiscussionTemplateId("Scenarios must have a discussion template")
         } else {
             setErrDiscussionTemplateId("")
         }
-        console.log("Stuff that is submitted for scenario","title:", title, "desc:", description, "category:", categoryId, "discuss:", discussionTemplateId);
+        console.log("Stuff that is submitted for scenario", "title:", title, "desc:", description, "category:", categoryId, "discuss:", discussionTemplateId);
 
         if (title.length > 0 && description.length > 0 && categoryId.length > 0 && discussionTemplateId.length > 0) {
             Meteor.call(
@@ -57,12 +57,12 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
             console.log(e.currentTarget.innerHTML);
             toggleNextModal();
         }
-        if(isWizard && e.currentTarget.innerHTML === "Cancel"){
+        if (isWizard && e.currentTarget.innerHTML === "Cancel") {
             toggleIsWizard();
         }
     }
 
-    const { discussionTemplates, categories } = useTracker(() => {
+    const {discussionTemplates, categories} = useTracker(() => {
         Meteor.subscribe("categories");
         Meteor.subscribe("discussionTemplates");
 
@@ -111,9 +111,14 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         onInput={({target}) => setTitle(target.value)}
                     />
                     {errScenarioTitle ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioTitle}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errScenarioTitle}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Form.Input
                         label="Description"
@@ -122,9 +127,14 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         onInput={({target}) => setDescription(target.value)}
                     />
                     {errScenarioDesc ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errScenarioDesc}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errScenarioDesc}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     {/*show catergories and discussion templates, get ids for db*/}
                     <Form.Dropdown
@@ -148,9 +158,14 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         onChange={(e, {value}) => setCategoryId(value.concat())}
                     />
                     {errCategory ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errCategory}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errCategory}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Form.Dropdown
                         label="Discussion Template"
@@ -170,9 +185,14 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         onChange={(e, {value}) => setDiscussionTemplateId(value)}
                     />
                     {errDiscussionTemplateId ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errDiscussionTemplateId}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errDiscussionTemplateId}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Button
                         content="Save & Close"
@@ -188,8 +208,9 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
                         floated="right"
                         content={"Save & Create Scenario Set"}
                         onClick={(e) => {
-                            submitScenario(e)}}
-                        positive />}
+                            submitScenario(e)
+                        }}
+                        positive/>}
                 </Form>
             </Modal.Content>
         </Modal>
