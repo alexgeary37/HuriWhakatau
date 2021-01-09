@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Segment, Form, Checkbox, Modal, Button} from "semantic-ui-react";
 import {Scenarios} from "/imports/api/scenarios";
 
 export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {

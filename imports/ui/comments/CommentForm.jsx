@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import RichTextEditor from "react-rte";
-import {Button, Form, Segment} from "semantic-ui-react";
+import {Button, Form} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Discussions} from "../../api/discussions";
 
@@ -12,7 +12,6 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
     );
     // useTracker makes sure the component will re-render when the data changes.
     const {user, typingUsers} = useTracker(() => {
-        // Meteor.subscribe("users");
         const subDiscussions = Meteor.subscribe("discussions");
         let discussionTypingUsersList;
         if (subDiscussions.ready()) {
@@ -44,7 +43,6 @@ export const CommentForm = ({discussionId, isDiscussionPublic, isUserAGroupMembe
     }, []);
 
     const handleChange = (value) => {
-        // console.log("ed val", value),
         setEditorValue(value);
     };
 

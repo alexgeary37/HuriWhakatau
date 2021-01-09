@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
 import {Categories} from "../../api/categories";
 import {Tour} from "../navigation/Tour";
 import {Groups} from "../../api/groups";
@@ -43,7 +43,7 @@ export const CreateDiscussion = ({toggleModal}) => {
                     insertDiscussion(result);
                 });
             } else {
-                insertDiscussion(newGroupId);
+                insertDiscussion(groupId);
             }
             toggleIt();
         }
@@ -153,7 +153,7 @@ export const CreateDiscussion = ({toggleModal}) => {
                         value={groupId}
                         onChange={(e, {value}) => setGroupId(value)}
                     />
-                    <Checkbox disabled readOnly checked={createNewGroup} label='Create new group?'
+                    <Checkbox checked={createNewGroup} label='Create new group?'
                               onClick={(e, data) => setCreateNewGroup(data.checked)}/>
                     <br/>
                     <br/>

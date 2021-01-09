@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Segment, Form, Modal, Button, Checkbox, Tab, Label, Input} from "semantic-ui-react";
+import {Segment, Form, Modal, Button, Checkbox, Tab} from "semantic-ui-react";
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {Groups} from "/imports/api/groups";
@@ -121,10 +121,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
         let index = parseInt(data.name);
         currentRatings[index].responseType = data.value;
         setRatings(currentRatings => [...currentRatings]);
-    }
-
-    const printText = (e) => {
-        console.log(introductionCommentText);
     }
 
     const panes = [

@@ -1,12 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {
-    Menu,
-    Container,
-    Icon,
-    Dropdown,
-    MenuItem,
-    MenuMenu,
-    Button, HeaderContent, Header, Segment,
+    Menu, Container, Dropdown,
+    MenuItem, MenuMenu, Button, Header,
 } from "semantic-ui-react";
 import Cookies from "universal-cookie/lib";
 import {siteGlossary} from "../../api/glossary";
@@ -67,7 +62,7 @@ export const NavBar = ({handleChangeLanguage}) => {
             >
                 <Container className="content-width">
                     <Menu.Item as={Link} to="/">
-                        <Header as={'h2'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>
+                        <Header as={'h1'} inverted content={siteGlossary.siteName[userLang]} style={{fontFamily: 'Tamaiti'}}/>
                     </Menu.Item>
                     {/*todo put discussion title / description here when I figure it out */}
                     <MenuMenu position="right">

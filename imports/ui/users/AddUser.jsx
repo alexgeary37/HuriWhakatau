@@ -1,12 +1,13 @@
 import React, {useState} from "react";
-import {Container, Segment, Form, Checkbox} from "semantic-ui-react";
+import {Container, Segment, Form, Checkbox, Modal, Button} from "semantic-ui-react";
 import {NavBar} from "../navigation/NavBar";
-import {useTracker} from "meteor/react-meteor-data";
+import {siteGlossary} from "../../api/glossary";
 
-export const AddUser = () => {
+export const AddUser = ({toggleModal}) => {
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isOpen, setIsOpen] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isSignupComplete, setIsSignupComplete] = useState(false);
     const [userAnon, setUserAnon] = useState(false);
@@ -29,9 +30,14 @@ export const AddUser = () => {
         setIsAdmin(result);
     });
 
+    const toggleIt = () => {
+        setIsOpen(false);
+        toggleModal();
+    };
+
     const handleSubmit = () => {
         setErrEmail("");
-        if(email.indexOf("@") === -1){
+        if (email.indexOf("@") === -1) {
             setErrEmail("Please enter a valid email address.")
         } else {
             setErrUsername("");
@@ -40,7 +46,6 @@ export const AddUser = () => {
                     setErrUsername(error.reason + " ");
                     return;
                 } else {
-                    // history.back();
                     setIsSignupComplete(true);
                     setErrUsername("");
                 }
@@ -49,88 +54,103 @@ export const AddUser = () => {
     }
 
     return (
-        <div>
-            <NavBar/>
-            <Container>
-                {!isSignupComplete &&
-                <Form as={Segment} attached="bottom">
-                    {/*update to have ability to input a list of emails. Space or comma separated*/}
-                    <Form.Input
-                        label="User Name"
-                        type="text"
-                        autoFocus
-                        value={userName}
-                        onInput={({target}) => setUserName(target.value)}
-                        disabled={userAnon}
-                    />
-                    <Checkbox label="Generate random username"
-                                checked={userAnon}
-                                disabled={userName !== ""}
-                                readOnly={userName !== ""}
-                                onClick={(e, data) => setUserAnon(data.checked)}
-                    />
-                    {errUsername ? (
-                        <div style={{ height: "10px", color: "red" }}>{errUsername}
-                          Please try again or choose to have one generated for you. This can be changed later.</div>
-                    ) : (
-                        <div style={{ height: "10px" }} />
-                    )}
-                    <br/>
-                    {isAdmin &&
-                    <Form.Dropdown
-                        label="Which Roles do you want to assign?"
-                        selection
-                        multiple
-                        options={userRoles && userRoles.map((role) => ({
-                            key: role,
-                            text: role[0] + role.substring(1,).toLowerCase(),
-                            // description: role,
-                            value: role,
-                        }))}
-                        name="roles"
-                        value={userRolesList}
-                        onChange={(e, {value}) => setUserRolesList(value.concat())}
-                    />}
-                    <Form.Input
-                        label="Email"
-                        type="email"
-                        value={email}
-                        onInput={({target}) => setEmail(target.value)}
-                    />
-                    {errEmail ? (
-                        <div style={{ height: "10px", color: "red" }}>{errEmail}</div>
-                    ) : (
-                        <div style={{ height: "10px" }} />
-                    )}
-                    <br/>
-                    <Form.Button
-                        content="Submit"
-                        negative
-                        disabled={email === ""}
-                        onClick={() => {
-                            // userName !== "" || userAnon &&
-                            // // password !== "" &&
-                            handleSubmit();
-                            setIsLoading(true)
-                        }
-                        }
-                        loading={isLoading && !errUsername && !errEmail}
-                    />
-                </Form>}
-                {isSignupComplete &&
-                <Form as={Segment} attached="bottom">
-                    <br/>
-                    <h3>Please check your emails for an invitation and validate you email address using the link provided</h3>
-                    <Form.Button
-                        content="Return"
-                        positive
-                        onClick={() => {
-                            history.back();
+        <Modal
+            onClose={() => setIsOpen(false)}
+            onOpen={() => setIsOpen(true)}
+            open={isOpen}
+            closeOnDimmerClick={false}
+            size="small"
+        >
+                    <Modal.Header
+                        className={'newUser'}>{isAdmin ? "Invite a new user" : "Sign-up to Huri Whakatau"}</Modal.Header>
+                    <Modal.Content>
+                        {!isSignupComplete &&
+                        <Form as={Segment} attached="bottom">
+                            {/*update to have ability to input a list of emails. Space or comma separated*/}
+                            <Form.Input
+                                label="User Name"
+                                type="text"
+                                autoFocus
+                                value={userName}
+                                onInput={({target}) => setUserName(target.value)}
+                                disabled={userAnon}
+                            />
+                            <Checkbox label="Generate random username"
+                                      checked={userAnon}
+                                      disabled={userName !== ""}
+                                      readOnly={userName !== ""}
+                                      onClick={(e, data) => setUserAnon(data.checked)}
+                            />
+                            {errUsername ? (
+                                <div style={{height: "10px", color: "red"}}>{errUsername}
+                                    Please try again or choose to have one generated for you. This can be changed
+                                    later.</div>
+                            ) : (
+                                <div style={{height: "10px"}}/>
+                            )}
+                            <br/>
+                            {isAdmin &&
+                            <Form.Dropdown
+                                label="Which Roles do you want to assign?"
+                                selection
+                                multiple
+                                options={userRoles && userRoles.map((role) => ({
+                                    key: role,
+                                    text: role[0] + role.substring(1,).toLowerCase(),
+                                    // description: role,
+                                    value: role,
+                                }))}
+                                name="roles"
+                                value={userRolesList}
+                                onChange={(e, {value}) => setUserRolesList(value.concat())}
+                            />}
+                            <Form.Input
+                                label="Email"
+                                type="email"
+                                value={email}
+                                onInput={({target}) => setEmail(target.value)}
+                            />
+                            {errEmail ? (
+                                <div style={{height: "10px", color: "red"}}>{errEmail}</div>
+                            ) : (
+                                <div style={{height: "10px"}}/>
+                            )}
+                            <br/>
+                            <Form.Button
+                                content="Submit"
+                                negative
+                                disabled={email === ""}
+                                onClick={() => {
+                                    handleSubmit();
+                                    setIsLoading(true)
+                                }
+                                }
+                                loading={isLoading && !errUsername && !errEmail}
+                            />
+                        </Form>}
+                        {isSignupComplete && !isAdmin &&
+                        <Form as={Segment} attached="bottom">
+                            <br/>
+                            <h3>Please check your emails for an invitation and validate you email address using the link
+                                provided</h3>
+                            <Form.Button
+                                content="Return"
+                                positive
+                                onClick={() => {
+                                    history.back();
+                                }
+                                }
+                            />
+                        </Form>}
+                        <Button color='black' onClick={() => {
+                            toggleIt();
+                            {
+                                !isAdmin && history.back()
                             }
-                        }
-                    />
-                </Form>}
-            </Container>
-        </div>
+                        }}>
+                            Cancel
+                        </Button>
+                    </Modal.Content>
+        </Modal>
     );
 };

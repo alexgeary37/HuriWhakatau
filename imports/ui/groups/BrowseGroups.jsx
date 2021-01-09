@@ -2,10 +2,7 @@ import React from "react";
 import {useTracker} from "meteor/react-meteor-data";
 import {Link} from "react-router-dom";
 import {
-    Button,
-    Container,
-    Segment,
-    List,
+    Button, Container, Segment, List,
 } from "semantic-ui-react";
 import {Groups} from "/imports/api/groups";
 import {NavBar} from "/imports/ui/navigation/NavBar";

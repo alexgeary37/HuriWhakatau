@@ -1,11 +1,10 @@
 import React from "react";
-import {useTracker} from "meteor/react-meteor-data";
 import {Router, Route, Switch} from "react-router";
 import {BrowserRouter, useHistory} from "react-router-dom";
 import history from "history";
-import {AddUser} from "/imports/ui/users/AddUser";
 import {FAQ} from "./FAQ";
-import {About} from "./About";
+import {About} from "./About";import {AddUser} from "/imports/ui/users/AddUser";
+import {Page404} from "./404";
 import {HuiChat} from "/imports/ui/discussions/HuiChat"
 import {Dashboard} from "./Dashboard";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
@@ -26,13 +25,6 @@ import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDi
 const browserHistory = history.createBrowserHistory();
 
 export const App = () => {
-    const {user} = useTracker(() => {
-        Meteor.subscribe("users");
-
-        return {
-            user: Meteor.userId(),
-        };
-    });
 
     return (
         <Router history={browserHistory}>
@@ -67,8 +59,6 @@ export const App = () => {
                         path="/experiments/create"
                         component={CreateExperiment}
                     />
-                    <Route path="/korerorero/:discussionId"
-                           component={Discussion}/> {/* probably not needed double up of the huichat path*/}
                     <Route
                         exact
                         path="/enroll-account/:token"
@@ -84,6 +74,7 @@ export const App = () => {
                         path="/confirm-identity/:token/:userId"
                         component={ConfirmationForm}
                     />
+                    <Route component={Page404}/>
                 </Switch>
             </BrowserRouter>
         </Router>

@@ -28,11 +28,7 @@ export const GroupSummary = ({ group }) => {
         backgroundColor: "#c4c4c4",
       }}>
         <List.Header as={'h4'} content={group && group.name} />
-        {/*<List.Description*/}
-        {/*  content={users && "Members: " + userList.join(", ")}*/}
-        {/*/>*/}
         <Button content={'open'} onClick={toggleIt} />
-        {/* show exp details */}
         {isOpenGroupDisplay &&
         <ViewGroup
             toggleModal={toggleIt}

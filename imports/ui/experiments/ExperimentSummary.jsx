@@ -18,7 +18,6 @@ export const ExperimentSummary = ({ experiment }) => {
           content={experiment && "Description: " + experiment.description}
         />
           <Button content={'open'} onClick={toggleIt} />
-          {/* show exp details */}
           {isOpenExperimentDisplay &&
           <ViewExperiment
               toggleModal={toggleIt}

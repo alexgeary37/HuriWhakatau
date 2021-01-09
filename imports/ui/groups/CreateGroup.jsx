@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useTracker} from "meteor/react-meteor-data";
-import {Container, Segment, Form, Checkbox, Input, Label, Modal, Button} from "semantic-ui-react";
+import {Segment, Form, Modal, Button} from "semantic-ui-react";
 
 export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [members, setMembers] = useState([]);
@@ -15,7 +15,7 @@ export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextMo
         if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
             toggleNextModal();
         }
-        if(isWizard && e.currentTarget.innerHTML === "Cancel"){
+        if (isWizard && e.currentTarget.innerHTML === "Cancel") {
             toggleIsWizard();
         }
     }
@@ -31,7 +31,7 @@ export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextMo
         } else {
             setErrGroupName("");
         }
-        if (groupName.length > 0 && members.length >0) {
+        if (groupName.length > 0 && members.length > 0) {
             Meteor.call("groups.create", groupName, members);
             toggleIt(e);
         }
@@ -64,9 +64,14 @@ export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextMo
                         onInput={({target}) => setGroupName(target.value)}
                     />
                     {errGroupName ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errGroupName}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errGroupName}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Form.Field control={Form.Group} label="Members">
                         <Form.Dropdown
@@ -89,26 +94,33 @@ export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextMo
                         />
                     </Form.Field>
                     {errGroupSize ? (
-                        <div style={{height: "10px", color: "red", marginTop:"-13px", marginBottom:"10px"}}>{errGroupSize}</div>
+                        <div style={{
+                            height: "10px",
+                            color: "red",
+                            marginTop: "-13px",
+                            marginBottom: "10px"
+                        }}>{errGroupSize}</div>
                     ) : (
-                        <div style={{height: "10px", marginTop:"-13px", marginBottom:"10px"}}/>
+                        <div style={{height: "10px", marginTop: "-13px", marginBottom: "10px"}}/>
                     )}
                     <Button
                         content="Save & Close"
                         onClick={(e) => {
                             submitGroup(e)
-                            }
+                        }
                         }
                         positive
                     />
                     <Button content={"Cancel"} color='black' onClick={(e) => {
-                        toggleIt(e)}}/>
+                        toggleIt(e)
+                    }}/>
                     {isWizard && <Button
                         floated="right"
                         content={"Save & Create Scenario"}
                         onClick={(e) => {
-                            submitGroup(e)}}
-                        positive />}
+                            submitGroup(e)
+                        }}
+                        positive/>}
                 </Form>
             </Modal.Content>
         </Modal>

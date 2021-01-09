@@ -1,8 +1,8 @@
 import {useTracker} from "meteor/react-meteor-data";
 import {ScenarioSets} from "/imports/api/scenarioSets";
 import {Groups} from "/imports/api/groups";
-import {Modal, Button, Label, Form, Header, SegmentGroup, Segment, Tab, List, ListItem, Grid} from "semantic-ui-react";
-import React, {useEffect, useState} from "react";
+import {Modal, Button, Header, Segment, Tab, ListItem, Grid} from "semantic-ui-react";
+import React, {useState} from "react";
 import {Discussions} from "../../api/discussions";
 import {Scenarios} from "../../api/scenarios";
 
