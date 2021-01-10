@@ -198,7 +198,7 @@ export const Discussion = () => { ///
             !timedDiscussion &&
             discussionStatus === "active"
         ) {
-            console.log('IF2IFELSE');
+            console.log('IF2IFELSEIF');
             updateTimedTrue();
             calculateTimeLeft();
         } else if (discussionDeadline < currentTime && discussionStatus !== "active") {
