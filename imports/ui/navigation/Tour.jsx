@@ -6,20 +6,21 @@ import Cookies from "universal-cookie/lib";
 export const Tour = ({TOUR_STEPS}) => {
 
     const handleCallback = (data) => {
-        const {status, step} = data;
-        if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
-            const cookies = new Cookies();
-            if (step.target === ".myPepeha") {
-                cookies.set('pepehaTour', 'complete', {path: '/'});
-            } else if ([".myDiscussions", ".finishedDiscussions", ".myGroups", ".newDiscussion",
-                ".discussionTemplates", ".myScenarios", ".myScenarioSets", ".myExperiments"].includes(step.target)) {
-                cookies.set('myDashTour', 'complete', {path: '/'});
-            } else if (step.target === ".signUp") {
-                cookies.set('signup', 'complete', {path: '/'});
-            } else if (['.participants'].includes(step.target)) {
-                cookies.set("huichatTour", 'complete', {path: '/'});
-            }
-        }
+        // console.log('data:', data);
+        // const {status, step} = data;
+        // if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+        //     const cookies = new Cookies();
+        //     if (step.target === ".myPepeha") {
+        //         cookies.set('pepehaTour', 'complete', {path: '/'});
+        //     } else if ([".myDiscussions", ".finishedDiscussions", ".myGroups", ".newDiscussion",
+        //         ".discussionTemplates", ".myScenarios", ".myScenarioSets", ".myExperiments"].includes(step.target)) {
+        //         cookies.set('myDashTour', 'complete', {path: '/'});
+        //     } else if (step.target === ".signUp") {
+        //         cookies.set('signup', 'complete', {path: '/'});
+        //     } else if (['.participants'].includes(step.target)) {
+        //         cookies.set("huichatTour", 'complete', {path: '/'});
+        //     }
+        // }
     }
 
     return (

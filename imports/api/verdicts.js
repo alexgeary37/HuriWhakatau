@@ -61,11 +61,13 @@ Meteor.methods({
       },
     });
   },
+
+  "verdicts.removeAll"() {
+    Verdicts.remove({});
+  }
 });
 
 if (Meteor.isServer) {
-  // Verdicts.remove();
-
   Meteor.publish("verdicts", function (discussionId) {
     return Verdicts.find(
       { discussionId: discussionId },

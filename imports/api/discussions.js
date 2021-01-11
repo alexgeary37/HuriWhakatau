@@ -137,12 +137,15 @@ Meteor.methods({
             )
         }, 2000)
     },
+
+    "discussions.removeAll"() {
+        Discussions.remove({});
+    }
 });
 
 if (Meteor.isServer) {
     if (!process.env.MONGO_URL.includes("juryroom_admin")) {
         console.log("minimongo discussions", process.env.MONGO_URL);
-        //Discussions.remove({});
     } else {
         console.log("not minimongo discussions");
     }

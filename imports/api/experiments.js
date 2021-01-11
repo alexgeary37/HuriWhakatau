@@ -234,6 +234,10 @@ Meteor.methods({
             }
         );
     },
+
+    "experiments.removeAll"() {
+        Experiments.remove({});
+    }
 });
 
 if (Meteor.isServer) {
@@ -241,7 +245,6 @@ if (Meteor.isServer) {
     // Meteor.call("experiments.exportDiscussion","HaCZyBgCvsayGRMhB");
     if(!process.env.MONGO_URL.includes("juryroom_admin")){
         console.log("minimongo experiments");
-        //Experiments.remove({});
     } else {
         console.log("not minimongo experiments");
     }
