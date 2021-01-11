@@ -18,10 +18,10 @@ import {Verdict} from "/imports/ui/verdicts/Verdict";
 import {CommentForm} from "/imports/ui/comments/CommentForm";
 import {UserComment} from "/imports/ui/comments/UserComment";
 import {VerdictForm} from "/imports/ui/verdicts/VerdictForm";
-import {Timer} from "./Timer"; ///
+import {Timer} from "./Timer";
 import {Layout} from "../navigation/Layout";
 
-export const Discussion = () => { ///
+export const Discussion = () => {
 
     const filter = {};
     const {discussionId} = useParams();
@@ -36,12 +36,6 @@ export const Discussion = () => { ///
     // use to allow comments or proposing / voting on verdicts
     // todo, if the user uses the browser back button to go back to dash from a timed discussion
     // and then to a non-timed discussion the timedDiscussion state stays true
-    const updateTimedTrue = () => {
-        setTimedDiscussion(true);
-    };
-    const updateTimedFalse = () => {
-        setTimedDiscussion(false);
-    }
     const updateDeadline = (deadline) => {
         setMutableDiscussionDeadline(deadline);
     };
@@ -92,7 +86,7 @@ export const Discussion = () => { ///
         discussionTemplate,
         discussionDeadline,
         discussionTimeLimit,
-        nextDiscussionId, ///
+        nextDiscussionId,
         discussionIsPublic,
     } = useTracker(() => {
         const discussionSub = Meteor.subscribe("discussions", discussionId);
@@ -122,6 +116,7 @@ export const Discussion = () => { ///
             discussionTemplateSub.ready()
         ) {
             let discussion = Discussions.findOne({});
+            console.log('discussion._id', discussion._id);
             discussionScenario = Scenarios.findOne({_id: discussion.scenarioId});
             discussionGroup = Groups.findOne({_id: discussion.groupId});
             verdictProposers = discussion.activeVerdictProposers;
@@ -168,13 +163,13 @@ export const Discussion = () => { ///
         document.title = "Discussion - " + (scenario && scenario.title)
     }, [group]);
 
-    // get discussion deadline. if zero the take current date, add discussion timelimit and update discussion with deadline.
-    // else set deadline for instance to discussion deadline. use this value to have a timer show how long til discussion ends.
-    if (discussionDeadline == null && discussionTimeLimit === 0) {
-        //probably should refactor this
-        console.log('IF1');
-    } else if (discussionDeadline == null && discussionTimeLimit > 0) {
-        console.log('ELSE IF 1');
+    console.log('Discussion Deadline', discussionDeadline);
+
+    // IF discussion deadline is zero, update discussion deadline with current date + discussion timelimit.
+    // Use this value to have a timer show how long til discussion ends.
+    if (discussionDeadline == null && discussionTimeLimit > 0) {
+        console.log('updateDeadline');
+        console.log('discussionTimeLimit', discussionTimeLimit);
         let currentDateTime = new Date();
         updateDeadline(
             new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
@@ -187,22 +182,16 @@ export const Discussion = () => { ///
     }
 
     if (discussionDeadline != null) {
-        console.log('IF2');
         let currentTime = new Date();
-        if (discussionDeadline < currentTime && discussionStatus === "active") {
-            console.log('IF2IF');
+        console.log('currentTime', currentTime);
+        console.log('timedDiscussion', timedDiscussion);
+        if (discussionDeadline > currentTime && discussionStatus === "active" && !timedDiscussion) {
+            // Discussion has time left and is active, but is not timed.
+            setTimedDiscussion(true);
+        } else if (discussionDeadline < currentTime && discussionStatus === "active" && timedDiscussion) {
+            // Deadline has passed, but discussion is still active and timed.
             setTimedDiscussion(false);
             Meteor.call("discussions.updateStatus", discussionId, "timedout");
-        } else if (
-            discussionDeadline > currentTime &&
-            !timedDiscussion &&
-            discussionStatus === "active"
-        ) {
-            console.log('IF2IFELSEIF');
-            updateTimedTrue();
-            calculateTimeLeft();
-        } else if (discussionDeadline < currentTime && discussionStatus !== "active") {
-            console.log('untiming');
             Meteor.call("discussions.updateDeadlineTimeout", discussionId);
         }
     }
