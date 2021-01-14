@@ -107,5 +107,14 @@ Meteor.methods({
         Meteor.call("commentRatings.removeAll");
         Meteor.call("verdicts.removeAll");
         Meteor.call("votes.removeAll");
+    },
+
+    "main.removeAllDiscussions"() {
+        Meteor.call("experiments.removeAll");
+        Meteor.call("discussions.removeAll");
+        Meteor.call("comments.removeAll");
+        Meteor.call("commentRatings.removeAll");
+        Meteor.call("verdicts.removeAll");
+        Meteor.call("votes.removeAll");
     }
 });

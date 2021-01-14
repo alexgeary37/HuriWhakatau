@@ -54,11 +54,11 @@ export const EnrollForm = () => {
                         information head over to your dashboard where the discussions you are to participate in will be
                         listed.</p>
                     <Form.Input
-                        focus
                         label="Password"
                         type="Password"
                         value={password}
                         onInput={({target}) => setPassword(target.value)}
+                        autoFocus
                     />
                     {errPassword ? (
                         <div style={{height: "10px", color: "red"}}>{errPassword}</div>
