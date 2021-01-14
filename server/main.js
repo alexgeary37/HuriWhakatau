@@ -91,21 +91,21 @@ Meteor.startup(() => {
 });
 
 Meteor.methods({
-  "main.removeAll"() {
-    Meteor.call("categories.removeAll");
-    Meteor.call("topics.removeAll");
-    Meteor.call("groups.removeAll");
-    Meteor.call("discussionTemplates.removeAll");
-    Meteor.call("scenarios.removeAll");
-    Meteor.call("scenarioSets.removeAll");
-    Meteor.call("mountains.removeAll");
-    Meteor.call("rivers.removeAll");
-    Meteor.call("personality.removeAll");
-    Meteor.call("experiments.removeAll");
-    Meteor.call("discussions.removeAll");
-    Meteor.call("comments.removeAll");
-    Meteor.call("commentRatings.removeAll");
-    Meteor.call("verdicts.removeAll");
-    Meteor.call("votes.removeAll");
-  }
+    "main.removeAll"() {
+        Meteor.call("categories.removeAll");
+        Meteor.call("topics.removeAll");
+        Meteor.call("groups.removeAll");
+        Meteor.call("discussionTemplates.removeAll");
+        Meteor.call("scenarios.removeAll");
+        Meteor.call("scenarioSets.removeAll");
+        Meteor.call("mountains.removeAll");
+        Meteor.call("rivers.removeAll");
+        Meteor.call("personality.removeAll");
+        Meteor.call("experiments.removeAll");
+        Meteor.call("discussions.removeAll");
+        Meteor.call("comments.removeAll");
+        Meteor.call("commentRatings.removeAll");
+        Meteor.call("verdicts.removeAll");
+        Meteor.call("votes.removeAll");
+    }
 });

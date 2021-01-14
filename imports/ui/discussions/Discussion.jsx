@@ -116,7 +116,6 @@ export const Discussion = () => {
             discussionTemplateSub.ready()
         ) {
             let discussion = Discussions.findOne({_id: discussionId});
-            console.log('discussion._id', discussion._id);
             discussionScenario = Scenarios.findOne({_id: discussion.scenarioId});
             discussionGroup = Groups.findOne({_id: discussion.groupId});
             verdictProposers = discussion.activeVerdictProposers;
@@ -164,12 +163,12 @@ export const Discussion = () => {
     }, [group]);
 
     console.log('Discussion Deadline', discussionDeadline);
+    console.log('Discussion Time Limit', discussionTimeLimit);
 
     // IF discussion deadline is zero, update discussion deadline with current date + discussion timelimit.
     // Use this value to have a timer show how long til discussion ends.
     if (discussionDeadline == null && discussionTimeLimit > 0) {
         console.log('updateDeadline');
-        console.log('discussionTimeLimit', discussionTimeLimit);
         let currentDateTime = new Date();
         updateDeadline(
             new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
@@ -201,9 +200,10 @@ export const Discussion = () => {
     const scrollToBottom = () => {
         commentsEndRef.current.scrollIntoView({behavior: "auto"});
     };
-    // discussionTimeLimit changes from undefined to 0 upon page load meaning the effect will take place upon page load.
-    // There might be a better way of handling this....
-    useEffect(scrollToBottom, [discussionTimeLimit, comments.filter(x => x.authorId === Meteor.userId()).length]);
+    // Effect occurs during first render only. This doesn't work because first render 
+    // happens before all the comments have been displayed.
+    useEffect(scrollToBottom, []);
+    useEffect(scrollToBottom, [comments.filter(x => x.authorId === Meteor.userId()).length]);
 
     // Return true if this user has submitted a verdict, false otherwise.
     const userHasSubmittedVerdict = () => {
