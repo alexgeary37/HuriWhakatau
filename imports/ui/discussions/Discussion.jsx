@@ -89,7 +89,7 @@ export const Discussion = () => {
         nextDiscussionId,
         discussionIsPublic,
     } = useTracker(() => {
-        const discussionSub = Meteor.subscribe("discussions", discussionId);
+        const discussionSub = Meteor.subscribe("allDiscussions");
         const scenarioSub = Meteor.subscribe("scenarios");
         const groupSub = Meteor.subscribe("groups");
         const topicSub = Meteor.subscribe("topics");
@@ -115,7 +115,7 @@ export const Discussion = () => {
             topicSub.ready() &&
             discussionTemplateSub.ready()
         ) {
-            let discussion = Discussions.findOne({});
+            let discussion = Discussions.findOne({_id: discussionId});
             console.log('discussion._id', discussion._id);
             discussionScenario = Scenarios.findOne({_id: discussion.scenarioId});
             discussionGroup = Groups.findOne({_id: discussion.groupId});
@@ -265,6 +265,7 @@ export const Discussion = () => {
                                                 ? discussionTemplate.usersCanEditComments
                                                 : true
                                         }
+                                        userInGroup={userInGroup}
                                     />
                                 ))}
                                 <div ref={commentsEndRef}/>
@@ -291,6 +292,7 @@ export const Discussion = () => {
                                         verdict={verdict}
                                         onVote={hasReachedConsensus}
                                         discussionStatus={discussionStatus}
+                                        userInGroup={userInGroup}
                                     />
                                 </List.Item>
                             ))}
@@ -299,7 +301,8 @@ export const Discussion = () => {
                                     <Modal.Content>Discussion reached a consensus:
                                         {<Verdict
                                             verdict={hasReachedConsensus()}
-                                        />}</Modal.Content>
+                                        />}
+                                    </Modal.Content>
                                     <Modal.Actions>
                                         {nextDiscussionId &&
                                         <Button as={Link}
@@ -313,6 +316,7 @@ export const Discussion = () => {
                             )}
                             {!userHasSubmittedVerdict() &&
                             discussionVerdictProposers &&
+                            userInGroup &&
                             discussionStatus === "active" &&
                             (discussionVerdictProposers.includes(Meteor.userId()) ? (
                                 <VerdictForm discussionId={discussionId}/>
