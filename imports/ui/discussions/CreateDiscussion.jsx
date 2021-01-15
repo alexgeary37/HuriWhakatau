@@ -12,7 +12,6 @@ export const CreateDiscussion = ({toggleModal}) => {
     const [description, setDescription] = useState("");
     const [categoryId, setCategoryId] = useState("");
     const [groupId, setGroupId] = useState("");
-    const [isOpen, setIsOpen] = useState(true);
     const [isHui, setIsHui] = useState(false);
     const [errTitle, setErrTitle] = useState("");
     const [createNewGroup, setCreateNewGroup] = useState(false);
@@ -57,7 +56,6 @@ export const CreateDiscussion = ({toggleModal}) => {
     };
 
     const toggleIt = () => {
-        setIsOpen(false);
         toggleModal();
     };
 
@@ -86,9 +84,7 @@ export const CreateDiscussion = ({toggleModal}) => {
     // enable form items as this functionality becomes available
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             closeOnDimmerClick={false}
             size="small"
         >

@@ -13,7 +13,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     const [introductionCommentText, setIntroductionCommentText] = useState("Welcome to the " +
         "introduction discussion. Use this space to get to know each other and vote on a group leader before " +
         "you progress to the first topic.");
-    const [isOpen, setIsOpen] = useState(true);
     const [hasIntroduction, setHasIntroduction] = useState(false);
     const [errName, setErrName] = useState("");
     const [errDescription, setErrDescription] = useState("");
@@ -65,7 +64,6 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
     }
 
     const toggleIt = (e) => {
-        setIsOpen(false);
         toggleModal();
         if (isWizard && e.currentTarget.innerHTML === "Cancel") {
             toggleIsWizard();
@@ -484,9 +482,7 @@ export const CreateExperiment = ({toggleModal, isWizard, toggleIsWizard}) => {
 
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             closeOnDimmerClick={false}
             size="large"
         >

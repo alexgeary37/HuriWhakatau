@@ -5,12 +5,10 @@ import {Segment, Form, Modal, Button} from "semantic-ui-react";
 export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextModal}) => {
     const [members, setMembers] = useState([]);
     const [groupName, setGroupName] = useState("");
-    const [isOpen, setIsOpen] = useState(true);
     const [errGroupName, setErrGroupName] = useState("");
     const [errGroupSize, setErrGroupSize] = useState("");
 
     const toggleIt = (e) => {
-        setIsOpen(false);
         toggleModal();
         if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
             toggleNextModal();
@@ -47,9 +45,7 @@ export const CreateGroup = ({toggleModal, isWizard, toggleIsWizard, toggleNextMo
 
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             closeOnDimmerClick={false}
             size="small"
         >

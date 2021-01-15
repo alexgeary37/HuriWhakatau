@@ -13,7 +13,6 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
     const [canAddEmojis, setCanAddEmojis] = useState(false);
     const [timeLimit, setTimeLimit] = useState(0);
     const [charLimit, setCharLimit] = useState(0);
-    const [isOpen, setIsOpen] = useState(true);
     const [errName, setErrName] = useState("");
 
     const submitTemplate = () => {
@@ -28,16 +27,13 @@ export const CreateDiscussionTemplate = ({toggleModal}) => {
     }
 
     const toggleIt = () => {
-        setIsOpen(false);
         toggleModal();
     }
 
     // enable form items as this functionality becomes available
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             closeOnDimmerClick={false}
             size="small"
         >

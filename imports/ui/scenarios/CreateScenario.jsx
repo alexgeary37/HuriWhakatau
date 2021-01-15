@@ -9,7 +9,6 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
     const [description, setDescription] = useState("");
     const [categoryId, setCategoryId] = useState([]); //make dynamically get the "other" category
     const [discussionTemplateId, setDiscussionTemplateId] = useState("");
-    const [isOpen, setIsOpen] = useState(true);
     const [errScenarioTitle, setErrScenarioTitle] = useState("");
     const [errScenarioDesc, setErrScenarioDesc] = useState("");
     const [errCategory, setErrCategory] = useState("");
@@ -51,7 +50,6 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
     }
 
     const toggleIt = (e) => {
-        setIsOpen(false);
         toggleModal();
         if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
             console.log(e.currentTarget.innerHTML);
@@ -94,9 +92,7 @@ export const CreateScenario = ({toggleModal, isWizard, toggleIsWizard, toggleNex
 
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             closeOnDimmerClick={false}
             size="small"
         >
