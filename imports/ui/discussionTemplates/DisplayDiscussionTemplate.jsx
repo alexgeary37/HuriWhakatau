@@ -11,19 +11,15 @@ export const DisplayDiscussionTemplate = ({toggleModal, template}) => {
     const canAddEmojis = template.canAddEmojis;
     const timeLimit = template.timeLimit;
     const charLimit = template.commentCharacterLimit;
-    const [isOpen, setIsOpen] = useState(true);
 
     const toggleIt = () => {
-        setIsOpen(false);
         toggleModal();
     }
 
     // enable form items as this functionality becomes available
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             size="small"
             closeOnDimmerClick={false}
         >
