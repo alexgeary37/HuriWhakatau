@@ -67,9 +67,35 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
         ratings,
         introductionCommentText
       );
-      toggleIt(e);
+      return true;
     }
+    return false;
   };
+
+  const resetFields = () => {
+    setName("");
+    setDescription("");
+    setGroupId("");
+    setScenarioSetId("");
+    setHasIntroduction(false);
+    setIntroductionCommentText(
+      "Welcome to the " +
+        "introduction discussion. Use this space to get to know each other and vote on a group leader before " +
+        "you progress to the first topic."
+    );
+    setErrName("");
+    setErrDescription("");
+    setErrGroupId("");
+    setErrScenarioSetId("");
+    setNumberOfRatings(1);
+    setRatings([
+      { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
+      { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
+      { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
+      { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
+      { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
+    ]);
+  }
 
   const toggleIt = (e) => {
     toggleModal();
@@ -139,6 +165,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
               label="Name"
               type="text"
               autoFocus
+              
               value={name}
               onInput={({ target }) => setName(target.value)}
             />
@@ -601,18 +628,30 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
         <Button
           content="Save & Close"
           onClick={(e) => {
-            submitExperiment(e);
+            const submitted = submitExperiment(e);
+            if (submitted) {
+              toggleIt(e);
+            }
+          }}
+          positive
+        />
+        <Button
+          content="Save & Create Another"
+          onClick={(e) => {
+            const submitted = submitExperiment(e);
+            if (submitted) {
+              resetFields();
+            }
           }}
           positive
         />
         <Button
           color="black"
+          content="Cancel"
           onClick={(e) => {
             toggleIt(e);
           }}
-        >
-          Cancel
-        </Button>
+        />
       </Modal.Content>
     </Modal>
   );
