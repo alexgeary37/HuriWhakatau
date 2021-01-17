@@ -67,7 +67,7 @@ Meteor.methods({
 
 if (Meteor.isServer) {
   if(!process.env.MONGO_URL.includes("juryroom_admin")){
-    console.log("minimongo discussion templates");
+    console.log("minimongo discussion templates", process.env.MONGO_URL);
   } else {
     console.log("not minimongo discussion templates");
   }

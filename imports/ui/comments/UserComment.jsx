@@ -67,7 +67,6 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
         //prevent context menu for comments the user is not the author of.
         if (!isAuthor) {
             const commentArea = document.getElementById(comment._id + ":text");
-            console.log("textarea", commentArea);
             commentArea.addEventListener("contextmenu", function (e) {
                 console.log(e)
                 e.preventDefault();
