@@ -3,7 +3,7 @@ import TextTrim from "react-text-trim"
 import {useTracker} from "meteor/react-meteor-data";
 import {List, Button, Card, Header} from "semantic-ui-react";
 
-export const Verdict = ({verdict, onVote, discussionStatus}) => {
+export const Verdict = ({verdict, onVote, discussionStatus, userInGroup}) => {
     // useTracker makes sure the component will re-render when the data changes.
     const {user} = useTracker(() => {
         Meteor.subscribe("users");
@@ -32,7 +32,7 @@ export const Verdict = ({verdict, onVote, discussionStatus}) => {
             return <div style={{padding: 5, textAlign: "right"}}>Voted</div>;
         } else {
             // IF the discussion is active and the user is not the verdict author, display "Affirm" and "Reject" buttons.
-            if (discussionStatus === 'active') {
+            if (discussionStatus === 'active' && userInGroup) {
                 return (
                     <div style={{paddingBottom: 5, textAlign: "center"}}>
                         <Button
@@ -49,24 +49,22 @@ export const Verdict = ({verdict, onVote, discussionStatus}) => {
                         />
                     </div>
                 );
+            } else {
+                return (
+                    <div style={{ paddingBottom: 5, textAlign: "center" }}>
+                        <Button
+                            content="Affirm"
+                            disabled
+                            size="mini"
+                        />
+                        <Button
+                            content="Reject"
+                            disabled
+                            size="mini"
+                        />
+                    </div>
+                );
             }
-            // else { //any reason we want disabled buttons rather than simply removing?
-            //   // Discussion is no longer active, so the buttons are disabled.
-            //   return (
-            //     <div style={{ paddingBottom: 5, textAlign: "center" }}>
-            //       <Button
-            //         content="Affirm"
-            //         disabled
-            //         size="mini"
-            //       />
-            //       <Button
-            //         content="Reject"
-            //         disabled
-            //         size="mini"
-            //       />
-            //     </div>
-            //   );
-            // }
         }
     };
 

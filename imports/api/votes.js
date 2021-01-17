@@ -37,11 +37,13 @@ Meteor.methods({
       },
     });
   },
+
+  "votes.removeAll"() {
+    Votes.remove({});
+  }
 });
 
 if (Meteor.isServer) {
-  // Votes.remove({});
-
   Meteor.publish("votes", function (verdictId) {
     return Votes.find(
       { verdictId: verdictId },

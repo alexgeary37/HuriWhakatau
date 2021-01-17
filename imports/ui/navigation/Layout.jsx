@@ -167,7 +167,7 @@ export const Layout = ({page, isDiscussion}) => {
                     placeholder="Username or email"
                     name="searchFriends"
                     fluid
-                    focus
+                    autoFocus
                     value={searchTerm}
                     /*onChange={(e) => setSearchTerm(e.currentTarget.value)}*/
                     onChange={(e) => {

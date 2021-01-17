@@ -26,15 +26,13 @@ Meteor.methods({
 
     Categories.remove(categoryId);
   },
+
+  "categories.removeAll"() {
+    Categories.remove({});
+  }
 });
 
 if (Meteor.isServer) {
-  // Categories.remove({});
-  // const categories = Categories.find({}).fetch();
-  // for (i = 0; i < categories.length; i += 1) {
-  //   console.log(i, '\ncategory:', categories[i]);
-  // }
-
   Meteor.publish("categories", function () {
     return Categories.find(
       {},

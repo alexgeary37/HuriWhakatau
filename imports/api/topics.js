@@ -36,6 +36,10 @@ Meteor.methods({
 
     Topics.remove(topicId);
   },
+
+  "topics.removeAll"() {
+    Topics.remove({});
+  }
 });
 
 if (Meteor.isServer) {
