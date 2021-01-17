@@ -59,16 +59,23 @@ Meteor.methods({
 
     DiscussionTemplates.remove(discussionTemplateId);
   },
+
+  "discussionTemplates.removeAll"() {
+    DiscussionTemplates.remove({});
+  }
 });
 
 if (Meteor.isServer) {
   if(!process.env.MONGO_URL.includes("juryroom_admin")){
     console.log("minimongo discussion templates");
-    //DiscussionTemplates.remove({});
   } else {
     console.log("not minimongo discussion templates");
   }
 
+  const templates = DiscussionTemplates.find({}).fetch();
+  for (i = 0; i < templates.length; i += 1) {
+    console.log(templates[i]);
+  }
 
   Meteor.publish("discussionTemplates", function () {
     return DiscussionTemplates.find(

@@ -11,6 +11,10 @@ Meteor.methods({
       name: name,
     });
   },
+
+  "rivers.removeAll"() {
+    Rivers.remove({});
+  }
 });
 
 if (Meteor.isServer) {

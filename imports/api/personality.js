@@ -29,6 +29,10 @@ Meteor.methods({
             return fetchedQuestion;
         }
     },
+
+    "personality.removeAll"() {
+        Personality.remove({});
+    }
 });
 
 if (Meteor.isServer) {

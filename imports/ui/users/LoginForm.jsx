@@ -49,7 +49,7 @@ export const LoginForm = ({toggleModal}) => {
                         name="username"
                         required
                         fluid
-                        focus
+                        autoFocus
                         onChange={(e) => setUsername(e.currentTarget.value)}
                     />
                     <br/>

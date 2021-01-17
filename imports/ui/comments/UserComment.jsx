@@ -7,7 +7,7 @@ import RichTextEditor from "react-rte";
 import "emoji-mart/css/emoji-mart.css";
 import NotificationBadge from "react-notification-badge";
 
-export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader}) => {
+export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader, userInGroup}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [reactionShown, setReactionShown] = useState(false);
     const [selectedEmojis, setSelectedEmojis] = useState(
@@ -224,7 +224,7 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
                 </div>
                 }
             </Comment.Actions>
-            {discussionStatus === "active" && (
+            {discussionStatus === "active" && userInGroup && (
                 <Button content="Add Reaction" size="mini" onClick={handleShowEmojis}/>
             )}
             {selectedEmojis &&

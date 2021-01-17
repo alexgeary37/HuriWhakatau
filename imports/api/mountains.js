@@ -11,6 +11,10 @@ Meteor.methods({
       name: name,
     });
   },
+
+  "mountains.removeAll"() {
+    Mountains.remove({});
+  }
 });
 
 if (Meteor.isServer) {

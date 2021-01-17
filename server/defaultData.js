@@ -37,7 +37,6 @@ if (Meteor.isServer) {
     }
 
     const categoryId = Categories.findOne({title: "Other"})._id;
-    // console.log('categoryId:', categoryId);
 
     // Create accounts
     let defaultUsers = [];

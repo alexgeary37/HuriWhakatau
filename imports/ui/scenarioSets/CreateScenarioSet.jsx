@@ -8,7 +8,6 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
     const [description, setDescription] = useState("");
     const [scenarioSet, setScenarios] = useState([]);
     const [isRandomised, setIsRandomised] = useState(false);
-    const [isOpen, setIsOpen] = useState(true);
     const [errTitle, setErrTitle] = useState("");
     const [errDescription, setErrDescription] = useState("");
     const [errScenarioSet, setErrScenarioSet] = useState("");
@@ -43,7 +42,6 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
     }
 
     const toggleIt = (e) => {
-        setIsOpen(false);
         toggleModal();
         if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
             console.log(e.currentTarget.innerHTML);
@@ -64,9 +62,7 @@ export const CreateScenarioSet = ({toggleModal, isWizard, toggleIsWizard, toggle
 
     return (
         <Modal
-            onClose={() => setIsOpen(false)}
-            onOpen={() => setIsOpen(true)}
-            open={isOpen}
+            open={true}
             closeOnDimmerClick={false}
             size="small"
         >

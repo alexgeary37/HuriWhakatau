@@ -14,6 +14,10 @@ Meteor.methods({
         },
             {upsert: true});
     },
+
+    "commentRatings.removeAll"() {
+        CommentRatings.remove({});
+    }
 });
 
 if(Meteor.isServer){

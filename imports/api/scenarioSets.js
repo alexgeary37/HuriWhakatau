@@ -27,20 +27,18 @@ Meteor.methods({
       createdBy: this.userId,
     });
   },
+
+  "scenarioSets.removeAll"() {
+    ScenarioSets.remove({});
+  }
 });
 
 if (Meteor.isServer) {
   if(!process.env.MONGO_URL.includes("juryroom_admin")){
     console.log("minimongo ScenarioSets");
-    //ScenarioSets.remove({});
   } else {
     console.log("not minimongo ScenarioSets");
   }
-
-  // const sets = ScenarioSets.find({}).fetch();
-  // for (i = 0; i < sets.length; i += 1) {
-  //   console.log(i, '\n', sets[i]);
-  // }
 
   Meteor.publish("scenarioSets", function () {
     return ScenarioSets.find(

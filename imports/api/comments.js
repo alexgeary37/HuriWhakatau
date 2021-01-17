@@ -94,11 +94,13 @@ Meteor.methods({
       return fetchedComment;
     }
   },
+
+  "comments.removeAll"() {
+    Comments.remove({});
+  }
 });
 
 if (Meteor.isServer) {
-  // Comments.remove({});
-
   Meteor.publish("comments", function (discussionId) {
     return Comments.find(
       { discussionId: discussionId },

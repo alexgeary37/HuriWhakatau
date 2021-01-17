@@ -82,12 +82,14 @@ Meteor.methods({
     //         }
     //     );
     // },
+    "groups.removeAll"() {
+        Groups.remove({});
+    }
 });
 
 if (Meteor.isServer) {
     if(!process.env.MONGO_URL.includes("juryroom_admin")){
         console.log("minimongo groups");
-        //Groups.remove({});
     } else {
         console.log("not minimongo groups");
     }
