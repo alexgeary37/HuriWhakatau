@@ -9,6 +9,7 @@ import {
   List,
   Grid,
 } from "semantic-ui-react";
+import {HelpModal} from "/imports/ui/navigation/helpModal"
 
 export const CreateDiscussionTemplate = ({ toggleModal }) => {
   const [anonymous, setAnonymous] = useState(false);
@@ -23,6 +24,9 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
   const [timeLimit, setTimeLimit] = useState(0);
   const [charLimit, setCharLimit] = useState(0);
   const [errName, setErrName] = useState("");
+  //text for the help modal component, discussion time limit & hui format
+  const timeLimitHelpText = 'Set to zero for unlimited time'
+  const huiHelpText = 'Discussion has a group leader and shows user pepeha and allows emotion selection'
   const nameRef = React.createRef();
 
   const submitTemplate = () => {
@@ -116,6 +120,7 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
                       label="Discussions use the Hui format"
                       onClick={(e, data) => setIsHui(data.checked)}
                     />
+                    <HelpModal text={huiHelpText}/>
                   </List.Item>
                   <List.Item>
                     <Checkbox
@@ -179,6 +184,7 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
             <Label>Discussions have time limit</Label>
             <input />
             <Label>mins</Label>
+            <HelpModal text={timeLimitHelpText}/>
           </Input>
           <br />
           <br />
