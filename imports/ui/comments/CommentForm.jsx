@@ -17,15 +17,12 @@ export const CommentForm = ({showTypingNotification, discussionId, isDiscussionP
         if (subDiscussions.ready()) {
             discussionTypingUsersList = Discussions.findOne({_id: discussionId}, {fields: {usersTyping: 1}});
         }
-        console.log("inside", discussionTypingUsersList)
-
         return {
             user: Meteor.users.findOne({_id: Meteor.userId()}),
             typingUsers: discussionTypingUsersList,
         };
     });
 
-    console.log("outside", typingUsers && typingUsers.usersTyping.join(","))
     //detect pasting into the form and get what was pasted.
     // should save this somewhere and add to comment when submitted
     useEffect(() => {
@@ -38,7 +35,9 @@ export const CommentForm = ({showTypingNotification, discussionId, isDiscussionP
         });
         //adds macrons to vowels
         editorContent.addEventListener('keydown', (event) => {
-            macronise(event)
+            if(event.altKey && ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"].includes(event.key)) {
+                macronise(event)
+            }
         });
     }, []);
 
