@@ -49,6 +49,7 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
     }
   };
 
+  // Reset all input fields on the form
   const resetFields = () => {
     setAnonymous(false);
     setTyping(true);
@@ -198,7 +199,7 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
           <br />
           <Modal.Actions>
             <Button
-              content="Save"
+              content="Save & Close"
               onClick={() => {
                 const submitted = submitTemplate();
                 if (submitted) {

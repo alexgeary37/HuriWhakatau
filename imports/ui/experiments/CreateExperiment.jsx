@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Segment, Form, Modal, Button, Checkbox, Tab } from "semantic-ui-react";
+import { Segment, Form, Input, Modal, Button, Checkbox, Tab } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
 import { ScenarioSets } from "/imports/api/scenarioSets";
 import { Groups } from "/imports/api/groups";
@@ -28,6 +28,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
     { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
   ]);
   const [numberOfRatings, setNumberOfRatings] = useState(1);
+  const nameRef = React.createRef();
 
   const submitExperiment = (e) => {
     if (name.length === 0) {
@@ -95,6 +96,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
       { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
       { rating: "", scale: 7, reverse: false, responseType: "Agreement" },
     ]);
+    nameRef.current.focus();
   }
 
   const toggleIt = (e) => {
@@ -161,11 +163,11 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
       render: () => (
         <Tab.Pane style={{ border: "none" }}>
           <Form as={Segment} attached="bottom" style={{ border: "none" }}>
-            <Form.Input
+            <Input
               label="Name"
               type="text"
               autoFocus
-              
+              ref={nameRef}
               value={name}
               onInput={({ target }) => setName(target.value)}
             />
@@ -189,7 +191,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 }}
               />
             )}
-            <Form.Input
+            <Input
               label="Description"
               type="text"
               value={description}

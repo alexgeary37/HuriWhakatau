@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
-import { Segment, Form, Modal, Button } from "semantic-ui-react";
+import { Segment, Form, Modal, Button, Input } from "semantic-ui-react";
 
 export const CreateGroup = ({
   toggleModal,
@@ -12,7 +12,7 @@ export const CreateGroup = ({
   const [groupName, setGroupName] = useState("");
   const [errGroupName, setErrGroupName] = useState("");
   const [errGroupSize, setErrGroupSize] = useState("");
-//   const nameRef = React.createRef();
+  const nameRef = React.createRef();
 
   const submitGroup = (e) => {
     if (groupName.length === 0) {
@@ -32,12 +32,13 @@ export const CreateGroup = ({
     return false;
   };
 
+  // Reset all input fields on the form
   const resetFields = () => {
     setMembers([]);
     setGroupName("");
     setErrGroupName("");
     setErrGroupSize("");
-    // nameRef.current.focus(); // This won't work because Form.Input is a function and cannot have a ref
+    nameRef.current.focus();
   }
 
   const toggleIt = (e) => {
@@ -63,11 +64,12 @@ export const CreateGroup = ({
       <Modal.Header>Create a Group</Modal.Header>
       <Modal.Content>
         <Form as={Segment} attached="bottom">
-          <Form.Input
+          <Input
             label="Name"
             type="text"
             autoFocus
-            // ref={nameRef}
+            ref={nameRef}
+            placeholder="Group Name"
             value={groupName}
             onInput={({ target }) => setGroupName(target.value)}
           />

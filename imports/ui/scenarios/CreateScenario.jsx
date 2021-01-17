@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Segment, Form, Modal, Button } from "semantic-ui-react";
+import { Segment, Form, Input, Modal, Button } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
 import { DiscussionTemplates } from "/imports/api/discussionTemplate";
 import { Categories } from "../../api/categories";
@@ -18,6 +18,7 @@ export const CreateScenario = ({
   const [errScenarioDesc, setErrScenarioDesc] = useState("");
   const [errCategory, setErrCategory] = useState("");
   const [errDiscussionTemplateId, setErrDiscussionTemplateId] = useState("");
+  const titleRef = React.createRef();
 
   const submitScenario = (e) => {
     if (title.length === 0) {
@@ -65,8 +66,22 @@ export const CreateScenario = ({
         categoryId,
         discussionTemplateId
       );
-      toggleIt(e);
+      return true;
     }
+    return false;
+  };
+
+  // Reset all input fields on the form
+  const resetFields = () => {
+    setTitle("");
+    setDescription("");
+    setCategoryId([]); //make dynamically get the "other" category
+    setDiscussionTemplateId("");
+    setErrScenarioTitle("");
+    setErrScenarioDesc("");
+    setErrCategory("");
+    setErrDiscussionTemplateId("");
+    titleRef.current.focus(); // This won't work because Form.Input is a function and cannot have a ref
   };
 
   const toggleIt = (e) => {
@@ -114,12 +129,13 @@ export const CreateScenario = ({
       <Modal.Header>Create a Scenario</Modal.Header>
       <Modal.Content>
         <Form as={Segment} attached="bottom">
-          <Form.Input
+          <Input
             label="Title"
             type="text"
             autoFocus
             value={title}
             onInput={({ target }) => setTitle(target.value)}
+            ref={titleRef}
           />
           {errScenarioTitle ? (
             <div
@@ -141,7 +157,7 @@ export const CreateScenario = ({
               }}
             />
           )}
-          <Form.Input
+          <Input
             label="Description"
             type="text"
             value={description}
@@ -248,19 +264,39 @@ export const CreateScenario = ({
           <Button
             content="Save & Close"
             onClick={(e) => {
-              submitScenario(e);
+              const submitted = submitScenario(e);
+              if (submitted) {
+                toggleIt(e);
+              }
             }}
             positive
           />
-          <Button color="black" onClick={(e) => toggleIt(e)}>
-            Cancel
-          </Button>
+          <Button
+            content="Save & Create Another"
+            onClick={(e) => {
+              const submitted = submitScenario(e);
+              if (submitted) {
+                resetFields();
+              }
+            }}
+            positive
+          />
+          <Button
+            color="black"
+            content="Cancel"
+            onClick={(e) => {
+              toggleIt(e);
+            }}
+          />
           {isWizard && (
             <Button
               floated="right"
               content={"Save & Create Scenario Set"}
               onClick={(e) => {
-                submitScenario(e);
+                const submitted = submitScenario(e);
+                if (submitted) {
+                  toggleIt(e);
+                }
               }}
               positive
             />

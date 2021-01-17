@@ -53,8 +53,9 @@ export const CreateDiscussion = ({ toggleModal }) => {
       } else {
         insertDiscussion(groupId);
       }
-      toggleIt();
+      return true;
     }
+    return false;
   };
 
   const insertDiscussion = (newGroupId) => {
@@ -226,15 +227,16 @@ export const CreateDiscussion = ({ toggleModal }) => {
           <br />
           <Modal.Actions>
             <Button
-              content="Save"
+              content="Save & Close"
               onClick={() => {
-                submitDiscussion();
+                const submitted = submitDiscussion();
+                if (submitted) {
+                  toggleIt();
+                }
               }}
               positive
             />
-            <Button color="black" onClick={toggleIt}>
-              Cancel
-            </Button>
+            <Button color="black" content="Cancel" onClick={toggleIt} />
           </Modal.Actions>
         </Form>
       </Modal.Content>
