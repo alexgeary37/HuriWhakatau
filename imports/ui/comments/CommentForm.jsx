@@ -75,7 +75,7 @@ export const CommentForm = ({showTypingNotification, discussionId, isDiscussionP
         let pastedItem = {
             item: event.clipboardData.getData('text/plain'),
             timestamp: Date.now(),
-        }
+        };
         setPastedItems(pastedItems => [...pastedItems, pastedItem]);
     };
 

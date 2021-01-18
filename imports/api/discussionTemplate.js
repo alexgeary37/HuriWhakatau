@@ -1,12 +1,26 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 
 export const DiscussionTemplates = new Mongo.Collection("discussionTemplates");
 
+DiscussionTemplates.schema = new SimpleSchema({
+  name: String,
+  usersAreAnonymous: Boolean,
+  showTypingNotification: Boolean,
+  usersCanEditComments: Boolean,
+  discussionCommentsThreaded: Boolean,
+  showProfileInfo: Boolean,
+  canAddEmojis: Boolean,
+  timeLimit: Number,
+  commentCharacterLimit: Number,
+  isHui: Boolean,
+  isPublic: Boolean,
+  createdAt: Date,
+  createdBy: String,
+});
+
 Meteor.methods({
-  // Insert a category into the category collection in the db.
-  // name: the category name
-  // Called from *****
   "discussionTemplates.create"(
     name,
     usersAreAnonymous,
@@ -33,7 +47,7 @@ Meteor.methods({
     check(isPublic, Boolean);
     //addcheck for user admin/researcher role
 
-    DiscussionTemplates.insert({
+    const discussionTemplate = {
       name: name,
       usersAreAnonymous: usersAreAnonymous,
       showTypingNotification: showTypingNotification,
@@ -47,7 +61,12 @@ Meteor.methods({
       isPublic: isPublic,
       createdAt: new Date(),
       createdBy: Meteor.userId(),
-    });
+    };
+
+    // Check discussionTemplate against schema.
+    DiscussionTemplates.schema.validate(discussionTemplate);
+    
+    DiscussionTemplates.insert(discussionTemplate);
   },
 
   // Remove a category from the categories collection in the db.

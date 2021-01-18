@@ -1,36 +1,57 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 
 export const Comments = new Mongo.Collection("comments");
 
+Comments.schema = new SimpleSchema({
+  discussionId: String,
+  postedTime: Date,
+  authorId: String,
+  text: String,
+  emojis: [String],
+// 'keystrokes.$': type = {
+//   key: event.key,
+//   timestamp: Date.now(),
+// }
+  keystrokes: [Object],
+  'keystrokes.$.key': { type: String },
+  'keystrokes.$.timestamp': {type: Number},
+  pastedItems: [Object],
+  'pastedItems.$.item': String,
+  'pastedItems.$.timestamp': Number,
+  emotion: String
+});
+
 Meteor.methods({
   // Insert a comment into the comments collection in the db.
-  // text: the text of the comment
   // discussionId: _id of the discussion this comment belongs to
   // Called from CommentForm.jsx
   "comments.insert"(text, pasted, keystrokes, discussionId, emotion) {
-    check(text, String);
-    check(pasted, Array);
-    check(keystrokes, Array);
-    check(discussionId, String);
-    if(!emotion){emotion = 'neutral'}
-    check(emotion, String);
+    if (!emotion) {
+      emotion = "neutral";
+    }
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    Comments.insert({
+    comment = {
       discussionId: discussionId,
       postedTime: new Date(),
-      authorId: this.userId, // _id of user
+      authorId: this.userId,
       text: text,
       emojis: [],
       keystrokes: keystrokes,
       pastedItems: pasted,
       emotion: emotion,
-    });
+    };
+
+    // Check comment against schema.
+    Comments.schema.validate(comment);
+
+    Comments.insert(comment);
   },
 
   // Remove a comment from the comments collection in the db.
@@ -75,6 +96,8 @@ Meteor.methods({
     check(commentId, String);
     check(emojis, Array);
 
+    console.log('emojis', emojis);
+
     Comments.update(commentId, {
       $set: {
         emojis: emojis,
@@ -86,18 +109,19 @@ Meteor.methods({
   //get a random comment from discussion
   "comments.getRandomExperimentCommentForRating"(discussionIds) {
     if (Meteor.isServer) {
-      const fetchedComment = Comments.rawCollection().aggregate([
-        {$match: {discussionId: {$in: discussionIds}}},
-        {$sample: {size: 1}}
-      ])
-          .toArray();
+      const fetchedComment = Comments.rawCollection()
+        .aggregate([
+          { $match: { discussionId: { $in: discussionIds } } },
+          { $sample: { size: 1 } },
+        ])
+        .toArray();
       return fetchedComment;
     }
   },
 
   "comments.removeAll"() {
     Comments.remove({});
-  }
+  },
 });
 
 if (Meteor.isServer) {

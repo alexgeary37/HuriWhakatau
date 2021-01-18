@@ -1,8 +1,20 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 import { Discussions } from "./discussions";
 
 export const Verdicts = new Mongo.Collection("verdicts");
+
+Verdicts.schema = new SimpleSchema({
+  discussionId: String,
+  postedTime:  Date,
+  authorId: String,
+  text: String,
+  votes: [Object],
+  'votes.$.userId': String,
+  'votes.$.vote': Boolean,
+  'votes.$.voteTime': Date
+});
 
 Meteor.methods({
   // Insert a Verdict into the verdicts collection in the db.

@@ -1,20 +1,28 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 
 export const Categories = new Mongo.Collection("categories");
 
+Categories.schema = new SimpleSchema({
+  title: String,
+  createdBy: String
+});
+
 Meteor.methods({
   // Insert a category into the category collection in the db.
-  // name: the category name
-  // Called from *****
   "categories.insert"(name) {
-    check(name, String);
     //addcheck for user admin/researcher role
 
-    Categories.insert({
+    const category = {
       title: name,
       createdBy: this.userId, // _id of user
-    });
+    };
+
+    // Check category against schema.
+    Categories.schema.validate(category);
+
+    Categories.insert(category);
   },
 
   // Remove a category from the categories collection in the db.
