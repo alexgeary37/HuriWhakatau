@@ -5,9 +5,10 @@ import SimpleSchema from "simpl-schema";
 export const Categories = new Mongo.Collection("categories");
 
 Categories.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   title: String,
   createdBy: String
-});
+}).newContext();
 
 Meteor.methods({
   // Insert a category into the category collection in the db.
@@ -22,7 +23,12 @@ Meteor.methods({
     // Check category against schema.
     Categories.schema.validate(category);
 
-    Categories.insert(category);
+    if (Categories.schema.isValid()) {
+      console.log('Successful validation');
+      Categories.insert(category);
+    } else {
+      console.log('validationErrors:', Comments.schema.validationErrors());
+    }
   },
 
   // Remove a category from the categories collection in the db.

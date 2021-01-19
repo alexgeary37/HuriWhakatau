@@ -5,6 +5,7 @@ import SimpleSchema from "simpl-schema";
 export const Discussions = new Mongo.Collection("discussions");
 
 Discussions.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   scenarioId: String,
   groupId: String,
   createdAt: Date,
@@ -13,11 +14,20 @@ Discussions.schema = new SimpleSchema({
   verdicts: [String],
   status: String,
   timeLimit: Number,
-  deadline: {type: Date, defaultValue: null},
-  isIntroduction: {type: Boolean, defaultValue: false},
+  deadline: {
+    type: Date,
+    optional: true,
+    custom: function () {
+      this.value === null;
+    }
+  },
+  usersTyping: [Object],
+  'usersTyping.$.user': String,
+  'usersTyping.$.timestamp': Number,
+  isIntroduction: { type: Boolean, defaultValue: false },
   isHui: Boolean,
-  isPublic: Boolean
-});
+  isPublic: Boolean,
+}).newContext();
 
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
@@ -37,6 +47,7 @@ Meteor.methods({
       status: "active",
       timeLimit: timeLimit,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
+      usersTyping: [],
       isIntroduction: false,
       isHui: isHui,
       isPublic: isPublic,
@@ -44,24 +55,23 @@ Meteor.methods({
 
     // Check discussion against schema.
     Discussions.schema.validate(discussion);
+    
+    if (Discussions.schema.isValid()) {
+      console.log('Successful validation');
+      return Discussions.insert(discussion); // discussionId is returned.
+    }
 
-    const discussionId = Discussions.insert(discussion);
-
-    return discussionId;
+    console.log("validationErrors:", Discussions.schema.validationErrors());
   },
 
   // Insert an introduction type discussion into the discussions collection in the db.
   // Called from experiments.js
   "discussions.insertIntroduction"(scenarioId, groupId, timeLimit) {
-    check(scenarioId, String);
-    check(groupId, String);
-    check(timeLimit, Number);
-
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    const discussionId = Discussions.insert({
+    const discussion = {
       scenarioId: scenarioId,
       groupId: groupId,
       createdAt: new Date(),
@@ -71,39 +81,74 @@ Meteor.methods({
       status: "active",
       timeLimit: timeLimit,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
+      usersTyping: [],
       isIntroduction: true,
       isHui: true,
       isPublic: false,
-    });
+    };
 
-    return discussionId;
+    Discussions.schema.validate(discussion);
+    
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      return Discussions.insert(discussion);
+    }
+    
+    console.log("validationErrors:", Discussions.schema.validationErrors());
   },
 
   "discussions.updateDeadline"(discussionId, deadline) {
     check(discussionId, String);
 
-    Discussions.update(discussionId, {
+    const mongoModifierObject = {
       $set: { deadline: deadline },
-    });
+    };
+
+    Discussions.schema.validate(mongoModifierObject, { modifier: true });
+    
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      Discussions.update(discussionId, mongoModifierObject);
+    } else {
+      console.log("validationErrors:", Discussions.schema.validationErrors());
+    }
   },
 
   "discussions.updateDeadlineTimeout"(discussionId) {
     check(discussionId, String);
 
-    Discussions.update(discussionId, {
+    const mongoModifierObject = {
       $set: {
         deadline: null,
         timeLimit: 0,
       },
-    });
+    };
+
+    Discussions.schema.validate(mongoModifierObject, { modifier: true });
+    
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      Discussions.update(discussionId, mongoModifierObject);
+    } else {
+      console.log("validationErrors:", Discussions.schema.validationErrors());
+    }
   },
 
   "discussions.updateStatus"(discussionId, status) {
     check(discussionId, String);
 
-    Discussions.update(discussionId, {
+    const mongoModifierObject = {
       $set: { status: status },
-    });
+    };
+
+    Discussions.schema.validate(mongoModifierObject, { modifier: true });
+    
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      Discussions.update(discussionId, mongoModifierObject);
+    } else {
+      console.log("validationErrors:", Discussions.schema.validationErrors()); 
+    }
   },
 
   // Add a user to the list of activeVerdictProposers in the specified Discussion.
@@ -115,9 +160,18 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    Discussions.update(discussionId, {
+    const mongoModifierObject = {
       $addToSet: { activeVerdictProposers: this.userId },
-    });
+    };
+
+    Discussions.schema.validate(mongoModifierObject, { modifier: true });
+    
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      Discussions.update(discussionId, mongoModifierObject);
+    } else {
+      console.log("validationErrors:", Discussions.schema.validationErrors());
+    }
   },
 
   // Remove a user from the list of activeVerdictProposers in the specified Discussion.
@@ -131,42 +185,66 @@ Meteor.methods({
       throw new Meteor.Error("Not authorized.");
     }
 
-    Discussions.update(discussionId, {
+    const mongoModifierObject = {
       $pull: { activeVerdictProposers: this.userId },
-    });
+    };
+
+    Discussions.schema.validate(mongoModifierObject, { modifier: true });
+
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      Discussions.update(discussionId, mongoModifierObject);
+    } else {
+      console.log("validationErrors:", Discussions.schema.validationErrors());
+    }
   },
 
   "discussions.addUserToTypingList"(discussionId, username) {
-    Discussions.update(
-      {
-        _id: discussionId,
-        $or: [
-          { usersTyping: { $size: 0 } },
-          {
-            $nor: [
-              { usersTyping: { $elemMatch: { user: { $eq: username } } } },
-            ],
-          },
-        ],
-      },
-      {
-        $addToSet: { usersTyping: { user: username, timestamp: Date.now() } },
-      }
-    );
+    check(discussionId, String);
+
+    const mongoModifierObject = {
+      $addToSet: { usersTyping: { user: username, timestamp: Date.now() } },
+    };
+
+    Discussions.schema.validate(mongoModifierObject, { modifier: true });
+
+    if (Discussions.schema.isValid()) {
+      console.log("Successful validation");
+      Discussions.update(
+        {
+          _id: discussionId,
+          $or: [
+            { usersTyping: { $size: 0 } },
+            {
+              $nor: [
+                { usersTyping: { $elemMatch: { user: { $eq: username } } } },
+              ],
+            },
+          ],
+        },
+        mongoModifierObject
+      );
+    } else {
+      console.log("validationErrors:", Discussions.schema.validationErrors());
+    }
 
     Meteor.setTimeout(() => {
       let datetimeThreshold = Date.now() - 1000;
-      Discussions.update(
-        { _id: discussionId },
-        {
-          $pull: {
-            usersTyping: {
-              user: username,
-              timestamp: { $lt: datetimeThreshold },
-            },
+
+      const mongoModifierObject = {
+        $pull: {
+          usersTyping: {
+            user: username,
+            timestamp: { $lt: datetimeThreshold },
           },
-        }
-      );
+        },
+      };
+
+      Discussions.schema.validate(mongoModifierObject, { modifier: true });
+      console.log("Successful validation:", Discussions.schema.isValid());
+      console.log("validationErrors:", Discussions.schema.validationErrors());
+
+      Discussions.update(discussionId, mongoModifierObject);
     }, 2000);
   },
 

@@ -62,13 +62,15 @@ Meteor.methods({
         0
       );
       console.log("adding intro id to exp ", introId);
-      Experiments.update(experimentId, {
-        $push: { discussions: introId },
-      });
-      console.log("adding intro id to set", introId);
-      discussionIds.push(introId);
-      Meteor.call("comments.insert", introductionCommentText, [], [], introId);
-      console.log(discussionIds);
+      if (introId) {
+        Experiments.update(experimentId, {
+          $push: { discussions: introId },
+        });
+        console.log("adding intro id to set", introId);
+        discussionIds.push(introId);
+        Meteor.call("comments.insert", introductionCommentText, [], [], introId);
+        console.log(discussionIds);
+      }
     }
 
     const set = ScenarioSets.findOne({ _id: scenarioSetId });
@@ -89,12 +91,14 @@ Meteor.methods({
         discussionTemplate.isPublic
       );
       console.log("adding discussion id to exp", discussionId);
-      Experiments.update(experimentId, {
-        $push: { discussions: discussionId },
-      });
-      console.log("adding disc id to set", discussionId);
-      discussionIds.push(discussionId);
-      console.log(discussionIds);
+      if (discussionId) {
+        Experiments.update(experimentId, {
+          $push: { discussions: discussionId },
+        });
+        console.log("adding disc id to set", discussionId);
+        discussionIds.push(discussionId);
+        console.log(discussionIds);
+      }
     }
     console.log(discussionIds);
     // to each discussion add the id for the next the discussion

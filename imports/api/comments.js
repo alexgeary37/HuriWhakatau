@@ -30,14 +30,13 @@ Comments.schema = new SimpleSchema({
     type: Date,
     optional: true,
     custom: function () {
-      const previousEditsLength = this.field("previousEdits").length;
-      if (previousEditsLength === 0) {
+      if (this.field("previousEdits").length === 0) {
         this.value === null;
       }
     },
   },
   previousEdits: [String],
-});
+}).newContext();
 
 Meteor.methods({
   // Insert a comment into the comments collection in the db.
@@ -68,7 +67,12 @@ Meteor.methods({
     // Check comment against schema.
     Comments.schema.validate(comment);
 
-    Comments.insert(comment);
+    if (Comments.schema.isValid()) {
+      console.log('Successful validation');
+      Comments.insert(comment);
+    } else {
+      console.log('validationErrors:', Comments.schema.validationErrors());
+    }
   },
 
   // Update an existing comment in the comments collection in the db.
@@ -94,7 +98,13 @@ Meteor.methods({
     };
 
     Comments.schema.validate(mongoModifierObject, { modifier: true });
-    Comments.update(commentId, mongoModifierObject);
+
+    if (Comments.schema.isValid()) {
+      console.log('Successful validation');
+      Comments.update(commentId, mongoModifierObject);
+    } else { 
+      console.log('validationErrors:', Comments.schema.validationErrors());
+    }
   },
 
   "comments.updateEmojis"(emojis, commentId) {
@@ -107,8 +117,14 @@ Meteor.methods({
     };
 
     Comments.schema.validate(mongoModifierObject, { modifier: true });
-    Comments.update(commentId, mongoModifierObject);
-    return true;
+
+    if (Comments.schema.isValid()) {
+      console.log('Successful validation');
+      Comments.update(commentId, mongoModifierObject);
+      return true;
+    }
+
+    console.log('validationErrors:', Comments.schema.validationErrors());
   },
 
   //get a random comment from discussion.

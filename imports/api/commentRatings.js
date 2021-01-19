@@ -5,10 +5,11 @@ import SimpleSchema from "simpl-schema";
 export const CommentRatings = new Mongo.Collection("commentRatings");
 
 CommentRatings.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   commentId: String,
   experimentId: String,
   ratings: [Object]
-});
+}).newContext();
 
 Meteor.methods({
 
