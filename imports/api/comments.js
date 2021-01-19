@@ -11,28 +11,32 @@ Comments.schema = new SimpleSchema({
   authorId: String,
   text: String,
   emojis: [Object],
-  'emojis.$.count': SimpleSchema.Integer,
-  'emojis.$.emoji': { type: Object, blackbox: true },
-  'emojis.$.users': [String],
-  
-// 'keystrokes.$': type = {
-//   key: event.key,
-//   timestamp: Date.now(),
-// }
+  "emojis.$.count": SimpleSchema.Integer,
+  "emojis.$.emoji": { type: Object, blackbox: true },
+  "emojis.$.users": [String],
+
+  // 'keystrokes.$': type = {
+  //   key: event.key,
+  //   timestamp: Date.now(),
+  // }
   keystrokes: [Object],
-  'keystrokes.$.key': String,
-  'keystrokes.$.timestamp': Number,
+  "keystrokes.$.key": String,
+  "keystrokes.$.timestamp": Number,
   pastedItems: [Object],
-  'pastedItems.$.item': String,
-  'pastedItems.$.timestamp': Number,
+  "pastedItems.$.item": String,
+  "pastedItems.$.timestamp": Number,
   emotion: String,
-  editedDate: { type: Date, optional: true, custom: function() {
-    const previousEditsLength = this.field('previousEdits').length;
-    if (previousEditsLength === 0) {
-      this.value === null;
-    }
-  }},
-  previousEdits: [String]
+  editedDate: {
+    type: Date,
+    optional: true,
+    custom: function () {
+      const previousEditsLength = this.field("previousEdits").length;
+      if (previousEditsLength === 0) {
+        this.value === null;
+      }
+    },
+  },
+  previousEdits: [String],
 });
 
 Meteor.methods({
@@ -58,7 +62,7 @@ Meteor.methods({
       pastedItems: pasted,
       emotion: emotion,
       editedDate: null,
-      previousEdits: []
+      previousEdits: [],
     };
 
     // Check comment against schema.
@@ -145,6 +149,18 @@ if (Meteor.isServer) {
   Meteor.publish("comments", function (discussionId) {
     return Comments.find(
       { discussionId: discussionId },
+      {
+        fields: {
+          postedTime: 1,
+          authorId: 1,
+          text: 1,
+          emojis: 1,
+          keystrokes: 1,
+          pasted: 1,
+          editedDate: 1,
+          emotion: 1,
+        },
+      }
     );
   });
 }
