@@ -16,7 +16,7 @@ Meteor.methods({
 
     const category = {
       title: name,
-      createdBy: this.userId, // _id of user
+      createdBy: this.userId,
     };
 
     // Check category against schema.

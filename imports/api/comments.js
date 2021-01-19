@@ -5,22 +5,34 @@ import SimpleSchema from "simpl-schema";
 export const Comments = new Mongo.Collection("comments");
 
 Comments.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   discussionId: String,
   postedTime: Date,
   authorId: String,
   text: String,
-  emojis: [String],
+  emojis: [Object],
+  'emojis.$.count': SimpleSchema.Integer,
+  'emojis.$.emoji': { type: Object, blackbox: true },
+  'emojis.$.users': [String],
+  
 // 'keystrokes.$': type = {
 //   key: event.key,
 //   timestamp: Date.now(),
 // }
   keystrokes: [Object],
-  'keystrokes.$.key': { type: String },
-  'keystrokes.$.timestamp': {type: Number},
+  'keystrokes.$.key': String,
+  'keystrokes.$.timestamp': Number,
   pastedItems: [Object],
   'pastedItems.$.item': String,
   'pastedItems.$.timestamp': Number,
-  emotion: String
+  emotion: String,
+  editedDate: { type: Date, optional: true, custom: function() {
+    const previousEditsLength = this.field('previousEdits').length;
+    if (previousEditsLength === 0) {
+      this.value === null;
+    }
+  }},
+  previousEdits: [String]
 });
 
 Meteor.methods({
@@ -32,7 +44,6 @@ Meteor.methods({
       emotion = "neutral";
     }
 
-    // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
@@ -46,6 +57,8 @@ Meteor.methods({
       keystrokes: keystrokes,
       pastedItems: pasted,
       emotion: emotion,
+      editedDate: null,
+      previousEdits: []
     };
 
     // Check comment against schema.
@@ -54,59 +67,47 @@ Meteor.methods({
     Comments.insert(comment);
   },
 
-  // Remove a comment from the comments collection in the db.
-  // commentId: _id of the comment to be removed
-  // Called from Discussion.jsx
-  "comments.remove"(commentId) {
-    check(commentId, String);
-
-    const comment = Comments.findOne(commentId);
-
-    // If user is not the author of the comment, throw error
-    if (!this.userId || comment.authorId !== this.userId) {
-      throw new Meteor.Error("Not authorized.");
-    }
-
-    Comments.remove(commentId);
-  },
-
   // Update an existing comment in the comments collection in the db.
   // text: the text of the comment
   // commentId: _id of the comment to be updated
   // Called from Discussion.jsx
   "comments.update"(text, commentId) {
     check(commentId, String);
+
     const comment = Comments.findOne(commentId);
 
-    // If user is not the author of the comment, throw error
+    // If user is not the author of the comment, throw error.
     if (!this.userId || comment.authorId !== this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    Comments.update(commentId, {
+    const mongoModifierObject = {
       $set: {
         text: text,
         editedDate: new Date(),
       },
       $push: { previousEdits: comment.text },
-    });
+    };
+
+    Comments.schema.validate(mongoModifierObject, { modifier: true });
+    Comments.update(commentId, mongoModifierObject);
   },
 
   "comments.updateEmojis"(emojis, commentId) {
     check(commentId, String);
-    check(emojis, Array);
 
-    console.log('emojis', emojis);
-
-    Comments.update(commentId, {
+    const mongoModifierObject = {
       $set: {
         emojis: emojis,
       },
-    });
+    };
+
+    Comments.schema.validate(mongoModifierObject, { modifier: true });
+    Comments.update(commentId, mongoModifierObject);
     return true;
   },
 
-  //get a random comment from discussion
+  //get a random comment from discussion.
   "comments.getRandomExperimentCommentForRating"(discussionIds) {
     if (Meteor.isServer) {
       const fetchedComment = Comments.rawCollection()
@@ -119,6 +120,22 @@ Meteor.methods({
     }
   },
 
+  // Remove a comment from the comments collection in the db.
+  // commentId: _id of the comment to be removed
+  // Called from Discussion.jsx
+  "comments.remove"(commentId) {
+    check(commentId, String);
+
+    const comment = Comments.findOne(commentId);
+
+    // If user is not the author of the comment, throw error.
+    if (!this.userId || comment.authorId !== this.userId) {
+      throw new Meteor.Error("Not authorized.");
+    }
+
+    Comments.remove(commentId);
+  },
+
   "comments.removeAll"() {
     Comments.remove({});
   },
@@ -128,18 +145,6 @@ if (Meteor.isServer) {
   Meteor.publish("comments", function (discussionId) {
     return Comments.find(
       { discussionId: discussionId },
-      {
-        fields: {
-          postedTime: 1,
-          authorId: 1,
-          text: 1,
-          emojis: 1,
-          keystrokes: 1,
-          pasted: 1,
-          editedDate: 1,
-          emotion: 1,
-        },
-      }
     );
   });
 }
