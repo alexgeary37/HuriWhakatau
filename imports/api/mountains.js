@@ -1,15 +1,27 @@
 import { Mongo } from "meteor/mongo";
-import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 
 export const Mountains = new Mongo.Collection("mountains");
 
+Mountains.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
+  name: String
+}).newContext();
+
 Meteor.methods({
   "mountains.insert"(name) {
-    check(name, String);
+    
+    const mountain = { name: name };
 
-    Mountains.insert({
-      name: name,
-    });
+    // Check mountain against schema.
+    Mountains.schema.validate(mountain);
+
+    if (Mountains.schema.isValid()) {
+      console.log('Successful validation of mountain');
+      Mountains.insert(mountain);
+    } else {
+      console.log("validationErrors:", Mountains.schema.validationErrors());
+    }
   },
 
   "mountains.removeAll"() {

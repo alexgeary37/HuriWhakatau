@@ -1,20 +1,34 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 
 export const Rivers = new Mongo.Collection("rivers");
 
+Rivers.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
+  name: String,
+}).newContext();
+
 Meteor.methods({
   "rivers.insert"(name) {
-    check(name, String);
-
-    Rivers.insert({
+    const river = {
       name: name,
-    });
+    };
+
+    // Check river against schema.
+    Rivers.schema.validate(river);
+
+    if (Rivers.schema.isValid()) {
+      console.log("Successful validation of river");
+      Rivers.insert(river);
+    } else {
+      console.log("validationErrors:", Rivers.schema.validationErrors());
+    }
   },
 
   "rivers.removeAll"() {
     Rivers.remove({});
-  }
+  },
 });
 
 if (Meteor.isServer) {
@@ -30,8 +44,8 @@ if (Meteor.isServer) {
   });
 }
 
-
-export const newRivers = ["Aan River",
+export const newRivers = [
+  "Aan River",
   "Acheron River (Canterbury)",
   "Acheron River (Marlborough)",
   "Ada River",
@@ -1176,4 +1190,5 @@ export const newRivers = ["Aan River",
   "Wye River",
   "Yankee River",
   "Yarra River",
-  "Young River"]
+  "Young River",
+];

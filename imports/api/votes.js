@@ -1,46 +1,57 @@
 import { Mongo } from "meteor/mongo";
-import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 import { Verdicts } from "./verdicts";
 
 export const Votes = new Mongo.Collection("votes");
 
+Votes.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
+  userId: String,
+  verdictId: String,
+  vote: Boolean,
+}).newContext();
+
 Meteor.methods({
   // Insert a vote into the votes collection in the db.
-  // userId: _id of the user that made this vote
-  // verdictId: _id of the verdict this vote was made on
-  // vote: True if user Affirmed, False if user Rejected
   // Called from Verdict.jsx
-  "votes.insert"(verdictId, vote) {
-    check(verdictId, String);
-    check(vote, Boolean);
-
+  "votes.insert"(verdictId, userVote) {
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    // Get _id of vote being inserted.
-    const voteId = Votes.insert(
-      {
-        userId: this.userId,
-        verdictId: verdictId,
-        vote: vote,
-      },
-      (_error, insertedDocs) => {
-        return insertedDocs[0]._id;
-      }
-    );
+    const vote = {
+      userId: this.userId,
+      verdictId: verdictId,
+      vote: userVote,
+    };
 
-    // Add voteId to the list of votes this verdict contains.
-    Verdicts.update(verdictId, {
-      $addToSet: {
-        votes: voteId,
-      },
-    });
+    // Check vote against schema.
+    Votes.schema.validate(vote);
+
+    if (Votes.schema.isValid()) {
+      const voteId = Votes.insert(vote);
+
+      // Add voteId to the list of votes this verdict contains.
+      const mongoModifierObject = {
+        $addToSet: {
+          votes: voteId,
+        },
+      };
+
+      Verdicts.schema.validate(mongoModifierObject, { modifier: true });
+
+      if (Verdicts.schema.isValid()) {
+        console.log('Successful validation of verdict update object for adding the vote to it');
+        Verdicts.update(verdictId, mongoModifierObject);
+      } else {
+        console.log("validationErrors:", Verdicts.schema.validationErrors());
+      }
+    }
   },
 
   "votes.removeAll"() {
     Votes.remove({});
-  }
+  },
 });
 
 if (Meteor.isServer) {

@@ -1,30 +1,40 @@
 import { Mongo } from "meteor/mongo";
 import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 
 export const Topics = new Mongo.Collection("topics");
 
+Topics.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
+  title: String,
+  description: String,
+  categoryId: String,
+  createdAt: Date,
+  createdBy: String
+}).newContext();
+
 Meteor.methods({
   // Insert a topic into the topic collection in the db.
-  // title: the title of the topic
-  // description: topic description
-  // categoryId: the _id of the category object
-  // createdAt: date created
-  // createdBy: user _id of creator.
-  // Called from ****
   "topics.insert"(title, description, categoryId) {
-    check(title, String);
-    check(description, String);
-    check(categoryId, String);
-
     //addcheck for user admin/researcher role
 
-    Topics.insert({
+    const topic = {
       title: title,
       description: description,
       categoryId: categoryId,
       createdAt: new Date(),
-      createdBy: this.userId, // _id of user
-    });
+      createdBy: this.userId
+    };
+
+    // Check topic against schema.
+    Topics.schema.validate(topic);
+
+    if (Topics.schema.isValid()) {
+      console.log('Successful validation of topic');
+      Topics.insert(topic);
+    } else {
+      console.log("validationErrors:", Topics.schema.validationErrors());
+    }
   },
 
   // Remove a topic from the topics collection in the db.
@@ -43,9 +53,6 @@ Meteor.methods({
 });
 
 if (Meteor.isServer) {
-  // Topics.remove({});
-  // console.log("Topics:", Topics.find().fetch());
-
   Meteor.publish("topics", function () {
     return Topics.find(
       {},

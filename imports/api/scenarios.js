@@ -4,13 +4,14 @@ import SimpleSchema from "simpl-schema";
 export const Scenarios = new Mongo.Collection("scenarios");
 
 Scenarios.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   title: String,
   description: String,
   categoryIds: [String],
   discussionTemplateId: String,
   createdAt: Date,
   createdBy: String
-});
+}).newContext();
 
 Meteor.methods({
   // Insert a Scenario into the scenarios collection in the db.
@@ -36,8 +37,13 @@ Meteor.methods({
     Scenarios.schema.validate(scenario);
 
     // Insert new Scenario and get its _id.
-    const scenarioId = Scenarios.insert(scenario);
-    return scenarioId;
+    if (Scenarios.schema.isValid()) {
+      console.log('Successful validation of scenario');
+      const scenarioId = Scenarios.insert(scenario);
+      return scenarioId;
+    } else {
+      console.log("validationErrors:", Scenarios.schema.validationErrors());
+    }
   },
 
   "scenarios.removeAll"() {

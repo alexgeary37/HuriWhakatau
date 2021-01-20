@@ -27,6 +27,13 @@ Discussions.schema = new SimpleSchema({
   isIntroduction: { type: Boolean, defaultValue: false },
   isHui: Boolean,
   isPublic: Boolean,
+  nextDiscussion: {
+    type: String,
+    optional: true,
+    custom: function () {
+      this.value === null;
+    }
+  }
 }).newContext();
 
 Meteor.methods({
@@ -51,6 +58,7 @@ Meteor.methods({
       isIntroduction: false,
       isHui: isHui,
       isPublic: isPublic,
+      nextDiscussion: null
     };
 
     // Check discussion against schema.
@@ -58,7 +66,7 @@ Meteor.methods({
     
     if (Discussions.schema.isValid()) {
       console.log('Successful validation');
-      return Discussions.insert(discussion); // discussionId is returned.
+      return Discussions.insert(discussion); // discussion._id is returned.
     }
 
     console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -85,13 +93,14 @@ Meteor.methods({
       isIntroduction: true,
       isHui: true,
       isPublic: false,
+      nextDiscussion: null
     };
 
     Discussions.schema.validate(discussion);
     
     if (Discussions.schema.isValid()) {
       console.log("Successful validation");
-      return Discussions.insert(discussion);
+      return Discussions.insert(discussion); // discussion._id is returned.
     }
     
     console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -224,28 +233,33 @@ Meteor.methods({
         },
         mongoModifierObject
       );
+
+      if (Meteor.isServer) {
+        Meteor.setTimeout(() => {
+          let datetimeThreshold = Date.now() - 1000;
+    
+          mongoModifierObject = {
+            $pull: {
+              usersTyping: {
+                user: username,
+                timestamp: { $lt: datetimeThreshold },
+              },
+            },
+          };
+    
+          Discussions.schema.validate(mongoModifierObject, { modifier: true });
+  
+          if (Discussions.schema.isValid()) {
+            console.log("Successful validation");
+            Discussions.update(discussionId, mongoModifierObject);
+          } else {
+            console.log("validationErrors:", Discussions.schema.validationErrors());
+          }
+        }, 2000);
+      }
     } else {
       console.log("validationErrors:", Discussions.schema.validationErrors());
     }
-
-    Meteor.setTimeout(() => {
-      let datetimeThreshold = Date.now() - 1000;
-
-      const mongoModifierObject = {
-        $pull: {
-          usersTyping: {
-            user: username,
-            timestamp: { $lt: datetimeThreshold },
-          },
-        },
-      };
-
-      Discussions.schema.validate(mongoModifierObject, { modifier: true });
-      console.log("Successful validation:", Discussions.schema.isValid());
-      console.log("validationErrors:", Discussions.schema.validationErrors());
-
-      Discussions.update(discussionId, mongoModifierObject);
-    }, 2000);
   },
 
   "discussions.removeAll"() {

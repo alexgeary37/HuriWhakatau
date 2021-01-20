@@ -5,6 +5,7 @@ import SimpleSchema from "simpl-schema";
 export const DiscussionTemplates = new Mongo.Collection("discussionTemplates");
 
 DiscussionTemplates.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   name: String,
   usersAreAnonymous: Boolean,
   showTypingNotification: Boolean,
@@ -18,7 +19,7 @@ DiscussionTemplates.schema = new SimpleSchema({
   isPublic: Boolean,
   createdAt: Date,
   createdBy: String,
-});
+}).newContext();
 
 Meteor.methods({
   "discussionTemplates.create"(
@@ -34,17 +35,6 @@ Meteor.methods({
     isHui,
     isPublic
   ) {
-    check(name, String);
-    check(usersAreAnonymous, Boolean);
-    check(showTypingNotification, Boolean);
-    check(usersCanEditComments, Boolean);
-    check(discussionCommentsThreaded, Boolean);
-    check(showProfileInfo, Boolean);
-    check(canAddEmojis, Boolean);
-    check(timeLimit, Number);
-    check(commentCharacterLimit, Number);
-    check(isHui, Boolean);
-    check(isPublic, Boolean);
     //addcheck for user admin/researcher role
 
     const discussionTemplate = {
@@ -66,12 +56,15 @@ Meteor.methods({
     // Check discussionTemplate against schema.
     DiscussionTemplates.schema.validate(discussionTemplate);
     
-    DiscussionTemplates.insert(discussionTemplate);
+    if (DiscussionTemplates.schema.isValid()) {
+      console.log('Successful validation of discussionTemplate');
+      DiscussionTemplates.insert(discussionTemplate);
+    } else {
+      console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
+    }
   },
 
-  // Remove a category from the categories collection in the db.
-  // categoryId: _id of the comment to be removed
-  // Called from Discussion.jsx
+  // Remove a discussionTemplate from the discussionTemplates collection in the db.
   "discussionTemplates.remove"(discussionTemplateId) {
     check(discussionTemplateId, String);
     //add role check

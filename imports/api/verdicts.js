@@ -6,6 +6,7 @@ import { Discussions } from "./discussions";
 export const Verdicts = new Mongo.Collection("verdicts");
 
 Verdicts.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   discussionId: String,
   postedTime:  Date,
   authorId: String,
@@ -14,64 +15,95 @@ Verdicts.schema = new SimpleSchema({
   'votes.$.userId': String,
   'votes.$.vote': Boolean,
   'votes.$.voteTime': Date
-});
+}).newContext();
 
 Meteor.methods({
+
   // Insert a Verdict into the verdicts collection in the db.
-  // text: the text of the Verdict
-  // discussionId: _id of the Viscussion this Verdict belongs to
   // Called from VerdictForm.jsx
   "verdicts.insert"(text, discussionId) {
-    check(text, String);
-    check(discussionId, String);
-
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    // Insert new Verdict and get its _id.
-    const verdictId = Verdicts.insert({
+    const verdict = {
       discussionId: discussionId,
       postedTime: new Date(),
       authorId: this.userId, // _id of user.
       text: text,
       votes: [], // _ids of votes that all OTHER users have given.
-    });
+    };
 
-    // Add _id of inserted Verdict and the author of it.
-    Discussions.update(discussionId, {
-      $addToSet: {
-        verdicts: verdictId,
-      },
-    });
+    // Check verdict against schema.
+    Verdicts.schema.validate(verdict);
 
-    // Remove this user from the list of activeVerdictProposers in the Discussion.
-    console.log("verdicts.insert this.userId::", this.userId);
+    if (Verdicts.schema.isValid()) {
+      console.log('Successful validation of verdict');
+      const verdictId = Verdicts.insert(verdict);
+      
+      // Add _id of inserted Verdict and the author of it.
 
-    // Meteor.call("discussions.removeProposer", discussionId);
-    // This method call is being made from the server, which means the userId will be null for unit tests.
-    // Hence the code below is being used instead.
+      let mongoModifierObject = {
+        $addToSet: {
+          verdicts: verdictId,
+        },
+      };
 
-    Discussions.update(discussionId, {
-      $pull: { activeVerdictProposers: this.userId },
-    });
+      Discussions.schema.validate(mongoModifierObject, { modifier: true });
+
+      if (Discussions.schema.isValid()) {
+        console.log('Successful validation of discussion update object in verdicts.insert when adding verdict to list of discussion verdicts');
+        Discussions.update(discussionId, mongoModifierObject);
+        
+        // Remove this user from the list of activeVerdictProposers in the Discussion.
+        console.log("verdicts.insert this.userId::", this.userId);
+
+        // Meteor.call("discussions.removeProposer", discussionId);
+        // This method call is being made from the server, which means the userId will be null for unit tests.
+        // Hence the code below is being used instead.
+
+        mongoModifierObject = {
+          $pull: { activeVerdictProposers: this.userId },
+        };
+
+        Discussions.schema.validate(mongoModifierObject, { modifier: true });
+
+        if (Discussions.schema.isValid()) {
+          console.log('Successful validation of discussion update object in verdicts.insert when removing user from the discussion activeVerdictProposers');
+          Discussions.update(discussionId, mongoModifierObject);
+        } else {
+          console.log("validationErrors:", Discussions.schema.validationErrors());
+        }
+      } else {
+        console.log("validationErrors:", Discussions.schema.validationErrors());
+      }
+    } else {
+      console.log("validationErrors:", Verdicts.schema.validationErrors());
+    }
   },
 
   "verdicts.addVote"(verdictId, vote) {
     check(verdictId, String);
-    check(vote, Boolean);
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
-    // Add a vote with the voter's ID and the time of the vote to the given verdict.
-    Verdicts.update(verdictId, {
+    const mongoModifierObject = {
       $addToSet: {
         votes: { userId: this.userId, vote: vote, voteTime: new Date() },
       },
-    });
+    };
+
+    Verdicts.schema.validate(mongoModifierObject, { modifier: true });
+
+    if (Verdicts.schema.isValid()) {
+      console.log('Successful validation of verdict update object for adding a vote');
+      Verdicts.update(verdictId, mongoModifierObject);
+    } else {
+      console.log("validationErrors:", Verdicts.schema.validationErrors());
+    }
   },
 
   "verdicts.removeAll"() {

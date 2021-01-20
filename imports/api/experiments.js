@@ -12,13 +12,29 @@ import { CommentRatings } from "./commentRatings";
 import { Groups } from "./groups";
 import { Verdicts } from "./verdicts";
 import { Personality } from "./personality";
+import SimpleSchema from "simpl-schema";
 
 export const Experiments = new Mongo.Collection("experiments");
+
+Experiments.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
+  name: String,
+  description: String,
+  groupId: String,
+  scenarioSetId: String,
+  discussions: [String],
+  ratings: [Object],
+  "ratings.$.rating": String,
+  "ratings.$.responseType": String,
+  "ratings.$.reverse": Boolean,
+  "ratings.$.scale": SimpleSchema.Integer,
+  createdAt: Date,
+  createdBy: String,
+}).newContext();
 
 Meteor.methods({
   // Insert a category into the category collection in the db.
   // name: the category name
-  // Called from *****
   "experiments.create"(
     name,
     description,
@@ -28,90 +44,144 @@ Meteor.methods({
     ratings,
     introductionCommentText
   ) {
-    check(name, String);
-    check(description, String);
-    check(groupId, String);
-    check(scenarioSetId, String);
     check(hasIntroduction, Boolean);
-    check(ratings, Array);
     check(introductionCommentText, String);
 
     let discussionIds = [];
     //addcheck for user admin/researcher role
 
-    const experimentId = Experiments.insert({
+    const experiment = {
       name: name,
       description: description,
       groupId: groupId,
       scenarioSetId: scenarioSetId,
+      discussions: [],
       ratings: ratings,
       createdAt: new Date(),
       createdBy: Meteor.userId(),
-    });
+    };
 
-    //create intro discussion if needed
-    if (hasIntroduction) {
-      const introductionScenario = Scenarios.findOne({
-        title: "Default - Introduction",
-      })._id;
-      console.log("creating introduction");
-      const introId = Meteor.call(
-        "discussions.insertIntroduction",
-        introductionScenario,
-        groupId,
-        0
-      );
-      console.log("adding intro id to exp ", introId);
-      if (introId) {
-        Experiments.update(experimentId, {
+    // Check experiment against schema.
+    Experiments.schema.validate(experiment);
+
+    if (Experiments.schema.isValid()) {
+      console.log("Successful validation of experiment");
+      const experimentId = Experiments.insert(experiment);
+
+      // Create intro discussion if needed.
+      if (hasIntroduction) {
+        const introductionScenario = Scenarios.findOne({
+          title: "Default - Introduction",
+        })._id;
+        console.log("creating introduction");
+        const introId = Meteor.call(
+          "discussions.insertIntroduction",
+          introductionScenario,
+          groupId,
+          0
+        );
+
+        console.log("add intro id to exp ", introId);
+        const mongoModifierObject = {
           $push: { discussions: introId },
-        });
-        console.log("adding intro id to set", introId);
-        discussionIds.push(introId);
-        Meteor.call("comments.insert", introductionCommentText, [], [], introId);
-        console.log(discussionIds);
-      }
-    }
+        };
 
-    const set = ScenarioSets.findOne({ _id: scenarioSetId });
-    const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
-    //for each scenario get discussion time limit and add to discussion
-    for (i = 0; i < scenarios.length; i++) {
-      console.log("creating discussion");
-      const discussionTemplate = DiscussionTemplates.findOne({
-        _id: scenarios[i].discussionTemplateId,
-      });
-      console.log("inserting discussion", discussionTemplate);
-      const discussionId = Meteor.call(
-        "discussions.insert",
-        scenarios[i]._id,
-        groupId,
-        discussionTemplate.timeLimit,
-        discussionTemplate.isHui,
-        discussionTemplate.isPublic
-      );
-      console.log("adding discussion id to exp", discussionId);
-      if (discussionId) {
-        Experiments.update(experimentId, {
-          $push: { discussions: discussionId },
-        });
-        console.log("adding disc id to set", discussionId);
-        discussionIds.push(discussionId);
-        console.log(discussionIds);
+        Experiments.schema.validate(mongoModifierObject, { modifier: true });
+
+        if (Experiments.schema.isValid()) {
+          console.log("Successful validation of experiment update object");
+          Experiments.update(experimentId, mongoModifierObject);
+          console.log("adding intro id to set", introId);
+          discussionIds.push(introId);
+          Meteor.call(
+            "comments.insert",
+            introductionCommentText,
+            [],
+            [],
+            introId
+          );
+          console.log(discussionIds);
+        } else {
+          console.log(
+            "experiment update object validationErrors:",
+            Experiments.schema.validationErrors()
+          );
+        }
       }
-    }
-    console.log(discussionIds);
-    // to each discussion add the id for the next the discussion
-    for (let id = 0; id < discussionIds.length - 1; id++) {
+
+      const set = ScenarioSets.findOne({ _id: scenarioSetId });
+      const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
+
+      // For each scenario get discussion time limit and add to discussion.
+      for (i = 0; i < scenarios.length; i++) {
+        console.log("creating discussion");
+        const discussionTemplate = DiscussionTemplates.findOne({
+          _id: scenarios[i].discussionTemplateId,
+        });
+
+        console.log("inserting discussion", discussionTemplate);
+        const discussionId = Meteor.call(
+          "discussions.insert",
+          scenarios[i]._id,
+          groupId,
+          discussionTemplate.timeLimit,
+          discussionTemplate.isHui,
+          discussionTemplate.isPublic
+        );
+
+        console.log("adding discussion id to exp", discussionId);
+
+        mongoModifierObject = {
+          $push: { discussions: discussionId },
+        };
+
+        Experiments.schema.validate(mongoModifierObject, { modifier: true });
+
+        if (Experiments.schema.isValid()) {
+          console.log("Successful validation of experiment update object");
+          Experiments.update(experimentId, mongoModifierObject);
+          console.log("adding disc id to set", discussionId);
+          discussionIds.push(discussionId);
+          console.log(discussionIds);
+        } else {
+          console.log(
+            "experiment update object validationErrors:",
+            Experiments.schema.validationErrors()
+          );
+        }
+      }
+      console.log(discussionIds);
+
+      // To each discussion, add the id for the next the discussion.
+      for (let id = 0; id < discussionIds.length - 1; id++) {
+        console.log(
+          "adding nextDiscussionId",
+          discussionIds[id],
+          " -> ",
+          discussionIds[id + 1]
+        );
+
+        mongoModifierObject = {
+          $set: { nextDiscussion: discussionIds[id + 1] },
+        };
+
+        Discussions.schema.validate(mongoModifierObject, { modifier: true });
+
+        if (Discussions.schema.isValid()) {
+          console.log("Successful validation of discussion update object");
+          Discussions.update(discussionIds[id], mongoModifierObject);
+        } else {
+          console.log(
+            "discussion update object validationErrors:",
+            Discussions.schema.validationErrors()
+          );
+        }
+      }
+    } else {
       console.log(
-        "adding nextDiscussionId",
-        discussionIds[id],
-        " -> ",
-        discussionIds[id + 1]
+        "experiment validationErrors:",
+        Experiments.schema.validationErrors()
       );
-      Discussions.update(discussionIds[id], {
-        $set: { nextDiscussion: discussionIds[id + 1] },
-      });
     }
   },
 
@@ -242,7 +312,6 @@ Meteor.methods({
   },
 
   // Remove an experiment from the experiments collection in the db.
-  // experimentId: _id of the comment to be removed
   "experiments.remove"(experimentId) {
     check(experimentId, String);
     //add role check
@@ -252,39 +321,65 @@ Meteor.methods({
 
   //moving the group leader vote here so it can be experiment specific
   "experiments.voteLeader"(experimentId, groupId, userId) {
-    Experiments.update(
-      { _id: experimentId },
-      { $inc: { ["leaderVotes." + userId]: 1 } },
-      function (err, res) {
-        let member;
-        if (err) {
-          throw err;
-        }
-        let group = Groups.findOne({ _id: groupId });
-        let experiment = Experiments.findOne(
-          { _id: experimentId },
-          { fields: { leaderVotes: 1 } }
-        );
-        let numMembers = group.members.length;
-        let leaderVotes = experiment.leaderVotes;
-        let numVotes = 0;
-        for (member in leaderVotes) {
-          numVotes += leaderVotes[member];
-        }
+    check(experimentId, String);
+    check(groupId, String);
+    check(userId, String);
 
-        let compare = function (a, b) {
-          return b[1] - a[1];
-        };
+    const mongoModifierObject = { $inc: { ["leaderVotes." + userId]: 1 } };
 
-        if (numVotes >= numMembers) {
-          let winner = Object.entries(leaderVotes).sort(compare)[0][0];
-          Experiments.update(
+    Experiments.schema.validate(mongoModifierObject);
+
+    if (Experiments.schema.isValid()) {
+      console.log("Successful validation of experiments update object");
+      Experiments.update(
+        experimentId,
+        mongoModifierObject,
+        function (err, res) {
+          let member;
+          if (err) {
+            throw err;
+          }
+          let group = Groups.findOne({ _id: groupId });
+          let experiment = Experiments.findOne(
             { _id: experimentId },
-            { $set: { groupLeader: winner } }
+            { fields: { leaderVotes: 1 } }
           );
+          let numMembers = group.members.length;
+          let leaderVotes = experiment.leaderVotes;
+          let numVotes = 0;
+          for (member in leaderVotes) {
+            numVotes += leaderVotes[member];
+          }
+
+          let compare = function (a, b) {
+            return b[1] - a[1];
+          };
+
+          if (numVotes >= numMembers) {
+            let winner = Object.entries(leaderVotes).sort(compare)[0][0];
+
+            mongoModifierObject = { $set: { groupLeader: winner } };
+
+            Experiments.schema.validate(mongoModifierObject);
+
+            if (Experiments.schema.isValid()) {
+              console.log("Successful validation of experiments update object");
+              Experiments.update(experimentId, mongoModifierObject);
+            } else {
+              console.log(
+                "experiment update object validationErrors:",
+                Experiments.schema.validationErrors()
+              );
+            }
+          }
         }
-      }
-    );
+      );
+    } else {
+      console.log(
+        "experiment update object validationErrors:",
+        Experiments.schema.validationErrors()
+      );
+    }
   },
 
   "experiments.removeAll"() {

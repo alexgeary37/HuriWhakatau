@@ -16,20 +16,22 @@ Meteor.methods({
   "commentRatings.addRating"(commentId, experimentId, rating) {
     check(commentId, String);
     check(experimentId, String);
-    check(rating, Object);
-
-    const commentRatingId = CommentRatings.update(
-      { commentId: commentId, experimentId: experimentId },
-      {
-        $push: { ratings: rating },
-      },
-      { upsert: true }
-    );
-
-    const commentRating = CommentRatings.findOne(commentRatingId);
+    
+    const mongoModifierObject = {
+      $push: { ratings: rating },
+    };
 
     // Check the comment rating against the schema.
-    CommentRatings.schema.validate(commentRating);
+    CommentRatings.schema.validate(mongoModifierObject, { modifier: true });
+
+    if (CommentRatings.schema.isValid()) {
+      console.log('Successful validation of commentratings update object');
+      CommentRatings.update(
+        { commentId: commentId, experimentId: experimentId },
+        mongoModifierObject,
+        { upsert: true }
+      );
+    }
   },
 
   "commentRatings.removeAll"() {

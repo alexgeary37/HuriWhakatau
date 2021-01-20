@@ -4,18 +4,18 @@ import SimpleSchema from "simpl-schema";
 export const ScenarioSets = new Mongo.Collection("scenarioSets");
 
 ScenarioSets.schema = new SimpleSchema({
+  _id: { type: String, optional: true },
   title: String,
   description: String,
   scenarios: [String],
   randomise: Boolean,
   createdAt: Date,
   createdBy: String
-});
+}).newContext();
 
 Meteor.methods({
   // Insert a ScenarioSet into the scenariosets collection in the db.
   "scenarioSets.create"(title, description, scenarios, randomise) {
-
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
@@ -30,11 +30,15 @@ Meteor.methods({
       createdBy: this.userId,
     };
 
-    // Check set against schema.
+    // Check scenarioSet against schema.
     ScenarioSets.schema.validate(scenarioSet);
 
-    // Insert new ScenarioSet.
-    ScenarioSets.insert(scenarioSet);
+    if (ScenarioSets.schema.isValid()) {
+      console.log('Successful validation of scenarioSet');
+      ScenarioSets.insert(scenarioSet);
+    } else {
+      console.log("validationErrors:", ScenarioSets.schema.validationErrors());
+    }
   },
 
   "scenarioSets.removeAll"() {
