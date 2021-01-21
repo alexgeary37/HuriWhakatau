@@ -214,7 +214,7 @@ Meteor.methods({
   "discussions.addUserToTypingList"(discussionId, username) {
     check(discussionId, String);
 
-    const mongoModifierObject = {
+    let mongoModifierObject = {
       $addToSet: { usersTyping: { user: username, timestamp: Date.now() } },
     };
 
