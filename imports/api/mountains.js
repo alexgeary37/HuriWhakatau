@@ -26,6 +26,7 @@ Meteor.methods({
 
   "mountains.removeAll"() {
     Mountains.remove({});
+    console.log('Mountains.count():', Mountains.find().count());
   }
 });
 

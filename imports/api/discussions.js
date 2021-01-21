@@ -267,6 +267,7 @@ Meteor.methods({
 
   "discussions.removeAll"() {
     Discussions.remove({});
+    console.log('Discussions.count():', Discussions.find().count());
   },
 });
 

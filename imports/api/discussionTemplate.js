@@ -74,6 +74,7 @@ Meteor.methods({
 
   "discussionTemplates.removeAll"() {
     DiscussionTemplates.remove({});
+    console.log('DiscussionTemplates.count():', DiscussionTemplates.find().count());
   }
 });
 

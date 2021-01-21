@@ -47,6 +47,7 @@ Meteor.methods({
 
   "categories.removeAll"() {
     Categories.remove({});
+    console.log('Categories.count():', Categories.find().count());
   }
 });
 

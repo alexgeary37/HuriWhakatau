@@ -108,6 +108,7 @@ Meteor.methods({
 
   "verdicts.removeAll"() {
     Verdicts.remove({});
+    console.log('Verdicts.count():', Verdicts.find().count());
   }
 });
 

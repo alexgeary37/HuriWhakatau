@@ -51,6 +51,7 @@ Meteor.methods({
 
   "votes.removeAll"() {
     Votes.remove({});
+    console.log('Votes.count():', Votes.find().count());
   },
 });
 

@@ -43,6 +43,7 @@ Meteor.methods({
 
   "scenarioSets.removeAll"() {
     ScenarioSets.remove({});
+    console.log('ScenarioSets.count():', ScenarioSets.find().count());
   }
 });
 

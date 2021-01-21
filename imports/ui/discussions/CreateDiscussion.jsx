@@ -84,7 +84,6 @@ export const CreateDiscussion = ({ toggleModal }) => {
 
   const { groups, categories, discussionTemplate } = useTracker(() => {
     Meteor.subscribe("groups");
-    Meteor.subscribe("topics");
     Meteor.subscribe("categories");
     Meteor.subscribe("discussionTemplates");
 

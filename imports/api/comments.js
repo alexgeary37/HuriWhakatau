@@ -158,6 +158,7 @@ Meteor.methods({
 
   "comments.removeAll"() {
     Comments.remove({});
+    console.log('Comments.count():', Comments.find().count());
   },
 });
 

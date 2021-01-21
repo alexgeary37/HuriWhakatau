@@ -390,6 +390,7 @@ Meteor.methods({
 
   "experiments.removeAll"() {
     Experiments.remove({});
+    console.log('Experiments.count():', Experiments.find().count());
   },
 });
 

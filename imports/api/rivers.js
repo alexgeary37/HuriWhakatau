@@ -28,6 +28,7 @@ Meteor.methods({
 
   "rivers.removeAll"() {
     Rivers.remove({});
+    console.log('Rivers.count():', Rivers.find().count());
   },
 });
 

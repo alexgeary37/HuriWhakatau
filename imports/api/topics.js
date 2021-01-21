@@ -49,6 +49,7 @@ Meteor.methods({
 
   "topics.removeAll"() {
     Topics.remove({});
+    console.log('Topics.count():', Topics.find().count());
   }
 });
 

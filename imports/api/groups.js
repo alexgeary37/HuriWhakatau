@@ -118,6 +118,7 @@ Meteor.methods({
 
   "groups.removeAll"() {
     Groups.remove({});
+    console.log('Groups.count():', Groups.find().count());
   },
 });
 

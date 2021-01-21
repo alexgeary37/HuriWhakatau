@@ -36,6 +36,7 @@ Meteor.methods({
 
   "commentRatings.removeAll"() {
     CommentRatings.remove({});
+    console.log('CommentRatings.count():', CommentRatings.find().count());
   },
 });
 

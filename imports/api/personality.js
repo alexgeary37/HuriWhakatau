@@ -16,9 +16,11 @@ Personality.schema = new SimpleSchema({
 }).newContext();
 
 Meteor.methods({
-  "personality.insert"(questionnaire) {
+  "personality.insert"(name, doi, items) {
     const personality = {
-      questionnaire
+      questionnaireName: name,
+      paperDoi: doi,
+      items: items
     };
 
     // Check personality against schema.
@@ -58,6 +60,7 @@ Meteor.methods({
 
   "personality.removeAll"() {
     Personality.remove({});
+    console.log('Personality.count():', Personality.find().count());
   },
 });
 

@@ -376,22 +376,31 @@ if (Meteor.isServer) {
     [admin]
   );
 
-  // // Create default personality.
-  // if (Personality.find().count() === 0) {
-  //   const personality = {
-  //     questionnaire: "Question"
-  //   };
+  // Create default personality.
+  if (Personality.find().count() === 0) {
+    const personality = {
+      questionnaireName: "Question",
+      paperDoi: "doi",
+      items: [
+        {
+          item: 1,
+          text: "item text",
+          scale: 2,
+          scoringReversed: false,
+          responseType: "Frequency"
+        }
+      ]
+    };
 
-  //   // Check personality against schema.
-  //   Personality.schema.validate(personality);
+    Personality.schema.validate(personality);
 
-  //   if (Personality.schema.isValid()) {
-  //     console.log('Successful validation of personality');
-  //     Personality.insert(personality);
-  //   } else {
-  //     console.log("validationErrors:", Personality.schema.validationErrors());
-  //   }
-  // }
+    if (Personality.schema.isValid()) {
+      console.log('Successful validation of personality');
+      Personality.insert(personality);
+    } else {
+      console.log("validationErrors:", Personality.schema.validationErrors());
+    }
+  }
 
   // let newMountains = [];
   //
