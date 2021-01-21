@@ -17,6 +17,7 @@ import { randomUsernames } from "../imports/api/usernames";
 import { Personality } from "../imports/api/personality";
 import { newRivers, Rivers } from "../imports/api/rivers";
 import { Discussions } from "../imports/api/discussions";
+import { Mountains } from "../imports/api/mountains";
 // const Mountains = new Mongo.Collection("mountains");
 
 // set up checks that each item doesn't exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
@@ -402,6 +403,38 @@ if (Meteor.isServer) {
     }
   }
 
+  // Create default mountains.
+  if (Mountains.find().count() === 0) {
+    const mountain = {
+      name: "mountain"
+    };
+
+    Mountains.schema.validate(mountain);
+
+    if (Mountains.schema.isValid()) {
+      console.log('Successful validation of mountain');
+      Mountains.insert(mountain);
+    } else {
+      console.log("validationErrors:", Mountains.schema.validationErrors());
+    }
+  }
+
+  // Create default rivers.
+  if (Rivers.find().count() === 0) {
+    const river = {
+      name: "river"
+    };
+
+    Rivers.schema.validate(river);
+
+    if (Rivers.schema.isValid()) {
+      console.log('Successful validation of river');
+      Rivers.insert(river);
+    } else {
+      console.log("validationErrors:", Rivers.schema.validationErrors());
+    }
+  }
+  
   // let newMountains = [];
   //
   // newMountains.forEach((mountain) => {
@@ -418,5 +451,6 @@ if (Meteor.isServer) {
   // newRivers.forEach((river) => {
   //         Rivers.insert({name: river});
   //     })
+
   console.log("Finished running defaultData.js");
 }

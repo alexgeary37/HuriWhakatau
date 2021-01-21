@@ -1,12 +1,11 @@
 import { Mongo } from "meteor/mongo";
-import { check } from "meteor/check";
 import SimpleSchema from "simpl-schema";
 
 export const Rivers = new Mongo.Collection("rivers");
 
 Rivers.schema = new SimpleSchema({
   _id: { type: String, optional: true },
-  name: String,
+  name: String
 }).newContext();
 
 Meteor.methods({
