@@ -94,6 +94,7 @@ export const Discussion = () => {
     discussionTemplate,
     discussionDeadline,
     discussionTimeLimit,
+    discussionConsensusThreshold,
     nextDiscussionId,
     discussionIsPublic,
   } = useTracker(() => {
@@ -111,6 +112,7 @@ export const Discussion = () => {
     let discussionGroup;
     let discussionState;
     let timeLimit;
+    let consensusThreshold;
     let discussionDeadline;
     let discussionTopic;
     let discussionTemplate;
@@ -132,6 +134,7 @@ export const Discussion = () => {
         _id: discussionScenario.discussionTemplateId,
       });
       timeLimit = discussion.timeLimit ? discussion.timeLimit : 0;
+      consensusThreshold = discussion.consensusThreshold ? discussion.consensusThreshold : 0;
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
@@ -150,6 +153,7 @@ export const Discussion = () => {
       discussionStatus: discussionState,
       discussionTemplate: discussionTemplate,
       discussionTimeLimit: timeLimit,
+      discussionConsensusThreshold: consensusThreshold,
       discussionDeadline: discussionDeadline,
       discussionIsPublic: publicDiscussion,
       nextDiscussionId: nextDiscussionId,
@@ -168,8 +172,8 @@ export const Discussion = () => {
     document.title = "Discussion - " + (scenario && scenario.title);
   }, [group]);
 
-  console.log("discussionDeadline", discussionDeadline);
-  console.log("discussionTimeLimit", discussionTimeLimit);
+  // console.log("discussionDeadline", discussionDeadline);
+  // console.log("discussionTimeLimit", discussionTimeLimit);
 
   // IF discussion deadline is zero, update discussion deadline with current date + discussion timelimit.
   // Use this value to have a timer show how long til discussion ends.
@@ -188,8 +192,8 @@ export const Discussion = () => {
 
   if (discussionDeadline != null) {
     let currentTime = new Date();
-    console.log("currentTime", currentTime);
-    console.log("timedDiscussion", timedDiscussion);
+    // console.log("currentTime", currentTime);
+    // console.log("timedDiscussion", timedDiscussion);
     if (
       discussionDeadline > currentTime &&
       discussionStatus === "active" &&
@@ -209,14 +213,18 @@ export const Discussion = () => {
     }
   }
 
-  //set reference for end of discussion and scroll to that point every time the number of comments made by the current user changes.
+  // Set reference for end of discussion and scroll to that point on initial load,
+  // and every time the number of comments made by the current user changes.
   const commentsEndRef = useRef(null);
+  const initialScrollToBottom = () => {
+    Meteor.setTimeout(() => {
+      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+    }, 2000);
+  };
   const scrollToBottom = () => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   };
-  // Effect occurs during first render only. This doesn't work because first render
-  // happens before all the comments have been displayed.
-//   useEffect(scrollToBottom, []);
+  useEffect(initialScrollToBottom, []);
   useEffect(scrollToBottom, [
     comments.filter((x) => x.authorId === Meteor.userId()).length,
   ]);
@@ -227,17 +235,15 @@ export const Discussion = () => {
   };
 
   const hasReachedConsensus = () => {
-    //threshold value for reaching consensus
-    let threshold = 0.75;
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
         // number of votes with value of true > number of group members multiplied by threshold
-        votes.filter((vote) => vote.vote !== false).length >
-        group.members.length * threshold
+        votes.filter((vote) => vote.vote !== false).length ===
+        discussionConsensusThreshold
       ) {
+        Meteor.call('discussions.updateStatus', discussionId, "finished");
         return verdicts[i];
-        // return true;
       }
     }
     return false;

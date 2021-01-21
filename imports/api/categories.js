@@ -12,19 +12,23 @@ Categories.schema = new SimpleSchema({
 
 Meteor.methods({
   // Insert a category into the category collection in the db.
+  "categories.validate"(category) {
+    validate(category);
+  },
+
   "categories.insert"(name) {
     //addcheck for user admin/researcher role
 
     const category = {
       title: name,
-      createdBy: this.userId,
+      createdBy: Meteor.userId(),
     };
 
     // Check category against schema.
     Categories.schema.validate(category);
 
     if (Categories.schema.isValid()) {
-      console.log('Successful validation');
+      console.log('validateCategoryInsert successful');
       Categories.insert(category);
     } else {
       console.log('validationErrors:', Categories.schema.validationErrors());

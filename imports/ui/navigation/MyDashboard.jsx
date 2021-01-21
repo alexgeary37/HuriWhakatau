@@ -298,7 +298,7 @@ export const MyDashboard = () => {
               >
                 <Header as={"h3"} className={"myDiscussions"}>
                   My {siteGlossary.userDiscourse[userLang]}
-                  <Button
+                  {/* <Button
                     className={"newDiscussion"}
                     floated={"right"}
                     onClick={handleToggleDiscussion}
@@ -306,7 +306,7 @@ export const MyDashboard = () => {
                     disabled={!user}
                     negative
                     compact
-                  />
+                  /> */}
                 </Header>
 
                 {/* attempting to only load this when user
@@ -387,9 +387,7 @@ export const MyDashboard = () => {
                 style={{ height: "21em", backgroundColor: "rgb(10, 10, 10)" }}
                 inverted
               >
-                <Header as={"h3"} className={"myGroups"}>
-                  My Groups
-                </Header>
+                <Header as={"h3"} content="My Groups" className={"myGroups"} />
                 <ListItem
                   style={{ overflow: "auto", height: "13em" }}
                   description={
@@ -420,9 +418,7 @@ export const MyDashboard = () => {
                     inverted
                     style={{ backgroundColor: "rgb(10, 10, 10)" }}
                   >
-                    <Header as={"h3"} className={"discussionTemplates"}>
-                      My Discussion Templates
-                    </Header>
+                    <Header as={"h3"} content="My Discussion Templates" className={"discussionTemplates"} />
                     <ListItem
                       style={{ overflow: "auto", height: "13em" }}
                       description={
@@ -452,9 +448,7 @@ export const MyDashboard = () => {
                     inverted
                     style={{ backgroundColor: "rgb(10, 10, 10)" }}
                   >
-                    <Header as={"h3"} className={"myScenarios"}>
-                      My scenarios
-                    </Header>
+                    <Header as={"h3"} content="My scenarios" className={"myScenarios"} />
                     <ListItem
                       style={{ overflow: "auto", height: "13em" }}
                       description={
@@ -489,9 +483,7 @@ export const MyDashboard = () => {
                   inverted
                   style={{ backgroundColor: "rgb(10, 10, 10)" }}
                 >
-                  <Header as={"h3"} className={"myScenarioSets"}>
-                    My Scenario Sets
-                  </Header>
+                  <Header as={"h3"} content="My Scenario Sets" className={"myScenarioSets"} />
                   <ListItem
                     style={{ overflow: "auto", height: "13em" }}
                     description={
@@ -521,9 +513,7 @@ export const MyDashboard = () => {
                   inverted
                   style={{ backgroundColor: "rgb(10, 10, 10)" }}
                 >
-                  <Header as={"h3"} className={"myExperiments"}>
-                    My Experiments
-                  </Header>
+                  <Header as={"h3"} content="My Experiments" className={"myExperiments"} />
                   <ListItem
                     style={{ overflow: "auto", height: "13em" }}
                     description={
@@ -553,7 +543,7 @@ export const MyDashboard = () => {
                   inverted
                   style={{ backgroundColor: "rgb(10, 10, 10)" }}
                 >
-                  <Header as={"h3"}>Add Users to roles</Header>
+                  <Header as={"h3"} content="Add Users to Roles" />
                   <Button
                     fluid
                     content="Assign Roles"
@@ -566,7 +556,7 @@ export const MyDashboard = () => {
                   <br />
                   <Button
                     fluid
-                    content="Add user"
+                    content="Add User"
                     onClick={handleToggleNewUser}
                     // as={Link}
                     // to="/AddUser"

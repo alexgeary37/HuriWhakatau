@@ -30,7 +30,7 @@ Meteor.methods({
       categoryIds: categoryIds,
       discussionTemplateId: discussionTemplateId,
       createdAt: new Date(),
-      createdBy: this.userId,
+      createdBy: Meteor.userId()
     };
 
     // Check scenario against schema.

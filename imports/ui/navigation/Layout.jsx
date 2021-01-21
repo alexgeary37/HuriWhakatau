@@ -49,7 +49,7 @@ export const Layout = ({page, isDiscussion}) => {
         let fetchedPendingFriends = [];
         let fetchedGroupMemberIds = [];
         let fetchedGroupMembers = [];
-        let currentUser = Meteor.users.findOne({_id: Meteor.userId()});
+        let currentUser = Meteor.users.findOne(Meteor.userId());
         let userId = Meteor.userId();
         let fetchedGroups = Groups.find({members: {$elemMatch: {$eq: userId}}}).fetch(); //,
 

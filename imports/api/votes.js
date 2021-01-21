@@ -20,7 +20,7 @@ Meteor.methods({
     }
 
     const vote = {
-      userId: this.userId,
+      userId: Meteor.userId(),
       verdictId: verdictId,
       vote: userVote,
     };

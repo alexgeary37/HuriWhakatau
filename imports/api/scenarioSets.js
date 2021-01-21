@@ -27,7 +27,7 @@ Meteor.methods({
       scenarios: scenarios,
       randomise: randomise,
       createdAt: new Date(),
-      createdBy: this.userId,
+      createdBy: Meteor.userId()
     };
 
     // Check scenarioSet against schema.

@@ -84,11 +84,6 @@ if (Meteor.isServer) {
     console.log("not minimongo discussion templates");
   }
 
-  const templates = DiscussionTemplates.find({}).fetch();
-  for (i = 0; i < templates.length; i += 1) {
-    console.log(templates[i]);
-  }
-
   Meteor.publish("discussionTemplates", function () {
     return DiscussionTemplates.find(
       {},

@@ -14,6 +14,7 @@ Discussions.schema = new SimpleSchema({
   verdicts: [String],
   status: String,
   timeLimit: Number,
+  consensusThreshold: SimpleSchema.Integer,
   deadline: {
     type: Date,
     optional: true,
@@ -39,7 +40,7 @@ Discussions.schema = new SimpleSchema({
 Meteor.methods({
   // Insert a discussion into the discussions collection in the db.
   // Called from experiments.js
-  "discussions.insert"(scenarioId, groupId, timeLimit, isHui, isPublic) {
+  "discussions.insert"(scenarioId, groupId, timeLimit, consensusThreshold, isHui, isPublic) {
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
@@ -48,11 +49,12 @@ Meteor.methods({
       scenarioId: scenarioId,
       groupId: groupId,
       createdAt: new Date(),
-      createdBy: this.userId,
+      createdBy: Meteor.userId(),
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
       status: "active",
       timeLimit: timeLimit,
+      consensusThreshold: consensusThreshold,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       usersTyping: [],
       isIntroduction: false,
@@ -74,7 +76,7 @@ Meteor.methods({
 
   // Insert an introduction type discussion into the discussions collection in the db.
   // Called from experiments.js
-  "discussions.insertIntroduction"(scenarioId, groupId, timeLimit) {
+  "discussions.insertIntroduction"(scenarioId, groupId, timeLimit, consensusThreshold) {
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
@@ -83,11 +85,12 @@ Meteor.methods({
       scenarioId: scenarioId,
       groupId: groupId,
       createdAt: new Date(),
-      createdBy: this.userId,
+      createdBy: Meteor.userId(),
       activeVerdictProposers: [], // Contains the users currently proposing a verdict.
       verdicts: [], // List of verdict._ids in this discussion.
       status: "active",
       timeLimit: timeLimit,
+      consensusThreshold: consensusThreshold,
       deadline: null, //to be set when discussion started and based on start datetime + timelimit from discussion template
       usersTyping: [],
       isIntroduction: true,
@@ -170,7 +173,7 @@ Meteor.methods({
     }
 
     const mongoModifierObject = {
-      $addToSet: { activeVerdictProposers: this.userId },
+      $addToSet: { activeVerdictProposers: Meteor.userId() },
     };
 
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
@@ -188,14 +191,14 @@ Meteor.methods({
   "discussions.removeProposer"(discussionId) {
     check(discussionId, String);
 
-    console.log("discussions.removeProposer::", this.userId);
+    console.log("discussions.removeProposer::", Meteor.userId());
 
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
 
     const mongoModifierObject = {
-      $pull: { activeVerdictProposers: this.userId },
+      $pull: { activeVerdictProposers: Meteor.userId() },
     };
 
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
@@ -289,10 +292,12 @@ if (Meteor.isServer) {
           maxCommentLength: 1,
           deadline: 1,
           isIntroduction: 1,
+          nextDiscussion: 1,
+          timeLimit: 1,
+          consensusThreshold: 1,
           isHui: 1,
           isPublic: 1,
           usersTyping: 1,
-          nextDiscussion: 1,
         },
       }
     );
@@ -315,8 +320,9 @@ if (Meteor.isServer) {
           isIntroduction: 1,
           nextDiscussion: 1,
           timeLimit: 1,
-          isPublic: 1,
+          consensusThreshold: 1,
           isHui: 1,
+          isPublic: 1,
           usersTyping: 1,
         },
       }

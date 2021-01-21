@@ -54,7 +54,7 @@ Meteor.methods({
     comment = {
       discussionId: discussionId,
       postedTime: new Date(),
-      authorId: this.userId,
+      authorId: Meteor.userId(),
       text: text,
       emojis: [],
       keystrokes: keystrokes,
@@ -85,7 +85,7 @@ Meteor.methods({
     const comment = Comments.findOne(commentId);
 
     // If user is not the author of the comment, throw error.
-    if (!this.userId || comment.authorId !== this.userId) {
+    if (!this.userId || comment.authorId !== Meteor.userId()) {
       throw new Meteor.Error("Not authorized.");
     }
 
@@ -149,7 +149,7 @@ Meteor.methods({
     const comment = Comments.findOne(commentId);
 
     // If user is not the author of the comment, throw error.
-    if (!this.userId || comment.authorId !== this.userId) {
+    if (!this.userId || comment.authorId !== Meteor.userId()) {
       throw new Meteor.Error("Not authorized.");
     }
 

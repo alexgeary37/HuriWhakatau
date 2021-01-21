@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Segment, Form, Input, Modal, Button, Checkbox, Tab } from "semantic-ui-react";
+import { Segment, Form, Input, Modal, Button, Checkbox, Tab, Label } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
 import { ScenarioSets } from "/imports/api/scenarioSets";
 import { Groups } from "/imports/api/groups";
@@ -16,6 +16,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
       "you progress to the first topic."
   );
   const [hasIntroduction, setHasIntroduction] = useState(false);
+  const [consensusThreshold, setConsensusThreshold] = useState(0);
   const [errName, setErrName] = useState("");
   const [errDescription, setErrDescription] = useState("");
   const [errGroupId, setErrGroupId] = useState("");
@@ -29,6 +30,19 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
   ]);
   const [numberOfRatings, setNumberOfRatings] = useState(1);
   const nameRef = React.createRef();
+
+  const setGroupIdAndThreshold = (groupId) => {
+    setGroupId(groupId);
+    const numGroupMembers = Groups.findOne(groupId).members.length;
+    setConsensusThreshold(numGroupMembers - 1);
+  };
+
+  const setClampedConsensusThreshold = (value) => {
+    const numGroupMembers = Groups.findOne(groupId).members.length;
+    if (value <= numGroupMembers - 1 && value >= 1) {
+      setConsensusThreshold(value);
+    }
+  };
 
   const submitExperiment = (e) => {
     if (name.length === 0) {
@@ -65,6 +79,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
         groupId,
         scenarioSetId,
         hasIntroduction,
+        consensusThreshold,
         ratings,
         introductionCommentText
       );
@@ -84,6 +99,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
         "introduction discussion. Use this space to get to know each other and vote on a group leader before " +
         "you progress to the first topic."
     );
+    setConsensusThreshold(0);
     setErrName("");
     setErrDescription("");
     setErrGroupId("");
@@ -234,7 +250,7 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 }
                 name="groups"
                 value={groupId}
-                onChange={(e, { value }) => setGroupId(value)}
+                onChange={(e, { value }) => setGroupIdAndThreshold(value)}
               />
               {errGroupId ? (
                 <div
@@ -294,6 +310,19 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 />
               )}
             </Form.Group>
+            <Input
+              style={{ width: "60px", rightMargin: "60px" }}
+              type="number"
+              disabled={groupId === ""}
+              labelPosition="right"
+              value={consensusThreshold}
+              onInput={({ target }) => setClampedConsensusThreshold(Number(target.value))}
+            >
+              <Label>A consensus is reached once</Label>
+              <input />
+              <Label>users have affirmed a verdict</Label>
+            </Input>
+            <br />
             <Checkbox
               checked={hasIntroduction}
               label="Create an Introduction Lounge"

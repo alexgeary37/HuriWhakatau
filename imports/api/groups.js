@@ -27,7 +27,7 @@ Meteor.methods({
       members: members,
       previousMembers: [],
       createdAt: new Date(),
-      createdBy: this.userId,
+      createdBy: Meteor.userId(),
     };
 
     // Check group against schema.
@@ -128,7 +128,7 @@ if (Meteor.isServer) {
     console.log("not minimongo groups");
   }
 
-  Meteor.publish("groups", function (userId) {
+  Meteor.publish("groups", function () {
     return Groups.find(
       {},
       {

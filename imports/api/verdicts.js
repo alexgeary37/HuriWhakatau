@@ -30,9 +30,9 @@ Meteor.methods({
     const verdict = {
       discussionId: discussionId,
       postedTime: new Date(),
-      authorId: this.userId, // _id of user.
+      authorId: Meteor.userId(), // _id of user.
       text: text,
-      votes: [], // _ids of votes that all OTHER users have given.
+      votes: [] // _ids of votes that all OTHER users have given.
     };
 
     // Check verdict against schema.
@@ -57,14 +57,14 @@ Meteor.methods({
         Discussions.update(discussionId, mongoModifierObject);
         
         // Remove this user from the list of activeVerdictProposers in the Discussion.
-        console.log("verdicts.insert this.userId::", this.userId);
+        console.log("verdicts.insert Meteor.userId()::", Meteor.userId());
 
         // Meteor.call("discussions.removeProposer", discussionId);
         // This method call is being made from the server, which means the userId will be null for unit tests.
         // Hence the code below is being used instead.
 
         mongoModifierObject = {
-          $pull: { activeVerdictProposers: this.userId },
+          $pull: { activeVerdictProposers: Meteor.userId() },
         };
 
         Discussions.schema.validate(mongoModifierObject, { modifier: true });
@@ -92,7 +92,7 @@ Meteor.methods({
 
     const mongoModifierObject = {
       $addToSet: {
-        votes: { userId: this.userId, vote: vote, voteTime: new Date() },
+        votes: { userId: Meteor.userId(), vote: vote, voteTime: new Date() },
       },
     };
 

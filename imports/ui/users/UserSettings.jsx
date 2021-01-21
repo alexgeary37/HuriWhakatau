@@ -29,7 +29,7 @@ export const UserSettings = () => {
         Meteor.subscribe("rivers");
 
         return {
-            user: Meteor.users.findOne({_id: Meteor.userId()}),
+            user: Meteor.users.findOne(Meteor.userId()),
             mountains: Mountains.find().fetch(),
             rivers: Rivers.find().fetch(),
         };

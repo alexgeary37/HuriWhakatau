@@ -28,6 +28,7 @@ Experiments.schema = new SimpleSchema({
   "ratings.$.responseType": String,
   "ratings.$.reverse": Boolean,
   "ratings.$.scale": SimpleSchema.Integer,
+  consensusThreshold: SimpleSchema.Integer,
   createdAt: Date,
   createdBy: String,
 }).newContext();
@@ -41,6 +42,7 @@ Meteor.methods({
     groupId,
     scenarioSetId,
     hasIntroduction,
+    consensusThreshold,
     ratings,
     introductionCommentText
   ) {
@@ -57,6 +59,7 @@ Meteor.methods({
       scenarioSetId: scenarioSetId,
       discussions: [],
       ratings: ratings,
+      consensusThreshold: consensusThreshold,
       createdAt: new Date(),
       createdBy: Meteor.userId(),
     };
@@ -78,7 +81,8 @@ Meteor.methods({
           "discussions.insertIntroduction",
           introductionScenario,
           groupId,
-          0
+          0,
+          consensusThreshold
         );
 
         console.log("add intro id to exp ", introId);
@@ -125,6 +129,7 @@ Meteor.methods({
           scenarios[i]._id,
           groupId,
           discussionTemplate.timeLimit,
+          consensusThreshold,
           discussionTemplate.isHui,
           discussionTemplate.isPublic
         );
@@ -194,6 +199,7 @@ Meteor.methods({
           { $sample: { size: 1 } },
         ])
         .toArray();
+      console.log('fetchedExp', fetchedExp);
       return fetchedExp;
     }
   },

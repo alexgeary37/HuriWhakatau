@@ -5,13 +5,20 @@ export const Personality = new Mongo.Collection("personality");
 
 Personality.schema = new SimpleSchema({
   _id: { type: String, optional: true },
-  questionnaire: Object
+  questionnaireName: String,
+  paperDoi: String,
+  items: [Object],
+  'items.$.item': SimpleSchema.Integer,
+  'items.$.text': String,
+  'items.$.scale': SimpleSchema.Integer,
+  'items.$.scoringReversed': Boolean,
+  'items.$.responseType': String
 }).newContext();
 
 Meteor.methods({
   "personality.insert"(questionnaire) {
     const personality = {
-      questionnaire,
+      questionnaire
     };
 
     // Check personality against schema.
@@ -30,7 +37,7 @@ Meteor.methods({
     if (Meteor.isServer) {
       const fetchedQuestion = Personality.rawCollection()
         .aggregate([
-          { $sample: { size: 1 } },
+          { $sample: { size: 1 } }, // Select 1 document from collection.
           {
             $project: {
               item: {

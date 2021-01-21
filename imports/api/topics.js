@@ -23,7 +23,7 @@ Meteor.methods({
       description: description,
       categoryId: categoryId,
       createdAt: new Date(),
-      createdBy: this.userId
+      createdBy: Meteor.userId()
     };
 
     // Check topic against schema.

@@ -16,6 +16,7 @@ export const CommentForm = ({
   const [editorValue, setEditorValue] = useState(
     RichTextEditor.createEmptyValue()
   );
+
   // useTracker makes sure the component will re-render when the data changes.
   const { user, typingUsers } = useTracker(() => {
     const subDiscussions = Meteor.subscribe("discussions");
@@ -27,7 +28,7 @@ export const CommentForm = ({
       );
     }
     return {
-      user: Meteor.users.findOne({ _id: Meteor.userId() }),
+      user: Meteor.users.findOne(Meteor.userId()),
       typingUsers: discussionTypingUsersList,
     };
   });
@@ -79,6 +80,7 @@ export const CommentForm = ({
       discussionId,
       user.profile.emotion?.emotion
     );
+
     setEditorValue(RichTextEditor.createEmptyValue());
     setPastedItems([]);
     setKeyStrokes([]);

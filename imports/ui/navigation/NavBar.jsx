@@ -23,7 +23,7 @@ export const NavBar = ({ handleChangeLanguage }) => {
   const { user } = useTracker(() => {
     Meteor.subscribe("users");
     return {
-      user: Meteor.users.findOne({ _id: Meteor.userId() }),
+      user: Meteor.users.findOne(Meteor.userId()),
     };
   });
   const logUserOut = () => {
