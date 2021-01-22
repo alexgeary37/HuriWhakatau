@@ -1,9 +1,19 @@
 import { Mongo } from "meteor/mongo";
-import { check } from "meteor/check";
-import { Discussions } from "./discussions";
-import {Verdicts} from "./verdicts";
+import SimpleSchema from "simpl-schema";
 
 export const Usernames = new Mongo.Collection("usernames");
+
+Usernames.schema = new SimpleSchema({
+  _id: {type: String, optional: true },
+  name: String
+}).newContext();
+
+Meteor.methods({
+  "usernames.removeAll"() {
+    Usernames.remove({});
+    console.log('Usernames.count():', Usernames.find().count());
+  }
+})
 
 export const randomUsernames = [
     'abaloneaccountant',
@@ -1046,8 +1056,7 @@ export const Maorinames = [
     'tieke',
     'titipounamu',
     'warapi',
-    'whio']
-
+    'whio'];
 
 if (Meteor.isServer) {
     Meteor.publish("usernames",function () {
@@ -1061,4 +1070,3 @@ if (Meteor.isServer) {
         );
     });
 }
-

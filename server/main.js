@@ -107,6 +107,7 @@ Meteor.methods({
         Meteor.call("commentRatings.removeAll");
         Meteor.call("verdicts.removeAll");
         Meteor.call("votes.removeAll");
+        Meteor.call('usernames.removeAll');
     },
 
     "main.removeAllDiscussions"() {

@@ -3,7 +3,7 @@ import TextTrim from "react-text-trim"
 import {useTracker} from "meteor/react-meteor-data";
 import {List, Button, Card, Header} from "semantic-ui-react";
 
-export const Verdict = ({verdict, onVote, discussionStatus, userInGroup}) => {
+export const Verdict = ({verdict, onVote, discussionStatus, discussionIsPublic, userInGroup}) => {
     // useTracker makes sure the component will re-render when the data changes.
     const {user} = useTracker(() => {
         Meteor.subscribe("users");
@@ -32,7 +32,7 @@ export const Verdict = ({verdict, onVote, discussionStatus, userInGroup}) => {
             return <div style={{padding: 5, textAlign: "right"}}>Voted</div>;
         } else {
             // IF the discussion is active and the user is not the verdict author, display "Affirm" and "Reject" buttons.
-            if (discussionStatus === 'active' && userInGroup) {
+            if (discussionStatus === 'active' && (discussionIsPublic || userInGroup)) {
                 return (
                     <div style={{paddingBottom: 5, textAlign: "center"}}>
                         <Button

@@ -325,6 +325,7 @@ export const Discussion = () => {
                       verdict={verdict}
                       onVote={hasReachedConsensus}
                       discussionStatus={discussionStatus}
+                      discussionIsPublic={discussionIsPublic}
                       userInGroup={userInGroup}
                     />
                   </List.Item>

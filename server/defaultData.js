@@ -12,13 +12,10 @@ import { Scenarios } from "../imports/api/scenarios";
 import { Categories } from "../imports/api/categories";
 import { ScenarioSets } from "../imports/api/scenarioSets";
 import { DiscussionTemplates } from "../imports/api/discussionTemplate";
-import { Usernames } from "../imports/api/usernames";
-import { randomUsernames } from "../imports/api/usernames";
+import { Usernames, randomUsernames } from "../imports/api/usernames";
 import { Personality } from "../imports/api/personality";
 import { newRivers, Rivers } from "../imports/api/rivers";
-import { Discussions } from "../imports/api/discussions";
 import { Mountains } from "../imports/api/mountains";
-// const Mountains = new Mongo.Collection("mountains");
 
 // set up checks that each item doesn't exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
@@ -421,36 +418,39 @@ if (Meteor.isServer) {
 
   // Create default rivers.
   if (Rivers.find().count() === 0) {
-    const river = {
-      name: "river"
-    };
 
-    Rivers.schema.validate(river);
-
-    if (Rivers.schema.isValid()) {
-      console.log('Successful validation of river');
-      Rivers.insert(river);
-    } else {
-      console.log("validationErrors:", Rivers.schema.validationErrors());
-    }
-  }
+    newRivers.forEach((river) => {
+      const document = {
+        name: river
+      };
   
-  // let newMountains = [];
-  //
-  // newMountains.forEach((mountain) => {
-  //     Mountains.insert({name: mountain});
-  // })
-  // if (Usernames.find({}).count() === 0) {
-  //
-  //     for (let i = 0; i < randomUsernames.length; i++) {
-  //         console.log("here's names", randomUsernames[i]);
-  //         Usernames.insert({name: randomUsernames[i]});
-  //     }
-  // }
+      Rivers.schema.validate(document);
+  
+      if (Rivers.schema.isValid()) {
+        console.log('Successful validation of river');
+        Rivers.insert(document);
+      } else {
+        console.log("validationErrors:", Rivers.schema.validationErrors());
+      }
+    });
+  }
 
-  // newRivers.forEach((river) => {
-  //         Rivers.insert({name: river});
-  //     })
+  if (Usernames.find({}).count() === 0) {
+    randomUsernames.forEach((username) => {
+      const document = {
+        name: username
+      }
+
+      Usernames.schema.validate(document);
+
+      if (Usernames.schema.isValid()) {
+        console.log('Successful validation of username document');
+        Usernames.insert(document);
+      } else {
+        console.log("validationErrors:", Usernames.schema.validationErrors());
+      }
+    });
+  }
 
   console.log("Finished running defaultData.js");
 }
