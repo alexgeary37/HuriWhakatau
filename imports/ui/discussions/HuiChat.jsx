@@ -162,9 +162,7 @@ export const HuiChat = () => {
     const checkGroupMembership = () => {
         if (group && group.members.includes(Meteor.userId())) {
             setUserInGroup(true);
-            console.log("user in group");
-        } else {
-            console.log("user not in group");
+            console.log("user is in group");
         }
     }
 
@@ -215,8 +213,6 @@ export const HuiChat = () => {
     const proposeVerdict = () =>
         Meteor.call("discussions.addProposer", discussionId);
 
-    console.log("isIntroduction undefined: ", isIntroduction === undefined)
-
     const huiChatPageContent = (userLang) => {
         return (
             <Container>
@@ -240,6 +236,7 @@ export const HuiChat = () => {
                                                     ? discussionTemplate.usersCanEditComments
                                                     : true
                                             }
+                                            userInGroup={userInGroup}
                                         />
                                     ))}
                                     <div ref={commentsEndRef}/>
