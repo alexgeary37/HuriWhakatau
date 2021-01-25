@@ -34,8 +34,6 @@ Experiments.schema = new SimpleSchema({
 }).newContext();
 
 Meteor.methods({
-  // Insert a category into the category collection in the db.
-  // name: the category name
   "experiments.create"(
     name,
     description,
@@ -61,7 +59,7 @@ Meteor.methods({
       ratings: ratings,
       consensusThreshold: consensusThreshold,
       createdAt: new Date(),
-      createdBy: Meteor.userId(),
+      createdBy: Meteor.userId()
     };
 
     // Check experiment against schema.
@@ -76,7 +74,7 @@ Meteor.methods({
         const introductionScenario = Scenarios.findOne({
           title: "Default - Introduction",
         })._id;
-        console.log("creating introduction");
+
         const introId = Meteor.call(
           "discussions.insertIntroduction",
           introductionScenario,
@@ -85,7 +83,6 @@ Meteor.methods({
           consensusThreshold
         );
 
-        console.log("add intro id to exp ", introId);
         const mongoModifierObject = {
           $push: { discussions: introId },
         };
@@ -95,7 +92,6 @@ Meteor.methods({
         if (Experiments.schema.isValid()) {
           console.log("Successful validation of experiment update object");
           Experiments.update(experimentId, mongoModifierObject);
-          console.log("adding intro id to set", introId);
           discussionIds.push(introId);
           Meteor.call(
             "comments.insert",
@@ -104,7 +100,6 @@ Meteor.methods({
             [],
             introId
           );
-          console.log(discussionIds);
         } else {
           console.log(
             "experiment update object validationErrors:",
@@ -117,13 +112,13 @@ Meteor.methods({
       const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
 
       // For each scenario get discussion time limit and add to discussion.
+      const discs = [];
       for (i = 0; i < scenarios.length; i++) {
         console.log("creating discussion");
         const discussionTemplate = DiscussionTemplates.findOne({
           _id: scenarios[i].discussionTemplateId,
         });
 
-        console.log("inserting discussion", discussionTemplate);
         const discussionId = Meteor.call(
           "discussions.insert",
           scenarios[i]._id,
@@ -134,7 +129,7 @@ Meteor.methods({
           discussionTemplate.isPublic
         );
 
-        console.log("adding discussion id to exp", discussionId);
+        discs.push([Discussions.findOne(discussionId), scenarios[i].title])
 
         mongoModifierObject = {
           $push: { discussions: discussionId },
@@ -145,9 +140,7 @@ Meteor.methods({
         if (Experiments.schema.isValid()) {
           console.log("Successful validation of experiment update object");
           Experiments.update(experimentId, mongoModifierObject);
-          console.log("adding disc id to set", discussionId);
           discussionIds.push(discussionId);
-          console.log(discussionIds);
         } else {
           console.log(
             "experiment update object validationErrors:",
@@ -158,9 +151,9 @@ Meteor.methods({
       console.log(discussionIds);
 
       // To each discussion, add the id for the next the discussion.
-      for (let id = 0; id < discussionIds.length - 1; id++) {
+      for (let id = 0; id < discussionIds.length - 1; id += 1) {
         console.log(
-          "adding nextDiscussionId",
+          "adding nextDiscussionId", id,
           discussionIds[id],
           " -> ",
           discussionIds[id + 1]
@@ -292,8 +285,8 @@ Meteor.methods({
                       discussionTemplate.commentCharacterLimit
                     },
                     "discussionTimeLimit": ${discussionTemplate.timeLimit},
-                    "discussionIsPublic": ${discussionTemplate.isPublic},
-                    "discussionIsInHuiFormat": ${discussionTemplate.isHui},
+                    "discussionIdsPublic": ${discussionTemplate.isPublic},
+                    "discussionIdsInHuiFormat": ${discussionTemplate.isHui},
                     "discussionTopicCategories": "${categoryNames.join(", ")}",
                 },
                 "discussionComments": ${JSON.stringify(comments)},

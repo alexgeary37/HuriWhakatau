@@ -59,6 +59,11 @@ if (Meteor.isServer) {
     console.log("not minimongo Scenarios");
   }
 
+  const scens = Scenarios.find().fetch();
+  for (i = 0; i < scens.length; i += 1) {
+    console.log(scens[i])
+  }
+
   Meteor.publish("scenarios", function () {
     return Scenarios.find(
       {},

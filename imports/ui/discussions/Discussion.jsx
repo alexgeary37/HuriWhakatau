@@ -134,7 +134,9 @@ export const Discussion = () => {
         _id: discussionScenario.discussionTemplateId,
       });
       timeLimit = discussion.timeLimit ? discussion.timeLimit : 0;
-      consensusThreshold = discussion.consensusThreshold ? discussion.consensusThreshold : 0;
+      consensusThreshold = discussion.consensusThreshold
+        ? discussion.consensusThreshold
+        : 0;
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
@@ -172,9 +174,6 @@ export const Discussion = () => {
     document.title = "Discussion - " + (scenario && scenario.title);
   }, [group]);
 
-  // console.log("discussionDeadline", discussionDeadline);
-  // console.log("discussionTimeLimit", discussionTimeLimit);
-
   // IF discussion deadline is zero, update discussion deadline with current date + discussion timelimit.
   // Use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit > 0) {
@@ -192,8 +191,6 @@ export const Discussion = () => {
 
   if (discussionDeadline != null) {
     let currentTime = new Date();
-    // console.log("currentTime", currentTime);
-    // console.log("timedDiscussion", timedDiscussion);
     if (
       discussionDeadline > currentTime &&
       discussionStatus === "active" &&
@@ -226,7 +223,7 @@ export const Discussion = () => {
   };
   useEffect(initialScrollToBottom, []);
   useEffect(scrollToBottom, [
-    comments.filter((x) => x.authorId === Meteor.userId()).length,
+    comments.filter((x) => x.authorId === Meteor.userId()).length
   ]);
 
   // Return true if this user has submitted a verdict, false otherwise.
@@ -242,7 +239,7 @@ export const Discussion = () => {
         votes.filter((vote) => vote.vote !== false).length ===
         discussionConsensusThreshold
       ) {
-        Meteor.call('discussions.updateStatus', discussionId, "finished");
+        Meteor.call("discussions.updateStatus", discussionId, "finished");
         return verdicts[i];
       }
     }
