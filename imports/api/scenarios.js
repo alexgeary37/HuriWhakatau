@@ -60,8 +60,9 @@ if (Meteor.isServer) {
   }
 
   const scens = Scenarios.find().fetch();
+  console.log('Scenarios:')
   for (i = 0; i < scens.length; i += 1) {
-    console.log(scens[i])
+    console.log(scens[i]._id, scens[i].title)
   }
 
   Meteor.publish("scenarios", function () {

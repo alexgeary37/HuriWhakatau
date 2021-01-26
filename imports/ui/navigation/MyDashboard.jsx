@@ -202,11 +202,23 @@ export const MyDashboard = () => {
       { $or: [{ groupId: { $in: groupIds } }, { createdBy: userId }] },
       {
         sort: {
-          createdAt: -1,
+          createdAt: 1,
           status: 1,
         },
       }
     ).fetch();
+
+    if (fetchedMyDiscussions.length == 4) {
+      console.log('fetchedMyDiscussions:', fetchedMyDiscussions)
+      console.log('Times')
+      for (i = 0; i < fetchedMyDiscussions.length; i += 1) {
+        console.log('ID:', fetchedMyDiscussions[i]._id, fetchedMyDiscussions[i].createdAt.getTime(), fetchedMyDiscussions[i].scenarioId)
+      }
+      console.log('fetchedScenarios')
+      for (i = 0; i < fetchedScenarios.length; i += 1) {
+        console.log('ID:', fetchedScenarios[i]._id, fetchedScenarios[i].title)
+      }
+    }
 
     return {
       user: Meteor.userId(),

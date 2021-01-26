@@ -54,6 +54,12 @@ if (Meteor.isServer) {
     console.log("not minimongo ScenarioSets");
   }
 
+  const sets = ScenarioSets.find().fetch();//
+  console.log('SETS')
+  for (i = 0; i < sets.length; i += 1) {
+    console.log(sets[i]._id, sets[i].title, sets[i].scenarios)
+  }
+
   Meteor.publish("scenarioSets", function () {
     return ScenarioSets.find(
       {},

@@ -124,7 +124,13 @@ export const HuiChat = () => {
         .find({
           _id: { $in: discussionGroup.members },
         })
-        .fetch();
+        .fetch()
+        .sort((a, b) => {
+          return (
+            discussionGroup.members.indexOf(a._id) -
+            discussionGroup.members.indexOf(b._id)
+          );
+        });
       //get the experiment id for the discussion and the group leader
       experiment = Experiments.findOne(
         { discussions: { $elemMatch: { $eq: discussionId } } },
@@ -189,14 +195,14 @@ export const HuiChat = () => {
   };
   useEffect(initialScrollToBottom, []);
   useEffect(scrollToBottom, [
-    comments.filter((x) => x.authorId === Meteor.userId()).length
+    comments.filter((x) => x.authorId === Meteor.userId()).length,
   ]);
 
   const handleUserGroupLeaderVote = () => {
     setUserVotedForLeader(true);
   };
 
-  console.log('USERVoted4Leader', userVotedForLeader)
+  console.log("USERVoted4Leader", userVotedForLeader);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {

@@ -17,18 +17,19 @@ export const ViewScenario = ({ toggleModal, scenario, template }) => {
   const { categories } = useTracker(() => {
     Meteor.subscribe("categories");
     return {
-      categories: Categories.find({ _id: { $in: categoryIds } }).fetch(),
+      categories: Categories.find({ _id: { $in: categoryIds } })
+        .fetch()
+        .sort((a, b) => {
+          // Sort categories by the order in which they appear in categoryIds.
+          return categoryIds.indexOf(a._id) - categoryIds.indexOf(b._id);
+        }),
     };
   });
 
   console.log("categories:", categories);
 
   return (
-    <Modal
-      open={true}
-      closeOnDimmerClick={false}
-      size="small"
-    >
+    <Modal open={true} closeOnDimmerClick={false} size="small">
       <Modal.Header>Scenario</Modal.Header>
       <Modal.Content>
         <Form.Input readOnly={true} label="Title: " type="text" value={title} />

@@ -59,7 +59,7 @@ Meteor.methods({
       ratings: ratings,
       consensusThreshold: consensusThreshold,
       createdAt: new Date(),
-      createdBy: Meteor.userId()
+      createdBy: Meteor.userId(),
     };
 
     // Check experiment against schema.
@@ -81,6 +81,15 @@ Meteor.methods({
           groupId,
           0,
           consensusThreshold
+        );
+
+        const introDisc = Discussions.findOne(introId);
+        console.log(
+          "ID:",
+          introDisc._id,
+          "TIME:",
+          introDisc.createdAt.getTime(),
+          "scen: Default - Introduction"
         );
 
         const mongoModifierObject = {
@@ -109,7 +118,12 @@ Meteor.methods({
       }
 
       const set = ScenarioSets.findOne({ _id: scenarioSetId });
-      const scenarios = Scenarios.find({ _id: { $in: set.scenarios } }).fetch();
+      const scenarios = Scenarios.find({ _id: { $in: set.scenarios } })
+        .fetch()
+        .sort((a, b) => {
+          // Sort scenarios by the order in which they appear in set's scenarios field.
+          return set.scenarios.indexOf(a._id) - set.scenarios.indexOf(b._id);
+        });
 
       // For each scenario get discussion time limit and add to discussion.
       const discs = [];
@@ -129,7 +143,16 @@ Meteor.methods({
           discussionTemplate.isPublic
         );
 
-        discs.push([Discussions.findOne(discussionId), scenarios[i].title])
+        const disc = Discussions.findOne(discussionId);
+        console.log(
+          "ID:",
+          disc._id,
+          "TIME:",
+          disc.createdAt.getTime(),
+          "scen:",
+          scenarios[i].title
+        );
+        discs.push([Discussions.findOne(discussionId), scenarios[i].title]);
 
         mongoModifierObject = {
           $push: { discussions: discussionId },
@@ -153,7 +176,8 @@ Meteor.methods({
       // To each discussion, add the id for the next the discussion.
       for (let id = 0; id < discussionIds.length - 1; id += 1) {
         console.log(
-          "adding nextDiscussionId", id,
+          "adding nextDiscussionId",
+          id,
           discussionIds[id],
           " -> ",
           discussionIds[id + 1]
@@ -192,7 +216,7 @@ Meteor.methods({
           { $sample: { size: 1 } },
         ])
         .toArray();
-      console.log('fetchedExp', fetchedExp);
+      console.log("fetchedExp", fetchedExp);
       return fetchedExp;
     }
   },
@@ -230,7 +254,14 @@ Meteor.methods({
           },
         }
       )
-      .fetch();
+      .fetch()
+      .sort((a, b) => {
+        // Sort users by the order in which they appear in discussionGroup's members field.
+        return (
+          discussionGroup.members.indexOf(a._id) -
+          discussionGroup.members.indexOf(b._id)
+        );
+      });
     let verdicts = Verdicts.find({ discussionId: discussionId }).fetch();
     users.forEach((user) => {
       if (user.profile?.personality !== undefined) {
@@ -246,7 +277,14 @@ Meteor.methods({
 
     let categories = Categories.find({
       _id: { $in: scenario.categoryIds },
-    }).fetch();
+    })
+      .fetch()
+      .sort((a, b) => {
+        return (
+          scenario.categoryIds.indexOf(a._id) -
+          scenario.categoryIds.indexOf(b._id)
+        );
+      });
     let categoryNames = [];
     categories.forEach((category) => {
       categoryNames.push(category.title);
@@ -383,7 +421,7 @@ Meteor.methods({
 
   "experiments.removeAll"() {
     Experiments.remove({});
-    console.log('Experiments.count():', Experiments.find().count());
+    console.log("Experiments.count():", Experiments.find().count());
   },
 });
 

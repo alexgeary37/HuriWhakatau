@@ -18,16 +18,20 @@ export const ViewScenarioSet = ({ toggleModal, scenarioSet }) => {
     return {
       scenarios: Scenarios.find({
         _id: { $in: scenarioSet.scenarios },
-      }).fetch(),
+      })
+        .fetch()
+        .sort((a, b) => {
+          // Sort scenarios by the order in which they appear in scenarioSet's scenarios field.
+          return (
+            scenarioSet.scenarios.indexOf(a._id) -
+            scenarioSet.scenarios.indexOf(b._id)
+          );
+        }),
     };
   });
 
   return (
-    <Modal
-      open={true}
-      closeOnDimmerClick={false}
-      size="small"
-    >
+    <Modal open={true} closeOnDimmerClick={false} size="small">
       <Modal.Header>Scenario Set: {title}</Modal.Header>
       <Modal.Content>
         <Header as={"h4"} content={"Description:"} />

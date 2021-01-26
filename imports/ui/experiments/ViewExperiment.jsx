@@ -47,7 +47,12 @@ export const ViewExperiment = ({ experiment, toggleModal }) => {
         let scenarios = fetchedScenarioSet.scenarios;
         scenarioSetTitle = fetchedScenarioSet.title;
         scenarioSetDescription = fetchedScenarioSet.description;
-        fetchedScenarios = Scenarios.find({ _id: { $in: scenarios } }).fetch();
+        fetchedScenarios = Scenarios.find({ _id: { $in: scenarios } })
+          .fetch()
+          .sort((a, b) => {
+            // Sort fetchedScenarios by the order in which they appear in fetchedScenarioSet's scenarios field.
+            return scenarios.indexOf(a._id) - scenarios.indexOf(b._id);
+          });
       }
 
       group = Groups.findOne(
@@ -65,7 +70,11 @@ export const ViewExperiment = ({ experiment, toggleModal }) => {
       discussions = Discussions.find(
         { _id: { $in: experiment.discussions } },
         { fields: { isHui: 1, scenarioId: 1 } }
-      );
+      )
+        .fetch()
+        .sort((a, b) => {
+          return experiment.discussions.indexOf(a._id) - experiment.discussions.indexOf(b._id);
+        });
     }
 
     return {
@@ -196,7 +205,7 @@ export const ViewExperiment = ({ experiment, toggleModal }) => {
                             experimentDetails.scenarios.filter(
                               (scenario) =>
                                 scenario._id === discussion.scenarioId
-                            )[0].title
+                            ).length
                           }
                         </a>
                         &nbsp;&nbsp;

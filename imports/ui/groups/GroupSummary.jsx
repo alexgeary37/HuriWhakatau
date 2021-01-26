@@ -5,7 +5,7 @@ import { ViewGroup } from "./ViewGroup";
 
 export const GroupSummary = ({ group }) => {
   const [isOpenGroupDisplay, setIsOpenGroupDisplay] = useState(false);
-  
+
   const toggleIt = () => {
     setIsOpenGroupDisplay(!isOpenGroupDisplay);
   };
@@ -14,10 +14,16 @@ export const GroupSummary = ({ group }) => {
     Meteor.subscribe("users");
 
     return {
-      users: Meteor.users.find({ _id: { $in: group.members } }).fetch(),
+      users: Meteor.users
+        .find({ _id: { $in: group.members } })
+        .fetch()
+        .sort((a, b) => {
+          // Sort users by the order in which they appear in group's members field.
+          return group.members.indexOf(a._id) - group.members.indexOf(b._id);
+        }),
     };
   });
-  
+
   let userList = [];
   for (let i = 0; i < users.length; i++) {
     userList.push(users[i].username);

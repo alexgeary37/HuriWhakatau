@@ -11,7 +11,13 @@ export const ViewGroup = ({ toggleModal, group }) => {
     Meteor.subscribe("users");
 
     return {
-      members: Meteor.users.find({ _id: { $in: group.members } }).fetch(),
+      members: Meteor.users
+        .find({ _id: { $in: group.members } })
+        .fetch()
+        .sort((a, b) => {
+          // Sort members by the order in which they appear in group's members field.
+          return group.members.indexOf(a._id) - group.members.indexOf(b._id);
+        }),
     };
   });
 
@@ -20,11 +26,7 @@ export const ViewGroup = ({ toggleModal, group }) => {
   };
 
   return (
-    <Modal
-      open={true}
-      size="small"
-      closeOnDimmerClick={false}
-    >
+    <Modal open={true} size="small" closeOnDimmerClick={false}>
       <Modal.Header>Group: {group.name}</Modal.Header>
 
       <Modal.Content>
