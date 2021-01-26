@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useTracker } from "meteor/react-meteor-data";
 import { Button, List, Segment } from "semantic-ui-react";
 import { ViewGroup } from "./ViewGroup";
 
@@ -9,25 +8,6 @@ export const GroupSummary = ({ group }) => {
   const toggleIt = () => {
     setIsOpenGroupDisplay(!isOpenGroupDisplay);
   };
-
-  const { users } = useTracker(() => {
-    Meteor.subscribe("users");
-
-    return {
-      users: Meteor.users
-        .find({ _id: { $in: group.members } })
-        .fetch()
-        .sort((a, b) => {
-          // Sort users by the order in which they appear in group's members field.
-          return group.members.indexOf(a._id) - group.members.indexOf(b._id);
-        }),
-    };
-  });
-
-  let userList = [];
-  for (let i = 0; i < users.length; i++) {
-    userList.push(users[i].username);
-  }
 
   return (
     <List.Item>
