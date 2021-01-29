@@ -40,7 +40,7 @@ export const HuiChat = () => {
   const [showTour, setShowTour] = useState(false);
   const filter = {};
   const { discussionId } = useParams();
-  const [userVotedForLeader, setUserVotedForLeader] = useState(false);
+  // const [userVotedForLeader, setUserVotedForLeader] = useState(false);
   const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   let history = useHistory();
@@ -64,10 +64,12 @@ export const HuiChat = () => {
     verdicts,
     discussionStatus,
     discussionTemplate,
+    discussionConsensusThreshold,
     groupMembers,
     groupLeader,
     leaderVotes,
-    nextDiscussion,
+    numLeaderVotes,
+    nextDiscussionId,
     isIntroduction,
     discussionIsPublic,
     experimentId,
@@ -89,8 +91,10 @@ export const HuiChat = () => {
     let discussionState;
     let discussionTopic;
     let discussionTemplate;
+    let consensusThreshold;
     let groupMembers = [];
     let theGroupLeader;
+    let leaderVotes;
     let numVotes = 0;
     let nextDiscussionId;
     let discussionIsIntroduction;
@@ -114,7 +118,9 @@ export const HuiChat = () => {
       discussionTemplate = DiscussionTemplates.findOne({
         _id: discussionScenario.discussionTemplateId,
       });
-
+      consensusThreshold = discussion.consensusThreshold
+      ? discussion.consensusThreshold
+      : 0;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
       nextDiscussionId = discussion.nextDiscussion
@@ -143,10 +149,10 @@ export const HuiChat = () => {
       );
       experimentId = experiment._id;
       theGroupLeader = experiment.groupLeader;
-      if (experiment?.leaderVotes) {
-        let leaderVoteKeys = Object.keys(experiment.leaderVotes);
-        leaderVoteKeys.forEach((key) => {
-          numVotes += experiment.leaderVotes[key];
+      leaderVotes = experiment.leaderVotes;
+      if (leaderVotes) {
+        leaderVotes.forEach((nominee) => {
+          numVotes += nominee.voters.length;
         });
       }
     }
@@ -160,10 +166,12 @@ export const HuiChat = () => {
       verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
       discussionStatus: discussionState,
       discussionTemplate: discussionTemplate,
+      discussionConsensusThreshold: consensusThreshold,
       groupMembers: groupMembers,
       groupLeader: theGroupLeader,
-      leaderVotes: numVotes,
-      nextDiscussion: nextDiscussionId,
+      leaderVotes: leaderVotes,
+      numLeaderVotes: numVotes,
+      nextDiscussionId: nextDiscussionId,
       discussionIsPublic: publicDiscussion,
       isIntroduction: discussionIsIntroduction,
       experimentId: experimentId,
@@ -198,11 +206,18 @@ export const HuiChat = () => {
     comments.filter((x) => x.authorId === Meteor.userId()).length,
   ]);
 
-  const handleUserGroupLeaderVote = () => {
-    setUserVotedForLeader(true);
+  const userVotedForLeader = () => {
+    if (leaderVotes) {
+      // This forloop could probably be avoided using a filter if someone wants to change it.
+      for (i = 0; i < leaderVotes.length; i += 1) {
+        const voters = leaderVotes[i].voters;
+        if (voters.includes(Meteor.userId())) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
-
-  console.log("USERVoted4Leader", userVotedForLeader);
 
   // Return true if this user has submitted a verdict, false otherwise.
   const userHasSubmittedVerdict = () => {
@@ -210,15 +225,13 @@ export const HuiChat = () => {
   };
 
   const hasReachedConsensus = () => {
-    //threshold value for reaching consensus
-    let threshold = 0.75;
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
-        // number of votes with value of true > number of group members multiplied by threshold
-        votes.filter((vote) => vote.vote !== false).length >
-        group.members.length * threshold
+        votes.filter((vote) => vote.vote !== false).length ===
+        discussionConsensusThreshold
       ) {
+        Meteor.call("discussions.updateStatus", discussionId, "finished");
         return verdicts[i];
       }
     }
@@ -226,10 +239,10 @@ export const HuiChat = () => {
   };
 
   const closeChat = () => {
-    if (nextDiscussion) {
-      history.push("/huichat/" + nextDiscussion);
-    }
     Meteor.call("discussions.updateStatus", discussionId, "finished");
+    if (nextDiscussionId) {
+      history.push("/huichat/" + nextDiscussionId);
+    }
   };
 
   const proposeVerdict = () =>
@@ -265,6 +278,9 @@ export const HuiChat = () => {
                   (discussionIsPublic || userInGroup) && (
                     <CommentForm
                       discussionId={discussionId}
+                      showTypingNotification={
+                        discussionTemplate.showTypingNotification
+                      }
                       isDiscussionPublic={discussionIsPublic}
                       isUserAGroupMember={userInGroup}
                       groupId={group._id}
@@ -304,7 +320,7 @@ export const HuiChat = () => {
                       {isIntroduction && (
                         <div>
                           Leader Votes cast:{" "}
-                          {leaderVotes + " / " + groupMembers.length}
+                          {numLeaderVotes + " / " + groupMembers.length}
                         </div>
                       )}
                       <Segment.Group>
@@ -313,14 +329,14 @@ export const HuiChat = () => {
                             <List.Item key={member._id}>
                               <UserSummary
                                 member={member}
-                                handleUserVoted={handleUserGroupLeaderVote}
-                                userHasVoted={userVotedForLeader}
+                                onLeaderVote={userVotedForLeader}
+                                userHasVoted={userVotedForLeader()}
                                 groupId={group._id}
                                 groupLeader={groupLeader}
                                 discussionStatus={discussionStatus}
                                 closeChat={closeChat}
                                 discussionId={discussionId}
-                                nextDiscussionId={nextDiscussion}
+                                nextDiscussionId={nextDiscussionId}
                                 experimentId={experimentId}
                                 isIntroduction={isIntroduction}
                               />
@@ -345,8 +361,10 @@ export const HuiChat = () => {
                             <Verdict
                               key={verdict._id}
                               verdict={verdict}
-                              discussionStatus={discussionStatus}
                               onVote={hasReachedConsensus}
+                              discussionStatus={discussionStatus}
+                              discussionIsPublic={discussionIsPublic}
+                              userInGroup={userInGroup}
                             />
                           </List.Item>
                         ))}
@@ -357,10 +375,10 @@ export const HuiChat = () => {
                             {<Verdict verdict={hasReachedConsensus()} />}
                           </Modal.Content>
                           <Modal.Actions>
-                            {nextDiscussion && (
+                            {nextDiscussionId && (
                               <Button
                                 as={Link}
-                                to={"/huichat/" + nextDiscussion}
+                                to={"/huichat/" + nextDiscussionId}
                                 content={"Next discussion"}
                               />
                             )}
@@ -395,6 +413,16 @@ export const HuiChat = () => {
                             />
                           </div>
                         ))}
+                      {discussionStatus !== "active" && nextDiscussionId && (
+                        <div style={{ textAlign: "center" }}>
+                          <Button
+                            style={{ margin: 10 }}
+                            content={"Go to next"}
+                            onClick={() => history.push("/huichat/" + nextDiscussionId)}
+                            primary
+                          />
+                        </div>
+                      )}
                     </List>
                   </div>
                 </GridColumn>

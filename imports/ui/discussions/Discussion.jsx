@@ -174,7 +174,7 @@ export const Discussion = () => {
     document.title = "Discussion - " + (scenario && scenario.title);
   }, [group]);
 
-  // IF discussion deadline is zero, update discussion deadline with current date + discussion timelimit.
+  // IF discussion deadline is null, update discussion deadline with current date + discussion timelimit.
   // Use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit > 0) {
     console.log("updateDeadline");
@@ -204,6 +204,7 @@ export const Discussion = () => {
       timedDiscussion
     ) {
       // Deadline has passed, but discussion is still active and timed.
+      console.log('Deadline has passed. discussionStatus:', discussionStatus, 'timedDiscussion:', timedDiscussion)
       setTimedDiscussion(false);
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
       Meteor.call("discussions.updateDeadlineTimeout", discussionId);
@@ -235,7 +236,6 @@ export const Discussion = () => {
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
-        // number of votes with value of true > number of group members multiplied by threshold
         votes.filter((vote) => vote.vote !== false).length ===
         discussionConsensusThreshold
       ) {
@@ -256,7 +256,6 @@ export const Discussion = () => {
       <Container attached="bottom" style={{ width: "110vh" }}>
         <Grid columns={3}>
           {" "}
-          {/**/}
           <GridColumn width={4} style={{ height: "90vh" }}>
             <Header
               inverted
@@ -299,10 +298,10 @@ export const Discussion = () => {
               {discussionStatus === "active" &&
                 (discussionIsPublic || userInGroup) && (
                   <CommentForm
+                    discussionId={discussionId}
                     showTypingNotification={
                       discussionTemplate.showTypingNotification
                     }
-                    discussionId={discussionId}
                     isDiscussionPublic={discussionIsPublic}
                     isUserAGroupMember={userInGroup}
                     groupId={group._id}

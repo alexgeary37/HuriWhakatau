@@ -20,7 +20,6 @@ Meteor.methods({
 
     // I believe this means it's checking that the user is the client currently calling this method.
     if (!this.userId) {
-      console.log("Not authorized");
       throw new Meteor.Error("Not authorized.");
     }
 
@@ -57,12 +56,6 @@ if (Meteor.isServer) {
     console.log("minimongo Scenarios");
   } else {
     console.log("not minimongo Scenarios");
-  }
-
-  const scens = Scenarios.find().fetch();
-  console.log('Scenarios:')
-  for (i = 0; i < scens.length; i += 1) {
-    console.log(scens[i]._id, scens[i].title)
   }
 
   Meteor.publish("scenarios", function () {

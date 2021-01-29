@@ -104,8 +104,7 @@ export const NavBar = ({ handleChangeLanguage }) => {
                   ))}
               </Dropdown.Menu>
             </Dropdown>
-            {!user &&
-              false && ( // hiding signup button for now.
+            {!user && ( // hiding signup button for now.
                 <MenuItem>
                   <Button
                     as={"h2"}

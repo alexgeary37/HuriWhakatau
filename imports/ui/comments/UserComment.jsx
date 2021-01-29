@@ -68,13 +68,11 @@ export const UserComment = ({comment, discussionStatus, userCanEdit, groupLeader
         if (!isAuthor) {
             const commentArea = document.getElementById(comment._id + ":text");
             commentArea.addEventListener("contextmenu", function (e) {
-                console.log(e)
                 e.preventDefault();
                 e.stopPropagation();
             });
             //attempting to prevent ctrl + c copy
             commentArea.addEventListener('keydown', (event) => {
-                console.log("key", event.key)
                 if (event.ctrlKey) {
                     event.preventDefault();
                     event.stopPropagation();

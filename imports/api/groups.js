@@ -43,8 +43,6 @@ Meteor.methods({
 
   "groups.addMember"(groupId, memberId) {
     check(groupId, String);
-
-    console.log('addMember');
     
     const mongoModifierObject = {
       $push: {
@@ -138,7 +136,7 @@ if (Meteor.isServer) {
           members: 1,
           createdAt: 1,
           createdBy: 1,
-          leaderVotes: 1,
+          // leaderVotes: 1,
           groupLeader: 1,
         },
       }

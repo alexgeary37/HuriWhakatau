@@ -22,11 +22,13 @@ import "/imports/api/commentRatings";
 import "/imports/api/tutorialVideos";
 
 Meteor.startup(() => {
-    process.env.MAIL_URL =
-        // "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
-        "smtps://huriwhakatau%40gmail.com:huriwhakataujuryroom@smtp.gmail.com:465/";
+    // Remove this from production version
+    if (!process.env.MONGO_URL.includes("juryroom_admin")) {
+        process.env.MAIL_URL = "smtps://huriwhakatau%40gmail.com:huriwhakataujuryroom@smtp.gmail.com:465/";
+    }
+    // "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
     // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
-    // console.log("email set");
+
 
 
     // modified from Chris Symon's code, scheduled job to set status
@@ -90,7 +92,7 @@ Meteor.startup(() => {
     }
 });
 
-if (!process.env.MONGO_URL.includes("juryroom")) {
+if (!process.env.MONGO_URL.includes("juryroom_admin")) {
     Meteor.methods({
         "main.removeAll"() {
             Meteor.call("categories.removeAll");

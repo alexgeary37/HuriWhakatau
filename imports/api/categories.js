@@ -28,7 +28,7 @@ Meteor.methods({
     Categories.schema.validate(category);
 
     if (Categories.schema.isValid()) {
-      console.log('validateCategoryInsert successful');
+      console.log('Successful validation of category');
       Categories.insert(category);
     } else {
       console.log('validationErrors:', Categories.schema.validationErrors());

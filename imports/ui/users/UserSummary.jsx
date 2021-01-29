@@ -4,7 +4,7 @@ import { Picker } from "emoji-mart";
 
 export const UserSummary = ({
   member,
-  handleUserVoted,
+  onLeaderVote,
   userHasVoted,
   groupId,
   groupLeader,
@@ -17,9 +17,9 @@ export const UserSummary = ({
   const [userEmotionalColour, setUserEmotionalColour] = useState("white");
 
   // send user vote to db and calculate winner
-  const submitLeaderVote = (userId) => {
-    Meteor.call("experiments.voteLeader", experimentId, groupId, userId);
-    handleUserVoted();
+  const submitLeaderVote = (nominee) => {
+    Meteor.call("experiments.voteLeader", experimentId, groupId, nominee);
+    onLeaderVote();
   };
 
   const handleCloseChat = () => {
@@ -99,11 +99,12 @@ export const UserSummary = ({
 
   useEffect(memberEmotionColour, [member?.profile?.emotion?.emotion]);
 
-  console.log('Meteor.userId() !== member._id', Meteor.userId() !== member._id)
-  console.log('isIntroduction', isIntroduction)
-  console.log('!groupLeader', !groupLeader)
-  console.log('!userHasVoted', !userHasVoted)
-  console.log('(discussionStatus = "active")', (discussionStatus = "active"))
+  // console.log('member._id:', member._id);
+  // console.log('Meteor.userId():', Meteor.userId());
+  // console.log('isIntroduction', isIntroduction)
+  // console.log('!groupLeader', !groupLeader)
+  // console.log('!userHasVoted', !userHasVoted)
+  // console.log('(discussionStatus = "active")', (discussionStatus = "active"))
 
   return (
     <Segment

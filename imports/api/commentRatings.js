@@ -31,6 +31,8 @@ Meteor.methods({
         mongoModifierObject,
         { upsert: true }
       );
+    } else {
+      console.log("validationErrors:", CommentRatings.schema.validationErrors());
     }
   },
 

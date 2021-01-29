@@ -29,6 +29,10 @@ Experiments.schema = new SimpleSchema({
   "ratings.$.reverse": Boolean,
   "ratings.$.scale": SimpleSchema.Integer,
   consensusThreshold: SimpleSchema.Integer,
+  leaderVotes: [Object],
+  'leaderVotes.$.nominee': String,
+  'leaderVotes.$.voters': [String],
+  groupLeader: String,
   createdAt: Date,
   createdBy: String,
 }).newContext();
@@ -58,6 +62,8 @@ Meteor.methods({
       discussions: [],
       ratings: ratings,
       consensusThreshold: consensusThreshold,
+      leaderVotes: [],
+      groupLeader: "",
       createdAt: new Date(),
       createdBy: Meteor.userId(),
     };
@@ -128,7 +134,6 @@ Meteor.methods({
       // For each scenario get discussion time limit and add to discussion.
       const discs = [];
       for (i = 0; i < scenarios.length; i++) {
-        console.log("creating discussion");
         const discussionTemplate = DiscussionTemplates.findOne({
           _id: scenarios[i].discussionTemplateId,
         });
@@ -171,7 +176,6 @@ Meteor.methods({
           );
         }
       }
-      console.log(discussionIds);
 
       // To each discussion, add the id for the next the discussion.
       for (let id = 0; id < discussionIds.length - 1; id += 1) {
@@ -216,7 +220,6 @@ Meteor.methods({
           { $sample: { size: 1 } },
         ])
         .toArray();
-      console.log("fetchedExp", fetchedExp);
       return fetchedExp;
     }
   },
@@ -357,22 +360,42 @@ Meteor.methods({
   },
 
   //moving the group leader vote here so it can be experiment specific
-  "experiments.voteLeader"(experimentId, groupId, userId) {
+  "experiments.voteLeader"(experimentId, groupId, nominee) {
     check(experimentId, String);
     check(groupId, String);
-    check(userId, String);
 
-    const mongoModifierObject = { $inc: { ["leaderVotes." + userId]: 1 } };
+    const experiment = Experiments.findOne(experimentId);
 
-    Experiments.schema.validate(mongoModifierObject);
+    let identifier;
+    let mongoModifierObject;
+
+    if (experiment.leaderVotes.filter((member) => member.nominee === nominee).length !== 0) {
+      identifier = { _id: experimentId, 'leaderVotes.nominee': nominee };
+      mongoModifierObject = {
+        $push: {
+          'leaderVotes.$.voters': Meteor.userId()
+        }
+      };
+    } else {
+      identifier = experimentId;
+      mongoModifierObject = {
+        $push: {
+          leaderVotes: {
+            nominee: nominee,
+            voters: [Meteor.userId()]
+          }
+        }
+      };
+    }
+
+    Experiments.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Experiments.schema.isValid()) {
       console.log("Successful validation of experiments update object");
-      Experiments.update(
-        experimentId,
+      Experiments.update(identifier,
         mongoModifierObject,
         function (err, res) {
-          let member;
+          // let member;
           if (err) {
             throw err;
           }
@@ -381,23 +404,19 @@ Meteor.methods({
             { _id: experimentId },
             { fields: { leaderVotes: 1 } }
           );
-          let numMembers = group.members.length;
+          const numMembers = group.members.length;
           let leaderVotes = experiment.leaderVotes;
           let numVotes = 0;
-          for (member in leaderVotes) {
-            numVotes += leaderVotes[member];
+          for (i = 0; i < leaderVotes.length; i += 1) {
+            numVotes += leaderVotes[i].voters.length;
           }
 
-          let compare = function (a, b) {
-            return b[1] - a[1];
-          };
-
-          if (numVotes >= numMembers) {
-            let winner = Object.entries(leaderVotes).sort(compare)[0][0];
+          if (numVotes >= numMembers) { // Should this be == instead of >=?
+            const winner = leaderVotes.sort((a, b) => (a.voters.length > b.voters.length) ? -1 : 1)[0].nominee;
 
             mongoModifierObject = { $set: { groupLeader: winner } };
 
-            Experiments.schema.validate(mongoModifierObject);
+            Experiments.schema.validate(mongoModifierObject, { modifier: true });
 
             if (Experiments.schema.isValid()) {
               console.log("Successful validation of experiments update object");
@@ -444,6 +463,7 @@ if (Meteor.isServer) {
           scenarioSetId: 1,
           ratings: 1,
           discussions: 1,
+          consensusThreshold: 1,
           leaderVotes: 1,
           groupLeader: 1,
           createdAt: 1,

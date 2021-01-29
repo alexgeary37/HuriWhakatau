@@ -191,8 +191,6 @@ Meteor.methods({
   "discussions.removeProposer"(discussionId) {
     check(discussionId, String);
 
-    console.log("discussions.removeProposer::", Meteor.userId());
-
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }

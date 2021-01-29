@@ -26,8 +26,6 @@ export const ViewScenario = ({ toggleModal, scenario, template }) => {
     };
   });
 
-  console.log("categories:", categories);
-
   return (
     <Modal open={true} closeOnDimmerClick={false} size="small">
       <Modal.Header>Scenario</Modal.Header>
