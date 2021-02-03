@@ -29,12 +29,8 @@ import { Timer } from "./Timer";
 import { Layout } from "../navigation/Layout";
 
 export const Discussion = () => {
-  const filter = {};
   const { discussionId } = useParams();
   const [timedDiscussion, setTimedDiscussion] = useState(false);
-  const [mutableDiscussionDeadline, setMutableDiscussionDeadline] = useState(
-    null
-  );
   const [timeLeft, setTimeLeft] = useState(null);
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   const [userInGroup, setUserInGroup] = useState(false);
@@ -137,6 +133,7 @@ export const Discussion = () => {
       consensusThreshold = discussion.consensusThreshold
         ? discussion.consensusThreshold
         : 0;
+      console.log('DEADLINEEE:', discussion._id, discussion.deadline);
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
@@ -150,8 +147,8 @@ export const Discussion = () => {
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
       topic: discussionTopic,
-      comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
-      verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
+      comments: Comments.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
+      verdicts: Verdicts.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
       discussionStatus: discussionState,
       discussionTemplate: discussionTemplate,
       discussionTimeLimit: timeLimit,
@@ -175,36 +172,36 @@ export const Discussion = () => {
   }, [group]);
 
   // IF discussion deadline is null, update discussion deadline with current date + discussion timelimit.
-  // Use this value to have a timer show how long til discussion ends.
   if (discussionDeadline == null && discussionTimeLimit > 0) {
-    console.log("updateDeadline");
-    let currentDateTime = new Date();
-    updateDeadline(
-      new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
-    );
+    const currentDateTime = new Date();
     Meteor.call(
       "discussions.updateDeadline",
       discussionId,
-      mutableDiscussionDeadline
+      new Date(currentDateTime.getTime() + discussionTimeLimit * 60000)
     );
   }
 
-  if (discussionDeadline != null) {
+  if (discussionDeadline !== null) {
+    console.log('!= NULL\ndiscussionDeadline:', discussionDeadline);
+    console.log('discussionStatus:', discussionStatus);
+    console.log('timedDiscussion:', timedDiscussion);
     let currentTime = new Date();
+    console.log('currentTime:', currentTime);
     if (
       discussionDeadline > currentTime &&
       discussionStatus === "active" &&
       !timedDiscussion
     ) {
       // Discussion has time left and is active, but is not timed.
-      setTimedDiscussion(true);
+      console.log('!== NULL IF');
+      setTimedDiscussion(true); // If page is refreshed this needs to be set back to true.
     } else if (
       discussionDeadline < currentTime &&
       discussionStatus === "active" &&
       timedDiscussion
     ) {
       // Deadline has passed, but discussion is still active and timed.
-      console.log('Deadline has passed. discussionStatus:', discussionStatus, 'timedDiscussion:', timedDiscussion)
+      console.log('Deadline has passed. discussionStatus:', discussionStatus, 'timedDiscussion:', timedDiscussion);
       setTimedDiscussion(false);
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
       Meteor.call("discussions.updateDeadlineTimeout", discussionId);
@@ -233,6 +230,7 @@ export const Discussion = () => {
   };
 
   const hasReachedConsensus = () => {
+    console.log('HAS REACHED CONSENSUS');
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
@@ -249,7 +247,9 @@ export const Discussion = () => {
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
-  const nextDiscussion = () => history.push("/discussion/" + nextDiscussionId);
+  const nextDiscussion = () => {
+    history.push("/discussion/" + nextDiscussionId);
+  };
 
   const discussionPageContent = () => {
     return (
@@ -368,7 +368,7 @@ export const Discussion = () => {
                     />
                   </div>
                 ))}
-              {discussionStatus !== "active" && nextDiscussionId && (
+              {discussionStatus !== "active" && nextDiscussionId && nextDiscussionId.length > 0 && (
                 <div style={{ textAlign: "center" }}>
                   <Button
                     style={{ margin: 10 }}

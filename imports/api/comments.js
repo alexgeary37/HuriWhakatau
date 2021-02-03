@@ -168,6 +168,7 @@ if (Meteor.isServer) {
       { discussionId: discussionId },
       {
         fields: {
+          discussionId: discussionId,
           postedTime: 1,
           authorId: 1,
           text: 1,

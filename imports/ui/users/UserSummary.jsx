@@ -22,11 +22,6 @@ export const UserSummary = ({
     onLeaderVote();
   };
 
-  const handleCloseChat = () => {
-    //add an "are you sure" modal before changing discussion status.
-    closeChat();
-  };
-
   const emotions = [
     {
       id: "slightly_smiling_face",
@@ -128,7 +123,7 @@ export const UserSummary = ({
           <Icon
             title={"End discussion and go to next"}
             className={"stop circle"}
-            onClick={handleCloseChat}
+            onClick={() => closeChat()}
             color={"red"}
           />
         )}
@@ -153,7 +148,7 @@ export const UserSummary = ({
           <Icon
             title={"Go to next discussion"}
             className={"arrow alternate circle right"}
-            onClick={handleCloseChat}
+            onClick={() => closeChat()}
             color={"green"}
           />
         )}

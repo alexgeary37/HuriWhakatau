@@ -35,8 +35,6 @@ export const CreateScenarioSet = ({
       setErrScenarioSet("");
     }
 
-    console.log("SCENS:", scenarioSet);
-
     if (title.length > 0 && description.length > 0 && scenarioSet.length > 0) {
       Meteor.call(
         "scenarioSets.create",

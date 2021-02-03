@@ -38,9 +38,7 @@ import { Layout } from "../navigation/Layout";
 export const HuiChat = () => {
   const cookies = new Cookies();
   const [showTour, setShowTour] = useState(false);
-  const filter = {};
   const { discussionId } = useParams();
-  // const [userVotedForLeader, setUserVotedForLeader] = useState(false);
   const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   let history = useHistory();
@@ -109,7 +107,7 @@ export const HuiChat = () => {
       discussionTemplateSub.ready() &&
       subExperiments.ready()
     ) {
-      let discussion = Discussions.findOne({});
+      let discussion = Discussions.findOne({ _id: discussionId });
       discussionIsIntroduction = discussion.isIntroduction;
       discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
       discussionGroup = Groups.findOne({ _id: discussion.groupId });
@@ -162,8 +160,8 @@ export const HuiChat = () => {
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
       topic: discussionTopic,
-      comments: Comments.find(filter, { sort: { postedTime: 1 } }).fetch(),
-      verdicts: Verdicts.find(filter, { sort: { postedTime: 1 } }).fetch(),
+      comments: Comments.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
+      verdicts: Verdicts.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
       discussionStatus: discussionState,
       discussionTemplate: discussionTemplate,
       discussionConsensusThreshold: consensusThreshold,
@@ -209,6 +207,8 @@ export const HuiChat = () => {
   const userVotedForLeader = () => {
     if (leaderVotes) {
       // This forloop could probably be avoided using a filter if someone wants to change it.
+      console.log('Meteor.userId():', Meteor.userId());
+      console.log('leaderVotes:', leaderVotes);
       for (i = 0; i < leaderVotes.length; i += 1) {
         const voters = leaderVotes[i].voters;
         if (voters.includes(Meteor.userId())) {
@@ -239,7 +239,9 @@ export const HuiChat = () => {
   };
 
   const closeChat = () => {
-    Meteor.call("discussions.updateStatus", discussionId, "finished");
+    if (discussionStatus !== "finished") {
+      Meteor.call("discussions.updateStatus", discussionId, "finished");
+    }
     if (nextDiscussionId) {
       history.push("/huichat/" + nextDiscussionId);
     }
@@ -248,6 +250,13 @@ export const HuiChat = () => {
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
+  console.log(
+    'discussionId:',
+    discussionId,
+    'discussionStatus:',
+    discussionStatus
+  );
+  
   const huiChatPageContent = (userLang) => {
     return (
       <Container>
@@ -413,7 +422,7 @@ export const HuiChat = () => {
                             />
                           </div>
                         ))}
-                      {discussionStatus !== "active" && nextDiscussionId && (
+                      {discussionStatus !== "active" && nextDiscussionId && nextDiscussionId.length > 0 && (
                         <div style={{ textAlign: "center" }}>
                           <Button
                             style={{ margin: 10 }}
