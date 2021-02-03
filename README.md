@@ -1,4 +1,4 @@
-Huri Whakatau / Jury Room is an online platform for facilitating discussions with the aim of encouraging a consensus outcome.
+Huri Whakatau / JuryRoom is an online platform for facilitating discussions with the aim of encouraging a consensus outcome.
 
 npm Libraries used:
 

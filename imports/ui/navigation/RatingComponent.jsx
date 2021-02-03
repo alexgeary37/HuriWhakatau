@@ -175,7 +175,7 @@ export const RatingComponent = () => {
 
   return (
     <div>
-      <Header as={"h3"} content={"question"} inverted />
+      <Header as={"h3"} content={"Questions"} inverted />
       <ListItem key={Math.random()}>
         <ListContent
           as={Segment}

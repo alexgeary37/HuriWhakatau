@@ -253,7 +253,7 @@ export const About = () => {
                     <Divider/>
                     <Image src='/user-icon_291700.jpg' size='tiny' alt={'Generic Bio Picture'}/>
                     <Header content={'Chris Symon: Software Engineer'}/>
-                    Chris built the the initial version of Huri Whakatau (or Jury Room) and while no longer with
+                    Chris built the the initial version of Huri Whakatau (or JuryRoom) and while no longer with
                     us deserves to be remembered here (no, he's not dead. Just dead to me, return your emails man!).
                     <br/>
                     <a href={""} target={"_blank"}>

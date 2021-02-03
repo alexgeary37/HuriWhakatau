@@ -460,7 +460,7 @@ export const MyDashboard = () => {
                     inverted
                     style={{ backgroundColor: "rgb(10, 10, 10)" }}
                   >
-                    <Header as={"h3"} content="My scenarios" className={"myScenarios"} />
+                    <Header as={"h3"} content="My Scenarios" className={"myScenarios"} />
                     <ListItem
                       style={{ overflow: "auto", height: "13em" }}
                       description={
