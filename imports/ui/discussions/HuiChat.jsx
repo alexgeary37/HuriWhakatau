@@ -43,6 +43,7 @@ export const HuiChat = () => {
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   let history = useHistory();
 
+
   const toggleShowTour = () => {
     if (!cookies.get("huichatTour")) {
       setShowTour(!showTour);
@@ -207,8 +208,8 @@ export const HuiChat = () => {
   const userVotedForLeader = () => {
     if (leaderVotes) {
       // This forloop could probably be avoided using a filter if someone wants to change it.
-      console.log('Meteor.userId():', Meteor.userId());
-      console.log('leaderVotes:', leaderVotes);
+      // console.log('Meteor.userId():', Meteor.userId());
+      // console.log('leaderVotes:', leaderVotes);
       for (i = 0; i < leaderVotes.length; i += 1) {
         const voters = leaderVotes[i].voters;
         if (voters.includes(Meteor.userId())) {
@@ -250,13 +251,13 @@ export const HuiChat = () => {
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
-  console.log(
-    'discussionId:',
-    discussionId,
-    'discussionStatus:',
-    discussionStatus
-  );
-  
+  // console.log(
+  //   'discussionId:',
+  //   discussionId,
+  //   'discussionStatus:',
+  //   discussionStatus
+  // );
+
   const huiChatPageContent = (userLang) => {
     return (
       <Container>
@@ -325,7 +326,7 @@ export const HuiChat = () => {
                         padding: "5px",
                       }}
                     >
-                      <Header content="Participants" />
+                      <Header content="Participants" className={"participants"}/>
                       {isIntroduction && (
                         <div>
                           Leader Votes cast:{" "}
