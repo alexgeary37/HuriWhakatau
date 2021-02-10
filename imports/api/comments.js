@@ -121,7 +121,6 @@ Meteor.methods({
     if (Comments.schema.isValid()) {
       console.log('Successful validation');
       Comments.update(commentId, mongoModifierObject);
-      return true;
     }
 
     console.log('validationErrors:', Comments.schema.validationErrors());
