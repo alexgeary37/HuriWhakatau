@@ -74,6 +74,12 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
     toggleModal();
   };
 
+  const setClampedTimeLimit = (value) => {
+    if (value >= 0) {
+      setTimeLimit(value);
+    }
+  };
+
   // enable form items as this functionality becomes available
   return (
     <Modal open={true} closeOnDimmerClick={false} size="small">
@@ -118,7 +124,12 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
                     <Checkbox
                       checked={isHui}
                       label="Discussions use the Hui format"
-                      onClick={(e, data) => setIsHui(data.checked)}
+                      onClick={(e, data) => {
+                        if (!isHui) {
+                          setTimeLimit(0)
+                        }
+                        setIsHui(data.checked)
+                      }}
                     />
                     <HelpModal text={huiHelpText}/>
                   </List.Item>
@@ -179,7 +190,8 @@ export const CreateDiscussionTemplate = ({ toggleModal }) => {
             type="number"
             labelPosition="right"
             value={timeLimit}
-            onInput={({ target }) => setTimeLimit(Number(target.value))}
+            onInput={({ target }) => setClampedTimeLimit(Number(target.value))}
+            disabled={isHui}
           >
             <Label>Discussions have time limit</Label>
             <input />

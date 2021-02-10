@@ -38,9 +38,7 @@ export const Discussion = () => {
   // use to allow comments or proposing / voting on verdicts
   // todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
-  const updateDeadline = (deadline) => {
-    setMutableDiscussionDeadline(deadline);
-  };
+  
   // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
     let current = new Date();
