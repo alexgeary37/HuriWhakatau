@@ -69,7 +69,7 @@ export const CommentForm = ({
     if (!isDiscussionPublic && !isUserAGroupMember) {
       return;
     } else if (isDiscussionPublic && !isUserAGroupMember) {
-      Meteor.call("groups.addMember", groupId, Meteor.userId());
+      Meteor.call("groups.addMember", groupId, Meteor.userId()); // Meteor.userId() will be undefined.
     }
 
     Meteor.call(

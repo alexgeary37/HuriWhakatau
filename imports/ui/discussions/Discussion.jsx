@@ -38,7 +38,7 @@ export const Discussion = () => {
   // use to allow comments or proposing / voting on verdicts
   // todo, if the user uses the browser back button to go back to dash from a timed discussion
   // and then to a non-timed discussion the timedDiscussion state stays true
-  
+
   // used timer code from https://www.digitalocean.com/community/tutorials/react-countdown-timer-react-hooks
   const calculateTimeLeft = () => {
     let current = new Date();
@@ -131,7 +131,7 @@ export const Discussion = () => {
       consensusThreshold = discussion.consensusThreshold
         ? discussion.consensusThreshold
         : 0;
-      console.log('DEADLINEEE:', discussion._id, discussion.deadline);
+      // console.log('DEADLINEEE:', discussion._id, discussion.deadline);
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
@@ -180,18 +180,18 @@ export const Discussion = () => {
   }
 
   if (discussionDeadline !== null) {
-    console.log('!= NULL\ndiscussionDeadline:', discussionDeadline);
-    console.log('discussionStatus:', discussionStatus);
-    console.log('timedDiscussion:', timedDiscussion);
+    // console.log('!= NULL\ndiscussionDeadline:', discussionDeadline);
+    // console.log('discussionStatus:', discussionStatus);
+    // console.log('timedDiscussion:', timedDiscussion);
     let currentTime = new Date();
-    console.log('currentTime:', currentTime);
+    // console.log('currentTime:', currentTime);
     if (
       discussionDeadline > currentTime &&
       discussionStatus === "active" &&
       !timedDiscussion
     ) {
       // Discussion has time left and is active, but is not timed.
-      console.log('!== NULL IF');
+      // console.log('!== NULL IF');
       setTimedDiscussion(true); // If page is refreshed this needs to be set back to true.
     } else if (
       discussionDeadline < currentTime &&
@@ -199,7 +199,7 @@ export const Discussion = () => {
       timedDiscussion
     ) {
       // Deadline has passed, but discussion is still active and timed.
-      console.log('Deadline has passed. discussionStatus:', discussionStatus, 'timedDiscussion:', timedDiscussion);
+      // console.log('Deadline has passed. discussionStatus:', discussionStatus, 'timedDiscussion:', timedDiscussion);
       setTimedDiscussion(false);
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
       Meteor.call("discussions.updateDeadlineTimeout", discussionId);
@@ -228,7 +228,7 @@ export const Discussion = () => {
   };
 
   const hasReachedConsensus = () => {
-    console.log('HAS REACHED CONSENSUS');
+    // console.log('HAS REACHED CONSENSUS');
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (
