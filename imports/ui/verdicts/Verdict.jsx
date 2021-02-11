@@ -27,44 +27,39 @@ export const Verdict = ({verdict, onVote, discussionStatus, discussionIsPublic, 
     };
 
     const renderButtons = () => {
-        // IF the user is the verdict author, or has already voted, display "Voted".
-        if (Meteor.userId() === verdict.authorId || userHasVoted()) {
-            return <div style={{padding: 5, textAlign: "right"}}>Voted</div>;
+        // IF the discussion is active and the user is not the verdict author, display "Affirm" and "Reject" buttons.
+        if (discussionStatus === 'active' && (discussionIsPublic || userInGroup)) {
+            return (
+                <div style={{paddingBottom: 5, textAlign: "center"}}>
+                    <Button
+                        content="Affirm"
+                        onClick={() => handleVoteClick(true)}
+                        positive
+                        size="mini"
+                    />
+                    <Button
+                        content="Reject"
+                        onClick={() => handleVoteClick(false)}
+                        negative
+                        size="mini"
+                    />
+                </div>
+            );
         } else {
-            // IF the discussion is active and the user is not the verdict author, display "Affirm" and "Reject" buttons.
-            if (discussionStatus === 'active' && (discussionIsPublic || userInGroup)) {
-                return (
-                    <div style={{paddingBottom: 5, textAlign: "center"}}>
-                        <Button
-                            content="Affirm"
-                            onClick={() => handleVoteClick(true)}
-                            positive
-                            size="mini"
-                        />
-                        <Button
-                            content="Reject"
-                            onClick={() => handleVoteClick(false)}
-                            negative
-                            size="mini"
-                        />
-                    </div>
-                );
-            } else {
-                return (
-                    <div style={{ paddingBottom: 5, textAlign: "center" }}>
-                        <Button
-                            content="Affirm"
-                            disabled
-                            size="mini"
-                        />
-                        <Button
-                            content="Reject"
-                            disabled
-                            size="mini"
-                        />
-                    </div>
-                );
-            }
+            return (
+                <div style={{ paddingBottom: 5, textAlign: "center" }}>
+                    <Button
+                        content="Affirm"
+                        disabled
+                        size="mini"
+                    />
+                    <Button
+                        content="Reject"
+                        disabled
+                        size="mini"
+                    />
+                </div>
+            );
         }
     };
 
@@ -96,7 +91,14 @@ export const Verdict = ({verdict, onVote, discussionStatus, discussionIsPublic, 
                         />
                     </Card.Description>
                 </Card.Content>
-                {renderButtons()}
+                {/* User needs to vote on the verdict */}
+                {Meteor.userId() !== verdict.authorId
+                && !userHasVoted()
+                && renderButtons()}
+                {/* Indicate to the user that they voted */}
+                {Meteor.userId() !== verdict.authorId
+                && userHasVoted()
+                && <div style={{padding: 5, textAlign: "right"}}>Voted</div>}
             </Card>
         </List.Item>
     );
