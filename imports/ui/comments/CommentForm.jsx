@@ -17,9 +17,13 @@ export const CommentForm = ({
     RichTextEditor.createEmptyValue()
   );
 
+  console.log('keyStrokes:', keyStrokes);
+  console.log('keyStrokes.length:', keyStrokes.length);
+
   // useTracker makes sure the component will re-render when the data changes.
   const { user, typingUsers } = useTracker(() => {
     const subDiscussions = Meteor.subscribe("discussions");
+
     let discussionTypingUsersList;
     if (subDiscussions.ready()) {
       discussionTypingUsersList = Discussions.findOne(
@@ -27,6 +31,7 @@ export const CommentForm = ({
         { fields: { usersTyping: 1 } }
       );
     }
+
     return {
       user: Meteor.users.findOne(Meteor.userId()),
       typingUsers: discussionTypingUsersList,
@@ -36,6 +41,7 @@ export const CommentForm = ({
   //detect pasting into the form and get what was pasted.
   // should save this somewhere and add to comment when submitted
   useEffect(() => {
+    console.log('USEEFFECT1');
     const editorContent = document.getElementsByClassName(
       "public-DraftEditor-content"
     )[0];
@@ -83,7 +89,7 @@ export const CommentForm = ({
 
     setEditorValue(RichTextEditor.createEmptyValue());
     setPastedItems([]);
-    setKeyStrokes([]);
+    setKeyStrokes([]); // This is not the problem because it doesn't run on first render!!!!!!!!!!!!!!!!!!!!!!!!
   };
 
   //function for recording pastes
@@ -100,12 +106,15 @@ export const CommentForm = ({
       key: event.key,
       timestamp: Date.now(),
     };
+    // This does not run on the first render so this is not the problem!!!!!!!!!!!!!!!!!!!!!!
     setKeyStrokes((keyStrokes) => [...keyStrokes, stroke]);
   };
 
   //attempting to update discussion with user name of who is typing by monitoring the keyStrokes state
   // variable. user should be removed from discussion userTyping list after 2000 ms
+  
   useEffect(() => {
+    console.log('ADD USER TO TYPING LIST:', user.username);
     Meteor.call("discussions.addUserToTypingList", discussionId, user.username);
   }, [keyStrokes]);
 
