@@ -4,3 +4,4 @@ node_modules/
 /run - Copy.bat
 /run_huriwhakatau_db.bat
 /.idea/
+/.deploy/
