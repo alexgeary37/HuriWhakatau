@@ -145,8 +145,14 @@ export const Discussion = () => {
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
       topic: discussionTopic,
-      comments: Comments.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
-      verdicts: Verdicts.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
+      comments: Comments.find(
+        { discussionId: discussionId },
+        { sort: { postedTime: 1 } }
+      ).fetch(),
+      verdicts: Verdicts.find(
+        { discussionId: discussionId },
+        { sort: { postedTime: 1 } }
+      ).fetch(),
       discussionStatus: discussionState,
       discussionTemplate: discussionTemplate,
       discussionTimeLimit: timeLimit,
@@ -219,7 +225,7 @@ export const Discussion = () => {
   };
   useEffect(initialScrollToBottom, []);
   useEffect(scrollToBottom, [
-    comments.filter((x) => x.authorId === Meteor.userId()).length
+    comments.filter((x) => x.authorId === Meteor.userId()).length,
   ]);
 
   // Return true if this user has submitted a verdict, false otherwise.
@@ -293,18 +299,17 @@ export const Discussion = () => {
                   ))}
                 <div ref={commentsEndRef} />
               </Comment.Group>
-              {discussionStatus === "active" &&
-                (discussionIsPublic || userInGroup) && (
-                  <CommentForm
-                    discussionId={discussionId}
-                    showTypingNotification={
-                      discussionTemplate.showTypingNotification
-                    }
-                    isDiscussionPublic={discussionIsPublic}
-                    isUserAGroupMember={userInGroup}
-                    groupId={group._id}
-                  />
-                )}
+              {discussionStatus === "active" && userInGroup && (
+                <CommentForm
+                  discussionId={discussionId}
+                  showTypingNotification={
+                    discussionTemplate.showTypingNotification
+                  }
+                  isDiscussionPublic={discussionIsPublic}
+                  isUserAGroupMember={userInGroup}
+                  groupId={group._id}
+                />
+              )}
             </div>
           </GridColumn>
           <GridColumn width={4}>
@@ -366,16 +371,18 @@ export const Discussion = () => {
                     />
                   </div>
                 ))}
-              {discussionStatus !== "active" && nextDiscussionId && nextDiscussionId.length > 0 && (
-                <div style={{ textAlign: "center" }}>
-                  <Button
-                    style={{ margin: 10 }}
-                    content={"Go to next"}
-                    onClick={nextDiscussion}
-                    primary
-                  />
-                </div>
-              )}
+              {discussionStatus !== "active" &&
+                nextDiscussionId &&
+                nextDiscussionId.length > 0 && (
+                  <div style={{ textAlign: "center" }}>
+                    <Button
+                      style={{ margin: 10 }}
+                      content={"Go to next"}
+                      onClick={nextDiscussion}
+                      primary
+                    />
+                  </div>
+                )}
             </List>
           </GridColumn>
         </Grid>

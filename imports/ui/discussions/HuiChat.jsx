@@ -43,7 +43,6 @@ export const HuiChat = () => {
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   let history = useHistory();
 
-
   const toggleShowTour = () => {
     if (!cookies.get("huichatTour")) {
       setShowTour(!showTour);
@@ -118,8 +117,8 @@ export const HuiChat = () => {
         _id: discussionScenario.discussionTemplateId,
       });
       consensusThreshold = discussion.consensusThreshold
-      ? discussion.consensusThreshold
-      : 0;
+        ? discussion.consensusThreshold
+        : 0;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
       nextDiscussionId = discussion.nextDiscussion
@@ -161,8 +160,14 @@ export const HuiChat = () => {
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
       topic: discussionTopic,
-      comments: Comments.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
-      verdicts: Verdicts.find({ discussionId: discussionId }, { sort: { postedTime: 1 } }).fetch(),
+      comments: Comments.find(
+        { discussionId: discussionId },
+        { sort: { postedTime: 1 } }
+      ).fetch(),
+      verdicts: Verdicts.find(
+        { discussionId: discussionId },
+        { sort: { postedTime: 1 } }
+      ).fetch(),
       discussionStatus: discussionState,
       discussionTemplate: discussionTemplate,
       discussionConsensusThreshold: consensusThreshold,
@@ -284,18 +289,17 @@ export const HuiChat = () => {
                     ))}
                   <div ref={commentsEndRef} />
                 </Comment.Group>
-                {discussionStatus === "active" &&
-                  (discussionIsPublic || userInGroup) && (
-                    <CommentForm
-                      discussionId={discussionId}
-                      showTypingNotification={
-                        discussionTemplate.showTypingNotification
-                      }
-                      isDiscussionPublic={discussionIsPublic}
-                      isUserAGroupMember={userInGroup}
-                      groupId={group._id}
-                    />
-                  )}
+                {discussionStatus === "active" && userInGroup && (
+                  <CommentForm
+                    discussionId={discussionId}
+                    showTypingNotification={
+                      discussionTemplate.showTypingNotification
+                    }
+                    isDiscussionPublic={discussionIsPublic}
+                    isUserAGroupMember={userInGroup}
+                    groupId={group._id}
+                  />
+                )}
               </GridColumn>
               <GridColumn width={isIntroduction ? 6 : 4}>
                 <div style={{ height: "83vh" }}>
@@ -326,7 +330,10 @@ export const HuiChat = () => {
                         padding: "5px",
                       }}
                     >
-                      <Header content="Participants" className={"participants"}/>
+                      <Header
+                        content="Participants"
+                        className={"participants"}
+                      />
                       {isIntroduction && (
                         <div>
                           Leader Votes cast:{" "}
@@ -423,16 +430,20 @@ export const HuiChat = () => {
                             />
                           </div>
                         ))}
-                      {discussionStatus !== "active" && nextDiscussionId && nextDiscussionId.length > 0 && (
-                        <div style={{ textAlign: "center" }}>
-                          <Button
-                            style={{ margin: 10 }}
-                            content={"Go to next"}
-                            onClick={() => history.push("/huichat/" + nextDiscussionId)}
-                            primary
-                          />
-                        </div>
-                      )}
+                      {discussionStatus !== "active" &&
+                        nextDiscussionId &&
+                        nextDiscussionId.length > 0 && (
+                          <div style={{ textAlign: "center" }}>
+                            <Button
+                              style={{ margin: 10 }}
+                              content={"Go to next"}
+                              onClick={() =>
+                                history.push("/huichat/" + nextDiscussionId)
+                              }
+                              primary
+                            />
+                          </div>
+                        )}
                     </List>
                   </div>
                 </GridColumn>
