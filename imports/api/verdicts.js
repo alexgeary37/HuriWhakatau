@@ -39,7 +39,6 @@ Meteor.methods({
     Verdicts.schema.validate(verdict);
 
     if (Verdicts.schema.isValid()) {
-      console.log('Successful validation of verdict');
       const verdictId = Verdicts.insert(verdict);
       
       // Add _id of inserted Verdict and the author of it.
@@ -53,7 +52,6 @@ Meteor.methods({
       Discussions.schema.validate(mongoModifierObject, { modifier: true });
 
       if (Discussions.schema.isValid()) {
-        console.log('Successful validation of discussion update object in verdicts.insert when adding verdict to list of discussion verdicts');
         Discussions.update(discussionId, mongoModifierObject);
         
         // Remove this user from the list of activeVerdictProposers in the Discussion.
@@ -68,7 +66,6 @@ Meteor.methods({
         Discussions.schema.validate(mongoModifierObject, { modifier: true });
 
         if (Discussions.schema.isValid()) {
-          console.log('Successful validation of discussion update object in verdicts.insert when removing user from the discussion activeVerdictProposers');
           Discussions.update(discussionId, mongoModifierObject);
         } else {
           console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -97,7 +94,6 @@ Meteor.methods({
     Verdicts.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Verdicts.schema.isValid()) {
-      console.log('Successful validation of verdict update object for adding a vote');
       Verdicts.update(verdictId, mongoModifierObject);
     } else {
       console.log("validationErrors:", Verdicts.schema.validationErrors());

@@ -7,6 +7,8 @@ import { Verdicts } from "./verdicts";
 import { Meteor } from "meteor/meteor";
 import { Personality } from "./personality";
 
+const emailAddress = "huriwhakatau@gmail.com";
+
 Meteor.methods({
   "users.updatePepeha"(pepeha, userId) {
     check(userId, String);
@@ -272,7 +274,7 @@ Meteor.methods({
 
         Email.send({
           to: exportingUserEmail,
-          from: "huriwhakatau@gmail.com",
+          from: emailAddress,
           subject:
             "Please confirm your email prior to data export from Huri Whakatau",
           text: emailBody,
@@ -352,7 +354,7 @@ Meteor.methods({
 
       Email.send({
         to: exportingUserEmail,
-        from: "huriwhakatau@gmail.com",
+        from: emailAddress,
         subject: "Data from Huri Whakatau",
         text:
           "Please find attached all the data that has been collected relating to your profile.",
@@ -369,8 +371,8 @@ Meteor.methods({
 
   "users.sendFeedback"(message) {
     Email.send({
-      to: "huriwhakatau@gmail.com",
-      from: "huriwhakatau@gmail.com",
+      to: emailAddress,
+      from: emailAddress,
       subject: "User privacy feedback",
       text: message,
     });

@@ -37,7 +37,6 @@ Meteor.methods({
 
     // Insert new Scenario and get its _id.
     if (Scenarios.schema.isValid()) {
-      console.log('Successful validation of scenario');
       const scenarioId = Scenarios.insert(scenario);
       return scenarioId;
     } else {

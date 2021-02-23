@@ -31,7 +31,6 @@ if (Meteor.isServer) {
       // Check category against schema.
       Categories.schema.validate(category);
       if (Categories.schema.isValid()) {
-        console.log('Successful validation of category');
         Categories.insert(category);
       } else {
         console.log("validationErrors:", Categories.schema.validationErrors());
@@ -192,7 +191,6 @@ if (Meteor.isServer) {
     Groups.schema.validate(group);
 
     if (Groups.schema.isValid()) {
-      console.log('Successful validation of group');
       Groups.insert(group);
     } else {
       console.log("validationErrors:", Groups.schema.validationErrors());
@@ -224,7 +222,6 @@ if (Meteor.isServer) {
     DiscussionTemplates.schema.validate(discussionTemplate);
 
     if (DiscussionTemplates.schema.isValid()) {
-      console.log('Successful validation of discussionTemplate');
       templateId1 = DiscussionTemplates.insert(discussionTemplate);
     } else {
       console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
@@ -249,7 +246,6 @@ if (Meteor.isServer) {
     DiscussionTemplates.schema.validate(discussionTemplate);
 
     if (DiscussionTemplates.schema.isValid()) {
-      console.log('Successful validation of discussionTemplate');
       templateId2 = DiscussionTemplates.insert(discussionTemplate);
     } else {
       console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
@@ -274,7 +270,6 @@ if (Meteor.isServer) {
     DiscussionTemplates.schema.validate(discussionTemplate);
 
     if (DiscussionTemplates.schema.isValid()) {
-      console.log('Successful validation of discussionTemplate');
       DiscussionTemplates.insert(discussionTemplate);
     } else {
       console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
@@ -301,7 +296,6 @@ if (Meteor.isServer) {
       Scenarios.schema.validate(scenario);
 
       if (Scenarios.schema.isValid()) {
-        console.log('Successful validation of scenario');
         const scenarioId = Scenarios.insert(scenario);
         scenarios.push(scenarioId);
       } else {
@@ -324,7 +318,6 @@ if (Meteor.isServer) {
     ScenarioSets.schema.validate(scenarioSet);
 
     if (ScenarioSets.schema.isValid()) {
-      console.log('Successful validation of scenarioSet');
       ScenarioSets.insert(scenarioSet);
     } else {
       console.log("validationErrors:", Scenarios.schema.validationErrors());
@@ -393,7 +386,6 @@ if (Meteor.isServer) {
     Personality.schema.validate(personality);
 
     if (Personality.schema.isValid()) {
-      console.log('Successful validation of personality');
       Personality.insert(personality);
     } else {
       console.log("validationErrors:", Personality.schema.validationErrors());
@@ -409,7 +401,6 @@ if (Meteor.isServer) {
     Mountains.schema.validate(mountain);
 
     if (Mountains.schema.isValid()) {
-      console.log('Successful validation of mountain');
       Mountains.insert(mountain);
     } else {
       console.log("validationErrors:", Mountains.schema.validationErrors());
@@ -427,7 +418,6 @@ if (Meteor.isServer) {
       Rivers.schema.validate(document);
   
       if (Rivers.schema.isValid()) {
-        console.log('Successful validation of river');
         Rivers.insert(document);
       } else {
         console.log("validationErrors:", Rivers.schema.validationErrors());
@@ -444,7 +434,6 @@ if (Meteor.isServer) {
       Usernames.schema.validate(document);
 
       if (Usernames.schema.isValid()) {
-        console.log('Successful validation of username document');
         Usernames.insert(document);
       } else {
         console.log("validationErrors:", Usernames.schema.validationErrors());

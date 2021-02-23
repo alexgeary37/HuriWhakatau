@@ -27,7 +27,6 @@ Meteor.methods({
     Personality.schema.validate(personality);
 
     if (Personality.schema.isValid()) {
-      console.log('Successful validation of personality');
       Personality.insert(personality);
     } else {
       console.log("validationErrors:", Personality.schema.validationErrors());

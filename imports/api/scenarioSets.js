@@ -34,7 +34,6 @@ Meteor.methods({
     ScenarioSets.schema.validate(scenarioSet);
 
     if (ScenarioSets.schema.isValid()) {
-      console.log('Successful validation of scenarioSet');
       ScenarioSets.insert(scenarioSet);
     } else {
       console.log("validationErrors:", ScenarioSets.schema.validationErrors());

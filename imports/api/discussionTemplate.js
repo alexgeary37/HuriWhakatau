@@ -57,7 +57,6 @@ Meteor.methods({
     DiscussionTemplates.schema.validate(discussionTemplate);
     
     if (DiscussionTemplates.schema.isValid()) {
-      console.log('Successful validation of discussionTemplate');
       DiscussionTemplates.insert(discussionTemplate);
     } else {
       console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());

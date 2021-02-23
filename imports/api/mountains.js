@@ -17,7 +17,6 @@ Meteor.methods({
     Mountains.schema.validate(mountain);
 
     if (Mountains.schema.isValid()) {
-      console.log('Successful validation of mountain');
       Mountains.insert(mountain);
     } else {
       console.log("validationErrors:", Mountains.schema.validationErrors());

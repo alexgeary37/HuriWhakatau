@@ -41,7 +41,6 @@ Meteor.methods({
       Verdicts.schema.validate(mongoModifierObject, { modifier: true });
 
       if (Verdicts.schema.isValid()) {
-        console.log('Successful validation of verdict update object for adding the vote to it');
         Verdicts.update(verdictId, mongoModifierObject);
       } else {
         console.log("validationErrors:", Verdicts.schema.validationErrors());

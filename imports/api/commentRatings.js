@@ -25,7 +25,6 @@ Meteor.methods({
     CommentRatings.schema.validate(mongoModifierObject, { modifier: true });
 
     if (CommentRatings.schema.isValid()) {
-      console.log('Successful validation of commentratings update object');
       CommentRatings.update(
         { commentId: commentId, experimentId: experimentId },
         mongoModifierObject,

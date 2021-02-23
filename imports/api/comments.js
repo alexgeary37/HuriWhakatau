@@ -68,7 +68,6 @@ Meteor.methods({
     Comments.schema.validate(comment);
 
     if (Comments.schema.isValid()) {
-      console.log('Successful validation');
       Comments.insert(comment);
     } else {
       console.log('validationErrors:', Comments.schema.validationErrors());
@@ -100,7 +99,6 @@ Meteor.methods({
     Comments.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Comments.schema.isValid()) {
-      console.log('Successful validation');
       Comments.update(commentId, mongoModifierObject);
     } else { 
       console.log('validationErrors:', Comments.schema.validationErrors());
@@ -119,7 +117,6 @@ Meteor.methods({
     Comments.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Comments.schema.isValid()) {
-      console.log('Successful validation');
       Comments.update(commentId, mongoModifierObject);
     }
 

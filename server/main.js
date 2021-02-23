@@ -22,10 +22,6 @@ import "/imports/api/commentRatings";
 import "/imports/api/tutorialVideos";
 
 Meteor.startup(() => {
-    // Remove these from repo eventually
-    // "smtps://juryrooms%40gmail.com:sxzvoqkplfteqpwk@smtp.gmail.com:465/";
-    // "smtps://dsten32%40gmail.com:RabbitseatpooGoogle@smtp.gmail.com:465/";
-
     // modified from Chris Symon's code, scheduled job to set status
     // of timed out discussions.
     // Runs only once as soon as server is started. Creates a job for

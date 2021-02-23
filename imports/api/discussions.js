@@ -67,7 +67,6 @@ Meteor.methods({
     Discussions.schema.validate(discussion);
     
     if (Discussions.schema.isValid()) {
-      console.log('Successful validation');
       return Discussions.insert(discussion); // discussion._id is returned.
     }
 

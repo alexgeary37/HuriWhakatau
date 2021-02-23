@@ -30,7 +30,6 @@ Meteor.methods({
     Topics.schema.validate(topic);
 
     if (Topics.schema.isValid()) {
-      console.log('Successful validation of topic');
       Topics.insert(topic);
     } else {
       console.log("validationErrors:", Topics.schema.validationErrors());
