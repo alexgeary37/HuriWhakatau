@@ -22,7 +22,7 @@ import { Discussions } from "/imports/api/discussions";
 import { ScenarioSets } from "/imports/api/scenarioSets";
 import { siteGlossary } from "../../api/glossary";
 import { myDashParticipant, myDashResearcher } from "/imports/api/tourSteps";
-import { DiscussionTemplates } from "/imports/api/discussionTemplate";
+import { DiscussionTemplates } from "/imports/api/discussionTemplates";
 import { Tour } from "./Tour";
 import { CreateGroup } from "../groups/CreateGroup";
 import { GroupSummary } from "/imports/ui/groups/GroupSummary";

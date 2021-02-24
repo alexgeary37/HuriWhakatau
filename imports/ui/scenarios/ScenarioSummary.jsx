@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Button, List, Segment } from "semantic-ui-react";
-import { DiscussionTemplates } from "/imports/api/discussionTemplate";
+import { DiscussionTemplates } from "/imports/api/discussionTemplates";
 import { ViewScenario } from "/imports/ui/scenarios/ViewScenario";
 
 export const ScenarioSummary = ({ scenario }) => {

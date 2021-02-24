@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Segment, Form, Input, Modal, Button, Checkbox, Tab, Label } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
+import { Scenarios } from "/imports/api/scenarios";
 import { ScenarioSets } from "/imports/api/scenarioSets";
+import { DiscussionTemplates } from "/imports/api/discussionTemplates";
 import { Groups } from "/imports/api/groups";
 import { responseSet } from "../../api/ratingResponses";
 
@@ -71,7 +73,6 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
       scenarioSetId.length > 0 &&
       groupId.length > 0
     ) {
-      console.log("hasIntroduction:", hasIntroduction);
       Meteor.call(
         "experiments.create",
         name,
@@ -122,16 +123,46 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
     }
   };
 
-  const { groups, scenarioSets } = useTracker(() => {
+  const { groups, scenarioSets, scenarios, discussionTemplates } = useTracker(() => {
     Meteor.subscribe("groups");
     Meteor.subscribe("scenarioSets");
+    Meteor.subscribe("scenarios");
+    Meteor.subscribe("discussionTemplates");
 
     //todo filter by user who created group
     return {
       groups: Groups.find().fetch(),
       scenarioSets: ScenarioSets.find().fetch(),
+      scenarios: Scenarios.find().fetch(),
+      discussionTemplates: DiscussionTemplates.find().fetch()
     };
   });
+
+  // Resets the setHasIntroduction hook whenever a set is selected by the user.
+  useEffect(() => {
+    if (setContainsHuiChat()) {
+      setHasIntroduction(true);
+    } else {
+      setHasIntroduction(false);
+    }
+  }, [scenarioSetId]);
+
+  // Returns true if the scenario set contains a hui chat.
+  const setContainsHuiChat = () => {
+    if (scenarioSets && scenarios && discussionTemplates) {
+      const set = scenarioSets.find(set => set._id === scenarioSetId);
+      if (set) {
+        const scens = scenarios.filter(s => set.scenarios.includes(s._id));
+        for (i = 0; i < scens.length; i += 1) {
+          const template = discussionTemplates.find(template => template._id === scens[i].discussionTemplateId);
+          if (template.isHui) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
 
   // the scales to be selected by the researcher for user ratings of comments
   const ratingScales = [
@@ -326,7 +357,14 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
             <Checkbox
               checked={hasIntroduction}
               label="Create an Introduction Lounge"
-              onClick={(e, data) => setHasIntroduction(data.checked)}
+              onClick={(e, data) => {
+                // Ensure the user cannot remove the introduction is the set contains a hui chat.
+                if (!setContainsHuiChat()) {
+                  setHasIntroduction(data.checked)
+                }
+              }}
+              // Disable the checkbox if the set contains a hui chat.
+              disabled={setContainsHuiChat()}
             />
             <br />
             <br />

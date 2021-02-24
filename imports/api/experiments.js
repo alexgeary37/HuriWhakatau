@@ -3,7 +3,7 @@ import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import { ScenarioSets } from "./scenarioSets";
 import { Scenarios } from "./scenarios";
-import { DiscussionTemplates } from "./discussionTemplate";
+import { DiscussionTemplates } from "./discussionTemplates";
 import { Discussions } from "./discussions";
 import awaitAsyncGenerator from "@babel/runtime/helpers/esm/awaitAsyncGenerator";
 import { Categories } from "./categories";

@@ -4,7 +4,7 @@ import { Form, Checkbox, Input, Label, Modal, Button } from "semantic-ui-react";
 import { Categories } from "../../api/categories";
 import { Tour } from "../navigation/Tour";
 import { Groups } from "../../api/groups";
-import { DiscussionTemplates } from "../../api/discussionTemplate";
+import { DiscussionTemplates } from "../../api/discussionTemplates";
 
 export const CreateDiscussion = ({ toggleModal }) => {
   const [discussionTitle, setDiscussionTitle] = useState("");

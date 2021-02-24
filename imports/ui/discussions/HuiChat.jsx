@@ -22,7 +22,7 @@ import { Verdicts } from "/imports/api/verdicts";
 import { Comments } from "/imports/api/comments";
 import { Scenarios } from "/imports/api/scenarios";
 import { Discussions } from "/imports/api/discussions";
-import { DiscussionTemplates } from "/imports/api/discussionTemplate";
+import { DiscussionTemplates } from "/imports/api/discussionTemplates";
 import { Verdict } from "/imports/ui/verdicts/Verdict";
 import { CommentForm } from "/imports/ui/comments/CommentForm";
 import { UserComment } from "/imports/ui/comments/UserComment";

@@ -10,7 +10,7 @@ import "/imports/api/votes";
 import "/imports/api/security";
 import "/imports/api/topics";
 import "/imports/api/categories";
-import "/imports/api/discussionTemplate";
+import "/imports/api/discussionTemplates";
 import "/imports/api/experiments"
 import "/imports/api/accountsEmail"
 import "/server/defaultData";

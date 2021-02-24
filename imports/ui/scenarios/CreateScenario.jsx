@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Segment, Form, Input, Modal, Button } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
-import { DiscussionTemplates } from "/imports/api/discussionTemplate";
+import { DiscussionTemplates } from "/imports/api/discussionTemplates";
 import { Categories } from "../../api/categories";
 
 export const CreateScenario = ({
