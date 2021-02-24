@@ -446,15 +446,15 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
               <Form.Field
                 width={3}
                 content={
-                  responseSet.filter(
+                  responseSet.find(
                     (response) =>
                       response.responseType === ratings[0].responseType
-                  )[0].fullRange[0] +
+                  ).fullRange[0] +
                   " - " +
-                  responseSet.filter(
+                  responseSet.find(
                     (response) =>
                       response.responseType === ratings[0].responseType
-                  )[0].fullRange[6]
+                  ).fullRange[6]
                 }
               />
               <Checkbox
@@ -498,15 +498,15 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 <Form.Field
                   width={3}
                   content={
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[1].responseType
-                    )[0].fullRange[0] +
+                    ).fullRange[0] +
                     " - " +
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[1].responseType
-                    )[0].fullRange[6]
+                    ).fullRange[6]
                   }
                 />
                 <Checkbox
@@ -551,15 +551,15 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 <Form.Field
                   width={3}
                   content={
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[2].responseType
-                    )[0].fullRange[0] +
+                    ).fullRange[0] +
                     " - " +
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[2].responseType
-                    )[0].fullRange[6]
+                    ).fullRange[6]
                   }
                 />
                 <Checkbox
@@ -604,15 +604,15 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 <Form.Field
                   width={3}
                   content={
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[3].responseType
-                    )[0].fullRange[0] +
+                    ).fullRange[0] +
                     " - " +
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[3].responseType
-                    )[0].fullRange[6]
+                    ).fullRange[6]
                   }
                 />
                 <Checkbox
@@ -657,15 +657,15 @@ export const CreateExperiment = ({ toggleModal, isWizard, toggleIsWizard }) => {
                 <Form.Field
                   width={3}
                   content={
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[4].responseType
-                    )[0].fullRange[0] +
+                    ).fullRange[0] +
                     " - " +
-                    responseSet.filter(
+                    responseSet.find(
                       (response) =>
                         response.responseType === ratings[4].responseType
-                    )[0].fullRange[6]
+                    ).fullRange[6]
                   }
                 />
                 <Checkbox
