@@ -18,7 +18,6 @@ Meteor.methods({
     Rivers.schema.validate(river);
 
     if (Rivers.schema.isValid()) {
-      console.log("Successful validation of river");
       Rivers.insert(river);
     } else {
       console.log("validationErrors:", Rivers.schema.validationErrors());

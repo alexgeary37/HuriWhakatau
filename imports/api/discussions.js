@@ -101,7 +101,6 @@ Meteor.methods({
     Discussions.schema.validate(discussion);
     
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       return Discussions.insert(discussion); // discussion._id is returned.
     }
     
@@ -118,7 +117,6 @@ Meteor.methods({
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
     
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       Discussions.update(discussionId, mongoModifierObject);
     } else {
       console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -138,7 +136,6 @@ Meteor.methods({
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
     
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       Discussions.update(discussionId, mongoModifierObject);
     } else {
       console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -155,7 +152,6 @@ Meteor.methods({
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
     
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       Discussions.update(discussionId, mongoModifierObject);
     } else {
       console.log("validationErrors:", Discussions.schema.validationErrors()); 
@@ -178,7 +174,6 @@ Meteor.methods({
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
     
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       Discussions.update(discussionId, mongoModifierObject);
     } else {
       console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -201,7 +196,6 @@ Meteor.methods({
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       Discussions.update(discussionId, mongoModifierObject);
     } else {
       console.log("validationErrors:", Discussions.schema.validationErrors());
@@ -218,7 +212,6 @@ Meteor.methods({
     Discussions.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Discussions.schema.isValid()) {
-      console.log("Successful validation");
       Discussions.update(
         {
           _id: discussionId,
@@ -250,7 +243,6 @@ Meteor.methods({
           Discussions.schema.validate(mongoModifierObject, { modifier: true });
   
           if (Discussions.schema.isValid()) {
-            console.log("Successful validation");
             Discussions.update(discussionId, mongoModifierObject);
           } else {
             console.log("validationErrors:", Discussions.schema.validationErrors());

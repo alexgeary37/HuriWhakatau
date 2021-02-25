@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Modal, Button, Input, Form, Divider } from "semantic-ui-react";
+import { Modal, Button, Input, Form, Divider, Link } from "semantic-ui-react";
 
 export const LoginForm = ({ toggleModal }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [emailAddress, setEmailAddress] = useState("");
   const [open, setOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -47,7 +49,6 @@ export const LoginForm = ({ toggleModal }) => {
             type="text"
             placeholder="Username"
             name="username"
-            required
             fluid
             autoFocus
             onChange={(e) => setUsername(e.currentTarget.value)}
@@ -60,7 +61,6 @@ export const LoginForm = ({ toggleModal }) => {
             type="password"
             placeholder="Password"
             name="password"
-            required
             fluid
             onChange={(e) => setPassword(e.currentTarget.value)}
           />
@@ -68,6 +68,35 @@ export const LoginForm = ({ toggleModal }) => {
             <div style={{ height: "10px", color: "red" }}>{err}</div>
           ) : (
             <div style={{ height: "10px" }} />
+          )}
+          {/* This whole block below does not work. It throws a browser error saying User not found */}
+          <Button
+            type={"button"}
+            content="Forgot my password"
+            onClick={() => setForgotPassword(true)}
+          />
+          {forgotPassword && (
+            <div>
+              <Input
+                label="Email"
+                labelPosition="left"
+                type="email"
+                placeholder="Email"
+                name="email"
+                onChange={(e) => setEmailAddress(e.currentTarget.value)}
+              />
+              <Button
+                content="Email me password"
+                onClick={() => Accounts.forgotPassword({email: emailAddress})}
+              />
+              <Button
+                content="Cancel"
+                onClick={(e) => {
+                  setEmailAddress("");
+                  setForgotPassword(false);
+                }}
+              />
+            </div>
           )}
         </Modal.Content>
         <Divider />

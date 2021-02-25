@@ -179,7 +179,7 @@ export const UserSettings = () => {
             Accounts.changePassword(userOldPassword, userNewPassword);
             setChangeUserPassword(false);
         }
-    }
+    };
 
     const handleUpdateUserDetails = () => {
         if (changeUserDetails) {

@@ -47,6 +47,7 @@ export const AddUser = ({ toggleModal }) => {
         userRolesList,
         (error, result) => {
           if (error) {
+            // If email address already exists in db, this callback will return the error.
             setErrUsername(error.reason + " ");
             return;
           } else {

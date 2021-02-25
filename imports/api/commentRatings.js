@@ -12,7 +12,6 @@ CommentRatings.schema = new SimpleSchema({
 }).newContext();
 
 Meteor.methods({
-
   "commentRatings.addRating"(commentId, experimentId, rating) {
     check(commentId, String);
     check(experimentId, String);

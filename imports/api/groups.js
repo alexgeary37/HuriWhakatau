@@ -34,7 +34,6 @@ Meteor.methods({
     Groups.schema.validate(group);
 
     if (Groups.schema.isValid()) {
-      console.log("Successful validation of group");
       return Groups.insert(group); // Returns _id of group.
     } else {
       console.log("validationErrors:", Groups.schema.validationErrors());
@@ -53,7 +52,6 @@ Meteor.methods({
     Groups.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Groups.schema.isValid()) {
-      console.log("Successful validation of group update object");
       Groups.update(groupId, mongoModifierObject);
       return true;
     } else {
@@ -76,7 +74,6 @@ Meteor.methods({
     Groups.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Groups.schema.isValid()) {
-      console.log("Successful validation of group update object");
       Groups.update(groupId, mongoModifierObject);
       return true;
     } else {

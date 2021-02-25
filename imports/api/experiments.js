@@ -72,7 +72,6 @@ Meteor.methods({
     Experiments.schema.validate(experiment);
 
     if (Experiments.schema.isValid()) {
-      console.log("Successful validation of experiment");
       const experimentId = Experiments.insert(experiment);
 
       // Create intro discussion if needed.
@@ -105,7 +104,6 @@ Meteor.methods({
         Experiments.schema.validate(mongoModifierObject, { modifier: true });
 
         if (Experiments.schema.isValid()) {
-          console.log("Successful validation of experiment update object");
           Experiments.update(experimentId, mongoModifierObject);
           discussionIds.push(introId);
           Meteor.call(
@@ -166,7 +164,6 @@ Meteor.methods({
         Experiments.schema.validate(mongoModifierObject, { modifier: true });
 
         if (Experiments.schema.isValid()) {
-          console.log("Successful validation of experiment update object");
           Experiments.update(experimentId, mongoModifierObject);
           discussionIds.push(discussionId);
         } else {
@@ -194,7 +191,6 @@ Meteor.methods({
         Discussions.schema.validate(mongoModifierObject, { modifier: true });
 
         if (Discussions.schema.isValid()) {
-          console.log("Successful validation of discussion update object");
           Discussions.update(discussionIds[id], mongoModifierObject);
         } else {
           console.log(
@@ -351,14 +347,6 @@ Meteor.methods({
     });
   },
 
-  // Remove an experiment from the experiments collection in the db.
-  "experiments.remove"(experimentId) {
-    check(experimentId, String);
-    //add role check
-
-    Experiments.remove(experimentId);
-  },
-
   //moving the group leader vote here so it can be experiment specific
   "experiments.voteLeader"(experimentId, groupId, nominee) {
     check(experimentId, String);
@@ -391,11 +379,9 @@ Meteor.methods({
     Experiments.schema.validate(mongoModifierObject, { modifier: true });
 
     if (Experiments.schema.isValid()) {
-      console.log("Successful validation of experiments update object");
       Experiments.update(identifier,
         mongoModifierObject,
         function (err, res) {
-          // let member;
           if (err) {
             throw err;
           }
@@ -419,7 +405,6 @@ Meteor.methods({
             Experiments.schema.validate(mongoModifierObject, { modifier: true });
 
             if (Experiments.schema.isValid()) {
-              console.log("Successful validation of experiments update object");
               Experiments.update(experimentId, mongoModifierObject);
             } else {
               console.log(
@@ -436,6 +421,14 @@ Meteor.methods({
         Experiments.schema.validationErrors()
       );
     }
+  },
+
+  // Remove an experiment from the experiments collection in the db.
+  "experiments.remove"(experimentId) {
+    check(experimentId, String);
+    //add role check
+
+    Experiments.remove(experimentId);
   },
 
   "experiments.removeAll"() {
