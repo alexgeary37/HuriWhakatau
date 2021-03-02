@@ -102,6 +102,7 @@ if (!process.env.MONGO_URL.includes("juryroom_admin")) {
             Meteor.call("verdicts.removeAll");
             Meteor.call("votes.removeAll");
             Meteor.call('usernames.removeAll');
+            Meteor.call('users.removeAll');
         },
     
         "main.removeAllDiscussions"() {

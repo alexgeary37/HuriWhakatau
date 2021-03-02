@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Modal, Button, Input, Form, Divider, Link } from "semantic-ui-react";
+import { useHistory, useParams } from "react-router-dom";
+import { Modal, Button, Input, Form, Divider } from "semantic-ui-react";
 
-export const LoginForm = ({ toggleModal }) => {
+export const ResetPasswordForm = ({ toggleModal }) => {
+  const { token } = useParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [forgotPassword, setForgotPassword] = useState(false);
-  const [emailAddress, setEmailAddress] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState("");
   let history = useHistory();
@@ -14,14 +14,19 @@ export const LoginForm = ({ toggleModal }) => {
   const submit = (e) => {
     e.preventDefault();
     setErr("");
-    Meteor.loginWithPassword(username, password, function (error) {
-      if (error) {
-        setErr(error.message);
-      } else {
-        toggleIt(e);
-      }
-    });
-    history.push("/mydashboard");
+    if (password === confirmedPassword) {
+      Accounts.resetPassword(token, password);
+      Meteor.loginWithPassword(username, password, function (error) {
+        if (error) {
+          setErr(error.message);
+        } else {
+          toggleIt(e);
+        }
+      });
+      history.push("/mydashboard");
+    } else {
+      setErr("Confirmed password does not match password");
+    }
   };
 
   const toggleIt = () => {
@@ -36,7 +41,7 @@ export const LoginForm = ({ toggleModal }) => {
       size="mini"
       style={{ padding: "10px" }}
     >
-      <Modal.Header>Please Login to continue</Modal.Header>
+      <Modal.Header>Reset your password</Modal.Header>
       <Form>
         <Modal.Content>
           <Input
@@ -60,42 +65,19 @@ export const LoginForm = ({ toggleModal }) => {
             fluid
             onChange={(e) => setPassword(e.currentTarget.value)}
           />
+          <Input
+            label="Confirm Password"
+            labelPosition="left"
+            type="password"
+            placeholder="Password"
+            name="confirmedPassword"
+            fluid
+            onChange={(e) => setConfirmedPassword(e.currentTarget.value)}
+          />
           {err ? (
             <div style={{ height: "10px", color: "red" }}>{err}</div>
           ) : (
             <div style={{ height: "10px" }} />
-          )}
-          {/* This whole block below does not work. It throws a browser error saying User not found */}
-          <Button
-            type={"button"}
-            content="Forgot my password"
-            onClick={() => setForgotPassword(true)}
-          />
-          {forgotPassword && (
-            <div>
-              <Input
-                label="Email"
-                labelPosition="left"
-                type="email"
-                placeholder="Email"
-                name="email"
-                onChange={(e) => setEmailAddress(e.currentTarget.value)}
-              />
-              <Button
-                content="Email me password"
-                onClick={() => {
-                  Accounts.forgotPassword({email: emailAddress})
-                  toggleIt()
-                }}
-              />
-              <Button
-                content="Cancel"
-                onClick={(e) => {
-                  setEmailAddress("");
-                  setForgotPassword(false);
-                }}
-              />
-            </div>
           )}
         </Modal.Content>
         <Divider />
@@ -107,7 +89,7 @@ export const LoginForm = ({ toggleModal }) => {
             onClick={(e) => toggleIt(e)}
           />
           <Button
-            content="Login"
+            content="Reset My Password"
             labelPosition="right"
             icon="check"
             onClick={(e) => {

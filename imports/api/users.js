@@ -377,6 +377,11 @@ Meteor.methods({
       text: message,
     });
   },
+
+  "users.removeAll"() {
+    Meteor.users.remove({});
+    console.log('Users.count():', Meteor.users.find().count());
+  }
 });
 
 if (Meteor.isServer) {

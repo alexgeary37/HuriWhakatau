@@ -56,6 +56,7 @@ export const AddUser = ({ toggleModal }) => {
           }
         }
       );
+      toggleIt();
     }
   };
 

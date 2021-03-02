@@ -1,6 +1,6 @@
 import React from "react";
 import {Router, Route, Switch} from "react-router";
-import {BrowserRouter, useHistory} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import history from "history";
 import {FAQ} from "./FAQ";
 import {About} from "./About";
@@ -9,18 +9,11 @@ import {Page404} from "./404";
 import {HuiChat} from "/imports/ui/discussions/HuiChat"
 import {Dashboard} from "./Dashboard";
 import {EnrollForm} from "/imports/ui/users/EnrollForm";
+import {ResetPasswordForm} from "/imports/ui/users/ResetPasswordForm";
 import {Discussion} from "/imports/ui/discussions/Discussion";
-import {CreateGroup} from "/imports/ui/groups/CreateGroup";
 import {MyDashboard} from "./MyDashboard";
 import {UserSettings} from "/imports/ui/users/UserSettings"
-import {BrowseGroups} from "/imports/ui/groups/BrowseGroups";
-import {CreateScenario} from "/imports/ui/scenarios/CreateScenario";
-import {BrowseScenarios} from "/imports/ui/scenarios/BrowseScenarios";
-import {CreateExperiment} from "/imports/ui/experiments/CreateExperiment";
-import {CreateScenarioSet} from "/imports/ui/scenarioSets/CreateScenarioSet";
-import {BrowseScenarioSets} from "/imports/ui/scenarioSets/BrowseScenarioSets";
 import {ConfirmationForm} from "../users/ConfirmationForm";
-import {CreateDiscussionTemplate} from "/imports/ui/discussionTemplates/CreateDiscussionTemplate";
 
 const browserHistory = history.createBrowserHistory();
 
@@ -72,6 +65,11 @@ export const App = () => {
                         exact
                         path="/confirm-identity/:token/:userId"
                         component={ConfirmationForm}
+                    />
+                    <Route
+                        exact
+                        path="/reset-password/:token"
+                        component={ResetPasswordForm}
                     />
                     <Route component={Page404}/>
                 </Switch>
