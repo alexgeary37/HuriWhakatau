@@ -14,14 +14,14 @@ export const LoginForm = ({ toggleModal }) => {
   const submit = (e) => {
     e.preventDefault();
     setErr("");
-    Meteor.loginWithPassword(username, password, function (error) {
+    Meteor.loginWithPassword(username, password, (error) => {
       if (error) {
         setErr(error.message);
       } else {
         toggleIt(e);
+        history.push("/mydashboard");
       }
     });
-    history.push("/mydashboard");
   };
 
   const toggleIt = () => {

@@ -21,9 +21,9 @@ export const ResetPasswordForm = ({ toggleModal }) => {
           setErr(error.message);
         } else {
           toggleIt(e);
+          history.push("/mydashboard");
         }
       });
-      history.push("/mydashboard");
     } else {
       setErr("Confirmed password does not match password");
     }
