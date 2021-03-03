@@ -41,7 +41,6 @@ export const AddUser = ({ toggleModal }) => {
       Meteor.call(
         "security.addUser",
         userName,
-        password,
         email,
         userAnon,
         userRolesList,
@@ -49,13 +48,16 @@ export const AddUser = ({ toggleModal }) => {
           if (error) {
             // If email address already exists in db, this callback will return the error.
             setErrUsername(error.reason + " ");
+            console.log('ERROR')
             return;
           } else {
             setIsSignupComplete(true);
             setErrUsername("");
+            console.log('NOT ERROR')
           }
         }
       );
+      console.log('AFTER BEFORE toggleIt')
       toggleIt();
     }
   };

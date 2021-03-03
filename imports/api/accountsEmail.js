@@ -28,20 +28,23 @@ Accounts.emailTemplates.enrollAccount = {
       customUrl =
         process.env.ROOT_URL + "/enroll-account/" + token + invitingUser;
     }
-    return `Hi, you've been invited to participate in Huri Whakatau, 
-            Click the link below to get started.
-            ${customUrl}
+    return `Hello,
+
+You've been invited to participate in Huri Whakatau. Click the link below to get started.
+
+${customUrl}
             
-            Please use username ${user.username} to complete your sign-up.
+Please use username ${user.username} to complete your sign-up.
             
-            Huri Whakatau is a prototype project of the University of Waikato. The information you provide by using the 
-            site may be used in academic studies. If you are concerned about how your data may be used please 
-            do not complete your enrollment at this time.
+Huri Whakatau is a prototype project of the University of Waikato. The information you provide by using the 
+site may be used in academic studies. If you are concerned about how your data may be used please 
+do not complete your enrollment at this time.
             
-            When the project is more fully developed a comprehensive informed consent procedure will be implemented.
+When the project is more fully developed a comprehensive informed consent procedure will be implemented.
             
-            If you did not request this email, please ignore it.
-            Thank you.`;
+If you did not request this email, please ignore it.
+
+Thank you.`;
   },
   html(user, url) {
     // This is where HTML email content would go. may need to create a component to go here
