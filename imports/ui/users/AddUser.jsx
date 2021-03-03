@@ -48,17 +48,13 @@ export const AddUser = ({ toggleModal }) => {
           if (error) {
             // If email address already exists in db, this callback will return the error.
             setErrUsername(error.reason + " ");
-            console.log('ERROR')
-            return;
           } else {
             setIsSignupComplete(true);
             setErrUsername("");
-            console.log('NOT ERROR')
+            toggleIt();
           }
         }
       );
-      console.log('AFTER BEFORE toggleIt')
-      toggleIt();
     }
   };
 
