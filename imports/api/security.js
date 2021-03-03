@@ -58,7 +58,6 @@ Meteor.methods({
     const userId = Accounts.createUser({
       username: finalUserName,
       email: email,
-      password: Math.random().toString(36).substring(7),
       profile: {
         pepeha: {
           mountain: "",

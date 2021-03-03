@@ -4,7 +4,6 @@ import { Segment, Form, Checkbox, Modal, Button } from "semantic-ui-react";
 export const AddUser = ({ toggleModal }) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSignupComplete, setIsSignupComplete] = useState(false);
   const [userAnon, setUserAnon] = useState(false);
