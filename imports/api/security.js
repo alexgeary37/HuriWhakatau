@@ -1,9 +1,6 @@
 import { Roles } from "meteor/alanning:roles";
 import { Usernames } from "/imports/api/usernames";
 import { Random } from "meteor/random";
-import { check } from "meteor/check";
-import { Comments } from "./comments";
-import { Mongo } from "meteor/mongo";
 
 Meteor.methods({
   //Note these methods take time to return a value from the database,
@@ -44,6 +41,7 @@ Meteor.methods({
     // } else {
     // start of taking a list of only emails and generating
     // usernames and accounts, then sending invite emails
+    
     let finalUserName = "";
     let usernames = Usernames.find({}, { fields: { name: 1 } });
     if (userAnon || (!userAnon && userName === "")) {
@@ -84,10 +82,8 @@ Meteor.methods({
         },
       },
     });
-    
     Accounts.sendEnrollmentEmail(userId);
     Roles.addUsersToRoles(userId, roles);
-    // };
   },
 
   // "security.updatePepeha"(pepeha, userId){
