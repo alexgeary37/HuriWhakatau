@@ -217,6 +217,7 @@ export const Discussion = () => {
   // Set reference for end of discussion and scroll to that point every 
   // time a comment is posted in the discussion.
   const commentsEndRef = useRef(null);
+
   useEffect(() => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
   }, [
@@ -277,8 +278,8 @@ export const Discussion = () => {
           <GridColumn width={8} textAlign="left">
             <div style={{ position: "absolute", bottom: "0px", width: "95%" }}>
               <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
-                {comments &&
-                  comments.map((comment) => (
+                {commentsHook &&
+                  commentsHook.map((comment) => (
                     <UserComment
                       key={comment._id}
                       comment={comment}

@@ -41,6 +41,7 @@ export const HuiChat = () => {
   const { discussionId } = useParams();
   const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
+  const [commentsHook, setCommentsHook] = useState([]);
   let history = useHistory();
 
   const toggleShowTour = () => {
@@ -78,7 +79,7 @@ export const HuiChat = () => {
     const topicSub = Meteor.subscribe("topics");
     const discussionTemplateSub = Meteor.subscribe("discussionTemplates");
     const subExperiments = Meteor.subscribe("experiments");
-    Meteor.subscribe("comments", discussionId);
+    const commentsSub = Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
     Meteor.subscribe("roles");
     Meteor.subscribe("users");
@@ -99,13 +100,15 @@ export const HuiChat = () => {
     let publicDiscussion;
     let experiment;
     let experimentId;
+    let comments;
     if (
       discussionSub.ready() &&
       scenarioSub.ready() &&
       groupSub.ready() &&
       topicSub.ready() &&
       discussionTemplateSub.ready() &&
-      subExperiments.ready()
+      subExperiments.ready() &&
+      commentsSub.ready()
     ) {
       let discussion = Discussions.findOne({ _id: discussionId });
       discussionIsIntroduction = discussion.isIntroduction;
@@ -153,6 +156,10 @@ export const HuiChat = () => {
           numVotes += nominee.voters.length;
         });
       }
+      comments = Comments.find(
+        { discussionId: discussionId },
+        { sort: { postedTime: 1 } }
+      ).fetch()
     }
 
     return {
@@ -160,10 +167,7 @@ export const HuiChat = () => {
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
       topic: discussionTopic,
-      comments: Comments.find(
-        { discussionId: discussionId },
-        { sort: { postedTime: 1 } }
-      ).fetch(),
+      comments: comments,
       verdicts: Verdicts.find(
         { discussionId: discussionId },
         { sort: { postedTime: 1 } }
@@ -194,27 +198,37 @@ export const HuiChat = () => {
     document.title = "HuiChat - " + (scenario && scenario.title);
   }, [group]);
 
-  // Set reference for end of discussion and scroll to that point on initial load,
-  // and every time the number of comments made by the current user changes.
+  // Update the commentshook whenever the comments in the database are changed.
+  useEffect(() => {
+    setCommentsHook(comments);
+  }, [comments && comments.length]);
+
+  // Set reference for end of discussion and scroll to that point every 
+  // time a comment is posted in the discussion.
   const commentsEndRef = useRef(null);
-  const initialScrollToBottom = () => {
-    Meteor.setTimeout(() => {
-      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-    }, 2000);
-  };
-  const scrollToBottom = () => {
+
+  useEffect(() => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  };
-  useEffect(initialScrollToBottom, []);
-  useEffect(scrollToBottom, [
-    comments.filter((x) => x.authorId === Meteor.userId()).length,
+  }, [
+    commentsHook && commentsHook.length,
   ]);
+
+  // const initialScrollToBottom = () => {
+  //   Meteor.setTimeout(() => {
+  //     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+  //   }, 2000);
+  // };
+  // const scrollToBottom = () => {
+  //   commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+  // };
+  // useEffect(initialScrollToBottom, []);
+  // useEffect(scrollToBottom, [
+  //   comments.filter((x) => x.authorId === Meteor.userId()).length,
+  // ]);
 
   const userVotedForLeader = () => {
     if (leaderVotes) {
       // This forloop could probably be avoided using a filter if someone wants to change it.
-      // console.log('Meteor.userId():', Meteor.userId());
-      // console.log('leaderVotes:', leaderVotes);
       for (i = 0; i < leaderVotes.length; i += 1) {
         const voters = leaderVotes[i].voters;
         if (voters.includes(Meteor.userId())) {
@@ -256,13 +270,6 @@ export const HuiChat = () => {
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
-  // console.log(
-  //   'discussionId:',
-  //   discussionId,
-  //   'discussionStatus:',
-  //   discussionStatus
-  // );
-
   const huiChatPageContent = (userLang) => {
     return (
       <Container>
@@ -272,8 +279,8 @@ export const HuiChat = () => {
             <GridRow>
               <GridColumn width={isIntroduction ? 10 : 8} textAlign={"left"}>
                 <Comment.Group style={{ overflow: "auto", height: "65vh" }}>
-                  {comments &&
-                    comments.map((comment) => (
+                  {commentsHook &&
+                    commentsHook.map((comment) => (
                       <UserComment
                         key={comment._id}
                         comment={comment}
