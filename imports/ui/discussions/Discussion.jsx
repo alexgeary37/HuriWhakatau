@@ -34,6 +34,7 @@ export const Discussion = () => {
   const [timeLeft, setTimeLeft] = useState(null);
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   const [userInGroup, setUserInGroup] = useState(false);
+  const [commentsHook, setCommentsHook] = useState([]);
   let history = useHistory();
   // use to allow comments or proposing / voting on verdicts
   // todo, if the user uses the browser back button to go back to dash from a timed discussion
@@ -66,13 +67,13 @@ export const Discussion = () => {
     );
   };
 
-  // if timed then trigger calc of time left and update ui every 1 second
+  // If discussion is timed then trigger calc of time left and update ui every 1 second.
   useEffect(() => {
     if (timedDiscussion) {
       const timer = setTimeout(() => {
         setTimeLeft(calculateTimeLeft());
       }, 1000);
-      // Clear timeout if the component is unmounted
+      // Clear timeout if the component is unmounted.
       return () => clearTimeout(timer);
     }
   });
@@ -97,7 +98,7 @@ export const Discussion = () => {
     const groupSub = Meteor.subscribe("groups");
     const topicSub = Meteor.subscribe("topics");
     const discussionTemplateSub = Meteor.subscribe("discussionTemplates");
-    Meteor.subscribe("comments", discussionId);
+    const commentsSub = Meteor.subscribe("comments", discussionId);
     Meteor.subscribe("verdicts", discussionId);
     Meteor.subscribe("roles");
 
@@ -112,12 +113,14 @@ export const Discussion = () => {
     let discussionTemplate;
     let nextDiscussionId;
     let publicDiscussion;
+    let comments;
     if (
       discussionSub.ready() &&
       scenarioSub.ready() &&
       groupSub.ready() &&
       topicSub.ready() &&
-      discussionTemplateSub.ready()
+      discussionTemplateSub.ready() &&
+      commentsSub.ready()
     ) {
       let discussion = Discussions.findOne({ _id: discussionId });
       discussionScenario = Scenarios.findOne({ _id: discussion.scenarioId });
@@ -131,13 +134,16 @@ export const Discussion = () => {
       consensusThreshold = discussion.consensusThreshold
         ? discussion.consensusThreshold
         : 0;
-      // console.log('DEADLINEEE:', discussion._id, discussion.deadline);
       discussionDeadline = discussion.deadline ? discussion.deadline : null;
       publicDiscussion = discussion.isPublic ? discussion.isPublic : false;
       discussionTopic = Topics.findOne({ _id: discussionScenario.topicId });
       nextDiscussionId = discussion.nextDiscussion
         ? discussion.nextDiscussion
         : null;
+      comments = Comments.find(
+        { discussionId: discussionId },
+        { sort: { postedTime: 1 } }
+      ).fetch()
     }
 
     return {
@@ -145,10 +151,7 @@ export const Discussion = () => {
       discussionVerdictProposers: verdictProposers,
       group: discussionGroup,
       topic: discussionTopic,
-      comments: Comments.find(
-        { discussionId: discussionId },
-        { sort: { postedTime: 1 } }
-      ).fetch(),
+      comments: comments,
       verdicts: Verdicts.find(
         { discussionId: discussionId },
         { sort: { postedTime: 1 } }
@@ -186,18 +189,13 @@ export const Discussion = () => {
   }
 
   if (discussionDeadline !== null) {
-    // console.log('!= NULL\ndiscussionDeadline:', discussionDeadline);
-    // console.log('discussionStatus:', discussionStatus);
-    // console.log('timedDiscussion:', timedDiscussion);
     let currentTime = new Date();
-    // console.log('currentTime:', currentTime);
     if (
       discussionDeadline > currentTime &&
       discussionStatus === "active" &&
       !timedDiscussion
     ) {
       // Discussion has time left and is active, but is not timed.
-      // console.log('!== NULL IF');
       setTimedDiscussion(true); // If page is refreshed this needs to be set back to true.
     } else if (
       discussionDeadline < currentTime &&
@@ -205,27 +203,24 @@ export const Discussion = () => {
       timedDiscussion
     ) {
       // Deadline has passed, but discussion is still active and timed.
-      // console.log('Deadline has passed. discussionStatus:', discussionStatus, 'timedDiscussion:', timedDiscussion);
       setTimedDiscussion(false);
       Meteor.call("discussions.updateStatus", discussionId, "timedout");
       Meteor.call("discussions.updateDeadlineTimeout", discussionId);
     }
   }
 
-  // Set reference for end of discussion and scroll to that point on initial load,
-  // and every time the number of comments made by the current user changes.
+  // Update the commentshook whenever the comments in the database are changed.
+  useEffect(() => {
+    setCommentsHook(comments);
+  }, [comments && comments.length]);
+
+  // Set reference for end of discussion and scroll to that point every 
+  // time a comment is posted in the discussion.
   const commentsEndRef = useRef(null);
-  const initialScrollToBottom = () => {
-    Meteor.setTimeout(() => {
-      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-    }, 2000);
-  };
-  const scrollToBottom = () => {
+  useEffect(() => {
     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  };
-  useEffect(initialScrollToBottom, []);
-  useEffect(scrollToBottom, [
-    comments.filter((x) => x.authorId === Meteor.userId()).length,
+  }, [
+    commentsHook && commentsHook.length,
   ]);
 
   // Return true if this user has submitted a verdict, false otherwise.
@@ -234,7 +229,6 @@ export const Discussion = () => {
   };
 
   const hasReachedConsensus = () => {
-    // console.log('HAS REACHED CONSENSUS');
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
       if (

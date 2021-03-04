@@ -12,6 +12,8 @@
     "bcrypt": "^5.0.0",
     "classnames": "^2.2.6",
     "emoji-mart": "^3.0.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-react-hooks": "0.0.0-ee4326357",
     "history": "^5.0.0",
     "meteor-node-stubs": "^1.0.0",
     "moment": "^2.29.1",

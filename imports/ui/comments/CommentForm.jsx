@@ -41,7 +41,6 @@ export const CommentForm = ({
   //detect pasting into the form and get what was pasted.
   // should save this somewhere and add to comment when submitted
   useEffect(() => {
-    console.log('USEEFFECT1');
     const editorContent = document.getElementsByClassName(
       "public-DraftEditor-content"
     )[0];
