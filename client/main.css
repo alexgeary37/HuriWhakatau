@@ -25,14 +25,18 @@ body {
   /*background-image: url("/huri_background.png");*/
   background-repeat: round;
   font-size: 14px;
-  width: 100vw;
-  height: 100vh;
+  width: inherit;
+  height: inherit;
   /*overflow: hidden;*/
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
 /* attempting to add background image to pages */
 .react-target {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(158, 242, 158);
   /*background-image: url("/huri_background.png");*/
 }
 

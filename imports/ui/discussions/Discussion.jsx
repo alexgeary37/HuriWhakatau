@@ -252,7 +252,7 @@ export const Discussion = () => {
 
   const discussionPageContent = () => {
     return (
-      <Container attached="bottom" style={{ width: "110vh" }}>
+      <Container attached="bottom">
         <Grid columns={3}>
           {" "}
           <GridColumn width={4} style={{ height: "90vh" }}>
