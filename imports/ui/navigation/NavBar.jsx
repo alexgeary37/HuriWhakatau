@@ -60,15 +60,13 @@ export const NavBar = ({ handleChangeLanguage }) => {
         fixed="top"
         inverted
         aria-label="Fern header image"
-        size={"large"}
         style={{
           backgroundColor: "black",
           backgroundImage: `url(${"/fren_gradient_extended_4.png"})`,
-          // backgroundSize: '200px',
           backgroundRepeat: "round",
         }}
       >
-        <Container className="content-width">
+        <Container>
           <Menu.Item as={Link} to="/">
             <Header
               as={"h1"}

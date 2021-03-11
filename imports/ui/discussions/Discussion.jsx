@@ -9,6 +9,8 @@ import {
   GridColumn,
   List,
   Divider,
+  Segment,
+  Message
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -35,6 +37,7 @@ export const Discussion = () => {
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   const [userInGroup, setUserInGroup] = useState(false);
   const [commentsHook, setCommentsHook] = useState([]);
+  const [scrollToBottomMessage, setScrollToBottomMessage] = useState(false);
   let history = useHistory();
   // use to allow comments or proposing / voting on verdicts
   // todo, if the user uses the browser back button to go back to dash from a timed discussion
@@ -218,8 +221,30 @@ export const Discussion = () => {
   // time a comment is posted in the discussion.
   const commentsEndRef = useRef(null);
 
+  // Scroll to bottom of comments every time this user makes a comment.
   useEffect(() => {
-    commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+    commentsEndRef.current.scrollIntoView({ behavior: 'auto'});
+  }, [commentsHook && commentsHook.filter((comment) => comment.authorId === Meteor.userId()).length]);
+
+  // Return whether the user has scrolled up from the bottom of the comments or not.
+  const isInViewport = (offset = 0) => {
+    if (commentsEndRef.current) {
+      const top = commentsEndRef.current.getBoundingClientRect().top;
+      return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+    }
+    return false;
+  }
+
+  // Scroll to bottom of comments every time other users make comments, unless
+  // this user has scrolled up to view other comments.
+  useEffect(() => {
+    if (isInViewport()) {
+      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+    } else {
+      console.log('Display "Go to latest" popup');
+      setScrollToBottomMessage(true);
+    }
+    console.log('scrollToBottom:', scrollToBottomMessage);
   }, [
     commentsHook && commentsHook.length,
   ]);
@@ -252,10 +277,12 @@ export const Discussion = () => {
 
   const discussionPageContent = () => {
     return (
-      <Container attached="bottom">
+      // <div className='ui container'>
+      <Container style={{backgroundColor: 'pink'}}>
         <Grid columns={3}>
           {" "}
-          <GridColumn width={4} style={{ height: "90vh" }}>
+          {/* <GridColumn width={4} style={{ height: "90vh" }}> */}
+          <GridColumn width={3} style={{ height: "90vh" }}>
             <Header
               inverted
               content={(scenario && scenario.title) || (topic && topic.title)}
@@ -275,7 +302,7 @@ export const Discussion = () => {
               <Timer time={timeLeft} />
             )}
           </GridColumn>
-          <GridColumn width={8} textAlign="left">
+          <GridColumn width={10} textAlign="left">
             <div style={{ position: "absolute", bottom: "0px", width: "95%" }}>
               <Comment.Group style={{ overflow: "auto", maxHeight: "70vh" }}>
                 {commentsHook &&
@@ -303,11 +330,13 @@ export const Discussion = () => {
                   isDiscussionPublic={discussionIsPublic}
                   isUserAGroupMember={userInGroup}
                   groupId={group._id}
+                  displayScrollToBottomMessage={scrollToBottomMessage}
+                  toggleScrollToBottomMessage={setScrollToBottomMessage(false)}
                 />
               )}
             </div>
           </GridColumn>
-          <GridColumn width={4}>
+          <GridColumn width={3}>
             <Header inverted content="Verdicts" size="medium" />
             <Divider />
             <List style={{ overflow: "auto", maxHeight: "50em" }}>
@@ -381,7 +410,9 @@ export const Discussion = () => {
             </List>
           </GridColumn>
         </Grid>
+        {/* </Segment> */}
       </Container>
+      // </div>
     );
   };
 

@@ -27,7 +27,7 @@ body {
   font-size: 14px;
   width: inherit;
   height: inherit;
-  /*overflow: hidden;*/
+  /* overflow: hidden; */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -63,32 +63,39 @@ sidebar
 .ui.sidebar.very.thin.friends {
   width: 70px;
 }
+
 .ui.sidebar.custom.wide.friends {
   width: 255px;
 }
+
 /*********************************************************
 navbar
 **********************************************************/
-.navbar {
+/* .navbar {
   margin: 4.5rem;
-}
-.navbar .item {
+} */
+
+/* .navbar .item {
   border: none;
-}
-.ui.menu {
+} */
+
+/* .ui.menu {
   border-bottom: 0 none !important;
   box-shadow: none;
-}
+} */
+
 /*********************************************************
 Emoji picker styles; source: https://medium.com/upshotly/how-to-use-emoji-reaction-in-react-bd68e03ad7b8
 ********************************************************/
 .reactions {
   margin-top: 20px;
 }
+
 .reactions .reactions-counter {
   display: flex;
   flex-wrap: wrap;
 }
+
 .reactions .emoji-mart {
   z-index: 999;
 }

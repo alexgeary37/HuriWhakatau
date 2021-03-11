@@ -1,5 +1,6 @@
 import {
   Button,
+  Container,
   Divider,
   Grid,
   Header,
@@ -249,9 +250,10 @@ export const Layout = ({ page, isDiscussion }) => {
   };
   return (
     <Segment
+      basic
       inverted
       textAlign="center"
-      style={{ minHeight: 800 }}
+      style={{ backgroundColor: 'olive'}}
       vertical
     >
       <NavBar handleChangeLanguage={handleChangeLanguage} />

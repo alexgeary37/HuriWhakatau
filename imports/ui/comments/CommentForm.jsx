@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RichTextEditor from "react-rte";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, Message } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
 import { Discussions } from "../../api/discussions";
 
@@ -10,6 +10,8 @@ export const CommentForm = ({
   isDiscussionPublic,
   isUserAGroupMember,
   groupId,
+  displayScrollToBottomMessage,
+  toggleScrollToBottomMessage
 }) => {
   const [keyStrokes, setKeyStrokes] = useState([]);
   const [pastedItems, setPastedItems] = useState([]);
@@ -17,8 +19,8 @@ export const CommentForm = ({
     RichTextEditor.createEmptyValue()
   );
 
-  console.log('keyStrokes:', keyStrokes);
-  console.log('keyStrokes.length:', keyStrokes.length);
+  // console.log('keyStrokes:', keyStrokes);
+  // console.log('keyStrokes.length:', keyStrokes.length);
 
   // useTracker makes sure the component will re-render when the data changes.
   const { user, typingUsers } = useTracker(() => {
@@ -64,6 +66,11 @@ export const CommentForm = ({
   const handleChange = (value) => {
     setEditorValue(value);
   };
+
+  const handleScrollToBottomClick = () => {
+    console.log('TOGGLE')
+    toggleScrollToBottomMessage()
+  }
 
   const handleSubmit = () => {
     if (editorValue.toString("markdown").charCodeAt(0) === 8203) {
@@ -113,7 +120,7 @@ export const CommentForm = ({
   // variable. user should be removed from discussion userTyping list after 2000 ms
   
   useEffect(() => {
-    console.log('ADD USER TO TYPING LIST:', user.username);
+    // console.log('ADD USER TO TYPING LIST:', user.username);
     Meteor.call("discussions.addUserToTypingList", discussionId, user.username);
   }, [keyStrokes]);
 
@@ -214,6 +221,12 @@ export const CommentForm = ({
                 (typingUsers.usersTyping.length === 1 ? " is" : " are") +
                 " typing"}
           </div>
+        )}
+        {displayScrollToBottomMessage && (
+          <Message
+            content='See latest comments'
+            onClick={handleScrollToBottomClick}
+          />
         )}
         <RichTextEditor
           value={editorValue}
