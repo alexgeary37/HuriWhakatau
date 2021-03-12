@@ -240,10 +240,8 @@ export const Discussion = () => {
     if (isInViewport()) {
       commentsEndRef.current.scrollIntoView({ behavior: "auto" });
     } else {
-      console.log('Display "Go to latest" popup');
       setScrollToBottomMessage(true);
     }
-    console.log('scrollToBottom:', scrollToBottomMessage);
   }, [
     commentsHook && commentsHook.length,
   ]);

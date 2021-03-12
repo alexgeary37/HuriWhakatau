@@ -19,10 +19,7 @@ export const CommentForm = ({
     RichTextEditor.createEmptyValue()
   );
 
-  // console.log('keyStrokes:', keyStrokes);
-  // console.log('keyStrokes.length:', keyStrokes.length);
-
-  // useTracker makes sure the component will re-render when the data changes.
+  // useTracker makes sure the component will re-render when data changes.
   const { user, typingUsers } = useTracker(() => {
     const subDiscussions = Meteor.subscribe("discussions");
 
@@ -67,8 +64,9 @@ export const CommentForm = ({
     setEditorValue(value);
   };
 
+  // Call the function from the Discussion/HuiChat component to ensure screen scrolls
+  // to the latest comments.
   const handleScrollToBottomClick = () => {
-    console.log('TOGGLE')
     toggleScrollToBottomMessage()
   }
 
@@ -95,7 +93,7 @@ export const CommentForm = ({
 
     setEditorValue(RichTextEditor.createEmptyValue());
     setPastedItems([]);
-    setKeyStrokes([]); // This is not the problem because it doesn't run on first render!!!!!!!!!!!!!!!!!!!!!!!!
+    setKeyStrokes([]);
   };
 
   //function for recording pastes
@@ -112,7 +110,6 @@ export const CommentForm = ({
       key: event.key,
       timestamp: Date.now(),
     };
-    // This does not run on the first render so this is not the problem!!!!!!!!!!!!!!!!!!!!!!
     setKeyStrokes((keyStrokes) => [...keyStrokes, stroke]);
   };
 
@@ -120,8 +117,9 @@ export const CommentForm = ({
   // variable. user should be removed from discussion userTyping list after 2000 ms
   
   useEffect(() => {
-    // console.log('ADD USER TO TYPING LIST:', user.username);
-    Meteor.call("discussions.addUserToTypingList", discussionId, user.username);
+    if (keyStrokes.length > 0) {
+      Meteor.call("discussions.addUserToTypingList", discussionId, user.username)
+    }
   }, [keyStrokes]);
 
   // start of function to add macrons to letters if alt or alt + shift is pressed. Things crash pretty
@@ -205,20 +203,20 @@ export const CommentForm = ({
 
   let typingUsernames = [];
   if (typingUsers && typingUsers.usersTyping.length > 0) {
-    typingUsers.usersTyping.forEach((user) => {
-      typingUsernames.push(user.user);
+    typingUsers.usersTyping.forEach((typingUser) => {
+      if (typingUser.user !== user.username) {
+        typingUsernames.push(typingUser.user);
+      }
     });
   }
 
   return (
     <Form>
       <div>
-        {showTypingNotification && (
+        {showTypingNotification && typingUsernames.length > 0 && (
           <div style={{ color: "white", height: "18px", bottomMargin: "5px" }}>
-            {typingUsers &&
-              typingUsers.usersTyping.length > 0 &&
-              typingUsernames.join(", ") +
-                (typingUsers.usersTyping.length === 1 ? " is" : " are") +
+            {typingUsernames.join(", ") +
+                (typingUsernames.length === 1 ? " is" : " are") +
                 " typing"}
           </div>
         )}
