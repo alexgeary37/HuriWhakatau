@@ -9,8 +9,6 @@ import {
   GridColumn,
   List,
   Divider,
-  Segment,
-  Message
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import "/imports/api/security";
@@ -227,6 +225,7 @@ export const Discussion = () => {
   }, [commentsHook && commentsHook.filter((comment) => comment.authorId === Meteor.userId()).length]);
 
   // Return whether the user has scrolled up from the bottom of the comments or not.
+  // https://stackoverflow.com/questions/45514676/react-check-if-element-is-visible-in-dom
   const isInViewport = (offset = 0) => {
     if (commentsEndRef.current) {
       const top = commentsEndRef.current.getBoundingClientRect().top;
@@ -254,6 +253,7 @@ export const Discussion = () => {
     return verdicts.findIndex((x) => x.authorId === Meteor.userId()) !== -1;
   };
 
+  // Return true if the discussion has reached consensus, false otherwise.
   const hasReachedConsensus = () => {
     for (i = 0; i < verdicts.length; i += 1) {
       const votes = verdicts[i].votes;
@@ -268,20 +268,20 @@ export const Discussion = () => {
     return false;
   };
 
+  // Add this user as a current verdict proposer in this discussion.
   const proposeVerdict = () =>
     Meteor.call("discussions.addProposer", discussionId);
 
+  // Go to the next discussion.
   const nextDiscussion = () => {
     history.push("/discussion/" + nextDiscussionId);
   };
 
   const discussionPageContent = () => {
     return (
-      // <div className='ui container'>
       <Container style={{backgroundColor: 'pink'}}>
         <Grid columns={3}>
           {" "}
-          {/* <GridColumn width={4} style={{ height: "90vh" }}> */}
           <GridColumn width={3} style={{ height: "90vh" }}>
             <Header
               inverted
@@ -331,7 +331,11 @@ export const Discussion = () => {
                   isUserAGroupMember={userInGroup}
                   groupId={group._id}
                   displayScrollToBottomMessage={scrollToBottomMessage}
-                  toggleScrollToBottomMessage={setScrollToBottomMessage(false)}
+                  toggleScrollToBottomMessage={() => {
+                    // Scroll to bottom of comments.
+                    setScrollToBottomMessage(false)
+                    commentsEndRef.current.scrollIntoView({ behavior: "auto" })
+                  }}
                 />
               )}
             </div>
@@ -410,9 +414,7 @@ export const Discussion = () => {
             </List>
           </GridColumn>
         </Grid>
-        {/* </Segment> */}
       </Container>
-      // </div>
     );
   };
 

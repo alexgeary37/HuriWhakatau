@@ -42,6 +42,7 @@ export const HuiChat = () => {
   const [userInGroup, setUserInGroup] = useState(false); //set if user is in the discussion group and
   const [isOpenConsensusModal, setIsOpenConsensusModal] = useState(true);
   const [commentsHook, setCommentsHook] = useState([]);
+  const [scrollToBottomMessage, setScrollToBottomMessage] = useState(false);
   let history = useHistory();
 
   const toggleShowTour = () => {
@@ -207,24 +208,34 @@ export const HuiChat = () => {
   // time a comment is posted in the discussion.
   const commentsEndRef = useRef(null);
 
+  // Scroll to bottom of comments every time this user makes a comment.
   useEffect(() => {
-    commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+    commentsEndRef.current.scrollIntoView({ behavior: 'auto'});
+  }, [commentsHook && commentsHook.filter((comment) => comment.authorId === Meteor.userId()).length]);
+
+  // Return whether the user has scrolled up from the bottom of the comments or not.
+  // https://stackoverflow.com/questions/45514676/react-check-if-element-is-visible-in-dom
+  const isInViewport = (offset = 0) => {
+    if (commentsEndRef.current) {
+      const top = commentsEndRef.current.getBoundingClientRect().top;
+      return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+    }
+    return false;
+  }
+
+  // Scroll to bottom of comments every time other users make comments, unless
+  // this user has scrolled up to view other comments.
+  useEffect(() => {
+    if (isInViewport()) {
+      commentsEndRef.current.scrollIntoView({ behavior: "auto" });
+    } else {
+      console.log('Display "Go to latest" popup');
+      setScrollToBottomMessage(true);
+    }
+    console.log('scrollToBottom:', scrollToBottomMessage);
   }, [
     commentsHook && commentsHook.length,
   ]);
-
-  // const initialScrollToBottom = () => {
-  //   Meteor.setTimeout(() => {
-  //     commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  //   }, 2000);
-  // };
-  // const scrollToBottom = () => {
-  //   commentsEndRef.current.scrollIntoView({ behavior: "auto" });
-  // };
-  // useEffect(initialScrollToBottom, []);
-  // useEffect(scrollToBottom, [
-  //   comments.filter((x) => x.authorId === Meteor.userId()).length,
-  // ]);
 
   const userVotedForLeader = () => {
     if (leaderVotes) {
@@ -305,6 +316,12 @@ export const HuiChat = () => {
                     isDiscussionPublic={discussionIsPublic}
                     isUserAGroupMember={userInGroup}
                     groupId={group._id}
+                    displayScrollToBottomMessage={scrollToBottomMessage}
+                    toggleScrollToBottomMessage={() => {
+                      // Scroll to bottom of comments.
+                      setScrollToBottomMessage(false)
+                      commentsEndRef.current.scrollIntoView({ behavior: "auto" })
+                    }}
                   />
                 )}
               </GridColumn>
