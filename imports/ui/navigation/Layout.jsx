@@ -253,15 +253,15 @@ export const Layout = ({ page, isDiscussion }) => {
       basic
       inverted
       textAlign="center"
-      style={{ backgroundColor: 'olive'}}
+      // style={{ backgroundColor: 'olive'}}
       vertical
     >
       <NavBar handleChangeLanguage={handleChangeLanguage} />
-      {/* <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30,30,30)'}}> */}
-      <Sidebar.Pushable
+      <Sidebar.Pushable as={Segment} style={{height: '90vh', backgroundColor: 'rgb(30,30,30)'}}>
+      {/* <Sidebar.Pushable
         as={Segment}
         style={{ backgroundColor: "aqua" }}
-      >
+      > */}
         <div>
           <Sidebar
             as={Segment}
@@ -274,8 +274,8 @@ export const Layout = ({ page, isDiscussion }) => {
             onMouseOver={!showSidebar ? handleShowSidebar : null}
             onClick={handleShowSidebar}
             style={{
-              // backgroundColor: "#f4f3f5"
-              backgroundColor: "red",
+              backgroundColor: "#f4f3f5"
+              // backgroundColor: "red"
             }}
           >
             <Icon
@@ -497,8 +497,8 @@ export const Layout = ({ page, isDiscussion }) => {
             visible
             width={"very thin"}
             style={{
-              // backgroundColor: 'rgb(30, 30, 30)',
-              backgroundColor: "green",
+              backgroundColor: 'rgb(30, 30, 30)',
+              // backgroundColor: "green",
               backgroundImage: `url(${"/HuriWhakatauIconHalfOpenInvertedVertical.png"})`,
               backgroundSize: "60px",
               backgroundRepeat: "repeat-y",
@@ -507,7 +507,7 @@ export const Layout = ({ page, isDiscussion }) => {
           {/* <Sidebar.Pusher style={{backgroundColor: 'rgb(10, 10, 10)', overflow: "auto", height: "90vh"}} */}
           <Sidebar.Pusher
             style={{
-              backgroundColor: "orange",
+              backgroundColor: 'rgb(10, 10, 10)',
               overflow: "auto"
             }}
             dimmed={showSidebar}
@@ -519,8 +519,8 @@ export const Layout = ({ page, isDiscussion }) => {
               <Segment
                 inverted
                 style={{
-                  // backgroundColor: 'rgb(10, 10, 0)'
-                  backgroundColor: "blue",
+                  backgroundColor: 'rgb(10, 10, 0)'
+                  // backgroundColor: "blue"
                 }}
               >
                 <Grid stackable>

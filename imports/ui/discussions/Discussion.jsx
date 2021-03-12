@@ -279,7 +279,8 @@ export const Discussion = () => {
 
   const discussionPageContent = () => {
     return (
-      <Container style={{backgroundColor: 'pink'}}>
+      // <Container style={{backgroundColor: 'pink'}}>
+      <Container>
         <Grid columns={3}>
           {" "}
           <GridColumn width={3} style={{ height: "90vh" }}>
