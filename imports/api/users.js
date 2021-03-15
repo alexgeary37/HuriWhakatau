@@ -9,6 +9,46 @@ import { Personality } from "./personality";
 
 const emailAddress = "huriwhakatau@gmail.com";
 
+if(Meteor.isServer){
+  Meteor.methods({
+    "users.inviteFriend"(email) {
+      check(email, String);
+      let finalUserName = "";
+      do {
+        finalUserName = Random.choice(Usernames);
+        // Generate new names until one that does not exist is found
+      } while (Meteor.users.findOne({ username: finalUserName }));
+      console.log(finalUserName);
+
+      const userId = Accounts.createUser({
+        username: finalUserName,
+        email: email,
+        profile: {
+          invitedBy: Meteor.userId(),
+          pepeha: {
+            mountain: "",
+            river: "",
+            waka: "",
+            iwi: "",
+            role: "",
+          },
+          userDetails: {
+            firstName: "",
+            lastName: "",
+            ethnicity: "",
+            location: "",
+            gender: "",
+            dob: "",
+            religion: "",
+          },
+        },
+      });
+      Accounts.sendEnrollmentEmail(userId);
+      return true;
+    },
+  });
+}
+
 Meteor.methods({
   "users.updatePepeha"(pepeha, userId) {
     check(userId, String);
@@ -85,42 +125,6 @@ Meteor.methods({
       .fetch();
 
     return friends;
-  },
-
-  "users.inviteFriend"(email) {
-    check(email, String);
-    let finalUserName = "";
-    do {
-      finalUserName = Random.choice(Usernames);
-      // Generate new names until one that does not exist is found
-    } while (Meteor.users.findOne({ username: finalUserName }));
-    console.log(finalUserName);
-
-    const userId = Accounts.createUser({
-      username: finalUserName,
-      email: email,
-      profile: {
-        invitedBy: Meteor.userId(),
-        pepeha: {
-          mountain: "",
-          river: "",
-          waka: "",
-          iwi: "",
-          role: "",
-        },
-        userDetails: {
-          firstName: "",
-          lastName: "",
-          ethnicity: "",
-          location: "",
-          gender: "",
-          dob: "",
-          religion: "",
-        },
-      },
-    });
-    Accounts.sendEnrollmentEmail(userId);
-    return true;
   },
 
   // add a user to friend list
