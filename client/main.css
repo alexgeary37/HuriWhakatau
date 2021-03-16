@@ -33,9 +33,10 @@ body {
 }
 
 /* attempting to add background image to pages */
-.react-target {
-  background-color: rgb(158, 242, 158);
+#react-target {
   /*background-image: url("/huri_background.png");*/
+  height: 100%;
+  width: 100%;
 }
 
 .segment,

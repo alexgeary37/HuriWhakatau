@@ -253,7 +253,7 @@ export const Layout = ({ page, isDiscussion }) => {
       basic
       inverted
       textAlign="center"
-      // style={{ backgroundColor: 'olive'}}
+      style={{ backgroundColor: 'black', height: '100%', width: '100%'}}
       vertical
     >
       <NavBar handleChangeLanguage={handleChangeLanguage} />
