@@ -1,5 +1,10 @@
 Huri Whakatau / JuryRoom is an online platform for facilitating discussions with the aim of encouraging a consensus outcome.
 
+### Installation Setup
+
+* `npm i `- installs all npm packages
+* `npm run start` - starts web application at on port 3000
+
 npm Libraries used:
 
 @babel/runtime
