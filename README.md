@@ -5,7 +5,7 @@ Huri Whakatau / JuryRoom is an online platform for facilitating discussions with
 * `npm i `- installs all npm packages
 * `npm run start` - starts web application at on port 3000
 
-npm Libraries used:
+### npm Libraries used
 
 @babel/runtime
 
@@ -34,7 +34,7 @@ npm Libraries used:
 - simpl-schema
 - universal-cookie
 
-meteor packages used:
+### meteor packages used
 
 - accounts-password 1.6.2\* Password support for accounts
 - alanning:roles 3.2.3 Authorization package for Meteor
