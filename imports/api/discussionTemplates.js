@@ -59,31 +59,24 @@ Meteor.methods({
     if (DiscussionTemplates.schema.isValid()) {
       DiscussionTemplates.insert(discussionTemplate);
     } else {
-      console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
+      console.log("Validation Errors:", DiscussionTemplates.schema.validationErrors());
     }
   },
 
   // Remove a discussionTemplate from the discussionTemplates collection in the db.
   "discussionTemplates.remove"(discussionTemplateId) {
     check(discussionTemplateId, String);
-    //add role check
+    // add role check
 
     DiscussionTemplates.remove(discussionTemplateId);
   },
 
   "discussionTemplates.removeAll"() {
     DiscussionTemplates.remove({});
-    console.log('DiscussionTemplates.count():', DiscussionTemplates.find().count());
   }
 });
 
 if (Meteor.isServer) {
-  if(!process.env.MONGO_URL.includes("juryroom_admin")){
-    console.log("minimongo discussion templates", process.env.MONGO_URL);
-  } else {
-    console.log("not minimongo discussion templates");
-  }
-
   Meteor.publish("discussionTemplates", function () {
     return DiscussionTemplates.find(
       {},

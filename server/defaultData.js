@@ -20,7 +20,6 @@ import { Mountains } from "../imports/api/mountains";
 // set up checks that each item doesn't exist, if not create, if so then for the ones that might be needed to create other items get their IDs.
 if (Meteor.isServer) {
   const admin = "ADMIN";
-  console.log("Running defaultData.js");
 
   //create categories if the basic set doesn't exist.
   if (Categories.find().count() === 0) {
@@ -33,7 +32,7 @@ if (Meteor.isServer) {
       if (Categories.schema.isValid()) {
         Categories.insert(category);
       } else {
-        console.log("validationErrors:", Categories.schema.validationErrors());
+        console.log("Validation Errors:", Categories.schema.validationErrors());
       }
     }
   }
@@ -73,7 +72,6 @@ if (Meteor.isServer) {
     defaultUsers.push(defaultUser);
   } else {
     const username = Accounts.findUserByUsername("Mary");
-    console.log("a default user: " + username.username);
     defaultUsers.push(username._id);
   }
 
@@ -177,8 +175,6 @@ if (Meteor.isServer) {
   // Create group for default users.
   const groupName = "Starter group";
   if (!Groups.findOne({ name: groupName })) {
-    console.log("Create Starter group");
-    console.log(defaultUsers);
 
     const group = {
       name: groupName,
@@ -193,14 +189,12 @@ if (Meteor.isServer) {
     if (Groups.schema.isValid()) {
       Groups.insert(group);
     } else {
-      console.log("validationErrors:", Groups.schema.validationErrors());
+      console.log("Validation Errors:", Groups.schema.validationErrors());
     }
   }
 
   // Set up DiscussionTemplates.
   if (DiscussionTemplates.find({}).count() === 0) {
-    console.log("Create Discussion Templates");
-
     let templateId1, templateId2;
 
     let discussionTemplate = {
@@ -224,7 +218,7 @@ if (Meteor.isServer) {
     if (DiscussionTemplates.schema.isValid()) {
       templateId1 = DiscussionTemplates.insert(discussionTemplate);
     } else {
-      console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
+      console.log("Validation Errors:", DiscussionTemplates.schema.validationErrors());
     }
 
     discussionTemplate = {
@@ -248,7 +242,7 @@ if (Meteor.isServer) {
     if (DiscussionTemplates.schema.isValid()) {
       templateId2 = DiscussionTemplates.insert(discussionTemplate);
     } else {
-      console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
+      console.log("Validation Errors:", DiscussionTemplates.schema.validationErrors());
     }
 
     discussionTemplate = {
@@ -272,13 +266,11 @@ if (Meteor.isServer) {
     if (DiscussionTemplates.schema.isValid()) {
       DiscussionTemplates.insert(discussionTemplate);
     } else {
-      console.log("validationErrors:", DiscussionTemplates.schema.validationErrors());
+      console.log("Validation Errors:", DiscussionTemplates.schema.validationErrors());
     }
 
     // Create Scenarios.
-    console.log("Create Scenarios for Discussion Templates");
     let scenarios = [];
-
     const scenarioTitles = ["Default - Introduction", "A title that sets up the discussion"];
     const scenarioDescriptions = ["A discussion for group members to get to know each other prior to the scheduled topic driven discussions", "A deeper description of the topic"];
     const scenarioTemplates = [templateId1, templateId2];
@@ -299,13 +291,11 @@ if (Meteor.isServer) {
         const scenarioId = Scenarios.insert(scenario);
         scenarios.push(scenarioId);
       } else {
-        console.log("validationErrors:", Scenarios.schema.validationErrors());
+        console.log("Validation Errors:", Scenarios.schema.validationErrors());
       }
     }
 
     // Create a ScenarioSet.
-    console.log('Create the ScenarioSet "Starter Set"');
-
     const scenarioSet = {
       title: 'Starter Set',
       description: "Here's what a scenario set looks like",
@@ -320,10 +310,8 @@ if (Meteor.isServer) {
     if (ScenarioSets.schema.isValid()) {
       ScenarioSets.insert(scenarioSet);
     } else {
-      console.log("validationErrors:", Scenarios.schema.validationErrors());
+      console.log("Validation Errors:", Scenarios.schema.validationErrors());
     }
-
-    console.log("scenarios::", scenarios);
   }
 
   //set up roles if they don't exist
@@ -388,7 +376,7 @@ if (Meteor.isServer) {
     if (Personality.schema.isValid()) {
       Personality.insert(personality);
     } else {
-      console.log("validationErrors:", Personality.schema.validationErrors());
+      console.log("Validation Errors:", Personality.schema.validationErrors());
     }
   }
 
@@ -403,7 +391,7 @@ if (Meteor.isServer) {
     if (Mountains.schema.isValid()) {
       Mountains.insert(mountain);
     } else {
-      console.log("validationErrors:", Mountains.schema.validationErrors());
+      console.log("Validation Errors:", Mountains.schema.validationErrors());
     }
   }
 
@@ -420,7 +408,7 @@ if (Meteor.isServer) {
       if (Rivers.schema.isValid()) {
         Rivers.insert(document);
       } else {
-        console.log("validationErrors:", Rivers.schema.validationErrors());
+        console.log("Validation Errors:", Rivers.schema.validationErrors());
       }
     });
   }
@@ -436,10 +424,8 @@ if (Meteor.isServer) {
       if (Usernames.schema.isValid()) {
         Usernames.insert(document);
       } else {
-        console.log("validationErrors:", Usernames.schema.validationErrors());
+        console.log("Validation Errors:", Usernames.schema.validationErrors());
       }
     });
   }
-
-  console.log("Finished running defaultData.js");
 }

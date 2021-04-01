@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RichTextEditor from "react-rte";
 import { Button, Form, Message } from "semantic-ui-react";
 import { useTracker } from "meteor/react-meteor-data";
@@ -18,6 +18,7 @@ export const CommentForm = ({
   const [editorValue, setEditorValue] = useState(
     RichTextEditor.createEmptyValue()
   );
+  const rteRef = React.createRef();
 
   // useTracker makes sure the component will re-render when data changes.
   const { user, typingUsers } = useTracker(() => {
@@ -92,6 +93,9 @@ export const CommentForm = ({
     );
 
     setEditorValue(RichTextEditor.createEmptyValue());
+    rteRef.current.focus();
+    // RichTextEditor.autoFocus;
+    // RichTextEditor.focusNode;
     setPastedItems([]);
     setKeyStrokes([]);
   };
@@ -235,6 +239,7 @@ export const CommentForm = ({
           autoFocus
           multiline
           required
+          ref={rteRef}
         />
         <Button
           content="Add Comment"

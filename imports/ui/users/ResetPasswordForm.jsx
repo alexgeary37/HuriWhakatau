@@ -33,7 +33,6 @@ export const ResetPasswordForm = ({ toggleModal }) => {
     toggleModal();
   };
 
-  console.log(err);
   return (
     <Modal
       open={true}

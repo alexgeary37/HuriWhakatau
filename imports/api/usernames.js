@@ -11,7 +11,6 @@ Usernames.schema = new SimpleSchema({
 Meteor.methods({
   "usernames.removeAll"() {
     Usernames.remove({});
-    console.log('Usernames.count():', Usernames.find().count());
   }
 })
 

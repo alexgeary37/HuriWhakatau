@@ -70,7 +70,7 @@ Meteor.methods({
       return Discussions.insert(discussion); // discussion._id is returned.
     }
 
-    console.log("validationErrors:", Discussions.schema.validationErrors());
+    console.log("Validation Errors:", Discussions.schema.validationErrors());
   },
 
   // Insert an introduction type discussion into the discussions collection in the db.
@@ -104,7 +104,7 @@ Meteor.methods({
       return Discussions.insert(discussion); // discussion._id is returned.
     }
     
-    console.log("validationErrors:", Discussions.schema.validationErrors());
+    console.log("Validation Errors:", Discussions.schema.validationErrors());
   },
 
   "discussions.updateDeadline"(discussionId, deadline) {
@@ -119,7 +119,7 @@ Meteor.methods({
     if (Discussions.schema.isValid()) {
       Discussions.update(discussionId, mongoModifierObject);
     } else {
-      console.log("validationErrors:", Discussions.schema.validationErrors());
+      console.log("Validation Errors:", Discussions.schema.validationErrors());
     }
   },
 
@@ -138,7 +138,7 @@ Meteor.methods({
     if (Discussions.schema.isValid()) {
       Discussions.update(discussionId, mongoModifierObject);
     } else {
-      console.log("validationErrors:", Discussions.schema.validationErrors());
+      console.log("Validation Errors:", Discussions.schema.validationErrors());
     }
   },
 
@@ -154,7 +154,7 @@ Meteor.methods({
     if (Discussions.schema.isValid()) {
       Discussions.update(discussionId, mongoModifierObject);
     } else {
-      console.log("validationErrors:", Discussions.schema.validationErrors()); 
+      console.log("Validation Errors:", Discussions.schema.validationErrors()); 
     }
   },
 
@@ -176,7 +176,7 @@ Meteor.methods({
     if (Discussions.schema.isValid()) {
       Discussions.update(discussionId, mongoModifierObject);
     } else {
-      console.log("validationErrors:", Discussions.schema.validationErrors());
+      console.log("Validation Errors:", Discussions.schema.validationErrors());
     }
   },
 
@@ -198,14 +198,12 @@ Meteor.methods({
     if (Discussions.schema.isValid()) {
       Discussions.update(discussionId, mongoModifierObject);
     } else {
-      console.log("validationErrors:", Discussions.schema.validationErrors());
+      console.log("Validation Errors:", Discussions.schema.validationErrors());
     }
   },
 
   "discussions.addUserToTypingList"(discussionId, username) {
     check(discussionId, String);
-
-    console.log('addUserToTypingList:', username);
     
     let mongoModifierObject = {
       $addToSet: { usersTyping: { user: username, timestamp: Date.now() } },
@@ -247,28 +245,21 @@ Meteor.methods({
           if (Discussions.schema.isValid()) {
             Discussions.update(discussionId, mongoModifierObject);
           } else {
-            console.log("validationErrors:", Discussions.schema.validationErrors());
+            console.log("Validation Errors:", Discussions.schema.validationErrors());
           }
         }, 2000);
       }
     } else {
-      console.log("validationErrors:", Discussions.schema.validationErrors());
+      console.log("Validation Errors:", Discussions.schema.validationErrors());
     }
   },
 
   "discussions.removeAll"() {
     Discussions.remove({});
-    console.log('Discussions.count():', Discussions.find().count());
   },
 });
 
 if (Meteor.isServer) {
-  if (!process.env.MONGO_URL.includes("juryroom_admin")) {
-    console.log("minimongo discussions", process.env.MONGO_URL);
-  } else {
-    console.log("not minimongo discussions");
-  }
-
   Meteor.publish("allDiscussions", function () {
     return Discussions.find(
       {},

@@ -68,13 +68,13 @@ Meteor.methods({
         if (Discussions.schema.isValid()) {
           Discussions.update(discussionId, mongoModifierObject);
         } else {
-          console.log("validationErrors:", Discussions.schema.validationErrors());
+          console.log("Validation Errors:", Discussions.schema.validationErrors());
         }
       } else {
-        console.log("validationErrors:", Discussions.schema.validationErrors());
+        console.log("Validation Errors:", Discussions.schema.validationErrors());
       }
     } else {
-      console.log("validationErrors:", Verdicts.schema.validationErrors());
+      console.log("Validation Errors:", Verdicts.schema.validationErrors());
     }
   },
 
@@ -96,13 +96,12 @@ Meteor.methods({
     if (Verdicts.schema.isValid()) {
       Verdicts.update(verdictId, mongoModifierObject);
     } else {
-      console.log("validationErrors:", Verdicts.schema.validationErrors());
+      console.log("Validation Errors:", Verdicts.schema.validationErrors());
     }
   },
 
   "verdicts.removeAll"() {
     Verdicts.remove({});
-    console.log('Verdicts.count():', Verdicts.find().count());
   }
 });
 

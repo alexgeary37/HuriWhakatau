@@ -42,7 +42,6 @@ Meteor.startup(() => {
         // The job which runs periodically according to the set schedule.
         job(dateTime) {
             // Bulk update all discussions with status of active but with a deadline that has passed.
-            console.log("dateTime: ", dateTime);
             Discussions.rawCollection().updateMany({
                 status: "active",
                 deadline: {$lte: dateTime}
@@ -114,6 +113,4 @@ if (!process.env.MONGO_URL.includes("juryroom_admin")) {
             Meteor.call("votes.removeAll");
         }
     });
-} else {
-    console.log('App is connected to juryroom database');
 }

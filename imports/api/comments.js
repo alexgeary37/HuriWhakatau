@@ -70,7 +70,7 @@ Meteor.methods({
     if (Comments.schema.isValid()) {
       Comments.insert(comment);
     } else {
-      console.log('validationErrors:', Comments.schema.validationErrors());
+      console.log('Validation Error:', Comments.schema.validationErrors());
     }
   },
 
@@ -101,7 +101,7 @@ Meteor.methods({
     if (Comments.schema.isValid()) {
       Comments.update(commentId, mongoModifierObject);
     } else { 
-      console.log('validationErrors:', Comments.schema.validationErrors());
+      console.log('Validation Error:', Comments.schema.validationErrors());
     }
   },
 
@@ -120,7 +120,7 @@ Meteor.methods({
       Comments.update(commentId, mongoModifierObject);
     }
 
-    console.log('validationErrors:', Comments.schema.validationErrors());
+    console.log('Validation Error:', Comments.schema.validationErrors());
   },
 
   //get a random comment from discussion.
@@ -154,7 +154,6 @@ Meteor.methods({
 
   "comments.removeAll"() {
     Comments.remove({});
-    console.log('Comments.count():', Comments.find().count());
   },
 });
 

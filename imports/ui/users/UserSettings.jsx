@@ -82,7 +82,6 @@ export const UserSettings = () => {
     const [userFeedback, setUserFeedback] = useState("");
     useEffect(() => {
         if (user /*&& isIndigenous*/ && !changeUserPepeha && !changeUserDetails && !changeUsername) {
-            console.log("Adding info to states");
             setUsername(user.username);
 
             if (user.profile.userDetails) {
@@ -121,7 +120,6 @@ export const UserSettings = () => {
             console.log(error.reason);
             return;
         }
-        console.log("user is indigenous: ", result);
         setIsIndigenous(result);
     });
 

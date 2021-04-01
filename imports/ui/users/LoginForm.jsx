@@ -28,7 +28,6 @@ export const LoginForm = ({ toggleModal }) => {
     toggleModal();
   };
 
-  console.log(err);
   return (
     <Modal
       open={true}

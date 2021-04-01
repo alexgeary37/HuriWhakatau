@@ -29,7 +29,7 @@ Meteor.methods({
     if (Personality.schema.isValid()) {
       Personality.insert(personality);
     } else {
-      console.log("validationErrors:", Personality.schema.validationErrors());
+      console.log("Validation Errors:", Personality.schema.validationErrors());
     }
   },
 
@@ -59,7 +59,6 @@ Meteor.methods({
 
   "personality.removeAll"() {
     Personality.remove({});
-    console.log('Personality.count():', Personality.find().count());
   },
 });
 

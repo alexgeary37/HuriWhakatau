@@ -30,13 +30,12 @@ Meteor.methods({
         { upsert: true }
       );
     } else {
-      console.log("validationErrors:", CommentRatings.schema.validationErrors());
+      console.log("Validation Error:", CommentRatings.schema.validationErrors());
     }
   },
 
   "commentRatings.removeAll"() {
     CommentRatings.remove({});
-    console.log('CommentRatings.count():', CommentRatings.find().count());
   },
 });
 

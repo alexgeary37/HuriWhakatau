@@ -36,7 +36,7 @@ Meteor.methods({
     if (Groups.schema.isValid()) {
       return Groups.insert(group); // Returns _id of group.
     } else {
-      console.log("validationErrors:", Groups.schema.validationErrors());
+      console.log("Validation Errors:", Groups.schema.validationErrors());
     }
   },
 
@@ -55,7 +55,7 @@ Meteor.methods({
       Groups.update(groupId, mongoModifierObject);
       return true;
     } else {
-      console.log("validationErrors:", Groups.schema.validationErrors());
+      console.log("Validation Errors:", Groups.schema.validationErrors());
     }
   },
 
@@ -77,7 +77,7 @@ Meteor.methods({
       Groups.update(groupId, mongoModifierObject);
       return true;
     } else {
-      console.log("validationErrors:", Groups.schema.validationErrors());
+      console.log("Validation Errors:", Groups.schema.validationErrors());
     }
   },
 
@@ -113,17 +113,10 @@ Meteor.methods({
 
   "groups.removeAll"() {
     Groups.remove({});
-    console.log('Groups.count():', Groups.find().count());
   },
 });
 
 if (Meteor.isServer) {
-  if (!process.env.MONGO_URL.includes("juryroom_admin")) {
-    console.log("minimongo groups");
-  } else {
-    console.log("not minimongo groups");
-  }
-
   Meteor.publish("groups", function () {
     return Groups.find(
       {},

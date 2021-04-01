@@ -63,7 +63,6 @@ export const CreateScenarioSet = ({
   const toggleIt = (e) => {
     toggleModal();
     if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
-      console.log(e.currentTarget.innerHTML);
       toggleNextModal();
     }
     if (isWizard && e.currentTarget.innerHTML === "Cancel") {

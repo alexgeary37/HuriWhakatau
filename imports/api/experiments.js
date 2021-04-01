@@ -88,15 +88,6 @@ Meteor.methods({
           consensusThreshold
         );
 
-        const introDisc = Discussions.findOne(introId);
-        console.log(
-          "ID:",
-          introDisc._id,
-          "TIME:",
-          introDisc.createdAt.getTime(),
-          "scen: Default - Introduction"
-        );
-
         const mongoModifierObject = {
           $push: { discussions: introId },
         };
@@ -114,10 +105,7 @@ Meteor.methods({
             introId
           );
         } else {
-          console.log(
-            "experiment update object validationErrors:",
-            Experiments.schema.validationErrors()
-          );
+          console.log("Validation Errors:", Experiments.schema.validationErrors());
         }
       }
 
@@ -146,15 +134,6 @@ Meteor.methods({
           discussionTemplate.isPublic
         );
 
-        const disc = Discussions.findOne(discussionId);
-        console.log(
-          "ID:",
-          disc._id,
-          "TIME:",
-          disc.createdAt.getTime(),
-          "scen:",
-          scenarios[i].title
-        );
         discs.push([Discussions.findOne(discussionId), scenarios[i].title]);
 
         mongoModifierObject = {
@@ -167,23 +146,12 @@ Meteor.methods({
           Experiments.update(experimentId, mongoModifierObject);
           discussionIds.push(discussionId);
         } else {
-          console.log(
-            "experiment update object validationErrors:",
-            Experiments.schema.validationErrors()
-          );
+          console.log("Validation Errors:", Experiments.schema.validationErrors());
         }
       }
 
       // To each discussion, add the id for the next the discussion.
       for (let id = 0; id < discussionIds.length - 1; id += 1) {
-        console.log(
-          "adding nextDiscussionId",
-          id,
-          discussionIds[id],
-          " -> ",
-          discussionIds[id + 1]
-        );
-
         mongoModifierObject = {
           $set: { nextDiscussion: discussionIds[id + 1] },
         };
@@ -193,17 +161,11 @@ Meteor.methods({
         if (Discussions.schema.isValid()) {
           Discussions.update(discussionIds[id], mongoModifierObject);
         } else {
-          console.log(
-            "discussion update object validationErrors:",
-            Discussions.schema.validationErrors()
-          );
+          console.log("Validation Errors:", Discussions.schema.validationErrors());
         }
       }
     } else {
-      console.log(
-        "experiment validationErrors:",
-        Experiments.schema.validationErrors()
-      );
+      console.log("Validation Errors:", Experiments.schema.validationErrors());
     }
   },
 
@@ -407,19 +369,13 @@ Meteor.methods({
             if (Experiments.schema.isValid()) {
               Experiments.update(experimentId, mongoModifierObject);
             } else {
-              console.log(
-                "experiment update object validationErrors:",
-                Experiments.schema.validationErrors()
-              );
+              console.log("ValidationErrors:", Experiments.schema.validationErrors());
             }
           }
         }
       );
     } else {
-      console.log(
-        "experiment update object validationErrors:",
-        Experiments.schema.validationErrors()
-      );
+      console.log("Validation Errors:", Experiments.schema.validationErrors());
     }
   },
 
@@ -433,18 +389,10 @@ Meteor.methods({
 
   "experiments.removeAll"() {
     Experiments.remove({});
-    console.log("Experiments.count():", Experiments.find().count());
   },
 });
 
 if (Meteor.isServer) {
-  // Meteor.call("experiments.exportDiscussion","HaCZyBgCvsayGRMhB");
-  if (!process.env.MONGO_URL.includes("juryroom_admin")) {
-    console.log("minimongo experiments");
-  } else {
-    console.log("not minimongo experiments");
-  }
-
   Meteor.publish("experiments", function () {
     return Experiments.find(
       {},
