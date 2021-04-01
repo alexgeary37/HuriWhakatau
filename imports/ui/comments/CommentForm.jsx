@@ -18,7 +18,6 @@ export const CommentForm = ({
   const [editorValue, setEditorValue] = useState(
     RichTextEditor.createEmptyValue()
   );
-  const rteRef = React.createRef();
 
   // useTracker makes sure the component will re-render when data changes.
   const { user, typingUsers } = useTracker(() => {
@@ -93,9 +92,6 @@ export const CommentForm = ({
     );
 
     setEditorValue(RichTextEditor.createEmptyValue());
-    rteRef.current.focus();
-    // RichTextEditor.autoFocus;
-    // RichTextEditor.focusNode;
     setPastedItems([]);
     setKeyStrokes([]);
   };
@@ -239,7 +235,6 @@ export const CommentForm = ({
           autoFocus
           multiline
           required
-          ref={rteRef}
         />
         <Button
           content="Add Comment"
