@@ -32,7 +32,7 @@ Meteor.methods({
     if (Topics.schema.isValid()) {
       Topics.insert(topic);
     } else {
-      console.log("validationErrors:", Topics.schema.validationErrors());
+      console.log("Validation Errors:", Topics.schema.validationErrors());
     }
   },
 
@@ -48,7 +48,6 @@ Meteor.methods({
 
   "topics.removeAll"() {
     Topics.remove({});
-    console.log('Topics.count():', Topics.find().count());
   }
 });
 

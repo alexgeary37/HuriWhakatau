@@ -36,23 +36,16 @@ Meteor.methods({
     if (ScenarioSets.schema.isValid()) {
       ScenarioSets.insert(scenarioSet);
     } else {
-      console.log("validationErrors:", ScenarioSets.schema.validationErrors());
+      console.log("Validation Errors:", ScenarioSets.schema.validationErrors());
     }
   },
 
   "scenarioSets.removeAll"() {
     ScenarioSets.remove({});
-    console.log('ScenarioSets.count():', ScenarioSets.find().count());
   }
 });
 
 if (Meteor.isServer) {
-  if(!process.env.MONGO_URL.includes("juryroom_admin")){
-    console.log("minimongo ScenarioSets");
-  } else {
-    console.log("not minimongo ScenarioSets");
-  }
-
   Meteor.publish("scenarioSets", function () {
     return ScenarioSets.find(
       {},

@@ -40,23 +40,16 @@ Meteor.methods({
       const scenarioId = Scenarios.insert(scenario);
       return scenarioId;
     } else {
-      console.log("validationErrors:", Scenarios.schema.validationErrors());
+      console.log("Validation Errors:", Scenarios.schema.validationErrors());
     }
   },
 
   "scenarios.removeAll"() {
     Scenarios.remove({});
-    console.log('Scenarios.count():', Scenarios.find().count());
   }
 });
 
 if (Meteor.isServer) {
-  if(!process.env.MONGO_URL.includes("juryroom_admin")){
-    console.log("minimongo Scenarios");
-  } else {
-    console.log("not minimongo Scenarios");
-  }
-
   Meteor.publish("scenarios", function () {
     return Scenarios.find(
       {},

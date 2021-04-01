@@ -18,7 +18,6 @@ if(Meteor.isServer){
         finalUserName = Random.choice(Usernames);
         // Generate new names until one that does not exist is found
       } while (Meteor.users.findOne({ username: finalUserName }));
-      console.log(finalUserName);
 
       const userId = Accounts.createUser({
         username: finalUserName,
@@ -228,7 +227,6 @@ Meteor.methods({
           },
         ])
         .toArray();
-      console.log("user", user);
     }
   },
 
@@ -255,7 +253,6 @@ Meteor.methods({
 
         let verificationURL;
         if (process.env.ROOT_URL[process.env.ROOT_URL.length - 1] === "/") {
-          console.log("slash = yes");
           verificationURL =
             process.env.ROOT_URL +
             "confirm-identity/" +
@@ -263,7 +260,6 @@ Meteor.methods({
             "/" +
             userId;
         } else {
-          console.log("slash = no");
           verificationURL =
             process.env.ROOT_URL +
             "/confirm-identity/" +
@@ -384,12 +380,10 @@ Meteor.methods({
 
   "users.removeAll"() {
     Meteor.users.remove({});
-    console.log('Users.count():', Meteor.users.find().count());
   }
 });
 
 if (Meteor.isServer) {
-  // Meteor.call("users.exportUserData", "SXz6FTuJ9PdgrhXyo");
   Meteor.publish("users", function () {
     return Meteor.users.find(
       {},

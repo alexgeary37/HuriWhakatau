@@ -20,13 +20,12 @@ Meteor.methods({
     if (Rivers.schema.isValid()) {
       Rivers.insert(river);
     } else {
-      console.log("validationErrors:", Rivers.schema.validationErrors());
+      console.log("Validation Errors:", Rivers.schema.validationErrors());
     }
   },
 
   "rivers.removeAll"() {
     Rivers.remove({});
-    console.log('Rivers.count():', Rivers.find().count());
   },
 });
 

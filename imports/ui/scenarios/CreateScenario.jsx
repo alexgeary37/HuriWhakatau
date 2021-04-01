@@ -41,17 +41,6 @@ export const CreateScenario = ({
     } else {
       setErrDiscussionTemplateId("");
     }
-    console.log(
-      "Stuff that is submitted for scenario",
-      "title:",
-      title,
-      "desc:",
-      description,
-      "category:",
-      categoryId,
-      "discuss:",
-      discussionTemplateId
-    );
 
     if (
       title.length > 0 &&
@@ -87,7 +76,6 @@ export const CreateScenario = ({
   const toggleIt = (e) => {
     toggleModal();
     if (isWizard && e.currentTarget.innerHTML !== "Cancel") {
-      console.log(e.currentTarget.innerHTML);
       toggleNextModal();
     }
     if (isWizard && e.currentTarget.innerHTML === "Cancel") {

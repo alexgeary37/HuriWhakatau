@@ -123,11 +123,9 @@ export const UserComment = ({
     let existingEmojiIds = comment.emojis.map(function (item) {
       return item.emoji.id;
     });
-    console.log('Existing Emoji Ids:', existingEmojiIds);
     if (!existingEmojiIds.includes(emoOb.emoji.id)) {
       //trigger the useEffect callback to update db when selectedEmojis state variable has changed.
       settingEmojisRef.current = true;
-      console.log('selectedEmojis:', selectedEmojis);
       setSelectedEmojis([...comment.emojis, emoOb]);
       setReactionShown(false);
       return;

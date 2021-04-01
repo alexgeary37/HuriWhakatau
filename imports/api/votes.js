@@ -43,14 +43,13 @@ Meteor.methods({
       if (Verdicts.schema.isValid()) {
         Verdicts.update(verdictId, mongoModifierObject);
       } else {
-        console.log("validationErrors:", Verdicts.schema.validationErrors());
+        console.log("Validation Errors:", Verdicts.schema.validationErrors());
       }
     }
   },
 
   "votes.removeAll"() {
     Votes.remove({});
-    console.log('Votes.count():', Votes.find().count());
   },
 });
 

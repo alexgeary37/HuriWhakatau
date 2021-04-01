@@ -6,7 +6,6 @@ import Cookies from "universal-cookie/lib";
 export const Tour = ({TOUR_STEPS}) => {
 
     const handleCallback = (data) => {
-        console.log('data:', data);
         const {status, step, action} = data;
         if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
             const cookies = new Cookies();

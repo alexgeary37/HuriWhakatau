@@ -19,13 +19,12 @@ Meteor.methods({
     if (Mountains.schema.isValid()) {
       Mountains.insert(mountain);
     } else {
-      console.log("validationErrors:", Mountains.schema.validationErrors());
+      console.log("Validation Errors:", Mountains.schema.validationErrors());
     }
   },
 
   "mountains.removeAll"() {
     Mountains.remove({});
-    console.log('Mountains.count():', Mountains.find().count());
   }
 });
 

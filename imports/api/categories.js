@@ -30,7 +30,7 @@ Meteor.methods({
     if (Categories.schema.isValid()) {
       Categories.insert(category);
     } else {
-      console.log('validationErrors:', Categories.schema.validationErrors());
+      console.log('Validation Error:', Categories.schema.validationErrors());
     }
   },
 
@@ -46,7 +46,6 @@ Meteor.methods({
 
   "categories.removeAll"() {
     Categories.remove({});
-    console.log('Categories.count():', Categories.find().count());
   }
 });
 

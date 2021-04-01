@@ -94,13 +94,6 @@ export const UserSummary = ({
 
   useEffect(memberEmotionColour, [member?.profile?.emotion?.emotion]);
 
-  // console.log('member._id:', member._id);
-  // console.log('Meteor.userId():', Meteor.userId());
-  // console.log('isIntroduction', isIntroduction)
-  // console.log('!groupLeader', !groupLeader)
-  // console.log('!userHasVoted', !userHasVoted)
-  // console.log('(discussionStatus = "active")', (discussionStatus = "active"))
-
   return (
     <Segment
       compact

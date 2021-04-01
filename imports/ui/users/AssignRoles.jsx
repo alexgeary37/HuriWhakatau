@@ -25,16 +25,12 @@ export const AssignRoles = ({ toggleModal }) => {
     if (userList.length === 0) {
       setUserListErr("You must select at least one user");
     }
-    console.log("about to update roles", userList, roleList);
 
     if (userList.length > 0 && roleList.length > 0) {
-      console.log("Updating roles", userList, roleList);
       Meteor.call("security.setRoles", userList, roleList, (err, result) => {
         if (err) {
-          console.log("error updating roles");
           setErrorMsg("Something went wrong, roles may not have updated");
         } else {
-          console.log("everything is fine");
           setUserList([]);
           setRoleList([]);
           setSuccessMsg("Roles updated successfully");
