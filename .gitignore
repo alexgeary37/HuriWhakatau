@@ -1,5 +1,6 @@
 node_modules/
 /app-deploy/
+/deploy/
 /run.bat
 /run - Copy.bat
 /run_huriwhakatau_db.bat
